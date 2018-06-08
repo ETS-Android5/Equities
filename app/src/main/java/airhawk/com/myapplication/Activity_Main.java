@@ -290,7 +290,18 @@ public class Activity_Main extends AppCompatActivity {
             nvnd.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
             if(market_name.contains("Bitcoin")){
                 nggp.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-            }else{
+            }
+            String dj = "Dow Jones";
+            String sp = "S&P 500";
+            String nas = "Nasdaq";
+            if(market_name.contains(dj)
+                    ||
+                    market_name.contains(sp)
+                    ||
+                    market_name.contains(nas)){
+                //Do something for these with historical data./ Maybe yahoo?
+            }
+            else{
                 nsgp.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
             }
 
