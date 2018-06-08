@@ -1,0 +1,43 @@
+<resources>
+    <string name="app_name">Aequities</string>
+    <string name="title_item_detail">Item Detail</string>
+    <string name="title_main">Main</string>
+    <string name="title_search">Search</string>
+    <string name="title_markets">MARKETS</string>
+    <string name="title_analysis">ANALYSIS</string>
+    <string name="title_news">NEWS</string>
+    <string name="title_video">VIDEO</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_search">Search</string>
+    <string name="action_analysis">Analysis</string>
+    <string name="action_favorite">Favorite</string>
+    <string name="day_color">Day Time</string>
+    <string name="night_color">Night Time</string>
+    <string name="top5stocks">Stocks</string>
+    <string name="top5cryptos">Cryptocurrencies</string>
+    <string name="bottom5stocks">Stocks</string>
+    <string name="bottom5cryptos">Cryptocurrencies</string>
+    <string name="winners">Winners</string>
+    <string name="losers">Losers</string>
+    <string name="volume">Volume</string>
+    <string name="dow_jones">Dow Jones</string>
+    <string name="s_p">S&amp;P 500</string>
+    <string name="nasdaq">Nasdaq</string>
+    <string name="btc_market_cap">Bitcoin</string>
+    <string name="crypto_cap">Crypto Cap</string>
+    <string name="altcoin_cap">Alt Coins</string>
+    <string name="stock_volume_leaders">Stock Market Volume Leaders</string>
+    <string name="crypto_volume_leaders">Crypto Volume Leaders</string>
+    <string name="stock_market_gainers">Stock Market Leaders</string>
+    <string name="crypto_gainers">Crypto Leaders</string>
+    <string name="stock_market_losers">Stock Market Losers</string>
+    <string name="crypto_losers">Crypto Losers</string>
+    <string name="name">Name</string>
+    <string name="date">Date</string>
+    <string name="price">Price</string>
+    <string name="range_52">52 Week Range</string>
+    <string name="supply">Coin_Supply</string>
+    <string name="shares">Shares</string>
+    <string name="title_buy">Buy It</string>
+
+</resources>

@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/stock_"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="font/scpro"
+            android:gravity="right|center"
+            android:text="@string/stock_market_losers"
+            android:textColor="@color/darkTextColor"
+            android:textSize="26sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/stock_1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:fontFamily="font/scpro"
+            android:gravity="center"
+            android:text="GSAT GlobalStar +400.56%"
+            android:textColor="@color/darkTextColor"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/stock_2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:fontFamily="font/scpro"
+            android:gravity="center"
+            android:text="DPW Digital Power +332.56%"
+            android:textColor="@color/darkTextColor"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/stock_3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:fontFamily="font/scpro"
+            android:gravity="center"
+            android:text="BIOA Biowhatever +189.46"
+            android:textColor="@color/darkTextColor"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/stock_4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:fontFamily="font/scpro"
+            android:gravity="center"
+            android:text="BIOA Biowhatever +189.46"
+            android:textColor="@color/darkTextColor"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/stock_5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:fontFamily="font/scpro"
+            android:gravity="center"
+            android:textColor="@color/darkTextColor"
+            android:textSize="20sp" />
+
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/crypto_"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="font/scpro"
+            android:gravity="right|center"
+            android:text="@string/crypto_losers"
+            android:textColor="@color/darkTextColor"
+            android:textSize="26sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+
+            <TextView
+                android:id="@+id/crypto_1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:fontFamily="font/scpro"
+                android:gravity="center"
+                android:text="TRX Tron +1430.56%"
+                android:textColor="@color/darkTextColor"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/crypto_2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:fontFamily="font/scpro"
+                android:gravity="center"
+                android:text="BTC Bitcoin +242.56%"
+                android:textColor="@color/darkTextColor"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/crypto_3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:fontFamily="font/scpro"
+                android:gravity="center"
+                android:text="ETH ETHEREUM +111.19"
+                android:textColor="@color/darkTextColor"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/crypto_4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:fontFamily="font/scpro"
+                android:gravity="center"
+                android:text="TRX Tron +1430.56%"
+                android:textColor="@color/darkTextColor"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/crypto_5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:fontFamily="font/scpro"
+                android:gravity="center"
+                android:text="TRX Tron +1430.56%"
+                android:textColor="@color/darkTextColor"
+                android:textSize="20sp" />
+
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+</LinearLayout>

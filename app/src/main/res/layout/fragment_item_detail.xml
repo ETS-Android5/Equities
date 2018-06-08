@@ -1,0 +1,58 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="?android:attr/textAppearanceLarge"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:textIsSelectable="true"
+    tools:context="airhawk.com.myapplication.Fragment_Activity_Main_Item_Detail">
+
+    <TextView
+        android:id="@+id/item_detail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/stuff"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="CCSCSC"
+        android:textColor="@color/colorBlack" />
+
+    <com.jjoe64.graphview.GraphView
+        android:id="@+id/graph"
+        android:layout_width="match_parent"
+        android:layout_height="125dp"
+        app:seriesColor="#ffffff"
+        app:seriesData="0=5;2=5;3=0;4=2"
+        app:seriesType="line"
+
+        />
+
+
+    <android.support.design.widget.TabLayout
+        android:id="@+id/actiontabs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:tabGravity="fill"
+        app:tabMode="fixed" />
+
+
+    <android.support.design.widget.TabLayout
+        android:id="@+id/market_view_tabs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:tabMode="fixed" />
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/view_pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="10dp"
+        android:background="@drawable/rounded_corners"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+
+</LinearLayout>

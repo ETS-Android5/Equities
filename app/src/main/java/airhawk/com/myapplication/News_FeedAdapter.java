@@ -1,0 +1,107 @@
+package airhawk.com.myapplication;
+
+import android.content.Context;
+import android.content.Intent;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.squareup.picasso.MemoryPolicy;
+import com.squareup.picasso.Picasso;
+
+import java.util.List;
+
+public class News_FeedAdapter extends RecyclerView.Adapter<News_FeedAdapter.MyViewHolder> {
+
+   private List<News_FeedItem> feedItems;
+   private static Context context;
+
+   public News_FeedAdapter(Context context, List<News_FeedItem> items){
+     this.context=context;  
+     this.feedItems = items;  
+   }  
+   
+   @Override  
+   public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+     LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+     final View view = inflater.inflate(R.layout.news_recyclerview, parent, false);
+
+     MyViewHolder mvh = new MyViewHolder(view, new MyViewHolder.myClickWebView() {  
+       @Override  
+       public void gotoWebView(String textlink) {  
+         Intent intent=new Intent(view.getContext(),WebViewActivity.class);
+         intent.putExtra("url",textlink);
+
+
+           view.getContext().startActivity(intent);
+       }  
+     });  
+     return mvh;  
+   }  
+   
+   @Override  
+   public void onBindViewHolder(MyViewHolder holder, int position) {  
+     News_FeedItem item = feedItems.get(position);
+     holder.tv_desc.setText(item.getDescription());  
+     holder.tv_link.setText(item.getLink());  
+     holder.tv_pubdate.setText(item.getPubDate());  
+     holder.tv_title.setText(item.getTitle());
+     Picasso.with(context).load(item.getThumbnailUrl()).memoryPolicy(MemoryPolicy.NO_CACHE).into(holder.tv_image);
+     holder.textlink=item.getLink();
+   }  
+   
+   @Override  
+   public int getItemCount() {  
+     return feedItems==null?0:feedItems.size();  
+   }  
+   
+   public static class MyViewHolder extends RecyclerView.ViewHolder{
+   
+       TextView tv_title;
+       TextView tv_desc;
+       TextView tv_pubdate;
+       TextView tv_link;
+       ImageView tv_image;
+       String textlink;
+       myClickWebView myClickWebView;
+   
+     public MyViewHolder(View itemView, final myClickWebView myClickWebView) {  
+       super(itemView);
+
+       tv_title=itemView.findViewById(R.id.news_title);
+       tv_desc=itemView.findViewById(R.id.news_desc);
+       tv_pubdate=itemView.findViewById(R.id.news_pubdate);
+       tv_link=itemView.findViewById(R.id.news_link);
+       tv_image=itemView.findViewById(R.id.news_image);
+       this.myClickWebView=myClickWebView;  
+   
+       itemView.setOnClickListener(new View.OnClickListener() {  
+         @Override  
+         public void onClick(View view) {  
+           myClickWebView.gotoWebView(textlink);  
+         }  
+       });
+
+
+       tv_link.setOnClickListener(new View.OnClickListener() {
+         @Override
+         public void onClick(View view) {
+           Intent intent=new Intent(context,WebViewActivity.class);
+
+         }
+       });
+   
+     }  
+   
+     //interface to handle onclick event and send some extras to another activity  
+     public interface myClickWebView{
+
+       void gotoWebView(String textlink);
+
+     }  
+   }  
+   
+ }
