@@ -57,14 +57,16 @@ public class Fragment_Analysis extends Fragment {
         a_marketcap =rootView.findViewById(R.id.aequity_market_cap);
         h_listview =rootView.findViewById(R.id.historical_listview);
         dataModels= new ArrayList<>();
-        if(dataModels !=null){
+        adapter= new CustomAdapter(dataModels,getContext());
+
             dataModels.clear();
-        }
+            h_listview.invalidateViews();
+
         for (int i = 0; i < _AllDays.size(); i++)
         {
             dataModels.add(new Historical_Data_Model(graph_high.get(i), graph_volume.get(i), graph_date.get(i)));
             System.out.println(String.valueOf(dataModels.get(i)));}
-        adapter= new CustomAdapter(dataModels,getContext());
+
         h_listview.setAdapter(adapter);
         tabLayout = (TabLayout)rootView.findViewById(R.id.tabs);
         tabLayout.addTab(tabLayout.newTab().setText("7D"));

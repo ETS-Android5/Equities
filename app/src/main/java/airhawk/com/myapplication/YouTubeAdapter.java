@@ -28,7 +28,7 @@ public class YouTubeAdapter extends RecyclerView.Adapter<YouTubeAdapter.VideoInf
     public ArrayList<String> videoText=image_video_url;
     public ArrayList<String> videoTitle=video_title;
     Context ctx;
-    public static final String DEVELOPER_KEY = "AIzaSyCGTdOkL4AMc6UIhtS1P3SNMfDLKPsM";
+    String DEVELOPER_KEY = "AIzaSyCGTdOkL4AMc6UIhtS1P3SNMfDLKPsM";
 
     public YouTubeAdapter(Context context) {
         this.ctx = context;

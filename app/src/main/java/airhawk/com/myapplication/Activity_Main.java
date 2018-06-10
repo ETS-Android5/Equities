@@ -75,6 +75,7 @@ import static airhawk.com.myapplication.Activity_Main.graph_low;
 import static airhawk.com.myapplication.Activity_Main.graph_market_cap;
 import static airhawk.com.myapplication.Activity_Main.graph_volume;
 import static airhawk.com.myapplication.Activity_Main.market_name;
+import static airhawk.com.myapplication.Activity_Main.newname;
 import static airhawk.com.myapplication.Activity_Main.progress;
 
 public class Activity_Main extends AppCompatActivity {
@@ -214,6 +215,7 @@ public class Activity_Main extends AppCompatActivity {
     static List<String> _AllDays =new ArrayList();
     static ArrayList<Historical_Data_Model> dataModels;
     static String market_name;
+    static String newname;
     public static String sp_name;
     public static String sp_amount;
     public static String sp_change;
@@ -282,21 +284,38 @@ public class Activity_Main extends AppCompatActivity {
             else{
             async = true;
             System.out.println(market_name+ " is the new market name");
+            Get_Alternative_Points al = new Get_Alternative_Points(Activity_Main.this);
             Get_Graph_Points nggp = new Get_Graph_Points(Activity_Main.this);
             Get_Home_News_Data nhnd = new Get_Home_News_Data(Activity_Main.this);
             Get_Video_News_Data nvnd = new Get_Video_News_Data(Activity_Main.this);
             Get_Stock_Graph_Points nsgp = new Get_Stock_Graph_Points(Activity_Main.this);
             nhnd.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
             nvnd.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-            if(market_name.contains("Bitcoin")){
+            String dj = "Dow Jones";
+            String spp = "S&P 500";
+            String nas = "Nasdaq";
+            newname=market_name;
+            if(newname !=null){
+            if(newname.contains("Bitcoin")){
                 nggp.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-            }else{
-                nsgp.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+            }
+            if(newname.contains(dj)) {
+                newname = "https://finance.yahoo.com/quote/%5EDJI/history?p=%5EDJI";
+                al.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+            }
+                if (newname.contains(spp)) {
+                    newname = "https://finance.yahoo.com/quote/%5EGSPC/history?p=%5EGSPC";
+                    al.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                }
+                if (newname.contains(nas)) {
+                    newname = "https://finance.yahoo.com/quote/%5EIXIC/history?p=^IXIC";
+                    al.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                }} else {
+                    nsgp.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                }
+
             }
 
-
-
-        }
 
         pager = findViewById(R.id.viewpager);
         pager.setVisibility(View.GONE);
@@ -429,6 +448,8 @@ public class Activity_Main extends AppCompatActivity {
     }
 
 
+
+
     class Get_Stock_Graph_Points extends AsyncTask<Void,Void,Void> {
         Context context;
         public Get_Stock_Graph_Points(Context context) {
@@ -490,12 +511,11 @@ public class Activity_Main extends AppCompatActivity {
             _7Days = _AllDays.subList(_AllDays.size()-7, _AllDays.size()-0);
             _30Days = _AllDays.subList(_AllDays.size()-30, _AllDays.size()-0);
             _90Days = _AllDays.subList(_AllDays.size()-90, _AllDays.size()-0);
-            _180Days = _AllDays.subList(_AllDays.size()-180, _AllDays.size()-0);
-            _1_Year_Chart=_AllDays.subList(_AllDays.size()-181, _AllDays.size()-0);
+            //_180Days = _AllDays.subList(_AllDays.size()-180, _AllDays.size()-0);
+            //_1_Year_Chart=_AllDays.subList(_AllDays.size()-181, _AllDays.size()-0);
 
         }
     }
-
 
     class Get_Video_News_Data extends AsyncTask<Void,Void,Void> {
         Context context;
@@ -673,9 +693,90 @@ public class Activity_Main extends AppCompatActivity {
     }
 
     class Get_Graph_Points extends AsyncTask<Void,Void,Void> {
+        Context context;
+
+        public Get_Graph_Points(Context context) {
+            this.context = context;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+
+            get_crypto_points();
+
+
+            return null;
+        }
+
+        public void get_crypto_points() {
+
+            DateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+            Date begindate = new Date();
+            Document doc = null;
+            //market_name="tron";
+            try {
+                doc = Jsoup.connect("https://coinmarketcap.com/currencies/" + market_name + "/historical-data/?start=20000101&end=" + sdf.format(begindate)).get();
+                //
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            Elements divs = doc.select("table");
+            for (Element tz : divs) {
+                Elements tds = tz.select("td");
+                Elements s = tz.getElementsByClass("text-right");
+                for (Element ss : s) {
+                    Elements p = ss.select("td[data-format-fiat]");
+                    String v = p.text();
+                    String[] splited = v.split("\\s+");
+                    if (v != null && !v.isEmpty()) {
+                        graph_high.add(splited[3]);
+                        graph_low.add(splited[2]);
+                    }
+                    Elements pn = ss.select("td[data-format-market-cap]");
+                    String vp = pn.text();
+                    String[] split = vp.split("\\s+");
+                    if (vp != null && !vp.isEmpty()) {
+                        graph_volume.add(split[0]);
+                        graph_market_cap.add(split[1]);
+                    }
+                }
+                for (Element bb : tds) {
+                    Elements gdate = bb.getElementsByClass("text-left");
+                    String result0 = gdate.text();
+                    if (result0 != null && !result0.isEmpty()) {
+                        graph_date.add(String.valueOf(result0));
+                    }
+                }
+            }
+            List<String> numbers = graph_high;
+            System.out.println(graph_high);
+            _AllDays = numbers;
+            _1_Day_Chart = _AllDays.subList(_AllDays.size() - 1, _AllDays.size() - 0);
+            _7Days = _AllDays.subList(_AllDays.size() - 7, _AllDays.size() - 0);
+            _30Days = _AllDays.subList(_AllDays.size() - 30, _AllDays.size() - 0);
+            _90Days = _AllDays.subList(_AllDays.size() - 90, _AllDays.size() - 0);
+           // _180Days = _AllDays.subList(_AllDays.size() - 180, _AllDays.size() - 0);
+            // 1_Year_Chart = _AllDays.subList(_AllDays.size() - 365, _AllDays.size() - 0);
+
+
+        }
+
+    }
+
+    class Get_Alternative_Points extends AsyncTask<Void,Void,Void> {
     Context context;
 
-    public Get_Graph_Points(Context context) {
+    public Get_Alternative_Points(Context context) {
         this.context = context;
     }
 
@@ -692,64 +793,45 @@ public class Activity_Main extends AppCompatActivity {
     @Override
     protected Void doInBackground(Void... voids) {
 
-            get_crypto_points();
+        getAlternativePoints();
 
 
         return null;
     }
 
-    public void get_crypto_points(){
 
-        DateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-        Date begindate = new Date();
+    public void getAlternativePoints(){
         Document doc = null;
-        //market_name="tron";
         try {
-            doc = Jsoup.connect("https://coinmarketcap.com/currencies/"+market_name+"/historical-data/?start=20000101&end="+sdf.format(begindate)).get();
-            //
+            doc = Jsoup.connect(newname).get();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Elements divs = doc.select("table");
-        for (Element tz :divs) {
-            Elements tds = tz.select("td");
-            Elements s = tz.getElementsByClass("text-right");
-            for (Element ss :s) {
-                Elements p = ss.select("td[data-format-fiat]");
-                String v = p.text();
-                String[] splited = v.split("\\s+");
-                if (v != null && !v.isEmpty()){
-                    graph_high.add(splited[3]);
-                    graph_low.add(splited[2]);
-                }
-                Elements pn = ss.select("td[data-format-market-cap]");
-                String vp = pn.text();
-                String[] split = vp.split("\\s+");
-                if (vp != null && !vp.isEmpty()){
-                    graph_volume.add(split[0]);
-                    graph_market_cap.add(split[1]);}
-            }
-            for (Element bb :tds) {
-                Elements gdate = bb.getElementsByClass("text-left");
-                String result0 = gdate.text();
-                if (result0 != null && !result0.isEmpty()){
-                    graph_date.add(String.valueOf(result0));}
-            }}
-        List<String> numbers = graph_high;
-        System.out.println(graph_high);
-        _AllDays=numbers;
-        _1_Day_Chart=_AllDays.subList(_AllDays.size()-1, _AllDays.size()-0);
-        _7Days = _AllDays.subList(_AllDays.size()-7, _AllDays.size()-0);
-        _30Days = _AllDays.subList(_AllDays.size()-30, _AllDays.size()-0);
-        _90Days = _AllDays.subList(_AllDays.size()-90, _AllDays.size()-0);
-        _180Days = _AllDays.subList(_AllDays.size()-180, _AllDays.size()-0);
-        _1_Year_Chart=_AllDays.subList(_AllDays.size()-365, _AllDays.size()-0);
+
+        Elements volumes = doc.getElementsByClass("BdT Bdc($c-fuji-grey-c) Ta(end) Fz(s) Whs(nw)");
+        for (Element el : volumes) {
+            Elements t = el.select("td");
+
+            String date = t.get(0).text();
+            graph_date.add(date);
+            System.out.println("DATE " + date);
+
+            String close = t.get(4).text();
+            graph_high.add(close);
+            System.out.println("CLOSE " + close);
+
+            String volume = t.get(6).text();
+            graph_volume.add(volume);
+            System.out.println("VOLUME " + volume);
+        }
+        _AllDays = graph_high;
+        _1_Day_Chart = _AllDays.subList(_AllDays.size() - 1, _AllDays.size() - 0);
+        _7Days = _AllDays.subList(_AllDays.size() - 7, _AllDays.size() - 0);
+        _30Days = _AllDays.subList(_AllDays.size() - 30, _AllDays.size() - 0);
+        _90Days = _AllDays.subList(_AllDays.size() - 90, _AllDays.size() - 0);
+        //_180Days = _AllDays.subList(_AllDays.size() - 180, _AllDays.size() - 0);
+        //_1_Year_Chart = _AllDays.subList(_AllDays.size() - 365, _AllDays.size() - 0);
+    }}
 
 
-
-
-    }
-
-
-}
 
