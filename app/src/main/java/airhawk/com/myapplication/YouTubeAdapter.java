@@ -15,7 +15,6 @@ import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubeStandalonePlayer;
 import com.google.android.youtube.player.YouTubeThumbnailLoader;
 import com.google.android.youtube.player.YouTubeThumbnailView;
-
 import java.util.ArrayList;
 
 import static airhawk.com.myapplication.Activity_Main.image_video_url;
@@ -24,7 +23,7 @@ import static airhawk.com.myapplication.Activity_Main.video_url;
 
 public class YouTubeAdapter extends RecyclerView.Adapter<YouTubeAdapter.VideoInfoHolder> {
 
-    public ArrayList<String> videoList=video_url;
+    private ArrayList<String> videoList=video_url;
     public ArrayList<String> videoText=image_video_url;
     public ArrayList<String> videoTitle=video_title;
     Context ctx;

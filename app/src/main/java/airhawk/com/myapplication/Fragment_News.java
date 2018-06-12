@@ -21,7 +21,7 @@ import static airhawk.com.myapplication.Activity_Main.progress;
  */
 
 public class Fragment_News extends Fragment {
-    RecyclerView news_feed;
+    private RecyclerView news_feed;
 
     public Fragment_News() {
     }

@@ -2,10 +2,10 @@ package airhawk.com.myapplication;
 
 public class Historical_Data_Model {
 
-    String name;
-    String cap;
-    String volume;
-    String date;
+    private String name;
+    private String cap;
+    private String volume;
+    private String date;
 
     public Historical_Data_Model(String name, String volume, String date ) {
         this.name=name;

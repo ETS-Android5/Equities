@@ -16,7 +16,7 @@ import java.util.ArrayList;
 public class CustomAdapter extends ArrayAdapter<Historical_Data_Model> implements View.OnClickListener{
 
     private ArrayList<Historical_Data_Model> dataSet;
-    Context mContext;
+    protected Context mContext;
 
     @Override
     public void onClick(View v) {
