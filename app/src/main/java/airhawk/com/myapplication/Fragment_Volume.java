@@ -25,8 +25,8 @@ import static airhawk.com.myapplication.Activity_Main.sto5;
  */
 
 public class Fragment_Volume extends Fragment {
-    static TextView stock,crypto;
-    static TextView volumestock1,volumestock2,volumestock3,volumestock4,volumestock5,volumecrypto1,volumecrypto2,volumecrypto3,volumecrypto4,volumecrypto5;
+    private TextView stock,crypto;
+    private TextView volumestock1,volumestock2,volumestock3,volumestock4,volumestock5,volumecrypto1,volumecrypto2,volumecrypto3,volumecrypto4,volumecrypto5;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

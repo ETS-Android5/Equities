@@ -7,8 +7,8 @@ import android.webkit.WebViewClient;
 
 public class WebViewActivity extends AppCompatActivity {
 
-  String webviewurl;
-  WebView wv_url;
+  private String webviewurl;
+  private WebView wv_url;
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);

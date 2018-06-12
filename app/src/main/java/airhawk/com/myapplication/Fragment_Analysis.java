@@ -38,10 +38,10 @@ import static airhawk.com.myapplication.Activity_Main.market_name;
  */
 
 public class Fragment_Analysis extends Fragment {
-    TabLayout tabLayout;
-    TextView a_name,a_marketcap,sup;
-    ListView h_listview;
-    CustomAdapter adapter;
+    private TabLayout tabLayout;
+    private TextView a_name,a_marketcap,sup;
+    private ListView h_listview;
+    private CustomAdapter adapter;
     @Override
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
