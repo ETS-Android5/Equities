@@ -9,16 +9,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import static airhawk.com.myapplication.Activity_Main.cry_1;
-import static airhawk.com.myapplication.Activity_Main.cry_2;
-import static airhawk.com.myapplication.Activity_Main.cry_3;
-import static airhawk.com.myapplication.Activity_Main.cry_4;
-import static airhawk.com.myapplication.Activity_Main.cry_5;
-import static airhawk.com.myapplication.Activity_Main.sto_1;
-import static airhawk.com.myapplication.Activity_Main.sto_2;
-import static airhawk.com.myapplication.Activity_Main.sto_3;
-import static airhawk.com.myapplication.Activity_Main.sto_4;
-import static airhawk.com.myapplication.Activity_Main.sto_5;
+import static airhawk.com.myapplication.App_Variables.cry_1;
+import static airhawk.com.myapplication.App_Variables.cry_2;
+import static airhawk.com.myapplication.App_Variables.cry_3;
+import static airhawk.com.myapplication.App_Variables.cry_4;
+import static airhawk.com.myapplication.App_Variables.cry_5;
+import static airhawk.com.myapplication.App_Variables.sto_1;
+import static airhawk.com.myapplication.App_Variables.sto_2;
+import static airhawk.com.myapplication.App_Variables.sto_3;
+import static airhawk.com.myapplication.App_Variables.sto_4;
+import static airhawk.com.myapplication.App_Variables.sto_5;
 
 /**
  * Created by Julian Dinkins on 4/25/2018.
@@ -26,14 +26,11 @@ import static airhawk.com.myapplication.Activity_Main.sto_5;
 
 public class Fragment_Losers extends Fragment {
     static TextView stock_1,stock_2,stock_3,stock_4,stock_5,crypto_1,crypto_2,crypto_3,crypto_4,crypto_5,stock_,crypto_;
-
     @Override
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
 
                              Bundle savedInstanceState) {
-
-
 
         View rootView = inflater.inflate(R.layout.fragment_losers, container, false);
         stock_ =rootView.findViewById(R.id.stock_);
@@ -69,7 +66,6 @@ public class Fragment_Losers extends Fragment {
         crypto_3.setText(cry_3);
         crypto_4.setText(cry_4);
         crypto_5.setText(cry_5);
-
         stock_1.setText(sto_1);
         stock_2.setText(sto_2);
         stock_3.setText(sto_3);

@@ -17,9 +17,9 @@ import com.google.android.youtube.player.YouTubeThumbnailLoader;
 import com.google.android.youtube.player.YouTubeThumbnailView;
 import java.util.ArrayList;
 
-import static airhawk.com.myapplication.Activity_Main.image_video_url;
-import static airhawk.com.myapplication.Activity_Main.video_title;
-import static airhawk.com.myapplication.Activity_Main.video_url;
+import static airhawk.com.myapplication.App_Variables.image_video_url;
+import static airhawk.com.myapplication.App_Variables.video_title;
+import static airhawk.com.myapplication.App_Variables.video_url;
 
 public class YouTubeAdapter extends RecyclerView.Adapter<YouTubeAdapter.VideoInfoHolder> {
 

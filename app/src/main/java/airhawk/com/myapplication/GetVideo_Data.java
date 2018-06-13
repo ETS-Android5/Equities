@@ -5,31 +5,8 @@ import android.os.AsyncTask;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-
-import static airhawk.com.myapplication.Activity_Main.all_market_cap_amount;
-import static airhawk.com.myapplication.Activity_Main.alt_market_cap_amount;
-import static airhawk.com.myapplication.Activity_Main.btc_market_cap_amount;
-import static airhawk.com.myapplication.Activity_Main.btc_market_cap_change;
-import static airhawk.com.myapplication.Activity_Main.cry1;
-import static airhawk.com.myapplication.Activity_Main.cry2;
-import static airhawk.com.myapplication.Activity_Main.cry3;
-import static airhawk.com.myapplication.Activity_Main.cry4;
-import static airhawk.com.myapplication.Activity_Main.cry5;
-import static airhawk.com.myapplication.Activity_Main.cry_1;
-import static airhawk.com.myapplication.Activity_Main.cry_2;
-import static airhawk.com.myapplication.Activity_Main.cry_3;
-import static airhawk.com.myapplication.Activity_Main.cry_4;
-import static airhawk.com.myapplication.Activity_Main.cry_5;
-import static airhawk.com.myapplication.Activity_Main.cry_vol1;
-import static airhawk.com.myapplication.Activity_Main.cry_vol2;
-import static airhawk.com.myapplication.Activity_Main.cry_vol3;
-import static airhawk.com.myapplication.Activity_Main.cry_vol4;
-import static airhawk.com.myapplication.Activity_Main.cry_vol5;
 
 
 public class GetVideo_Data extends AsyncTask<Void, Void, Void> {
