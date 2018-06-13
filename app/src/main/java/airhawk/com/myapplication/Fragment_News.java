@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
-import static airhawk.com.myapplication.Activity_Main.feedItems;
+import static airhawk.com.myapplication.App_Variables.feedItems;
 import static airhawk.com.myapplication.Activity_Main.progress;
 
 /**

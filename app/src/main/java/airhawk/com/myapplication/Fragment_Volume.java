@@ -9,16 +9,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import static airhawk.com.myapplication.Activity_Main.cry_vol1;
-import static airhawk.com.myapplication.Activity_Main.cry_vol2;
-import static airhawk.com.myapplication.Activity_Main.cry_vol3;
-import static airhawk.com.myapplication.Activity_Main.cry_vol4;
-import static airhawk.com.myapplication.Activity_Main.cry_vol5;
-import static airhawk.com.myapplication.Activity_Main.sto1;
-import static airhawk.com.myapplication.Activity_Main.sto2;
-import static airhawk.com.myapplication.Activity_Main.sto3;
-import static airhawk.com.myapplication.Activity_Main.sto4;
-import static airhawk.com.myapplication.Activity_Main.sto5;
+import static airhawk.com.myapplication.App_Variables.cry_vol1;
+import static airhawk.com.myapplication.App_Variables.cry_vol2;
+import static airhawk.com.myapplication.App_Variables.cry_vol3;
+import static airhawk.com.myapplication.App_Variables.cry_vol4;
+import static airhawk.com.myapplication.App_Variables.cry_vol5;
+import static airhawk.com.myapplication.App_Variables.sto1;
+import static airhawk.com.myapplication.App_Variables.sto2;
+import static airhawk.com.myapplication.App_Variables.sto3;
+import static airhawk.com.myapplication.App_Variables.sto4;
+import static airhawk.com.myapplication.App_Variables.sto5;
 
 /**
  * Created by Julian Dinkins on 4/25/2018.

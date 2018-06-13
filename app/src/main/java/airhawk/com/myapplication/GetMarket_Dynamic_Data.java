@@ -9,25 +9,25 @@ import org.jsoup.select.Elements;
 
 import java.io.IOException;
 
-import static airhawk.com.myapplication.Activity_Main.dow_amount;
-import static airhawk.com.myapplication.Activity_Main.dow_change;
-import static airhawk.com.myapplication.Activity_Main.dow_name;
-import static airhawk.com.myapplication.Activity_Main.nas_amount;
-import static airhawk.com.myapplication.Activity_Main.nas_change;
-import static airhawk.com.myapplication.Activity_Main.nas_name;
-import static airhawk.com.myapplication.Activity_Main.sp_amount;
-import static airhawk.com.myapplication.Activity_Main.sp_change;
-import static airhawk.com.myapplication.Activity_Main.sp_name;
-import static airhawk.com.myapplication.Activity_Main.sto1;
-import static airhawk.com.myapplication.Activity_Main.sto2;
-import static airhawk.com.myapplication.Activity_Main.sto3;
-import static airhawk.com.myapplication.Activity_Main.sto4;
-import static airhawk.com.myapplication.Activity_Main.sto5;
-import static airhawk.com.myapplication.Activity_Main.sto_1;
-import static airhawk.com.myapplication.Activity_Main.sto_2;
-import static airhawk.com.myapplication.Activity_Main.sto_3;
-import static airhawk.com.myapplication.Activity_Main.sto_4;
-import static airhawk.com.myapplication.Activity_Main.sto_5;
+import static airhawk.com.myapplication.App_Variables.dow_amount;
+import static airhawk.com.myapplication.App_Variables.dow_change;
+import static airhawk.com.myapplication.App_Variables.dow_name;
+import static airhawk.com.myapplication.App_Variables.nas_amount;
+import static airhawk.com.myapplication.App_Variables.nas_change;
+import static airhawk.com.myapplication.App_Variables.nas_name;
+import static airhawk.com.myapplication.App_Variables.sp_amount;
+import static airhawk.com.myapplication.App_Variables.sp_change;
+import static airhawk.com.myapplication.App_Variables.sp_name;
+import static airhawk.com.myapplication.App_Variables.sto1;
+import static airhawk.com.myapplication.App_Variables.sto2;
+import static airhawk.com.myapplication.App_Variables.sto3;
+import static airhawk.com.myapplication.App_Variables.sto4;
+import static airhawk.com.myapplication.App_Variables.sto5;
+import static airhawk.com.myapplication.App_Variables.sto_1;
+import static airhawk.com.myapplication.App_Variables.sto_2;
+import static airhawk.com.myapplication.App_Variables.sto_3;
+import static airhawk.com.myapplication.App_Variables.sto_4;
+import static airhawk.com.myapplication.App_Variables.sto_5;
 
 public class GetMarket_Dynamic_Data extends AsyncTask<Void, Void, Void> {
         @Override
