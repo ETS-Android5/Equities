@@ -87,6 +87,7 @@ import static airhawk.com.myapplication.App_Variables.sp_amount;
 import static airhawk.com.myapplication.App_Variables.sp_change;
 import static airhawk.com.myapplication.App_Variables.sto5;
 import static airhawk.com.myapplication.App_Variables.video_title;
+import static airhawk.com.myapplication.Fragment_Analysis.adapter;
 
 public class Activity_Main extends AppCompatActivity {
 
@@ -204,8 +205,6 @@ public class Activity_Main extends AppCompatActivity {
                 String repo = ad.getItem(position).toString();
                 market_name = repo;
                 String am = "CRYPTO";
-                System.out.println(market_name);
-
 
                 toolbar.removeView(v);
                 chosen_searchView_item.onEditorAction(EditorInfo.IME_ACTION_DONE);
@@ -235,7 +234,7 @@ public class Activity_Main extends AppCompatActivity {
     Aequity_Local_DB ld = new Aequity_Local_DB(Activity_Main.this);
     private static final String TAG = "ActivityMain";
     Boolean async = false;
-
+    boolean foo =false;
     public void onBackPressed() {
         if (isSearchOpened) {
             return;
@@ -278,11 +277,14 @@ public class Activity_Main extends AppCompatActivity {
     private void setMarketPage() {
 
         if (async = false) {
-            System.out.println(market_name + " is the market name");
             callPoints();
+
         } else {
             async = true;
-            System.out.println(market_name + " is the new market name");
+            if (foo==true){
+                reloadAllData();
+            }
+
             Get_Alternative_Points al = new Get_Alternative_Points(Activity_Main.this);
             Get_Graph_Points nggp = new Get_Graph_Points(Activity_Main.this);
             Get_Home_News_Data nhnd = new Get_Home_News_Data(Activity_Main.this);
@@ -294,34 +296,36 @@ public class Activity_Main extends AppCompatActivity {
             String spp = "S&P 500";
             String nas = "Nasdaq";
             newname = market_name;
-            if (newname != null) {
                 if (newname.contains("Bitcoin")) {
                     nggp.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                    System.out.println("CHOOSING BITCOIN");
                 }
-                if (newname.contains(dj)) {
+                else if (newname.contains(dj)) {
                     newname = "https://finance.yahoo.com/quote/%5EDJI/history?p=%5EDJI";
                     al.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                    System.out.println("CHOOSING DOW JONES");
                 }
-                if (newname.contains(spp)) {
+                else if (newname.contains(spp)) {
                     newname = "https://finance.yahoo.com/quote/%5EGSPC/history?p=%5EGSPC";
                     al.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                    System.out.println("CHOOSING SP500");
                 }
-                if (newname.contains(nas)) {
+                else if (newname.contains(nas)) {
                     newname = "https://finance.yahoo.com/quote/%5EIXIC/history?p=^IXIC";
                     al.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                    System.out.println("CHOOSING NASDAQ");
                 }
-            } else {
+                 else {
                 nsgp.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                    System.out.println("CHOOSING REGULAR STOCKS");
             }
-
+            foo =true;
         }
 
 
         pager = findViewById(R.id.viewpager);
         pager.setVisibility(View.GONE);
         market_pager = findViewById(R.id.market_pager);
-
-
         market_pager.setVisibility(View.VISIBLE);
         maa_adapter = new Market_Analysis_Adapter(this, getSupportFragmentManager());
         market_pager.setAdapter(maa_adapter);
@@ -349,13 +353,6 @@ public class Activity_Main extends AppCompatActivity {
         tabs.addTab(tabs.newTab().setText(getString(R.string.volume)));
         wlv_adapter = new Winners_Losers_Volume_Pager_Adapter(this, getSupportFragmentManager());
         pager.setAdapter(wlv_adapter);
-        tabs.setupWithViewPager(pager);
-        tabs.getTabAt(0).setCustomView(R.layout.customtab);
-        tabs.getTabAt(1).setCustomView(R.layout.customtab2);
-        tabs.getTabAt(2).setCustomView(R.layout.customtab3);
-        tabs.setSelectedTabIndicatorHeight(1);
-        tabs.setTabTextColors(Color.parseColor("#0000ff"), Color.parseColor("#ffffff"));
-
         if (findViewById(R.id.item_detail_container) != null) {
             mTwoPane = true;
         }
@@ -381,12 +378,14 @@ public class Activity_Main extends AppCompatActivity {
                 MarketsContent.MarketsItem item = (MarketsContent.MarketsItem) view.getTag();
                 market_name = String.valueOf(item.id);
                 market_name = market_name.replace(" ", "%20");
-                System.out.println("THIS IS -----  " + market_name);
                 setMarketPage();
+                if (foo !=true){
+                  reloadAllData();
+                }
+                foo =true;
+
             }
         };
-
-
         SimpleItemRecyclerViewAdapter(Activity_Main parent,
                                       List<MarketsContent.MarketsItem> items,
                                       boolean twoPane) {
@@ -394,7 +393,6 @@ public class Activity_Main extends AppCompatActivity {
             mParentActivity = parent;
             mTwoPane = twoPane;
         }
-
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext())
@@ -446,22 +444,39 @@ public class Activity_Main extends AppCompatActivity {
         }
     }
 
-    public class Get_Stock_Graph_Points extends AsyncTask<Void, Void, Void> {
+    public static class Get_Stock_Graph_Points extends AsyncTask<String, Void, Void> {
         Context context;
 
         public Get_Stock_Graph_Points(Context context) {
             this.context = context;
         }
 
-        @Override
-        protected Void doInBackground(Void... voids) {
+
+        protected Void doInBackground(String...tasks) {
             get_nasdaq_points();
+            int count = tasks.length;
+            for(int i =0;i<count;i++){
+                // Do the current task task here
+                List<String> taskList= new ArrayList<>(count);
+                String currentTask = tasks[i];
+                taskList.add(currentTask);
+
+                // Sleep the UI thread for 1 second
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            if(isCancelled()){
+                break;
+            }}
             return null;
         }
 
         public void get_nasdaq_points() {
 
             String marname = market_name;
+            System.out.println("CHOOSING !!!!!!  "+marname);
             int i = marname.indexOf(" ");
             String in = marname.substring(0, i);
             marname = in;
@@ -503,7 +518,6 @@ public class Activity_Main extends AppCompatActivity {
             }
             List<String> numbers = graph_high;
             Collections.reverse(numbers);
-            System.out.println(graph_high);
             _AllDays = numbers;
             _1_Day_Chart = _AllDays.subList(_AllDays.size() - 1, _AllDays.size() - 0);
             _7Days = _AllDays.subList(_AllDays.size() - 7, _AllDays.size() - 0);
@@ -515,7 +529,7 @@ public class Activity_Main extends AppCompatActivity {
         }
     }
 
-    public class Get_Video_News_Data extends AsyncTask<Void, Void, Void> {
+    public static class Get_Video_News_Data extends AsyncTask<String, Void, Void> {
         Context context;
 
         public Get_Video_News_Data(Context context) {
@@ -532,14 +546,30 @@ public class Activity_Main extends AppCompatActivity {
             super.onPostExecute(aVoid);
         }
 
-        @Override
-        protected Void doInBackground(Void... voids) {
+
+        protected Void doInBackground(String...tasks) {
             video_image_url.clear();
             App_Variables.image_video_url.clear();
             App_Variables.video_url.clear();
             video_title.clear();
 
             getVideoInfo();
+            int count = tasks.length;
+            for(int i =0;i<count;i++){
+                // Do the current task task here
+                List<String> taskList= new ArrayList<>(count);
+                String currentTask = tasks[i];
+                taskList.add(currentTask);
+
+                // Sleep the UI thread for 1 second
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                if(isCancelled()){
+                    break;
+                }}
             return null;
         }
 
@@ -575,7 +605,7 @@ public class Activity_Main extends AppCompatActivity {
         }
     }
 
-    class Get_Home_News_Data extends AsyncTask<Void, Void, Void> {
+    public static class Get_Home_News_Data extends AsyncTask<String, Void, Void> {
         URL url;
         Context context;
         String st, sd, sp, sl;
@@ -599,10 +629,26 @@ public class Activity_Main extends AppCompatActivity {
         }
 
 
-        @Override
-        protected Void doInBackground(Void... voids) {
+
+        protected Void doInBackground(String...tasks) {
             feedItems.clear();
             ProcessXml(GoogleRSFeed());
+            int count = tasks.length;
+            for(int i =0;i<count;i++){
+                // Do the current task task here
+                List<String> taskList= new ArrayList<>(count);
+                String currentTask = tasks[i];
+                taskList.add(currentTask);
+
+                // Sleep the UI thread for 1 second
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                if(isCancelled()){
+                    break;
+                }}
             return null;
         }
 
@@ -689,7 +735,7 @@ public class Activity_Main extends AppCompatActivity {
 
     }
 
-    class Get_Graph_Points extends AsyncTask<Void, Void, Void> {
+    public static class Get_Graph_Points extends AsyncTask<String, Void, Void> {
         Context context;
 
         public Get_Graph_Points(Context context) {
@@ -706,11 +752,26 @@ public class Activity_Main extends AppCompatActivity {
             super.onPostExecute(aVoid);
         }
 
-        @Override
-        protected Void doInBackground(Void... voids) {
+
+        protected Void doInBackground(String...tasks) {
 
             get_crypto_points();
+            int count = tasks.length;
+            for(int i =0;i<count;i++){
+                // Do the current task task here
+                List<String> taskList= new ArrayList<>(count);
+                String currentTask = tasks[i];
+                taskList.add(currentTask);
 
+                // Sleep the UI thread for 1 second
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                if(isCancelled()){
+                    break;
+                }}
 
             return null;
         }
@@ -770,7 +831,7 @@ public class Activity_Main extends AppCompatActivity {
 
     }
 
-    class Get_Alternative_Points extends AsyncTask<Void, Void, Void> {
+    public static class Get_Alternative_Points extends AsyncTask<String, Void, Void> {
         Context context;
 
         public Get_Alternative_Points(Context context) {
@@ -787,11 +848,26 @@ public class Activity_Main extends AppCompatActivity {
             super.onPostExecute(aVoid);
         }
 
-        @Override
-        protected Void doInBackground(Void... voids) {
+
+        protected Void doInBackground(String...tasks) {
 
             getAlternativePoints();
+            int count = tasks.length;
+            for(int i =0;i<count;i++){
+                // Do the current task task here
+                List<String> taskList= new ArrayList<>(count);
+                String currentTask = tasks[i];
+                taskList.add(currentTask);
 
+                // Sleep the UI thread for 1 second
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                if(isCancelled()){
+                    break;
+                }}
 
             return null;
         }
@@ -811,15 +887,13 @@ public class Activity_Main extends AppCompatActivity {
 
                 String date = t.get(0).text();
                 graph_date.add(date);
-                System.out.println("DATE " + date);
 
                 String close = t.get(4).text();
                 graph_high.add(close);
-                System.out.println("CLOSE " + close);
 
                 String volume = t.get(6).text();
                 graph_volume.add(volume);
-                System.out.println("VOLUME " + volume);
+
             }
             _AllDays = graph_high;
             _1_Day_Chart = _AllDays.subList(_AllDays.size() - 1, _AllDays.size() - 0);
@@ -856,5 +930,11 @@ public class Activity_Main extends AppCompatActivity {
         };
         userRef.addValueEventListener(postListener);
     }
-
+    private void reloadAllData(){
+        graph_date.clear();
+        graph_high.clear();
+        graph_volume.clear();
+        adapter.clear();
+        adapter.notifyDataSetChanged();
+    }
 }
