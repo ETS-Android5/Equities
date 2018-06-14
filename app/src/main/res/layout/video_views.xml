@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/parent_relativeLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
@@ -8,13 +9,13 @@
         xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/rounded_corners"
         android:clickable="true"
         android:foreground="@drawable/rounded_corners"
+        card_view:cardBackgroundColor="#00000000"
         card_view:cardCornerRadius="5dp"
         card_view:cardElevation="0dp"
-        android:layout_marginTop="10dp"
-        card_view:cardBackgroundColor="@android:color/black"
-        android:background="@drawable/rounded_corners"
         card_view:cardPreventCornerOverlap="false"
         card_view:cardUseCompatPadding="true">
 
@@ -23,8 +24,8 @@
             android:id="@+id/video_main_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:fontFamily="@font/scpro"
+            android:gravity="center"
             android:text="test"
             android:textColor="#ffffff"
             android:textSize="20sp" />
@@ -37,7 +38,8 @@
             android:scaleType="fitEnd"
             android:visibility="visible" />
 
-        <RelativeLayout android:id="@+id/relativeLayout_over_youtube_thumbnail"
+        <RelativeLayout
+            android:id="@+id/relativeLayout_over_youtube_thumbnail"
             android:layout_width="match_parent"
             android:layout_height="250dp"
             android:background="#00000000"

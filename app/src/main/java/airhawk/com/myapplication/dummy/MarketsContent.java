@@ -5,19 +5,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static airhawk.com.myapplication.Activity_Main.all_market_cap_amount;
-import static airhawk.com.myapplication.Activity_Main.alt_market_cap_amount;
-import static airhawk.com.myapplication.Activity_Main.btc_market_cap_amount;
-import static airhawk.com.myapplication.Activity_Main.btc_market_cap_change;
-import static airhawk.com.myapplication.Activity_Main.dow_amount;
-import static airhawk.com.myapplication.Activity_Main.dow_change;
-import static airhawk.com.myapplication.Activity_Main.dow_name;
-import static airhawk.com.myapplication.Activity_Main.nas_amount;
-import static airhawk.com.myapplication.Activity_Main.nas_change;
-import static airhawk.com.myapplication.Activity_Main.nas_name;
-import static airhawk.com.myapplication.Activity_Main.sp_amount;
-import static airhawk.com.myapplication.Activity_Main.sp_change;
-import static airhawk.com.myapplication.Activity_Main.sp_name;
+import static airhawk.com.myapplication.App_Variables.all_market_cap_amount;
+import static airhawk.com.myapplication.App_Variables.alt_market_cap_amount;
+import static airhawk.com.myapplication.App_Variables.btc_market_cap_amount;
+import static airhawk.com.myapplication.App_Variables.btc_market_cap_change;
+import static airhawk.com.myapplication.App_Variables.dow_amount;
+import static airhawk.com.myapplication.App_Variables.dow_change;
+import static airhawk.com.myapplication.App_Variables.dow_name;
+import static airhawk.com.myapplication.App_Variables.nas_amount;
+import static airhawk.com.myapplication.App_Variables.nas_change;
+import static airhawk.com.myapplication.App_Variables.nas_name;
+import static airhawk.com.myapplication.App_Variables.sp_amount;
+import static airhawk.com.myapplication.App_Variables.sp_change;
+import static airhawk.com.myapplication.App_Variables.sp_name;
 
 public class MarketsContent {
 

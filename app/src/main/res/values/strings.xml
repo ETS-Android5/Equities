@@ -17,9 +17,9 @@
     <string name="top5cryptos">Cryptocurrencies</string>
     <string name="bottom5stocks">Stocks</string>
     <string name="bottom5cryptos">Cryptocurrencies</string>
-    <string name="winners">Winners</string>
-    <string name="losers">Losers</string>
-    <string name="volume">Volume</string>
+    <string name="winners">WINNERS</string>
+    <string name="losers">LOSERS</string>
+    <string name="volume">VOLUME</string>
     <string name="dow_jones">Dow Jones</string>
     <string name="s_p">S&amp;P 500</string>
     <string name="nasdaq">Nasdaq</string>

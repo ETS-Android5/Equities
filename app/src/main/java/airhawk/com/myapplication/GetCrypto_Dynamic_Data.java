@@ -9,7 +9,6 @@ import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import static airhawk.com.myapplication.App_Variables.all_market_cap_amount;
 import static airhawk.com.myapplication.App_Variables.alt_market_cap_amount;
@@ -119,7 +118,7 @@ public class GetCrypto_Dynamic_Data extends AsyncTask<Void, Void, Void> {
             for (Element vlink : vse) {
                 String zz = vlink.text();
                 zz = zz.replaceAll("[()]","");
-                System.out.println(zz.indexOf(' '));
+                //System.out.println(zz.indexOf(' '));
                 cryptoarrayvolumellist.add(zz);
             }
 
@@ -128,7 +127,7 @@ public class GetCrypto_Dynamic_Data extends AsyncTask<Void, Void, Void> {
             cry_vol3 = String.valueOf(cryptoarrayvolumellist.get(2));
             cry_vol4 = String.valueOf(cryptoarrayvolumellist.get(3));
             cry_vol5 = String.valueOf(cryptoarrayvolumellist.get(4));
-            System.out.println(Arrays.asList(cryptoarrayvolumellist));
+            //System.out.println(Arrays.asList(cryptoarrayvolumellist));
 
         }}
 

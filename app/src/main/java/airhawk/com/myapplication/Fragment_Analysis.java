@@ -11,6 +11,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import static airhawk.com.myapplication.App_Variables._AllDays;
 import static airhawk.com.myapplication.App_Variables.dataModels;
@@ -27,7 +28,7 @@ public class Fragment_Analysis extends Fragment {
     private TabLayout tabLayout;
     private TextView a_name,a_marketcap,sup;
     private ListView h_listview;
-    private CustomAdapter adapter;
+    static CustomAdapter adapter;
     @Override
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -40,13 +41,12 @@ public class Fragment_Analysis extends Fragment {
         dataModels= new ArrayList<>();
         adapter= new CustomAdapter(dataModels,getContext());
 
-            dataModels.clear();
-            h_listview.invalidateViews();
+
 
         for (int i = 0; i < _AllDays.size(); i++)
         {
             dataModels.add(new Historical_Data_Model(graph_high.get(i), graph_volume.get(i), graph_date.get(i)));
-            System.out.println(String.valueOf(dataModels.get(i)));}
+            System.out.println(Arrays.asList(dataModels.get(i)));}
 
         h_listview.setAdapter(adapter);
         tabLayout = (TabLayout)rootView.findViewById(R.id.tabs);
