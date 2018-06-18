@@ -6,9 +6,18 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import java.util.Scanner;
 
+import static airhawk.com.myapplication.App_Variables._1_Day_Chart;
+import static airhawk.com.myapplication.App_Variables._30Days;
+import static airhawk.com.myapplication.App_Variables._7Days;
+import static airhawk.com.myapplication.App_Variables._90Days;
+import static airhawk.com.myapplication.App_Variables._AllDays;
 import static airhawk.com.myapplication.App_Variables.all_market_cap_amount;
 import static airhawk.com.myapplication.App_Variables.alt_market_cap_amount;
 import static airhawk.com.myapplication.App_Variables.btc_market_cap_amount;
@@ -28,15 +37,35 @@ import static airhawk.com.myapplication.App_Variables.cry_vol2;
 import static airhawk.com.myapplication.App_Variables.cry_vol3;
 import static airhawk.com.myapplication.App_Variables.cry_vol4;
 import static airhawk.com.myapplication.App_Variables.cry_vol5;
+import static airhawk.com.myapplication.App_Variables.graph_date;
+import static airhawk.com.myapplication.App_Variables.graph_high;
+import static airhawk.com.myapplication.App_Variables.graph_low;
+import static airhawk.com.myapplication.App_Variables.graph_market_cap;
+import static airhawk.com.myapplication.App_Variables.graph_volume;
+import static airhawk.com.myapplication.App_Variables.market_name;
+
 public class TestMethods {
+    static ArrayList cryptoarrayvolumellist = new ArrayList();
+    static ArrayList cryptoarraynamellist = new ArrayList();
+
     public static void main(String[] args) {
 
 
         Document volume_data = null;
         Document stock_data = null;
         Document crypto_data = null;
+        Long start_marketcaps = null;
+        Long end_marketcaps;
+        Long start_winlosecaps = null;
+        Long end_winlosecaps;
+        Long start_volume = null;
+        Long end_volume;
+
+        Long start_cmc =null;
+        Long end_cmc;
         try {
             crypto_data = Jsoup.connect("https://www.worldcoinindex.com/").timeout(10 * 10000).get();
+            start_marketcaps = System.currentTimeMillis();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -62,9 +91,14 @@ public class TestMethods {
         String altmc = t.toString();
         btc_market_cap_amount = aren[14];
         alt_market_cap_amount = altmc + "B";
+        end_marketcaps= System.currentTimeMillis();
+        System.out.println(end_marketcaps-start_marketcaps+" MarketCap time in milliseconds"); //Milli Secs
+        System.out.print((end_marketcaps-start_marketcaps)/1000); //Secs
+        System.out.println(" Seconds for "+ cryptarray.length + " entries");
         try {
 
             stock_data = Jsoup.connect("https://coinmarketcap.com/gainers-losers/").get();
+            start_winlosecaps = System.currentTimeMillis();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -72,7 +106,7 @@ public class TestMethods {
         Element f = ffsd.get(2);
         Elements xx = f.select("tbody");
         Elements elementsx = xx.select("img[src]");
-        ArrayList cryptoarraynamellist = new ArrayList();
+
         for (Element link : elementsx) {
             String z = link.attr("alt");
             cryptoarraynamellist.add(z);
@@ -99,35 +133,123 @@ public class TestMethods {
         cry_3 = String.valueOf(cryptoarraynamellist2.get(2)) + "   " + xxxd2.get(2).text();
         cry_4 = String.valueOf(cryptoarraynamellist2.get(3)) + "   " + xxxd2.get(3).text();
         cry_5 = String.valueOf(cryptoarraynamellist2.get(4)) + "   " + xxxd2.get(4).text();
-
+        end_winlosecaps= System.currentTimeMillis();
+        System.out.println(end_winlosecaps-start_winlosecaps+" Winners/Losers time in milliseconds"); //Milli Secs
+        System.out.print((end_winlosecaps-start_winlosecaps)/1000); //Secs
+        System.out.println(" Seconds for "+ cryptoarraynamellist.size() + " entries");
 
         try {
             volume_data = Jsoup.connect("https://coinmarketcap.com/currencies/volume/24-hour/").get();
+            start_volume = System.currentTimeMillis();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        ArrayList cryptoarrayvolumellist = new ArrayList();
-
+        for(int i=0; i <=5; i++){
         Elements vse = volume_data.getElementsByClass("padding-top--lv6 margin-bottom--lv2");
         for (Element vlink : vse) {
             String zz = vlink.text();
-            zz = zz.replaceAll("[()]","");
-            System.out.println(zz.indexOf(' '));
-            cryptoarrayvolumellist.add(zz);
+            zz = zz.replaceAll("[()]", "");
+            String[] split = zz.split(" ");
+            cryptoarrayvolumellist.add(split[2]);
+            cryptoarraynamellist.add(split[1]);
+        }}
+
+        cry_vol1 = String.valueOf(cryptoarraynamellist.get(0) + " " + cryptoarrayvolumellist.get(0));
+        cry_vol2 = String.valueOf(cryptoarraynamellist.get(1) + " " + cryptoarrayvolumellist.get(1));
+        cry_vol3 = String.valueOf(cryptoarraynamellist.get(2) + " " + cryptoarrayvolumellist.get(2));
+        cry_vol4 = String.valueOf(cryptoarraynamellist.get(3) + " " + cryptoarrayvolumellist.get(3));
+        cry_vol5 = String.valueOf(cryptoarraynamellist.get(4) + " " + cryptoarrayvolumellist.get(4));
+        System.out.println(cry_vol1 + "\n" + cry_vol2 + "\n" + cry_vol3 + "\n" + cry_vol4 + "\n" + cry_vol5);
+        //taco();
+        end_volume= System.currentTimeMillis();
+        System.out.println(end_volume-start_winlosecaps+" Volume time in milliseconds"); //Milli Secs
+        System.out.print((end_volume-start_winlosecaps)/1000); //Secs
+        System.out.println(" Seconds for "+ cryptoarrayvolumellist.size() + "entries");
+        System.out.println("\n");
+        Long mc = end_marketcaps-start_marketcaps;
+        Long wl = end_winlosecaps-start_winlosecaps;
+        Long cv = end_volume-start_volume;
+        Long tot = mc+wl+cv;
+        Long tots = tot/1000;
+        System.out.println(tot+" Milliseconds to finish all");
+        System.out.println(tots+" Seconds to finish all downloading for all cryptos");
+
+
+
+// Measuring the amount of time it takes to get all data from coinmarket
+        DateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        Date begindate = new Date();
+        Document doc = null;
+        start_cmc = System.currentTimeMillis();
+        String tron = "Tron";
+        try {
+            doc = Jsoup.connect("https://coinmarketcap.com/currencies/" + tron + "/historical-data/?start=20000101&end=" + sdf.format(begindate)).get();
+            //
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+        Elements divs = doc.select("table");
+        for (Element tz : divs) {
+            Elements tds = tz.select("td");
+            Elements s = tz.getElementsByClass("text-right");
+            for (Element ss : s) {
+                Elements p = ss.select("td[data-format-fiat]");
+                String v = p.text();
+                String[] splited = v.split("\\s+");
+                if (v != null && !v.isEmpty()) {
+                    graph_high.add(splited[3]);
+                    graph_low.add(splited[2]);
+                }
+                Elements pn = ss.select("td[data-format-market-cap]");
+                String vp = pn.text();
+                String[] split = vp.split("\\s+");
+                if (vp != null && !vp.isEmpty()) {
+                    graph_volume.add(split[0]);
+                    graph_market_cap.add(split[1]);
+                }
+            }
+            for (Element bb : tds) {
+                Elements gdate = bb.getElementsByClass("text-left");
+                String result0 = gdate.text();
+                if (result0 != null && !result0.isEmpty()) {
+                    graph_date.add(String.valueOf(result0));
+                }
+            }
+        }
+        List<String> numbers = graph_high;
 
-        cry_vol1 = String.valueOf(cryptoarrayvolumellist.get(0));
-        cry_vol2 = String.valueOf(cryptoarrayvolumellist.get(1));
-        cry_vol3 = String.valueOf(cryptoarrayvolumellist.get(2));
-        cry_vol4 = String.valueOf(cryptoarrayvolumellist.get(3));
-        cry_vol5 = String.valueOf(cryptoarrayvolumellist.get(4));
-        System.out.println(Arrays.asList(cryptoarrayvolumellist));
+        _AllDays = numbers;
+        _1_Day_Chart = _AllDays.subList(_AllDays.size() - 1, _AllDays.size() - 0);
+        _7Days = _AllDays.subList(_AllDays.size() - 7, _AllDays.size() - 0);
+        _30Days = _AllDays.subList(_AllDays.size() - 30, _AllDays.size() - 0);
+        _90Days = _AllDays.subList(_AllDays.size() - 90, _AllDays.size() - 0);
+        // _180Days = _AllDays.subList(_AllDays.size() - 180, _AllDays.size() - 0);
+        // 1_Year_Chart = _AllDays.subList(_AllDays.size() - 365, _AllDays.size() - 0);
+        end_cmc= System.currentTimeMillis();
+        System.out.println(end_cmc-start_cmc+" Total download time from coinmarketcap"); //Milli Secs
+        System.out.print((end_cmc-start_cmc)/1000); //Secs
     }
+   /* static void taco() {
+        Scanner scan = new Scanner(System.in);
+        System.out.println("Enter a cryptocurrency");
+        String chosen_crypto = scan.nextLine();
 
-
-
-
+        if (cryptoarraynamellist.contains(chosen_crypto)) {
+            int cry = cryptoarraynamellist.indexOf(chosen_crypto);
+            String cryvolume = String.valueOf(cryptoarrayvolumellist.get(cry));
+            System.out.print("This is the information for " + cryptoarraynamellist.get(cry));
+            System.out.println(" ");
+            System.out.println(cryvolume);
+        } else {
+            System.out.println("---" + chosen_crypto + "--- is not in the list");
+            taco();
+        }
+    }
+    */
 }
+
+
+
 
 
 

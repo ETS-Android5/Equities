@@ -38,6 +38,8 @@ public class GetCrypto_Dynamic_Data extends AsyncTask<Void, Void, Void> {
             return null;
         }
         public void crypto() {
+            ArrayList cryptoarrayvolumellist = new ArrayList();
+            ArrayList cryptoarrayvolumenamellist = new ArrayList();
             Document volume_data = null;
             Document stock_data = null;
             Document crypto_data = null;
@@ -79,10 +81,11 @@ public class GetCrypto_Dynamic_Data extends AsyncTask<Void, Void, Void> {
             Elements xx = f.select("tbody");
             Elements elementsx = xx.select("img[src]");
             ArrayList cryptoarraynamellist = new ArrayList();
+            for(int i=0; i <=5; i++){
             for (Element link : elementsx) {
                 String z = link.attr("alt");
                 cryptoarraynamellist.add(z);
-            }
+            }}
             Elements xxxd = xx.select("td[data-usd]");
             cry1 = String.valueOf(cryptoarraynamellist.get(0)) + "   " + xxxd.get(0).text();
             cry2 = String.valueOf(cryptoarraynamellist.get(1)) + "   " + xxxd.get(1).text();
@@ -95,10 +98,11 @@ public class GetCrypto_Dynamic_Data extends AsyncTask<Void, Void, Void> {
             Elements xx2 = f2.select("tbody");
             Elements elementsx2 = xx2.select("img[src]");
             ArrayList cryptoarraynamellist2 = new ArrayList();
+            for(int i=0; i <=5; i++){
             for (Element link : elementsx2) {
                 String z = link.attr("alt");
                 cryptoarraynamellist2.add(z);
-            }
+            }}
             Elements xxxd2 = xx2.select("td[data-usd]");
             cry_1 = String.valueOf(cryptoarraynamellist2.get(0)) + "   " + xxxd2.get(0).text();
             cry_2 = String.valueOf(cryptoarraynamellist2.get(1)) + "   " + xxxd2.get(1).text();
@@ -106,28 +110,28 @@ public class GetCrypto_Dynamic_Data extends AsyncTask<Void, Void, Void> {
             cry_4 = String.valueOf(cryptoarraynamellist2.get(3)) + "   " + xxxd2.get(3).text();
             cry_5 = String.valueOf(cryptoarraynamellist2.get(4)) + "   " + xxxd2.get(4).text();
 
-
             try {
                 volume_data = Jsoup.connect("https://coinmarketcap.com/currencies/volume/24-hour/").get();
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            ArrayList cryptoarrayvolumellist = new ArrayList();
 
             Elements vse = volume_data.getElementsByClass("padding-top--lv6 margin-bottom--lv2");
+            for(int i=0; i <=5; i++){
             for (Element vlink : vse) {
                 String zz = vlink.text();
-                zz = zz.replaceAll("[()]","");
-                //System.out.println(zz.indexOf(' '));
-                cryptoarrayvolumellist.add(zz);
-            }
+                zz = zz.replaceAll("[()]", "");
+                String[] split = zz.split(" ");
+                cryptoarrayvolumellist.add(split[2]);
+                cryptoarrayvolumenamellist.add(split[1]);
+            }}
 
-            cry_vol1 = String.valueOf(cryptoarrayvolumellist.get(0));
-            cry_vol2 = String.valueOf(cryptoarrayvolumellist.get(1));
-            cry_vol3 = String.valueOf(cryptoarrayvolumellist.get(2));
-            cry_vol4 = String.valueOf(cryptoarrayvolumellist.get(3));
-            cry_vol5 = String.valueOf(cryptoarrayvolumellist.get(4));
-            //System.out.println(Arrays.asList(cryptoarrayvolumellist));
+            cry_vol1 = String.valueOf(cryptoarrayvolumenamellist.get(0) + " " + cryptoarrayvolumellist.get(0));
+            cry_vol2 = String.valueOf(cryptoarrayvolumenamellist.get(1) + " " + cryptoarrayvolumellist.get(1));
+            cry_vol3 = String.valueOf(cryptoarrayvolumenamellist.get(2) + " " + cryptoarrayvolumellist.get(2));
+            cry_vol4 = String.valueOf(cryptoarrayvolumenamellist.get(3) + " " + cryptoarrayvolumellist.get(3));
+            cry_vol5 = String.valueOf(cryptoarrayvolumenamellist.get(4) + " " + cryptoarrayvolumellist.get(4));
+            //System.out.println(cry_vol1 + "\n" + cry_vol2 + "\n" + cry_vol3 + "\n" + cry_vol4 + "\n" + cry_vol5);
 
         }}
 
