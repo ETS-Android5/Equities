@@ -235,6 +235,7 @@ public class Activity_Main extends AppCompatActivity {
     private static final String TAG = "ActivityMain";
     Boolean async = false;
     boolean foo =false;
+
     public void onBackPressed() {
         if (isSearchOpened) {
             return;

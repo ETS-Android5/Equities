@@ -1,6 +1,5 @@
 package airhawk.com.myapplication;
 
-import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -39,8 +38,8 @@ public class Fragment_Losers extends Fragment {
 
         stock_.setTypeface(custom_font);
         crypto_.setTypeface(custom_font);
-        stock_.setPaintFlags(stock_.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
-        crypto_.setPaintFlags(crypto_.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
+        //stock_.setPaintFlags(stock_.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
+        //crypto_.setPaintFlags(crypto_.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
         stock_1 = rootView.findViewById(R.id.stock_1);
         stock_1.setTypeface(custom_font);
         stock_2 = rootView.findViewById(R.id.stock_2);

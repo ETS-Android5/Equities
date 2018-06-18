@@ -1,6 +1,5 @@
 package airhawk.com.myapplication;
 
-import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -37,9 +36,9 @@ public class Fragment_Volume extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_volume, container, false);
         stock =rootView.findViewById(R.id.stock);
-        stock.setPaintFlags(stock.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
+        //stock.setPaintFlags(stock.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
         crypto =rootView.findViewById(R.id.crypto);
-        crypto.setPaintFlags(crypto.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
+        //crypto.setPaintFlags(crypto.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
         Typeface custom_font = Typeface.createFromAsset(getActivity().getAssets(),"fonts/Oregon.ttf");
 
         stock.setTypeface(custom_font);
