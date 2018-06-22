@@ -62,15 +62,12 @@ import java.util.regex.Pattern;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-
 import airhawk.com.myapplication.dummy.MarketsContent;
-
 import static airhawk.com.myapplication.App_Variables._1_Day_Chart;
 import static airhawk.com.myapplication.App_Variables._30Days;
 import static airhawk.com.myapplication.App_Variables._7Days;
 import static airhawk.com.myapplication.App_Variables._90Days;
 import static airhawk.com.myapplication.App_Variables._AllDays;
-import static airhawk.com.myapplication.App_Variables.cry5;
 import static airhawk.com.myapplication.App_Variables.dow_amount;
 import static airhawk.com.myapplication.App_Variables.dow_change;
 import static airhawk.com.myapplication.App_Variables.feedItems;
@@ -79,15 +76,14 @@ import static airhawk.com.myapplication.App_Variables.graph_high;
 import static airhawk.com.myapplication.App_Variables.graph_low;
 import static airhawk.com.myapplication.App_Variables.graph_market_cap;
 import static airhawk.com.myapplication.App_Variables.graph_volume;
-import static airhawk.com.myapplication.App_Variables.market_name;
 import static airhawk.com.myapplication.App_Variables.nas_amount;
 import static airhawk.com.myapplication.App_Variables.nas_change;
 import static airhawk.com.myapplication.App_Variables.newname;
 import static airhawk.com.myapplication.App_Variables.sp_amount;
 import static airhawk.com.myapplication.App_Variables.sp_change;
-import static airhawk.com.myapplication.App_Variables.sto5;
 import static airhawk.com.myapplication.App_Variables.video_title;
 import static airhawk.com.myapplication.Fragment_Analysis.adapter;
+import static airhawk.com.myapplication.GetCrypto_Dynamic_Data.cryptonamelist;
 
 public class Activity_Main extends AppCompatActivity {
 
@@ -152,8 +148,8 @@ public class Activity_Main extends AppCompatActivity {
                         dow_change != null && !dow_change.isEmpty() &&
                         nas_amount != null && !nas_amount.isEmpty() &&
                         nas_change != null && !nas_change.isEmpty() &&
-                        sto5 != null && !sto5.isEmpty() &&
-                        cry5 != null && !cry5.isEmpty()) {
+                       // sto5 != null && !sto5.isEmpty() &&
+                        cryptonamelist != null && !cryptonamelist.isEmpty()) {
                     setMainPage();
                 } else {
 
@@ -202,9 +198,13 @@ public class Activity_Main extends AppCompatActivity {
                 inputMethodManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
 
                 feedItems.clear();
-                String repo = ad.getItem(position).toString();
-                market_name = repo;
-                String am = "CRYPTO";
+                String[] split_marketinfo = ad.getItem(position).toString().split("  ");
+                ap_info.setMarketSymbol(split_marketinfo[0]);
+                ap_info.setMarketName(split_marketinfo[1]);
+                ap_info.setMarketType(split_marketinfo[2]);
+                System.out.println("SYMBOL: "+ap_info.getMarketSymbol());
+                System.out.println("NAME: "+ap_info.getMarketName());
+                System.out.println("TYPE: "+ap_info.getMarketType());
 
                 toolbar.removeView(v);
                 chosen_searchView_item.onEditorAction(EditorInfo.IME_ACTION_DONE);
@@ -224,6 +224,7 @@ public class Activity_Main extends AppCompatActivity {
     private Winners_Losers_Volume_Pager_Adapter wlv_adapter;
     private Market_Analysis_Adapter maa_adapter;
     private boolean mTwoPane;
+
     private ViewPager pager, market_pager;
     private View recyclerView;
     private static List<String> video_image_url = new ArrayList<>();
@@ -235,7 +236,7 @@ public class Activity_Main extends AppCompatActivity {
     private static final String TAG = "ActivityMain";
     Boolean async = false;
     boolean foo =false;
-
+    static App_Variables ap_info = new App_Variables();
     public void onBackPressed() {
         if (isSearchOpened) {
             return;
@@ -267,7 +268,7 @@ public class Activity_Main extends AppCompatActivity {
 
 
         ghnd.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-        if (market_name.contains("Bitcoin")) {
+        if (ap_info.getMarketType().equals("Crypto")) {
             ggp.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         } else {
             gsgp.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
@@ -287,40 +288,15 @@ public class Activity_Main extends AppCompatActivity {
             }
 
             Get_Alternative_Points al = new Get_Alternative_Points(Activity_Main.this);
-            Get_Graph_Points nggp = new Get_Graph_Points(Activity_Main.this);
             Get_Home_News_Data nhnd = new Get_Home_News_Data(Activity_Main.this);
             Get_Video_News_Data nvnd = new Get_Video_News_Data(Activity_Main.this);
-            Get_Stock_Graph_Points nsgp = new Get_Stock_Graph_Points(Activity_Main.this);
             nhnd.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
             nvnd.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-            String dj = "Dow Jones";
-            String spp = "S&P 500";
-            String nas = "Nasdaq";
-            newname = market_name;
-                if (newname.contains("Bitcoin")) {
-                    nggp.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                    System.out.println("CHOOSING BITCOIN");
-                }
-                else if (newname.contains(dj)) {
-                    newname = "https://finance.yahoo.com/quote/%5EDJI/history?p=%5EDJI";
-                    al.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                    System.out.println("CHOOSING DOW JONES");
-                }
-                else if (newname.contains(spp)) {
-                    newname = "https://finance.yahoo.com/quote/%5EGSPC/history?p=%5EGSPC";
-                    al.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                    System.out.println("CHOOSING SP500");
-                }
-                else if (newname.contains(nas)) {
-                    newname = "https://finance.yahoo.com/quote/%5EIXIC/history?p=^IXIC";
-                    al.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                    System.out.println("CHOOSING NASDAQ");
-                }
-                 else {
-                nsgp.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                    System.out.println("CHOOSING REGULAR STOCKS");
-            }
-            foo =true;
+
+
+                System.out.println("CHOOSING 4 "+ap_info.getMarketType());
+
+                foo =true;
         }
 
 
@@ -369,29 +345,12 @@ public class Activity_Main extends AppCompatActivity {
     }
 
     public class SimpleItemRecyclerViewAdapter extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
-
-        private final Activity_Main mParentActivity;
         private final List<MarketsContent.MarketsItem> mValues;
-        private final boolean mTwoPane;
-        private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                MarketsContent.MarketsItem item = (MarketsContent.MarketsItem) view.getTag();
-                market_name = String.valueOf(item.id);
-                market_name = market_name.replace(" ", "%20");
-                setMarketPage();
-                if (foo !=true){
-                  reloadAllData();
-                }
-                foo =true;
-
-            }
-        };
+        private AdapterView.OnItemClickListener mListener;
         SimpleItemRecyclerViewAdapter(Activity_Main parent,
                                       List<MarketsContent.MarketsItem> items,
                                       boolean twoPane) {
             mValues = items;
-            mParentActivity = parent;
             mTwoPane = twoPane;
         }
         @Override
@@ -404,6 +363,7 @@ public class Activity_Main extends AppCompatActivity {
         @SuppressLint("ResourceAsColor")
         @Override
         public void onBindViewHolder(final ViewHolder holder, final int position) {
+
             holder.mIdView.setText(mValues.get(position).id);
             holder.mPriceView.setText("$ " + mValues.get(position).content);
             if (mValues.get(position).change.contains("-")) {
@@ -422,9 +382,83 @@ public class Activity_Main extends AppCompatActivity {
             holder.mPriceView.setTypeface(custom_font);
             holder.mChangeView.setTypeface(custom_font);
             holder.itemView.setTag(mValues.get(position));
-            holder.itemView.setOnClickListener(mOnClickListener);
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mValues.get(position);
+                    System.out.println("This is the position "+position);
+                    String temp = holder.mIdView.getText().toString();
+                    System.out.println("This is the NAME "+holder.mIdView.getText().toString());
+                    switch (position) {
+                        case 0:
+                            temp = "Dow Jones";
+                            ap_info.setMarketName(temp);
+                            ap_info.setMarketSymbol("DJI");
+                            ap_info.setMarketType("Stock");
+                            setMarketPage();
+                            break;
+                        case 1:
+                            temp = "S%P 500";
+                            ap_info.setMarketName(temp);
+                            ap_info.setMarketSymbol("INX");
+                            ap_info.setMarketType("Stock");
+                            setMarketPage();
+                            break;
+                        case 2:
+                            temp = "Nasdaq";
+                            ap_info.setMarketName(temp);
+                            ap_info.setMarketSymbol("IXIC");
+                            ap_info.setMarketType("Stock");
+                            setMarketPage();
+                            break;
+                        case 3:
+                            temp = "Bitcoin";
+                            ap_info.setMarketName(temp);
+                            ap_info.setMarketSymbol("BTC");
+                            ap_info.setMarketType("Crypto");
+                            setMarketPage();
+                            break;
+                        case 4:
+                            temp = "All Crypto";
+                            ap_info.setMarketName(temp);
+                            ap_info.setMarketSymbol("ALL");
+                            ap_info.setMarketType("Crypto");
+                            setMarketPage();
+                            break;
+                        case 5:
+                            temp = "Alt Cap";
+                            ap_info.setMarketName(temp);
+                            ap_info.setMarketSymbol("ALT");
+                            ap_info.setMarketType("Crypto");
+                            setMarketPage();
+                            break;
 
+                        case 6:
+                            temp = "IPO";
+                            ap_info.setMarketName(temp);
+                            ap_info.setMarketSymbol("IPO");
+                            ap_info.setMarketType("Stock");
+                            setMarketPage();
+                            break;
+                        case 7:
+                            temp = "ICO";
+                            ap_info.setMarketName(temp);
+                            ap_info.setMarketSymbol("ICO");
+                            ap_info.setMarketType("Crypto");
+                            setMarketPage();
+                            break;
+                        default:
+                            temp = temp;
+                            break;
+
+                    }
+
+
+
+                }
+            });
         }
+
 
         @Override
         public int getItemCount() {
@@ -476,7 +510,7 @@ public class Activity_Main extends AppCompatActivity {
 
         public void get_nasdaq_points() {
 
-            String marname = market_name;
+            String marname = ap_info.getMarketName();
             System.out.println("CHOOSING !!!!!!  "+marname);
             int i = marname.indexOf(" ");
             String in = marname.substring(0, i);
@@ -585,7 +619,7 @@ public class Activity_Main extends AppCompatActivity {
             String url_1st = "https://i.ytimg.com/vi/";
             String url_3rd = "/hqdefault.jpg";
             try {
-                Document doc = Jsoup.connect(url).data("search_query", market_name).userAgent("Mozilla/5.0").get();
+                Document doc = Jsoup.connect(url).data("search_query", ap_info.getMarketName()).userAgent("Mozilla/5.0").get();
 
                 for (Element a : doc.select(".yt-lockup-title > a[title]")) {
                     begin_url = (a.attr("href") + " " + a.attr("title"));
@@ -707,7 +741,7 @@ public class Activity_Main extends AppCompatActivity {
         public org.w3c.dom.Document GoogleRSFeed() {
             try {
                 String repo;
-                repo = market_name;
+                repo = ap_info.getMarketName();
                 repo = repo.replace("  ", " ");
                 System.out.println("BIG BOOBS1 " + repo);
                 if (repo.contains(" ")) {
@@ -784,7 +818,7 @@ public class Activity_Main extends AppCompatActivity {
             Document doc = null;
             //market_name="tron";
             try {
-                doc = Jsoup.connect("https://coinmarketcap.com/currencies/" + market_name + "/historical-data/?start=20000101&end=" + sdf.format(begindate)).get();
+                doc = Jsoup.connect("https://coinmarketcap.com/currencies/" + ap_info.getMarketName() + "/historical-data/?start=20000101&end=" + sdf.format(begindate)).get();
                 //
             } catch (IOException e) {
                 e.printStackTrace();
@@ -915,7 +949,7 @@ public class Activity_Main extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot childDataSnapshot : dataSnapshot.getChildren()) {
                     App_Variables team = new App_Variables();
-                    team.setEquity_Symbol(String.valueOf(childDataSnapshot.child("0").getValue()));
+                    team.setMarketSymbol(String.valueOf(childDataSnapshot.child("0").getValue()));
                     name_arraylist.add(String.valueOf(team));
                     ld = Aequity_Local_DB.getInstance(Activity_Main.this);
                 }

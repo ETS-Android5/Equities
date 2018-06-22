@@ -8,16 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import static airhawk.com.myapplication.App_Variables.cry_1;
-import static airhawk.com.myapplication.App_Variables.cry_2;
-import static airhawk.com.myapplication.App_Variables.cry_3;
-import static airhawk.com.myapplication.App_Variables.cry_4;
-import static airhawk.com.myapplication.App_Variables.cry_5;
-import static airhawk.com.myapplication.App_Variables.sto_1;
-import static airhawk.com.myapplication.App_Variables.sto_2;
-import static airhawk.com.myapplication.App_Variables.sto_3;
-import static airhawk.com.myapplication.App_Variables.sto_4;
-import static airhawk.com.myapplication.App_Variables.sto_5;
 
 /**
  * Created by Julian Dinkins on 4/25/2018.
@@ -60,7 +50,7 @@ public class Fragment_Losers extends Fragment {
         crypto_4.setTypeface(custom_font);
         crypto_5= rootView.findViewById(R.id.crypto_5);
         crypto_5.setTypeface(custom_font);
-        crypto_1.setText(cry_1);
+       /* crypto_1.setText(cry_1);
         crypto_2.setText(cry_2);
         crypto_3.setText(cry_3);
         crypto_4.setText(cry_4);
@@ -70,6 +60,7 @@ public class Fragment_Losers extends Fragment {
         stock_3.setText(sto_3);
         stock_4.setText(sto_4);
         stock_5.setText(sto_5);
+      */
         return rootView;
 
     }

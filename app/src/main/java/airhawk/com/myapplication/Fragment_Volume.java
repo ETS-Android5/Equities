@@ -8,16 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import static airhawk.com.myapplication.App_Variables.cry_vol1;
-import static airhawk.com.myapplication.App_Variables.cry_vol2;
-import static airhawk.com.myapplication.App_Variables.cry_vol3;
-import static airhawk.com.myapplication.App_Variables.cry_vol4;
-import static airhawk.com.myapplication.App_Variables.cry_vol5;
-import static airhawk.com.myapplication.App_Variables.sto1;
-import static airhawk.com.myapplication.App_Variables.sto2;
-import static airhawk.com.myapplication.App_Variables.sto3;
-import static airhawk.com.myapplication.App_Variables.sto4;
-import static airhawk.com.myapplication.App_Variables.sto5;
 
 /**
  * Created by Julian Dinkins on 4/25/2018.
@@ -58,6 +48,7 @@ public class Fragment_Volume extends Fragment {
         volumecrypto4.setTypeface(custom_font);
         volumestock5 = rootView.findViewById(R.id.volumestock5);
         volumecrypto5.setTypeface(custom_font);
+        /*
         volumestock1.setText(sto1);
         volumestock1.setTypeface(custom_font);
         volumecrypto2.setTypeface(custom_font);
@@ -80,7 +71,7 @@ public class Fragment_Volume extends Fragment {
         volumecrypto3.setText(cry_vol3);
         volumecrypto4.setText(cry_vol4);
         volumecrypto5.setText(cry_vol5);
-
+*/
         return rootView;
 
     }
