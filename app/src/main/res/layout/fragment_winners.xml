@@ -5,7 +5,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+    <android.support.v7.widget.AppCompatTextView
 
+        android:id="@+id/stock"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:text="@string/stock_market_gainers"
+        android:textColor="@color/darkTextColor"
+        android:textSize="26sp"
+        android:textStyle="bold" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -14,110 +24,289 @@
         android:orientation="vertical"
         tools:ignore="MissingConstraints">
 
-        <android.support.v7.widget.AppCompatTextView
 
-            android:id="@+id/stock"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:text="@string/stock_market_gainers"
-            android:textColor="@color/darkTextColor"
-            android:textSize="26sp"
-            android:textStyle="bold" />
         <TableRow
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent"
+            android:layout_weight="1">
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
                 android:layout_weight="1"
-                android:gravity="center"
+                android:gravity="left|center"
                 android:text="Symbol"
                 android:textColor="@color/darkTextColor"
-                android:textSize="10sp" />
+                android:textSize="14sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:layout_weight=".5"
                 android:gravity="center"
                 android:text="Name"
                 android:textColor="@color/darkTextColor"
-                android:textSize="10sp" />
+                android:textSize="14sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginRight="5dp"
                 android:layout_weight="1"
-                android:gravity="center"
+                android:gravity="right|center"
                 android:text="Change"
                 android:textColor="@color/darkTextColor"
-                android:textSize="10sp" />
+                android:textSize="14sp"
+                android:textStyle="bold" />
         </TableRow>
-           <android.support.v7.widget.AppCompatTextView
 
-            android:id="@+id/stock1"
+
+        <TableRow
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="3dp"
-            android:gravity="center"
-            android:text="GSAT GlobalStar +400.56%"
-            android:textColor="@color/darkTextColor"
-            android:textSize="20sp"
-               />
+            android:layout_height="match_parent"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="0dp"
+            android:layout_weight="1">
 
-               <android.support.v7.widget.AppCompatTextView
+            <android.support.v7.widget.AppCompatTextView
 
-            android:id="@+id/stock2"
+                android:id="@+id/stocksymbol1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
+                android:layout_weight="1"
+                android:gravity="left|center"
+                android:text="GSAT GlobalStar +400.56%"
+                android:textColor="@color/darkTextColor"
+                android:textSize="16sp" />
+
+            <android.support.v7.widget.AppCompatTextView
+
+                android:id="@+id/stockname1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight=".5"
+                android:gravity="center"
+                android:text="GSAT GlobalStar +400.56%"
+                android:textColor="@color/darkTextColor"
+                android:textSize="16sp" />
+
+            <android.support.v7.widget.AppCompatTextView
+
+                android:id="@+id/stocktype1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="0dp"
+                android:layout_weight="1"
+                android:gravity="right|center"
+                android:text="GSAT GlobalStar +400.56%"
+                android:textColor="@color/darkTextColor"
+                android:textSize="16sp" />
+            />
+        </TableRow>
+
+        <TableRow
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="3dp"
-            android:gravity="center"
-            android:text="DPW Digital Power +332.56%"
-            android:textColor="@color/darkTextColor"
-            android:textSize="20sp"
-               />
+            android:layout_height="match_parent"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="0dp"
+            android:layout_weight="1">
 
-       <android.support.v7.widget.AppCompatTextView
+            <android.support.v7.widget.AppCompatTextView
 
-            android:id="@+id/stock3"
+                android:id="@+id/stocksymbol2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
+                android:layout_weight="1"
+                android:gravity="left|center"
+                android:text="GSAT GlobalStar +400.56%"
+                android:textColor="@color/darkTextColor"
+                android:textSize="16sp" />
+
+            <android.support.v7.widget.AppCompatTextView
+
+                android:id="@+id/stockname2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="0dp"
+                android:layout_weight=".5"
+                android:gravity="center"
+                android:text="GSAT GlobalStar +400.56%"
+                android:textColor="@color/darkTextColor"
+                android:textSize="16sp" />
+
+            <android.support.v7.widget.AppCompatTextView
+
+                android:id="@+id/stocktype2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="0dp"
+                android:layout_weight="1"
+                android:gravity="right|center"
+                android:text="GSAT GlobalStar +400.56%"
+                android:textColor="@color/darkTextColor"
+                android:textSize="16sp" />
+            />
+        </TableRow>
+
+        <TableRow
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="3dp"
-            android:gravity="center"
-            android:text="BIOA Biowhatever +209.46"
-            android:textColor="@color/darkTextColor"
-            android:textSize="20sp"
-               />
+            android:layout_height="match_parent"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="0dp"
+            android:layout_weight="1">
 
-        <android.support.v7.widget.AppCompatTextView
+            <android.support.v7.widget.AppCompatTextView
 
-            android:id="@+id/stock4"
+                android:id="@+id/stocksymbol3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
+                android:layout_weight="1"
+                android:gravity="left|center"
+                android:text="GSAT GlobalStar +400.56%"
+                android:textColor="@color/darkTextColor"
+                android:textSize="16sp" />
+
+            <android.support.v7.widget.AppCompatTextView
+
+                android:id="@+id/stockname3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="0dp"
+                android:layout_weight=".5"
+                android:gravity="center"
+                android:text="GSAT GlobalStar +400.56%"
+                android:textColor="@color/darkTextColor"
+                android:textSize="16sp" />
+
+            <android.support.v7.widget.AppCompatTextView
+
+                android:id="@+id/stocktype3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="0dp"
+                android:layout_weight="1"
+                android:gravity="right|center"
+                android:text="GSAT GlobalStar +400.56%"
+                android:textColor="@color/darkTextColor"
+                android:textSize="16sp" />
+            />
+        </TableRow>
+
+        <TableRow
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="3dp"
-            android:gravity="center"
-            android:text="BIOA Biowhatever +209.46"
-            android:textColor="@color/darkTextColor"
-            android:textSize="20sp"
-               />
+            android:layout_height="match_parent"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="0dp"
+            android:layout_weight="1">
 
-                <android.support.v7.widget.AppCompatTextView
+            <android.support.v7.widget.AppCompatTextView
 
-            android:id="@+id/stock5"
+                android:id="@+id/stocksymbol4"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
+                android:layout_weight="1"
+                android:gravity="left|center"
+                android:text="GSAT GlobalStar +400.56%"
+                android:textColor="@color/darkTextColor"
+                android:textSize="16sp" />
+
+            <android.support.v7.widget.AppCompatTextView
+
+                android:id="@+id/stockname4"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="0dp"
+                android:layout_weight=".5"
+                android:gravity="center"
+                android:text="GSAT GlobalStar +400.56%"
+                android:textColor="@color/darkTextColor"
+                android:textSize="16sp" />
+
+            <android.support.v7.widget.AppCompatTextView
+
+                android:id="@+id/stocktype4"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="0dp"
+                android:layout_weight="1"
+                android:gravity="right|center"
+                android:text="GSAT GlobalStar +400.56%"
+                android:textColor="@color/darkTextColor"
+                android:textSize="16sp" />
+            />
+        </TableRow>
+
+        <TableRow
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="3dp"
-            android:gravity="center"
-            android:textColor="@color/darkTextColor"
-            android:textSize="20sp"
-               />
+            android:layout_height="match_parent"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="0dp"
+            android:layout_weight="1">
+
+            <android.support.v7.widget.AppCompatTextView
+
+                android:id="@+id/stocksymbol5"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
+                android:layout_weight="1"
+                android:gravity="left|right|center"
+                android:text="GSAT GlobalStar +400.56%"
+                android:textColor="@color/darkTextColor"
+                android:textSize="16sp" />
+
+            <android.support.v7.widget.AppCompatTextView
+
+                android:id="@+id/stockname5"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="0dp"
+                android:layout_weight=".5"
+                android:gravity="center"
+                android:text="GSAT GlobalStar +400.56%"
+                android:textColor="@color/darkTextColor"
+                android:textSize="16sp" />
+
+            <android.support.v7.widget.AppCompatTextView
+
+                android:id="@+id/stocktype5"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="0dp"
+                android:layout_weight="1"
+                android:gravity="right|center"
+                android:text="GSAT GlobalStar +400.56%"
+                android:textColor="@color/darkTextColor"
+                android:textSize="16sp" />
+            />
+        </TableRow>
 
 
     </LinearLayout>
 
+    <android.support.v7.widget.AppCompatTextView
+
+        android:id="@+id/crypto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:text="@string/crypto_gainers"
+        android:textColor="@color/darkTextColor"
+        android:textSize="26sp"
+        android:textStyle="bold" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -125,110 +314,266 @@
         android:layout_weight="1"
         android:orientation="vertical">
 
-        <android.support.v7.widget.AppCompatTextView
-
-            android:id="@+id/crypto"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:text="@string/crypto_gainers"
-            android:textColor="@color/darkTextColor"
-            android:textSize="26sp"
-            android:textStyle="bold" />
 
         <TableRow
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent"
+            android:layout_weight="1">
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
                 android:layout_weight="1"
-                android:gravity="center"
+                android:gravity="left|center"
                 android:text="Symbol"
                 android:textColor="@color/darkTextColor"
-                android:textSize="10sp" />
+                android:textSize="14sp" />
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:layout_weight=".5"
                 android:gravity="center"
                 android:text="Name"
                 android:textColor="@color/darkTextColor"
-                android:textSize="10sp" />
+                android:textSize="14sp" />
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginRight="5dp"
                 android:layout_weight="1"
-                android:gravity="center"
+                android:gravity="right|center"
                 android:text="Change"
                 android:textColor="@color/darkTextColor"
-                android:textSize="10sp" />
+                android:textSize="14sp" />
         </TableRow>
 
-        <android.support.v7.widget.AppCompatTextView
-
-            android:id="@+id/crypto1"
+        <TableRow
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="3dp"
-            android:gravity="center"
-            android:text="TRX Tron +1430.56%"
-            android:textColor="@color/darkTextColor"
-            android:textSize="20sp"
-               />
+            android:layout_height="match_parent"
+            android:layout_weight="1">
 
-                <android.support.v7.widget.AppCompatTextView
+            <android.support.v7.widget.AppCompatTextView
 
-            android:id="@+id/crypto2"
+                android:id="@+id/cryptosymbol1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="0dp"
+                android:layout_weight="1"
+                android:gravity="left|center"
+                android:text="GSAT GlobalStar +400.56%"
+                android:textColor="@color/darkTextColor"
+                android:textSize="16sp" />
+
+            <android.support.v7.widget.AppCompatTextView
+
+                android:id="@+id/cryptoname1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="0dp"
+                android:layout_weight=".5"
+                android:gravity="center"
+                android:text="GSAT GlobalStar +400.56%"
+                android:textColor="@color/darkTextColor"
+                android:textSize="16sp" />
+
+            <android.support.v7.widget.AppCompatTextView
+
+                android:id="@+id/cryptotype1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="0dp"
+                android:layout_weight="1"
+                android:gravity="right|center"
+                android:text="GSAT GlobalStar +400.56%"
+                android:textColor="@color/darkTextColor"
+                android:textSize="16sp" />
+            />
+        </TableRow>
+
+        <TableRow
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="3dp"
-            android:gravity="center"
-            android:text="BTC Bitcoin +242.56%"
-            android:textColor="@color/darkTextColor"
-            android:textSize="20sp"
-               />
+            android:layout_height="match_parent"
+            android:layout_weight="1">
 
-                <android.support.v7.widget.AppCompatTextView
+            <android.support.v7.widget.AppCompatTextView
 
-            android:id="@+id/crypto3"
+                android:id="@+id/cryptosymbol2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="0dp"
+                android:layout_weight="1"
+                android:gravity="left|center"
+                android:text="GSAT GlobalStar +400.56%"
+                android:textColor="@color/darkTextColor"
+                android:textSize="16sp" />
+
+            <android.support.v7.widget.AppCompatTextView
+
+                android:id="@+id/cryptoname2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="0dp"
+                android:layout_weight=".5"
+                android:gravity="center"
+                android:text="GSAT GlobalStar +400.56%"
+                android:textColor="@color/darkTextColor"
+                android:textSize="16sp" />
+
+            <android.support.v7.widget.AppCompatTextView
+
+                android:id="@+id/cryptotype2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="0dp"
+                android:layout_weight="1"
+                android:gravity="right|center"
+                android:text="GSAT GlobalStar +400.56%"
+                android:textColor="@color/darkTextColor"
+                android:textSize="16sp" />
+            />
+        </TableRow>
+
+        <TableRow
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="3dp"
-            android:gravity="center"
-            android:text="ETH ETHEREUM +111.19"
-            android:textColor="@color/darkTextColor"
-            android:textSize="20sp"
-               />
+            android:layout_height="match_parent"
+            android:layout_weight="1">
 
-                <android.support.v7.widget.AppCompatTextView
+            <android.support.v7.widget.AppCompatTextView
 
-            android:id="@+id/crypto4"
+                android:id="@+id/cryptosymbol3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="0dp"
+                android:layout_weight="1"
+                android:gravity="left|center"
+                android:text="GSAT GlobalStar +400.56%"
+                android:textColor="@color/darkTextColor"
+                android:textSize="16sp" />
+
+            <android.support.v7.widget.AppCompatTextView
+
+                android:id="@+id/cryptoname3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="0dp"
+                android:layout_weight=".5"
+                android:gravity="center"
+                android:text="GSAT GlobalStar +400.56%"
+                android:textColor="@color/darkTextColor"
+                android:textSize="16sp" />
+
+            <android.support.v7.widget.AppCompatTextView
+
+                android:id="@+id/cryptotype3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="0dp"
+                android:layout_weight="1"
+                android:gravity="right|center"
+                android:text="GSAT GlobalStar +400.56%"
+                android:textColor="@color/darkTextColor"
+                android:textSize="16sp" />
+            />
+        </TableRow>
+
+        <TableRow
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="3dp"
-            android:gravity="center"
-            android:text="TRX Tron +1430.56%"
-            android:textColor="@color/darkTextColor"
-            android:textSize="20sp"
-               />
+            android:layout_height="match_parent"
+            android:layout_weight="1">
 
-               <android.support.v7.widget.AppCompatTextView
+            <android.support.v7.widget.AppCompatTextView
 
-            android:id="@+id/crypto5"
+                android:id="@+id/cryptosymbol4"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="0dp"
+                android:layout_weight="1"
+                android:gravity="left|center"
+                android:text="GSAT GlobalStar +400.56%"
+                android:textColor="@color/darkTextColor"
+                android:textSize="16sp" />
+
+            <android.support.v7.widget.AppCompatTextView
+
+                android:id="@+id/cryptoname4"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="0dp"
+                android:layout_weight=".5"
+                android:gravity="center"
+                android:text="GSAT GlobalStar +400.56%"
+                android:textColor="@color/darkTextColor"
+                android:textSize="16sp" />
+
+            <android.support.v7.widget.AppCompatTextView
+
+                android:id="@+id/cryptotype4"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="0dp"
+                android:layout_weight="1"
+                android:gravity="right|center"
+                android:text="GSAT GlobalStar +400.56%"
+                android:textColor="@color/darkTextColor"
+                android:textSize="16sp" />
+            />
+        </TableRow>
+
+        <TableRow
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="3dp"
-            android:fontFamily="sans-serif-thin"
-            android:gravity="center"
-            android:text="TRX Tron +1430.56%"
-            android:textColor="@color/darkTextColor"
-            android:textSize="20sp"
-               />
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <android.support.v7.widget.AppCompatTextView
+
+                android:id="@+id/cryptosymbol5"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="0dp"
+                android:layout_weight="1"
+                android:gravity="left|center"
+                android:text="GSAT GlobalStar +400.56%"
+                android:textColor="@color/darkTextColor"
+                android:textSize="16sp" />
+
+            <android.support.v7.widget.AppCompatTextView
+
+                android:id="@+id/cryptoname5"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="0dp"
+                android:layout_weight=".5"
+                android:gravity="center"
+                android:text="GSAT GlobalStar +400.56%"
+                android:textColor="@color/darkTextColor"
+                android:textSize="16sp" />
+
+            <android.support.v7.widget.AppCompatTextView
+
+                android:id="@+id/cryptotype5"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="0dp"
+                android:layout_weight="1"
+                android:gravity="right|center"
+                android:text="GSAT GlobalStar +400.56%"
+                android:textColor="@color/darkTextColor"
+                android:textSize="16sp" />
+            />
+        </TableRow>
 
 
     </LinearLayout>

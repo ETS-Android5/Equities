@@ -143,17 +143,7 @@ public class Aequity_Local_DB extends SQLiteOpenHelper {
 
 
 
-    public App_Variables getEquity(int id) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.query(TABLE_AEQUITY_INFO, new String[] { KEY_ID,
-                        KEY_AEQUITY_SYMBOL, KEY_AEQUITY_NAME,KEY_AEQUITY_TYPE }, KEY_ID + "=?",
-                new String[] { String.valueOf(id) }, null, null, null, null);
-        if (cursor != null)
-            cursor.moveToFirst();
-        App_Variables getEquity = new App_Variables(cursor.getString(0),
-                cursor.getString(1), cursor.getString(2));
-        return getEquity;
-    }
+
 
     public List<String> getAllEquities() {
         List<String> tableNames = new ArrayList<>();

@@ -29,7 +29,7 @@
     <string name="stock_volume_leaders">Stock Market Volume Leaders</string>
     <string name="crypto_volume_leaders">Crypto Volume Leaders</string>
     <string name="stock_market_gainers">Stock Market Leaders</string>
-    <string name="crypto_gainers">Crypto Leaders</string>
+    <string name="crypto_gainers">Cryptocurrency Leaders</string>
     <string name="stock_market_losers">Stock Market Losers</string>
     <string name="crypto_losers">Crypto Losers</string>
     <string name="name">Name</string>
