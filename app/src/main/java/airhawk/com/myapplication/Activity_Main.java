@@ -6,9 +6,7 @@ import android.content.res.AssetManager;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -19,7 +17,6 @@ import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,10 +37,7 @@ import com.google.firebase.database.ValueEventListener;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -51,122 +45,50 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+
 import airhawk.com.myapplication.dummy.MarketsContent;
-import static airhawk.com.myapplication.App_Variables._1_Day_Chart;
-import static airhawk.com.myapplication.App_Variables._30Days;
-import static airhawk.com.myapplication.App_Variables._7Days;
-import static airhawk.com.myapplication.App_Variables._90Days;
-import static airhawk.com.myapplication.App_Variables._AllDays;
-import static airhawk.com.myapplication.App_Variables.dow_amount;
-import static airhawk.com.myapplication.App_Variables.dow_change;
-import static airhawk.com.myapplication.App_Variables.feedItems;
-import static airhawk.com.myapplication.App_Variables.graph_date;
-import static airhawk.com.myapplication.App_Variables.graph_high;
-import static airhawk.com.myapplication.App_Variables.graph_low;
-import static airhawk.com.myapplication.App_Variables.graph_market_cap;
-import static airhawk.com.myapplication.App_Variables.graph_volume;
-import static airhawk.com.myapplication.App_Variables.nas_amount;
-import static airhawk.com.myapplication.App_Variables.nas_change;
-import static airhawk.com.myapplication.App_Variables.newname;
-import static airhawk.com.myapplication.App_Variables.sp_amount;
-import static airhawk.com.myapplication.App_Variables.sp_change;
-import static airhawk.com.myapplication.App_Variables.video_title;
-import static airhawk.com.myapplication.Fragment_Analysis.adapter;
-import static airhawk.com.myapplication.GetCrypto_Dynamic_Data.cryptonamelist;
+
+import static airhawk.com.myapplication.Constructor_App_Variables.feedItems;
+import static airhawk.com.myapplication.Constructor_App_Variables.graph_date;
+import static airhawk.com.myapplication.Constructor_App_Variables.graph_high;
+import static airhawk.com.myapplication.Constructor_App_Variables.graph_volume;
+import static airhawk.com.myapplication.Constructor_App_Variables.image_video_url;
+import static airhawk.com.myapplication.Constructor_App_Variables.video_title;
+import static airhawk.com.myapplication.Constructor_App_Variables.video_url;
 
 public class Activity_Main extends AppCompatActivity {
+    static Element price=null;
+    protected ArrayAdapter<String> ad;
+    private Toolbar toolbar;
 
-    public static String AssetJSONFile(String filename, Context context) throws IOException {
-        AssetManager manager = context.getAssets();
-        InputStream file = manager.open(filename);
-        byte[] formArray = new byte[file.available()];
-        file.read(formArray);
-        file.close();
-        return new String(formArray);
-    }
-
-    public void setJSON_INFO() {
-//General Method for reading JSON file in Assets
-
-        try {
-            String jsonLocation = AssetJSONFile("rd.json", Activity_Main.this);
-            JSONObject obj = new JSONObject(jsonLocation);
-
-            JSONArray Arry = obj.getJSONArray("ALL");
-            ;
-            for (int i = 0; i < Arry.length(); i++) {
-                JSONArray childJsonArray = Arry.getJSONArray(i);
-                String sym = childJsonArray.getString(0);
-                String nam = childJsonArray.getString(1);
-                String typ = childJsonArray.getString(2);
-//Now adding strings to arraylist
-                name_arraylist.add(sym + "  " + nam + "  " + typ);
-
-
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void setDATAMain() {
-        new CountDownTimer(2000, 1000) {
-            @Override
-            public void onTick(long millisUntilFinished) {
-                GetMarket_Dynamic_Data gnd = new GetMarket_Dynamic_Data();
-                gnd.execute();
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-                    GetCrypto_Dynamic_Data cryp = new GetCrypto_Dynamic_Data();
-                    cryp.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                } else {
-                    GetCrypto_Dynamic_Data cryp = new GetCrypto_Dynamic_Data();
-                    cryp.execute();
-                }
-
-
-            }
-
-            @Override
-            public void onFinish() {
-                if (sp_amount != null && !sp_amount.isEmpty() &&
-                        sp_change != null && !sp_change.isEmpty() &&
-                        dow_amount != null && !dow_amount.isEmpty() &&
-                        dow_change != null && !dow_change.isEmpty() &&
-                        nas_amount != null && !nas_amount.isEmpty() &&
-                        nas_change != null && !nas_change.isEmpty() &&
-                       // sto5 != null && !sto5.isEmpty() &&
-                        cryptonamelist != null && !cryptonamelist.isEmpty()) {
-                    setMainPage();
-                } else {
-
-                    setDATAMain();
-                }
-            }
-        }.start();
-    }
+    public static ArrayList<String> searchview_arraylist = new ArrayList<>();
+    public static ArrayList<String> aequity_symbol_arraylist = new ArrayList<>();
+    public static ArrayList<String> aequity_name_arraylist = new ArrayList<>();
+    public static ArrayList<String> aequity_type_arraylist = new ArrayList<>();
+    private boolean mTwoPane;
+    public ViewPager pager, market_pager;
+    private View recyclerView;
+    public static String get_current_aequity_price;
+    Database_Local_Aequities ld = new Database_Local_Aequities(Activity_Main.this);
+    private static final String TAG = "ActivityMain";
+    static Boolean async_analysis_page = false;
+    static Constructor_App_Variables ap_info = new Constructor_App_Variables();
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.options_menu, menu);
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_top, menu);
+
+        //MenuInflater inflater = getMenuInflater();
+        //inflater.inflate(R.menu.menu_top, menu);
         return super.onCreateOptionsMenu(menu);
     }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -180,156 +102,80 @@ public class Activity_Main extends AppCompatActivity {
         }
     }
 
-    public void openSearchView() {
-        LayoutInflater i = (LayoutInflater) Activity_Main.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        final View v = i.inflate(R.layout.searchbar, null);
-        toolbar = findViewById(R.id.toolbar);
-        toolbar.addView(v);
 
-        ad = new ArrayAdapter(Activity_Main.this, android.R.layout.simple_dropdown_item_1line, name_arraylist);
-        AutoCompleteTextView chosen_searchView_item = v.findViewById(R.id.searchtool);
-        chosen_searchView_item.setAdapter(ad);
-
-        chosen_searchView_item.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                inputMethodManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
-
-                feedItems.clear();
-                String[] split_marketinfo = ad.getItem(position).toString().split("  ");
-                ap_info.setMarketSymbol(split_marketinfo[0]);
-                ap_info.setMarketName(split_marketinfo[1]);
-                ap_info.setMarketType(split_marketinfo[2]);
-                System.out.println("SYMBOL: "+ap_info.getMarketSymbol());
-                System.out.println("NAME: "+ap_info.getMarketName());
-                System.out.println("TYPE: "+ap_info.getMarketType());
-
-                toolbar.removeView(v);
-                chosen_searchView_item.onEditorAction(EditorInfo.IME_ACTION_DONE);
-                setMarketPage();
-
-            }
-        });
+    public static String AssetJSONFile(String filename, Context context) throws IOException {
+        AssetManager manager = context.getAssets();
+        InputStream file = manager.open(filename);
+        byte[] formArray = new byte[file.available()];
+        file.read(formArray);
+        file.close();
+        return new String(formArray);
     }
-
-    protected ArrayAdapter<String> ad;
-    private Toolbar toolbar;
-    private static boolean isSearchOpened = false;
-    protected static ProgressBar progress;
-    private static ArrayList<String> name_arraylist = new ArrayList<>();
-    private static List<String> _180Days = new ArrayList();
-    private static List<String> _1_Year_Chart = new ArrayList();
-    private Winners_Losers_Volume_Pager_Adapter wlv_adapter;
-    private Market_Analysis_Adapter maa_adapter;
-    private boolean mTwoPane;
-
-    private ViewPager pager, market_pager;
-    private View recyclerView;
-    private static List<String> video_image_url = new ArrayList<>();
-    private Get_Home_News_Data ghnd = new Get_Home_News_Data(Activity_Main.this);
-    private Get_Video_News_Data gvnd = new Get_Video_News_Data(Activity_Main.this);
-    private Get_Graph_Points ggp = new Get_Graph_Points(Activity_Main.this);
-    private Get_Stock_Graph_Points gsgp = new Get_Stock_Graph_Points(Activity_Main.this);
-    Aequity_Local_DB ld = new Aequity_Local_DB(Activity_Main.this);
-    private static final String TAG = "ActivityMain";
-    Boolean async = false;
-    boolean foo =false;
-    static App_Variables ap_info = new App_Variables();
     public void onBackPressed() {
-        if (isSearchOpened) {
-            return;
-        }
+        pager = findViewById(R.id.viewpager);
+        pager.setVisibility(View.VISIBLE);
+        market_pager = findViewById(R.id.market_pager);
+        market_pager.setVisibility(View.GONE);
+        Adapter_Pager_Winners_Losers_Volume wlv_adapter= new Adapter_Pager_Winners_Losers_Volume(this,getSupportFragmentManager());
+        TabLayout tabs = findViewById(R.id.tabs);
+        tabs.setupWithViewPager(pager);
+        tabs.setSelectedTabIndicatorHeight(0);
+        //if (isSearchOpened) {
+       //     return;
+       // }
 
-        super.onBackPressed();
+        //super.onBackPressed();
 
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setDATAMain();
+    }
+
+    private void setDATAMain() {
+        ProgressBar progress;
         setContentView(R.layout.splash);
-        if (sp_amount != null) {
-            setMainPage();
-            setJSON_INFO();
-            toolbar = findViewById(R.id.toolbar);
-            setSupportActionBar(toolbar);
-        } else {
-            setDATAMain();
-            setJSON_INFO();
-            toolbar = findViewById(R.id.toolbar);
-            setSupportActionBar(toolbar);
-        }
+        progress =(ProgressBar)findViewById(R.id.progressbar);
+        new AsyncTask<Void, Void, Void>() {
 
-    }
-
-    private void callPoints() {
-
-
-        ghnd.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-        if (ap_info.getMarketType().equals("Crypto")) {
-            ggp.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-        } else {
-            gsgp.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-        }
-        gvnd.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-    }
-
-    private void setMarketPage() {
-
-        if (async = false) {
-            callPoints();
-
-        } else {
-            async = true;
-            if (foo==true){
-                reloadAllData();
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                progress.setVisibility(View.VISIBLE);
             }
-
-            Get_Alternative_Points al = new Get_Alternative_Points(Activity_Main.this);
-            Get_Home_News_Data nhnd = new Get_Home_News_Data(Activity_Main.this);
-            Get_Video_News_Data nvnd = new Get_Video_News_Data(Activity_Main.this);
-            nhnd.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-            nvnd.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-
-
-                System.out.println("CHOOSING 4 "+ap_info.getMarketType());
-
-                foo =true;
-        }
-
-
-        pager = findViewById(R.id.viewpager);
-        pager.setVisibility(View.GONE);
-        market_pager = findViewById(R.id.market_pager);
-        market_pager.setVisibility(View.VISIBLE);
-        maa_adapter = new Market_Analysis_Adapter(this, getSupportFragmentManager());
-        market_pager.setAdapter(maa_adapter);
-        wlv_adapter.notifyDataSetChanged();
-        TabLayout tabs = findViewById(R.id.tabs);
-        tabs.removeAllTabs();
-        tabs.setupWithViewPager(market_pager);
-        tabs.setSelectedTabIndicatorHeight(1);
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                super.onPostExecute(aVoid);
+                progress.setVisibility(View.GONE);
+                setMainPage();
+            }
+            @Override
+            protected Void doInBackground(Void... params) {
+                Executor_Winners_Losers_Kings cst =new Executor_Winners_Losers_Kings();
+                cst.main();
+                return null;
+            }
+        }.execute();
 
     }
-
-    private void setMainPage() {
+    private void setMainPage(){
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        setJSON_INFO();
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(null);
-        pager = findViewById(R.id.viewpager);
+        ViewPager pager = findViewById(R.id.viewpager);
         pager.setVisibility(View.VISIBLE);
-        progress = (ProgressBar) findViewById(R.id.progressbar);
-        market_pager = findViewById(R.id.market_pager);
+        ViewPager market_pager = findViewById(R.id.market_pager);
         market_pager.setVisibility(View.GONE);
         TabLayout tabs = findViewById(R.id.tabs);
         tabs.addTab(tabs.newTab().setText(getString(R.string.winners)));
         tabs.addTab(tabs.newTab().setText(getString(R.string.losers)));
         tabs.addTab(tabs.newTab().setText(getString(R.string.volume)));
-        wlv_adapter = new Winners_Losers_Volume_Pager_Adapter(this, getSupportFragmentManager());
+        Adapter_Pager_Winners_Losers_Volume wlv_adapter = new Adapter_Pager_Winners_Losers_Volume(this, getSupportFragmentManager());
         pager.setAdapter(wlv_adapter);
+        tabs.setupWithViewPager(pager);
         if (findViewById(R.id.item_detail_container) != null) {
             mTwoPane = true;
         }
@@ -337,13 +183,38 @@ public class Activity_Main extends AppCompatActivity {
         recyclerView = findViewById(R.id.item_list);
         assert recyclerView != null;
         setupRecyclerView((RecyclerView) recyclerView);
-
     }
+    public void setJSON_INFO() {
+//General Method for reading JSON file in Assets
+
+        try {
+            String jsonLocation = AssetJSONFile("rd.json", Activity_Main.this);
+            JSONObject obj = new JSONObject(jsonLocation);
+
+            JSONArray Arry = obj.getJSONArray("ALL");
+
+            for (int i = 0; i < Arry.length(); i++) {
+                JSONArray childJsonArray = Arry.getJSONArray(i);
+                String sym = childJsonArray.getString(0);
+                aequity_symbol_arraylist.add(sym);
+                String nam = childJsonArray.getString(1);
+                aequity_name_arraylist.add(nam);
+                String typ = childJsonArray.getString(2);
+                aequity_type_arraylist.add(typ);
+
+                searchview_arraylist.add(sym + "  " + nam + "  " + typ);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
         recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(this, MarketsContent.ITEMS, mTwoPane));
     }
-
     public class SimpleItemRecyclerViewAdapter extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
         private final List<MarketsContent.MarketsItem> mValues;
         private AdapterView.OnItemClickListener mListener;
@@ -415,21 +286,21 @@ public class Activity_Main extends AppCompatActivity {
                             temp = "Bitcoin";
                             ap_info.setMarketName(temp);
                             ap_info.setMarketSymbol("BTC");
-                            ap_info.setMarketType("Crypto");
+                            ap_info.setMarketType(getString(R.string.crypto));
                             setMarketPage();
                             break;
                         case 4:
                             temp = "All Crypto";
                             ap_info.setMarketName(temp);
                             ap_info.setMarketSymbol("ALL");
-                            ap_info.setMarketType("Crypto");
+                            ap_info.setMarketType(getString(R.string.crypto));
                             setMarketPage();
                             break;
                         case 5:
                             temp = "Alt Cap";
                             ap_info.setMarketName(temp);
                             ap_info.setMarketSymbol("ALT");
-                            ap_info.setMarketType("Crypto");
+                            ap_info.setMarketType(getString(R.string.crypto));
                             setMarketPage();
                             break;
 
@@ -444,7 +315,7 @@ public class Activity_Main extends AppCompatActivity {
                             temp = "ICO";
                             ap_info.setMarketName(temp);
                             ap_info.setMarketSymbol("ICO");
-                            ap_info.setMarketType("Crypto");
+                            ap_info.setMarketType(getString(R.string.crypto));
                             setMarketPage();
                             break;
                         default:
@@ -479,467 +350,81 @@ public class Activity_Main extends AppCompatActivity {
         }
     }
 
-    public static class Get_Stock_Graph_Points extends AsyncTask<String, Void, Void> {
-        Context context;
+    public void setMarketPage() {
 
-        public Get_Stock_Graph_Points(Context context) {
-            this.context = context;
-        }
+        if (async_analysis_page) {
+            reloadAllData();
 
+                Executor_Chosen_Aequity shoe =new Executor_Chosen_Aequity();
+            shoe.main();
+            System.out.println("ASYNC HAS BEEN CALLED PREVIOUSLY");
+        } else
+            {
 
-        protected Void doInBackground(String...tasks) {
-            get_nasdaq_points();
-            int count = tasks.length;
-            for(int i =0;i<count;i++){
-                // Do the current task task here
-                List<String> taskList= new ArrayList<>(count);
-                String currentTask = tasks[i];
-                taskList.add(currentTask);
+                Executor_Chosen_Aequity shoe =new Executor_Chosen_Aequity();
+                shoe.main();
+                System.out.println("ASYNC HAS NOT BEEN CALLED");
 
-                // Sleep the UI thread for 1 second
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            if(isCancelled()){
-                break;
-            }}
-            return null;
-        }
-
-        public void get_nasdaq_points() {
-
-            String marname = ap_info.getMarketName();
-            System.out.println("CHOOSING !!!!!!  "+marname);
-            int i = marname.indexOf(" ");
-            String in = marname.substring(0, i);
-            marname = in;
-            List<String> name = new ArrayList<>();
-            List<String> number = new ArrayList<>();
-            Document doc = null;
-            try {
-                doc = Jsoup.connect("https://charting.nasdaq.com/ext/charts.dll?2-1-14-0-0-512-03NA000000" + marname + "-&SF:1|5-BG=FFFFFF-BT=0-HT=395--XTBL-").get();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            Elements divs = doc.getElementsByClass("DrillDownData");
-            Elements divsdate = doc.getElementsByClass("DrillDownDate");
-            ArrayList<String> elements = new ArrayList<String>();
-            for (Element el : divs) {
-                Elements tds = el.select("td");
-                String result = tds.get(0).text();
-                elements.add(result);
-            }
-            ArrayList<String> elements_dates = new ArrayList<String>();
-            for (Element e : divsdate) {
-                Elements tdsdate = e.select("td");
-                String resultdate = tdsdate.get(0).text();
-                elements_dates.add(resultdate);
-            }
-
-            for (int j = elements.size() - 1; j >= 0; j--) {
-                if (j % 2 == 0) { // Even
-                    number.add(elements.get(j));
-                } else { // Odd
-                    name.add(elements.get(j));
-                }
-            }
-            for (int counter = 0; counter < number.size(); counter++) {
-                System.out.println("VOLUME " + name.get(counter) + " NUMBER " + number.get(counter) + " DATE " + elements_dates.get(counter));
-                graph_date.add(elements_dates.get(counter));
-                graph_volume.add(name.get(counter));
-                graph_high.add(number.get(counter));
-            }
-            List<String> numbers = graph_high;
-            Collections.reverse(numbers);
-            _AllDays = numbers;
-            _1_Day_Chart = _AllDays.subList(_AllDays.size() - 1, _AllDays.size() - 0);
-            _7Days = _AllDays.subList(_AllDays.size() - 7, _AllDays.size() - 0);
-            _30Days = _AllDays.subList(_AllDays.size() - 30, _AllDays.size() - 0);
-            _90Days = _AllDays.subList(_AllDays.size() - 90, _AllDays.size() - 0);
-            //_180Days = _AllDays.subList(_AllDays.size()-180, _AllDays.size()-0);
-            //_1_Year_Chart=_AllDays.subList(_AllDays.size()-181, _AllDays.size()-0);
-
-        }
-    }
-
-    public static class Get_Video_News_Data extends AsyncTask<String, Void, Void> {
-        Context context;
-
-        public Get_Video_News_Data(Context context) {
-            this.context = context;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-        }
-
-
-        protected Void doInBackground(String...tasks) {
-            video_image_url.clear();
-            App_Variables.image_video_url.clear();
-            App_Variables.video_url.clear();
-            video_title.clear();
-
-            getVideoInfo();
-            int count = tasks.length;
-            for(int i =0;i<count;i++){
-                // Do the current task task here
-                List<String> taskList= new ArrayList<>(count);
-                String currentTask = tasks[i];
-                taskList.add(currentTask);
-
-                // Sleep the UI thread for 1 second
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                if(isCancelled()){
-                    break;
-                }}
-            return null;
-        }
-
-        public void getVideoInfo() {
-
-
-            String url = "https://www.youtube.com/results";
-
-            String begin_url;
-            String mid_url;
-            String end_url;
-            String url_1st = "https://i.ytimg.com/vi/";
-            String url_3rd = "/hqdefault.jpg";
-            try {
-                Document doc = Jsoup.connect(url).data("search_query", ap_info.getMarketName()).userAgent("Mozilla/5.0").get();
-
-                for (Element a : doc.select(".yt-lockup-title > a[title]")) {
-                    begin_url = (a.attr("href") + " " + a.attr("title"));
-                    begin_url = begin_url.replace("/watch?v=", "");
-                    mid_url = begin_url.substring(0, begin_url.indexOf(" "));
-                    end_url = begin_url.replace(mid_url, "");
-                    String f_url = url_1st + mid_url + url_3rd;
-                    App_Variables.video_title.add(end_url);
-                    App_Variables.video_url.add(mid_url);
-                    App_Variables.image_video_url.add(f_url);
-                }
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            async_analysis_page=true;
 
 
         }
-    }
-
-    public static class Get_Home_News_Data extends AsyncTask<String, Void, Void> {
-        URL url;
-        Context context;
-        String st, sd, sp, sl;
-
-        public Get_Home_News_Data(Context context) {
-            this.context = context;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            progress.setVisibility(View.VISIBLE);
-            progress.setIndeterminate(true);
-            super.onPreExecute();
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            progress.setVisibility(View.GONE);
-
-            super.onPostExecute(aVoid);
-        }
-
-
-
-        protected Void doInBackground(String...tasks) {
-            feedItems.clear();
-            ProcessXml(GoogleRSFeed());
-            int count = tasks.length;
-            for(int i =0;i<count;i++){
-                // Do the current task task here
-                List<String> taskList= new ArrayList<>(count);
-                String currentTask = tasks[i];
-                taskList.add(currentTask);
-
-                // Sleep the UI thread for 1 second
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                if(isCancelled()){
-                    break;
-                }}
-            return null;
-        }
-
-        private void ProcessXml(org.w3c.dom.Document data) {
-            if (data != null) {
-
-                org.w3c.dom.Element root = data.getDocumentElement();
-                Node channel = root.getChildNodes().item(0);
-                NodeList items = channel.getChildNodes();
-
-                for (int i = 0; i < items.getLength(); i++) {
-                    News_FeedItem it = new News_FeedItem();
-                    Node curentchild = items.item(i);
-                    if (curentchild.getNodeName().equalsIgnoreCase("item")) {
-                        NodeList itemchilds = curentchild.getChildNodes();
-                        for (int j = 0; j < itemchilds.getLength(); j++) {
-                            Node curent = itemchilds.item(j);
-                            if (curent.getNodeName().equalsIgnoreCase("title")) {
-                                st = Html.fromHtml(curent.getTextContent()).toString();
-                                it.setTitle(st);
-                            } else if (curent.getNodeName().equalsIgnoreCase("description")) {
-                                sd = Html.fromHtml(curent.getTextContent()).toString();
-                                String d = curent.getTextContent().toString();
-                                String pattern1 = "<img src=\"";
-                                String pattern2 = "\"";
-                                Pattern p = Pattern.compile(Pattern.quote(pattern1) + "(.*?)" + Pattern.quote(pattern2));
-                                Matcher m = p.matcher(d);
-                                while (m.find()) {
-                                    it.setThumbnailUrl(m.group(1));
-                                }
-                                it.setDescription(sd);
-
-                            } else if (curent.getNodeName().equalsIgnoreCase("pubDate")) {
-                                sp = Html.fromHtml(curent.getTextContent()).toString();
-                                sp = sp.replaceAll("@20", " ");
-                                it.setPubDate(sp);
-                            } else if (curent.getNodeName().equalsIgnoreCase("link")) {
-                                sl = Html.fromHtml(curent.getTextContent()).toString();
-                                sl = sl.replaceAll("@20", " ");
-                                it.setLink(sl);
-                            } else if (curent.getNodeName().equalsIgnoreCase("img src")) {
-
-                            }
-                        }
-
-                        feedItems.add(it);
-
-
-                    }
-                }
-            }
-        }
-
-
-        public org.w3c.dom.Document GoogleRSFeed() {
-            try {
-                String repo;
-                repo = ap_info.getMarketName();
-                repo = repo.replace("  ", " ");
-                System.out.println("BIG BOOBS1 " + repo);
-                if (repo.contains(" ")) {
-                    String remove = repo.substring(repo.lastIndexOf(" "));
-                    repo = repo.replace(remove, "");
-                }
-                repo = repo.replace(" ", "%20");
-                String address = "https://news.google.com/news/rss/search/section/q/" + repo + "?ned=us&gl=US&hl=en";
-
-                url = new URL(address);
-                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                connection.setRequestMethod("GET");
-                InputStream inputStream = connection.getInputStream();
-                DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
-                DocumentBuilder builder = builderFactory.newDocumentBuilder();
-                org.w3c.dom.Document xmlDoc = builder.parse(inputStream);
-                return xmlDoc;
-            } catch (Exception e) {
-                e.printStackTrace();
-                return null;
-            }
-
-
-        }
+        pager = findViewById(R.id.viewpager);
+        pager.setVisibility(View.GONE);
+        market_pager = findViewById(R.id.market_pager);
+        market_pager.setVisibility(View.VISIBLE);
+        Adapter_Chosen_Aequity maa_adapter = new Adapter_Chosen_Aequity(this, getSupportFragmentManager());
+        market_pager.setAdapter(maa_adapter);
+        Adapter_Pager_Winners_Losers_Volume wlv_adapter= new Adapter_Pager_Winners_Losers_Volume(this,getSupportFragmentManager());
+        wlv_adapter.notifyDataSetChanged();
+        TabLayout tabs = findViewById(R.id.tabs);
+        tabs.removeAllTabs();
+        tabs.setupWithViewPager(market_pager);
+        tabs.setSelectedTabIndicatorHeight(0);
 
 
     }
 
-    public static class Get_Graph_Points extends AsyncTask<String, Void, Void> {
-        Context context;
-
-        public Get_Graph_Points(Context context) {
-            this.context = context;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-        }
-
-
-        protected Void doInBackground(String...tasks) {
-
-            get_crypto_points();
-            int count = tasks.length;
-            for(int i =0;i<count;i++){
-                // Do the current task task here
-                List<String> taskList= new ArrayList<>(count);
-                String currentTask = tasks[i];
-                taskList.add(currentTask);
-
-                // Sleep the UI thread for 1 second
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                if(isCancelled()){
-                    break;
-                }}
-
-            return null;
-        }
-
-        public void get_crypto_points() {
-
-            DateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-            Date begindate = new Date();
-            Document doc = null;
-            //market_name="tron";
-            try {
-                doc = Jsoup.connect("https://coinmarketcap.com/currencies/" + ap_info.getMarketName() + "/historical-data/?start=20000101&end=" + sdf.format(begindate)).get();
-                //
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            Elements divs = doc.select("table");
-            for (Element tz : divs) {
-                Elements tds = tz.select("td");
-                Elements s = tz.getElementsByClass("text-right");
-                for (Element ss : s) {
-                    Elements p = ss.select("td[data-format-fiat]");
-                    String v = p.text();
-                    String[] splited = v.split("\\s+");
-                    if (v != null && !v.isEmpty()) {
-                        graph_high.add(splited[3]);
-                        graph_low.add(splited[2]);
-                    }
-                    Elements pn = ss.select("td[data-format-market-cap]");
-                    String vp = pn.text();
-                    String[] split = vp.split("\\s+");
-                    if (vp != null && !vp.isEmpty()) {
-                        graph_volume.add(split[0]);
-                        graph_market_cap.add(split[1]);
-                    }
-                }
-                for (Element bb : tds) {
-                    Elements gdate = bb.getElementsByClass("text-left");
-                    String result0 = gdate.text();
-                    if (result0 != null && !result0.isEmpty()) {
-                        graph_date.add(String.valueOf(result0));
-                    }
-                }
-            }
-            List<String> numbers = graph_high;
-            System.out.println(graph_high);
-            _AllDays = numbers;
-            _1_Day_Chart = _AllDays.subList(_AllDays.size() - 1, _AllDays.size() - 0);
-            _7Days = _AllDays.subList(_AllDays.size() - 7, _AllDays.size() - 0);
-            _30Days = _AllDays.subList(_AllDays.size() - 30, _AllDays.size() - 0);
-            _90Days = _AllDays.subList(_AllDays.size() - 90, _AllDays.size() - 0);
-            // _180Days = _AllDays.subList(_AllDays.size() - 180, _AllDays.size() - 0);
-            // 1_Year_Chart = _AllDays.subList(_AllDays.size() - 365, _AllDays.size() - 0);
-
-
-        }
-
+    private void reloadAllData(){
+        graph_date.clear();
+        graph_high.clear();
+        graph_volume.clear();
+        feedItems.clear();
+        image_video_url.clear();
+        video_url.clear();
+        video_title.clear();
     }
 
-    public static class Get_Alternative_Points extends AsyncTask<String, Void, Void> {
-        Context context;
+    public void openSearchView() {
+        LayoutInflater i = (LayoutInflater) Activity_Main.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        final View v = i.inflate(R.layout.searchbar, null);
+        toolbar = findViewById(R.id.toolbar);
+        toolbar.addView(v);
 
-        public Get_Alternative_Points(Context context) {
-            this.context = context;
-        }
+        ad = new ArrayAdapter(Activity_Main.this, android.R.layout.simple_dropdown_item_1line, searchview_arraylist);
+        AutoCompleteTextView chosen_searchView_item = v.findViewById(R.id.searchtool);
+        chosen_searchView_item.setAdapter(ad);
 
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
+        chosen_searchView_item.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-        }
+                InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputMethodManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
 
+                feedItems.clear();
+                String[] split_marketinfo = ad.getItem(position).toString().split("  ");
+                ap_info.setMarketSymbol(split_marketinfo[0]);
+                ap_info.setMarketName(split_marketinfo[1]);
+                ap_info.setMarketType(split_marketinfo[2]);
 
-        protected Void doInBackground(String...tasks) {
-
-            getAlternativePoints();
-            int count = tasks.length;
-            for(int i =0;i<count;i++){
-                // Do the current task task here
-                List<String> taskList= new ArrayList<>(count);
-                String currentTask = tasks[i];
-                taskList.add(currentTask);
-
-                // Sleep the UI thread for 1 second
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                if(isCancelled()){
-                    break;
-                }}
-
-            return null;
-        }
-
-
-        public void getAlternativePoints() {
-            Document doc = null;
-            try {
-                doc = Jsoup.connect(newname).get();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            Elements volumes = doc.getElementsByClass("BdT Bdc($c-fuji-grey-c) Ta(end) Fz(s) Whs(nw)");
-            for (Element el : volumes) {
-                Elements t = el.select("td");
-
-                String date = t.get(0).text();
-                graph_date.add(date);
-
-                String close = t.get(4).text();
-                graph_high.add(close);
-
-                String volume = t.get(6).text();
-                graph_volume.add(volume);
+                toolbar.removeView(v);
+                chosen_searchView_item.onEditorAction(EditorInfo.IME_ACTION_DONE);
+                setMarketPage();
 
             }
-            _AllDays = graph_high;
-            _1_Day_Chart = _AllDays.subList(_AllDays.size() - 1, _AllDays.size() - 0);
-            _7Days = _AllDays.subList(_AllDays.size() - 7, _AllDays.size() - 0);
-            _30Days = _AllDays.subList(_AllDays.size() - 30, _AllDays.size() - 0);
-            _90Days = _AllDays.subList(_AllDays.size() - 90, _AllDays.size() - 0);
-            //_180Days = _AllDays.subList(_AllDays.size() - 180, _AllDays.size() - 0);
-            //_1_Year_Chart = _AllDays.subList(_AllDays.size() - 365, _AllDays.size() - 0);
-        }
+        });
     }
-
     //Get's updated data from Firebase about new aequities
     private void UpdateData() {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -948,10 +433,10 @@ public class Activity_Main extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot childDataSnapshot : dataSnapshot.getChildren()) {
-                    App_Variables team = new App_Variables();
+                    Constructor_App_Variables team = new Constructor_App_Variables();
                     team.setMarketSymbol(String.valueOf(childDataSnapshot.child("0").getValue()));
-                    name_arraylist.add(String.valueOf(team));
-                    ld = Aequity_Local_DB.getInstance(Activity_Main.this);
+                    searchview_arraylist.add(String.valueOf(team));
+                    ld = Database_Local_Aequities.getInstance(Activity_Main.this);
                 }
 
             }
@@ -965,11 +450,82 @@ public class Activity_Main extends AppCompatActivity {
         };
         userRef.addValueEventListener(postListener);
     }
-    private void reloadAllData(){
-        graph_date.clear();
-        graph_high.clear();
-        graph_volume.clear();
-        adapter.clear();
-        adapter.notifyDataSetChanged();
+
+    private static void ProcessXml(org.w3c.dom.Document data) {
+        if (data != null) {
+            String st, sd, sp, sl;
+            org.w3c.dom.Element root = data.getDocumentElement();
+            Node channel = root.getChildNodes().item(0);
+            NodeList items = channel.getChildNodes();
+
+            for (int i = 0; i < items.getLength(); i++) {
+                Constructor_News_Feed it = new Constructor_News_Feed();
+                Node curentchild = items.item(i);
+                if (curentchild.getNodeName().equalsIgnoreCase("item")) {
+                    NodeList itemchilds = curentchild.getChildNodes();
+                    for (int j = 0; j < itemchilds.getLength(); j++) {
+                        Node curent = itemchilds.item(j);
+                        if (curent.getNodeName().equalsIgnoreCase("title")) {
+                            st = Html.fromHtml(curent.getTextContent()).toString();
+                            it.setTitle(st);
+                        } else if (curent.getNodeName().equalsIgnoreCase("description")) {
+                            sd = Html.fromHtml(curent.getTextContent()).toString();
+                            String d = curent.getTextContent().toString();
+                            String pattern1 = "<img src=\"";
+                            String pattern2 = "\"";
+                            Pattern p = Pattern.compile(Pattern.quote(pattern1) + "(.*?)" + Pattern.quote(pattern2));
+                            Matcher m = p.matcher(d);
+                            while (m.find()) {
+                                it.setThumbnailUrl(m.group(1));
+                            }
+                            it.setDescription(sd);
+                        } else if (curent.getNodeName().equalsIgnoreCase("pubDate")) {
+                            sp = Html.fromHtml(curent.getTextContent()).toString();
+                            sp = sp.replaceAll("@20", " ");
+                            it.setPubDate(sp);
+                        } else if (curent.getNodeName().equalsIgnoreCase("link")) {
+                            sl = Html.fromHtml(curent.getTextContent()).toString();
+                            sl = sl.replaceAll("@20", " ");
+                            it.setLink(sl);
+                        } else if (curent.getNodeName().equalsIgnoreCase("img src")) {
+
+                        }
+                    }
+
+                    feedItems.add(it);
+
+
+                }
+            }
+        }
     }
-}
+    public static org.w3c.dom.Document GoogleRSFeed() {
+        try {
+            URL url;
+            Context context;
+            String repo;
+            repo = ap_info.getMarketName();
+            repo = repo.replace("  ", " ");
+            if (repo.contains(" ")) {
+                String remove = repo.substring(repo.lastIndexOf(" "));
+                repo = repo.replace(remove, "");
+            }
+            repo = repo.replace(" ", "%20");
+            String address = "https://news.google.com/news/rss/search/section/q/" + repo + "?ned=us&gl=US&hl=en";
+
+            url = new URL(address);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+            InputStream inputStream = connection.getInputStream();
+            DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = builderFactory.newDocumentBuilder();
+            org.w3c.dom.Document xmlDoc = builder.parse(inputStream);
+            return xmlDoc;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+
+    }}
+

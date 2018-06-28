@@ -17,11 +17,11 @@ import com.google.android.youtube.player.YouTubeThumbnailLoader;
 import com.google.android.youtube.player.YouTubeThumbnailView;
 import java.util.ArrayList;
 
-import static airhawk.com.myapplication.App_Variables.image_video_url;
-import static airhawk.com.myapplication.App_Variables.video_title;
-import static airhawk.com.myapplication.App_Variables.video_url;
+import static airhawk.com.myapplication.Constructor_App_Variables.image_video_url;
+import static airhawk.com.myapplication.Constructor_App_Variables.video_title;
+import static airhawk.com.myapplication.Constructor_App_Variables.video_url;
 
-public class YouTubeAdapter extends RecyclerView.Adapter<YouTubeAdapter.VideoInfoHolder> {
+public class Adapter_Youtube extends RecyclerView.Adapter<Adapter_Youtube.VideoInfoHolder> {
 
     private ArrayList<String> videoList=video_url;
     public ArrayList<String> videoText=image_video_url;
@@ -29,7 +29,7 @@ public class YouTubeAdapter extends RecyclerView.Adapter<YouTubeAdapter.VideoInf
     Context ctx;
     String DEVELOPER_KEY = "AIzaSyCGTdOkL4AMc6UIhtS1P3SNMfDLKPsM";
 
-    public YouTubeAdapter(Context context) {
+    public Adapter_Youtube(Context context) {
         this.ctx = context;
     }
 

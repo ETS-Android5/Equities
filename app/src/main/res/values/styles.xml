@@ -8,11 +8,13 @@
         <item name="colorAccent">@color/colorBlack</item>
         <item name="android:windowFullscreen">true</item>
         <item name="android:textColor">#FFFFFF</item>
+
     </style>
 
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="android:windowDisablePreview">true</item>
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">

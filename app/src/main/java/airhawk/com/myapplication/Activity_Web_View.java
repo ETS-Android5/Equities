@@ -5,7 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-public class WebViewActivity extends AppCompatActivity {
+public class Activity_Web_View extends AppCompatActivity {
 
   private String webviewurl;
   private WebView wv_url;

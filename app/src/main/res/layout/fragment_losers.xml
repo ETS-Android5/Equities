@@ -1,226 +1,137 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <LinearLayout
+    <android.support.v7.widget.AppCompatTextView
+
+        android:id="@+id/stock"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:text="@string/stock_market_losers"
+        android:textColor="@color/darkTextColor"
+        android:textSize="26sp"
+        android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/stock_"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:fontFamily="font/scpro"
-            android:gravity="center"
-            android:text="@string/stock_market_losers"
-            android:textColor="@color/darkTextColor"
-            android:textSize="26sp"
-            android:textStyle="bold" />
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="Symbol"
-                android:textColor="@color/darkTextColor"
-                android:textSize="10sp" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="Name"
-                android:textColor="@color/darkTextColor"
-                android:textSize="10sp" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="Change"
-                android:textColor="@color/darkTextColor"
-                android:textSize="10sp" />
-        </TableRow>
-        <TextView
-            android:id="@+id/stock_1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="3dp"
-            android:fontFamily="font/scpro"
-            android:gravity="center"
-            android:text="GSAT GlobalStar +400.56%"
-            android:textColor="@color/darkTextColor"
-            android:textSize="20sp" />
-
-        <TextView
-            android:id="@+id/stock_2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="3dp"
-            android:fontFamily="font/scpro"
-            android:gravity="center"
-            android:text="DPW Digital Power +332.56%"
-            android:textColor="@color/darkTextColor"
-            android:textSize="20sp" />
-
-        <TextView
-            android:id="@+id/stock_3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="3dp"
-            android:fontFamily="font/scpro"
-            android:gravity="center"
-            android:text="BIOA Biowhatever +189.46"
-            android:textColor="@color/darkTextColor"
-            android:textSize="20sp" />
-
-        <TextView
-            android:id="@+id/stock_4"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="3dp"
-            android:fontFamily="font/scpro"
-            android:gravity="center"
-            android:text="BIOA Biowhatever +189.46"
-            android:textColor="@color/darkTextColor"
-            android:textSize="20sp" />
-
-        <TextView
-            android:id="@+id/stock_5"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="3dp"
-            android:fontFamily="font/scpro"
-            android:gravity="center"
-            android:textColor="@color/darkTextColor"
-            android:textSize="20sp" />
-
-
-    </LinearLayout>
-    <LinearLayout
+    <TableRow
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp">
 
         <TextView
-            android:id="@+id/crypto_"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:fontFamily="font/scpro"
-            android:gravity="center"
-            android:text="@string/crypto_losers"
-            android:textColor="@color/darkTextColor"
-            android:textSize="26sp"
-            android:textStyle="bold" />
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="Symbol"
-                android:textColor="@color/darkTextColor"
-                android:textSize="10sp" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="Name"
-                android:textColor="@color/darkTextColor"
-                android:textSize="10sp" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="Change"
-                android:textColor="@color/darkTextColor"
-                android:textSize="10sp" />
-        </TableRow>
-        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_weight="1.1"
+            android:gravity="left|center"
+            android:singleLine="true"
+            android:textColor="@color/darkTextColor"
+            android:textSize="14sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="left|center"
+            android:singleLine="true"
+            android:text="Symbol"
+            android:textColor="@color/darkTextColor"
+            android:textSize="14sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight=".6"
+            android:gravity="left|center"
+            android:singleLine="true"
+            android:text="Name"
+            android:textColor="@color/darkTextColor"
+            android:textSize="14sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_gravity="end"
+            android:singleLine="true"
+            android:textAlignment="textEnd"
+            android:text="Amount"
+            android:textColor="@color/darkTextColor"
+            android:textSize="14sp" />
+    </TableRow>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/stock_items"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1" />
 
 
-            <TextView
-                android:id="@+id/crypto_1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="3dp"
-                android:fontFamily="font/scpro"
-                android:gravity="center"
-                android:text="TRX Tron +1430.56%"
-                android:textColor="@color/darkTextColor"
-                android:textSize="20sp" />
+    <android.support.v7.widget.AppCompatTextView
 
-            <TextView
-                android:id="@+id/crypto_2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="3dp"
-                android:fontFamily="font/scpro"
-                android:gravity="center"
-                android:text="BTC Bitcoin +242.56%"
-                android:textColor="@color/darkTextColor"
-                android:textSize="20sp" />
+        android:id="@+id/crypto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:text="@string/crypto_losers"
+        android:textColor="@color/darkTextColor"
+        android:textSize="26sp"
+        android:textStyle="bold" />
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp">
 
-            <TextView
-                android:id="@+id/crypto_3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="3dp"
-                android:fontFamily="font/scpro"
-                android:gravity="center"
-                android:text="ETH ETHEREUM +111.19"
-                android:textColor="@color/darkTextColor"
-                android:textSize="20sp" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1.1"
+            android:gravity="left|center"
+            android:singleLine="true"
+            android:textColor="@color/darkTextColor"
+            android:textSize="14sp" />
 
-            <TextView
-                android:id="@+id/crypto_4"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="3dp"
-                android:fontFamily="font/scpro"
-                android:gravity="center"
-                android:text="TRX Tron +1430.56%"
-                android:textColor="@color/darkTextColor"
-                android:textSize="20sp" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="left|center"
+            android:singleLine="true"
+            android:text="Symbol"
+            android:textColor="@color/darkTextColor"
+            android:textSize="14sp" />
 
-            <TextView
-                android:id="@+id/crypto_5"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="3dp"
-                android:fontFamily="font/scpro"
-                android:gravity="center"
-                android:text="TRX Tron +1430.56%"
-                android:textColor="@color/darkTextColor"
-                android:textSize="20sp" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight=".6"
+            android:gravity="left|center"
+            android:singleLine="true"
+            android:text="Name"
+            android:textColor="@color/darkTextColor"
+            android:textSize="14sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_gravity="end"
+            android:singleLine="true"
+            android:textAlignment="textEnd"
+            android:text="Amount"
+            android:textColor="@color/darkTextColor"
+            android:textSize="14sp" />
+    </TableRow>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/crypto_items"
+        android:layout_width="match_parent"
+        android:layout_weight="1"
+        android:layout_height="match_parent"
+        />
 
 
-        </LinearLayout>
-
-
-    </LinearLayout>
 </LinearLayout>

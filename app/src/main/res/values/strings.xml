@@ -36,8 +36,11 @@
     <string name="date">Date</string>
     <string name="price">Price</string>
     <string name="range_52">52 Week Range</string>
-    <string name="supply">Coin_Supply</string>
+    <string name="supply">Coins</string>
     <string name="shares">Shares</string>
     <string name="title_buy">Buy It</string>
+    <string name="crypto">Cryptocurrency</string>
+    <string name="title_gratitude">Gratitude</string>
+    <string name="title_exchanges">Exchanges</string>
 
 </resources>

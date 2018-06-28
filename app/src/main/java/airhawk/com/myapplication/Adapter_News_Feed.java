@@ -14,12 +14,12 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-public class News_FeedAdapter extends RecyclerView.Adapter<News_FeedAdapter.MyViewHolder> {
+public class Adapter_News_Feed extends RecyclerView.Adapter<Adapter_News_Feed.MyViewHolder> {
 
-   private List<News_FeedItem> feedItems;
+   private List<Constructor_News_Feed> feedItems;
    private static Context context;
 
-   public News_FeedAdapter(Context context, List<News_FeedItem> items){
+   public Adapter_News_Feed(Context context, List<Constructor_News_Feed> items){
      this.context=context;  
      this.feedItems = items;  
    }  
@@ -32,7 +32,7 @@ public class News_FeedAdapter extends RecyclerView.Adapter<News_FeedAdapter.MyVi
      MyViewHolder mvh = new MyViewHolder(view, new MyViewHolder.myClickWebView() {  
        @Override  
        public void gotoWebView(String textlink) {  
-         Intent intent=new Intent(view.getContext(),WebViewActivity.class);
+         Intent intent=new Intent(view.getContext(),Activity_Web_View.class);
          intent.putExtra("url",textlink);
 
 
@@ -44,7 +44,7 @@ public class News_FeedAdapter extends RecyclerView.Adapter<News_FeedAdapter.MyVi
    
    @Override  
    public void onBindViewHolder(MyViewHolder holder, int position) {  
-     News_FeedItem item = feedItems.get(position);
+     Constructor_News_Feed item = feedItems.get(position);
      holder.tv_desc.setText(item.getDescription());  
      holder.tv_link.setText(item.getLink());  
      holder.tv_pubdate.setText(item.getPubDate());  
@@ -89,7 +89,7 @@ public class News_FeedAdapter extends RecyclerView.Adapter<News_FeedAdapter.MyVi
        tv_link.setOnClickListener(new View.OnClickListener() {
          @Override
          public void onClick(View view) {
-           Intent intent=new Intent(context,WebViewActivity.class);
+           Intent intent=new Intent(context,Activity_Web_View.class);
 
          }
        });

@@ -8,4 +8,16 @@
         android:icon="@android:drawable/ic_menu_search"
         android:title="@string/title_search"
         app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/action_gratitude"
+        android:icon="@android:drawable/ic_menu_search"
+        android:title="@string/title_gratitude"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/action_exchanges"
+        android:icon="@android:drawable/ic_menu_search"
+        android:title="@string/title_exchanges"
+        app:showAsAction="never"/>
 </menu>

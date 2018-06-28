@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="10dp"
-    android:layout_marginTop="10dp">
+    android:layout_margin="15dp"
+    android:background="@drawable/rounded_corners">
 
     <ProgressBar
         android:id="@+id/progressbar"
@@ -12,84 +12,91 @@
         android:layout_width="fill_parent"
         android:layout_height="8px"
         android:max="100" />
+
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/rounded_corners"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent">
 
         <TableRow
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:background="@drawable/rounded_corners">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_margin="3dp"
                 android:layout_weight="2.66"
+                android:background="@drawable/rounded_corners"
                 android:orientation="vertical"
                 android:visibility="visible">
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="#000000"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/news_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="3dp"
+
+                        android:fontFamily="@font/scpro"
+                        android:gravity="left"
+                        android:textColor="@color/darkTextColor"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/news_desc"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/scpro"
+
+                        android:textColor="@color/darkTextColor"
+                        android:textSize="12sp"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/news_pubdate"
+                        android:layout_width="match_parent"
+                        android:layout_height="20dp"
+
+                        android:layout_marginLeft="3dp"
+                        android:fontFamily="@font/scpro"
+                        android:gravity="left|center"
+                        android:textColor="@color/darkTextColor"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/news_link"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/scpro"
+
+                        android:textColor="@color/darkTextColor"
+                        android:textSize="10sp"
+                        android:visibility="gone" />
+
+
+                </LinearLayout>
+
                 <ImageView
                     android:id="@+id/news_image"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="125dp"
                     android:layout_gravity="center_horizontal|center"
-                    android:background="@drawable/rounded_corners"
                     android:gravity="center"
                     android:scaleType="fitXY" />
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/news_title"
-                    android:layout_width="match_parent"
-                    android:layout_height="80dp"
-                    android:layout_marginLeft="3dp"
-
-                    android:fontFamily="@font/scpro"
-                    android:gravity="left"
-                    android:textColor="@color/darkTextColor"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/news_desc"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/scpro"
-
-                    android:textColor="@color/darkTextColor"
-                    android:textSize="12sp"
-                    android:visibility="gone" />
-
-                <TextView
-                    android:id="@+id/news_pubdate"
-                    android:layout_width="match_parent"
-                    android:layout_height="20dp"
-
-                    android:layout_marginLeft="3dp"
-                    android:fontFamily="@font/scpro"
-                    android:gravity="left|center"
-                    android:textColor="@color/darkTextColor"
-                    android:textSize="14sp" />
-
-                <TextView
-                    android:id="@+id/news_link"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/scpro"
-
-                    android:textColor="@color/darkTextColor"
-                    android:textSize="10sp"
-                    android:visibility="gone" />
-
-
-            </LinearLayout>
         </TableRow>
 
 

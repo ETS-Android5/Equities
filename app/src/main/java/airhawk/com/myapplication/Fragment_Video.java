@@ -29,7 +29,7 @@ public class Fragment_Video extends Fragment {
         LinearLayoutManager linearLayoutManager=new LinearLayoutManager(getActivity());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(linearLayoutManager);
-        YouTubeAdapter adapter=new YouTubeAdapter(getActivity());
+        Adapter_Youtube adapter=new Adapter_Youtube(getActivity());
         recyclerView.setAdapter(adapter);
         return rootView;
     }

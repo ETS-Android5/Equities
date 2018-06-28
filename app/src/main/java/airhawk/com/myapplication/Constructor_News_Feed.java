@@ -1,7 +1,7 @@
 package airhawk.com.myapplication;
 
 
-public class News_FeedItem {
+public class Constructor_News_Feed {
    String title;  
    String link;  
    String description;  
