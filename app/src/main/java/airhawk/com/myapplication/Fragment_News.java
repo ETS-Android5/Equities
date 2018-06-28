@@ -1,8 +1,5 @@
 package airhawk.com.myapplication;
 
-import android.app.ProgressDialog;
-import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,10 +7,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 
-import static airhawk.com.myapplication.App_Variables.feedItems;
+import static airhawk.com.myapplication.Constructor_App_Variables.feedItems;
 import static airhawk.com.myapplication.Activity_Main.progress;
 
 /**
@@ -34,7 +29,7 @@ public class Fragment_News extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_news, container, false);
 
         news_feed=rootView.findViewById(R.id.news_feed);
-        news_feed.setAdapter(new News_FeedAdapter(getActivity(), feedItems));
+        news_feed.setAdapter(new Adapter_News_Feed(getActivity(), feedItems));
         news_feed.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
 
 

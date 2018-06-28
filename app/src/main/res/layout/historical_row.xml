@@ -1,20 +1,15 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+<TableRow android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
-
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
         <TextView
-            android:id="@+id/aequity_name"
+            android:id="@+id/aequity_amount"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="$ 7426.56"
+            android:text="$ 7426.34"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="#ffffff" />
 
@@ -40,5 +35,3 @@
             android:textColor="#ffffff" />
     </TableRow>
 
-
-</LinearLayout>

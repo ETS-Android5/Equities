@@ -5,9 +5,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-public class Winners_Losers_Volume_Pager_Adapter extends FragmentPagerAdapter {
+public class Adapter_Pager_Winners_Losers_Volume extends FragmentPagerAdapter {
     private Context mContext;
-    public Winners_Losers_Volume_Pager_Adapter(Context context, FragmentManager fm) {
+    public Adapter_Pager_Winners_Losers_Volume(Context context, FragmentManager fm) {
         super(fm);
         mContext = context;
     }
@@ -15,16 +15,19 @@ public class Winners_Losers_Volume_Pager_Adapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         if (position == 0) {
             return new Fragment_Winners();
-        } else if (position == 1){
+        } else if (position == 1) {
             return new Fragment_Losers();
-        } else if (position == 2){
+
+       /* } else if (position == 2){
             return new Fragment_Volume();
+
+        */
         }
         return null;
     }
     @Override
     public int getCount() {
-        return 3;
+        return 2;
     }
     @Override
     public CharSequence getPageTitle(int position) {

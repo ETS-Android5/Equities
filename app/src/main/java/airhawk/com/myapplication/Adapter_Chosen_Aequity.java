@@ -5,11 +5,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-public class Market_Analysis_Adapter extends FragmentPagerAdapter {
+public class Adapter_Chosen_Aequity extends FragmentPagerAdapter {
 
     private Context mContext;
 
-    public Market_Analysis_Adapter(Context context, FragmentManager fm) {
+    public Adapter_Chosen_Aequity(Context context, FragmentManager fm) {
         super(fm);
         mContext = context;
     }

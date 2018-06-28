@@ -5,19 +5,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static airhawk.com.myapplication.App_Variables.all_market_cap_amount;
-import static airhawk.com.myapplication.App_Variables.alt_market_cap_amount;
-import static airhawk.com.myapplication.App_Variables.btc_market_cap_amount;
-import static airhawk.com.myapplication.App_Variables.btc_market_cap_change;
-import static airhawk.com.myapplication.App_Variables.dow_amount;
-import static airhawk.com.myapplication.App_Variables.dow_change;
-import static airhawk.com.myapplication.App_Variables.dow_name;
-import static airhawk.com.myapplication.App_Variables.nas_amount;
-import static airhawk.com.myapplication.App_Variables.nas_change;
-import static airhawk.com.myapplication.App_Variables.nas_name;
-import static airhawk.com.myapplication.App_Variables.sp_amount;
-import static airhawk.com.myapplication.App_Variables.sp_change;
-import static airhawk.com.myapplication.App_Variables.sp_name;
+import static airhawk.com.myapplication.Constructor_App_Variables.all_market_cap_amount;
+import static airhawk.com.myapplication.Constructor_App_Variables.alt_market_cap_amount;
+import static airhawk.com.myapplication.Constructor_App_Variables.btc_market_cap_amount;
+import static airhawk.com.myapplication.Constructor_App_Variables.btc_market_cap_change;
+import static airhawk.com.myapplication.Constructor_App_Variables.dow_amount;
+import static airhawk.com.myapplication.Constructor_App_Variables.dow_change;
+import static airhawk.com.myapplication.Constructor_App_Variables.dow_name;
+import static airhawk.com.myapplication.Constructor_App_Variables.nas_amount;
+import static airhawk.com.myapplication.Constructor_App_Variables.nas_change;
+import static airhawk.com.myapplication.Constructor_App_Variables.nas_name;
+import static airhawk.com.myapplication.Constructor_App_Variables.sp_amount;
+import static airhawk.com.myapplication.Constructor_App_Variables.sp_change;
+import static airhawk.com.myapplication.Constructor_App_Variables.sp_name;
 
 public class MarketsContent {
 
@@ -53,7 +53,7 @@ public class MarketsContent {
         public final String change;
         public final String details;
 
-        public MarketsItem(String id, String content, String details,String change) {
+        public MarketsItem(String id, String content, String details, String change) {
             this.id = id;
             this.content = String.valueOf(content);
             this.details = details;

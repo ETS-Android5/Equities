@@ -1,12 +1,21 @@
 package airhawk.com.myapplication;
 
+import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import static airhawk.com.myapplication.Executor_Winners_Losers_Kings.crypto_volume_volumelist;
+import static airhawk.com.myapplication.Executor_Winners_Losers_Kings.crypto_volume_namelist;
+import static airhawk.com.myapplication.Executor_Winners_Losers_Kings.stock_volume_volumelist;
+import static airhawk.com.myapplication.Executor_Winners_Losers_Kings.stock_volume_namelist;
+import static airhawk.com.myapplication.Executor_Winners_Losers_Kings.stock_volume_symbollist;
 
 
 /**
@@ -14,8 +23,9 @@ import android.widget.TextView;
  */
 
 public class Fragment_Volume extends Fragment {
-    private TextView stock,crypto;
-    private TextView volumestock1,volumestock2,volumestock3,volumestock4,volumestock5,volumecrypto1,volumecrypto2,volumecrypto3,volumecrypto4,volumecrypto5;
+    TextView stock, crypto;
+    private RecyclerView stockitems;
+    private RecyclerView cryptoitems;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -25,53 +35,22 @@ public class Fragment_Volume extends Fragment {
 
 
         View rootView = inflater.inflate(R.layout.fragment_volume, container, false);
-        stock =rootView.findViewById(R.id.stock);
-        //stock.setPaintFlags(stock.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
-        crypto =rootView.findViewById(R.id.crypto);
-        //crypto.setPaintFlags(crypto.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
-        Typeface custom_font = Typeface.createFromAsset(getActivity().getAssets(),"fonts/Oregon.ttf");
-
+        stock = rootView.findViewById(R.id.stock);
+        crypto = rootView.findViewById(R.id.crypto);
+        stockitems= rootView.findViewById(R.id.stock_items);
+        stockitems.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+        stockitems.setAdapter(new Adapter_Winners_Losers_Kings(getActivity(), "Stock_Volume", stock_volume_symbollist,stock_volume_namelist,stock_volume_volumelist));
+        cryptoitems= rootView.findViewById(R.id.crypto_items);
+        cryptoitems.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+        cryptoitems.setAdapter(new Adapter_Winners_Losers_Kings(getActivity(), "Crypto_Volume",null,crypto_volume_namelist,crypto_volume_volumelist));
+        Typeface custom_font = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Oregon.ttf");
         stock.setTypeface(custom_font);
         crypto.setTypeface(custom_font);
-        volumecrypto1 = rootView.findViewById(R.id.volumecrypto1);
-        volumecrypto2 = rootView.findViewById(R.id.volumecrypto2);
-        volumecrypto3 = rootView.findViewById(R.id.volumecrypto3);
-        volumecrypto4 = rootView.findViewById(R.id.volumecrypto4);
-        volumecrypto5 = rootView.findViewById(R.id.volumecrypto5);
-        volumestock1 = rootView.findViewById(R.id.volumestock1);
-        volumecrypto1.setTypeface(custom_font);
-        volumestock2 = rootView.findViewById(R.id.volumestock2);
-        volumecrypto2.setTypeface(custom_font);
-        volumestock3 = rootView.findViewById(R.id.volumestock3);
-        volumecrypto3.setTypeface(custom_font);
-        volumestock4 = rootView.findViewById(R.id.volumestock4);
-        volumecrypto4.setTypeface(custom_font);
-        volumestock5 = rootView.findViewById(R.id.volumestock5);
-        volumecrypto5.setTypeface(custom_font);
-        /*
-        volumestock1.setText(sto1);
-        volumestock1.setTypeface(custom_font);
-        volumecrypto2.setTypeface(custom_font);
-        volumestock2.setText(sto2);
-        volumestock2.setTypeface(custom_font);
-                volumestock3.setTypeface(custom_font);
-        volumestock4.setTypeface(custom_font);
-                volumestock5.setTypeface(custom_font);
-
-        volumecrypto3.setTypeface(custom_font);
-        volumestock3.setText(sto3);
-        volumecrypto4.setTypeface(custom_font);
-        volumestock4.setText(sto4);
-        volumecrypto5.setTypeface(custom_font);
-        volumestock5.setText(sto5);
+        stock.setPaintFlags(stock.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
+        crypto.setPaintFlags(stock.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
 
 
-        volumecrypto1.setText(cry_vol1);
-        volumecrypto2.setText(cry_vol2);
-        volumecrypto3.setText(cry_vol3);
-        volumecrypto4.setText(cry_vol4);
-        volumecrypto5.setText(cry_vol5);
-*/
+
         return rootView;
 
     }

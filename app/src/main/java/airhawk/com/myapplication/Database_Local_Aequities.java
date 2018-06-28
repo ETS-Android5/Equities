@@ -14,12 +14,12 @@ import java.util.List;
  * Created by Julian Dinkins on 1/12/2018.
  */
 
-public class Aequity_Local_DB extends SQLiteOpenHelper {
+public class Database_Local_Aequities extends SQLiteOpenHelper {
 
     private static final int DATABASE_VERSION = 1;
     public static final String TAG = "TAG";
-    private static Aequity_Local_DB mInstance = null;
-    private static final String DATABASE_NAME = "Aequity_Local_DB";
+    private static Database_Local_Aequities mInstance = null;
+    private static final String DATABASE_NAME = "Database_Local_Aequities";
 
     // Contacts table name
     private static final String TABLE_AEQUITY_INFO = "Equity_Info";
@@ -31,13 +31,13 @@ public class Aequity_Local_DB extends SQLiteOpenHelper {
     private static final String KEY_AEQUITY_TYPE = "KEY_EQUITY_TYPE";
 
 
-    public static Aequity_Local_DB getInstance(Context context) {
+    public static Database_Local_Aequities getInstance(Context context) {
 
         // Use the application context, which will ensure that you
         // don't accidentally leak an Activity's context.
         // See this article for more information: http://bit.ly/6LRzfx
         if (mInstance == null) {
-            mInstance = new Aequity_Local_DB(context.getApplicationContext());
+            mInstance = new Database_Local_Aequities(context.getApplicationContext());
         }
         return mInstance;
     }
@@ -47,7 +47,7 @@ public class Aequity_Local_DB extends SQLiteOpenHelper {
      * make call to static factory method "getInstance()" instead.
      */
 
-    public Aequity_Local_DB(Context context) {
+    public Database_Local_Aequities(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
