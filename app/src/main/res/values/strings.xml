@@ -17,30 +17,37 @@
     <string name="top5cryptos">Cryptocurrencies</string>
     <string name="bottom5stocks">Stocks</string>
     <string name="bottom5cryptos">Cryptocurrencies</string>
-    <string name="winners">WINNERS</string>
+    <string name="leaders">LEADERS</string>
     <string name="losers">LOSERS</string>
     <string name="volume">VOLUME</string>
     <string name="dow_jones">Dow Jones</string>
     <string name="s_p">S&amp;P 500</string>
     <string name="nasdaq">Nasdaq</string>
     <string name="btc_market_cap">Bitcoin</string>
-    <string name="crypto_cap">Crypto Cap</string>
+    <string name="crypto_cap">Cryptocurrency Cap</string>
     <string name="altcoin_cap">Alt Coins</string>
-    <string name="stock_volume_leaders">Stock Market Volume Leaders</string>
-    <string name="crypto_volume_leaders">Crypto Volume Leaders</string>
+    <string name="stock_volume_leaders">Stock Market Kings</string>
+    <string name="crypto_volume_leaders">Cryptocurrency Kings</string>
     <string name="stock_market_gainers">Stock Market Leaders</string>
     <string name="crypto_gainers">Cryptocurrency Leaders</string>
     <string name="stock_market_losers">Stock Market Losers</string>
-    <string name="crypto_losers">Crypto Losers</string>
+    <string name="crypto_losers">Cryptocurrency Losers</string>
     <string name="name">Name</string>
     <string name="date">Date</string>
     <string name="price">Price</string>
     <string name="range_52">52 Week Range</string>
     <string name="supply">Coins</string>
     <string name="shares">Shares</string>
-    <string name="title_buy">Buy It</string>
+    <string name="title_buy">Exchanges</string>
     <string name="crypto">Cryptocurrency</string>
     <string name="title_gratitude">Gratitude</string>
     <string name="title_exchanges">Exchanges</string>
-
+    <string name="market_kings">Kings</string>
+    <string name="news">News</string>
+    <string name="saved">Saved</string>
+    <string name="title_about">About</string>
+    <string name="ico">ICO\'s</string>
+    <string name="ipo">IPO\'s</string>
+    <string name="market_cap">Market Cap</string>
+    <string name="default_font" translatable="false">sans-serif-light</string>
 </resources>

@@ -1,6 +1,8 @@
 package airhawk.com.myapplication;
 
 
+import android.util.Log;
+
 public class Constructor_News_Feed {
    String title;  
    String link;  
@@ -36,7 +38,7 @@ public class Constructor_News_Feed {
            img = img.substring(0, indexOf);
            setThumbnailUrl(img);
            this.description = this.description.replace(cleanUp, "");
-           System.out.println("FINAL IMAGE URL IS "+this.description);
+           //System.out.println("FINAL IMAGE URL IS "+this.description);
        }
    }  
    public String getPubDate() {  
@@ -45,11 +47,12 @@ public class Constructor_News_Feed {
    public void setPubDate(String pubDate) {  
      this.pubDate = pubDate;  
    }  
-   public String getThumbnailUrl() {  
-     return thumbnailUrl;  
+   public String getThumbnailUrl() {
+
+       return thumbnailUrl;
    }  
    public void setThumbnailUrl(String thumbnailUrl) {
        this.thumbnailUrl = thumbnailUrl;
-       //Log.d("*******image*********", thumbnailUrl.toString());
+
    }  
  }

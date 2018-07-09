@@ -25,7 +25,7 @@ public class Adapter_Chosen_Aequity extends FragmentPagerAdapter {
         } else if (position == 2){
             return new Fragment_Video();
         } else if (position == 3){
-            return new Fragment_Buy();
+            return new Fragment_Exchanges();
         }
 
         return null;

@@ -36,7 +36,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import static airhawk.com.myapplication.Activity_Main.ap_info;
-import static airhawk.com.myapplication.Activity_Main.get_current_aequity_price;
+
 import static airhawk.com.myapplication.Constructor_App_Variables._AllDays;
 import static airhawk.com.myapplication.Constructor_App_Variables.feedItems;
 import static airhawk.com.myapplication.Constructor_App_Variables.graph_date;
@@ -66,17 +66,20 @@ public class Executor_Chosen_Aequity
                 long startTime = System.nanoTime();
                 Constructor_App_Variables ax = new Constructor_App_Variables();
                 String a = ax.getMarketType();
-                System.out.println("This is what a actually equals "+a);
-                if (a.equals("Cryptocurrency"))
+                if (a.equals("Cryptocurrency") || a.equals("Crypto"))
                 {
                     get_crypto_points();
-                }else
-                    {
-                    get_nasdaq_points();
+                }
+                else {
+                    get_stock_shares();
+                    get_stock_cap();
+                    get_stock_points();
                     }
+
                 long endTime = System.nanoTime();
                 long duration = (endTime - startTime);
-                System.out.println("GET get_crypto_points/get_nasdaq_points TIME IS "+duration/1000000000+" seconds");
+                //29 seconds Boost Mobile
+                System.out.println("GET get_crypto_points/get_stock_points TIME IS "+duration/1000000000+" seconds");
                 return null;
             }
         });
@@ -89,6 +92,7 @@ public class Executor_Chosen_Aequity
                 getVideoInfo();
                 long endTime = System.nanoTime();
                 long duration = (endTime - startTime);
+                //1 second Boost Mobile
                 System.out.println("GET VIDEOS TIME IS "+duration/1000000000+" seconds");
                 return null;
             }
@@ -102,6 +106,7 @@ public class Executor_Chosen_Aequity
                 ProcessXml(GoogleRSFeed());
                 long endTime = System.nanoTime();
                 long duration = (endTime - startTime);
+                //4 seconds Boost Mobile
                 System.out.println("GET NEWS TIME IS "+duration/1000000000+" seconds");
                 return null;
             }
@@ -113,65 +118,93 @@ public class Executor_Chosen_Aequity
             List<Future<String>> futures = service.invokeAll(callables);
             for (Future<String> future : futures)
             {
-                System.out.println (future.get());
+                //System.out.println (future.get());
                 //Where to check all variables
-                System.out.println(Arrays.asList(graph_date));
             }
         }
         catch (InterruptedException e)
         {
             e.printStackTrace();
         }
-        catch (ExecutionException e)
-        {
-            e.printStackTrace();
-        }
+
     }
 
 
-
-
-    public static void get_nasdaq_points() {
-
+    public static void get_stock_shares(){
+        Document doc =null;
         String marname = ap_info.getMarketSymbol();
-        //int i = marname.indexOf(" ");
-        //String in = marname.substring(0, i);
-        //marname = in;
-        List<String> name = new ArrayList<>();
-        List<String> number = new ArrayList<>();
-        Document doc = null;
         try {
-            doc = Jsoup.connect("https://charting.nasdaq.com/ext/charts.dll?2-1-14-0-0-512-03NA000000" + marname + "-&SF:1|5-BG=FFFFFF-BT=0-HT=395--XTBL-").timeout(10 * 10000).get();
+            doc = Jsoup.connect("https://finance.yahoo.com/quote/"+marname+"/key-statistics?p="+marname).timeout(10 * 1000).get();
+            //
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Elements divs = doc.getElementsByClass("DrillDownData");
-        Elements divsdate = doc.getElementsByClass("DrillDownDate");
-        ArrayList<String> elements = new ArrayList<String>();
-        for (Element el : divs) {
-            Elements tds = el.select("td");
-            String result = tds.get(0).text();
-            elements.add(result);
+        Elements e =doc.select("tbody");
+        Element f =e.get(9);
+        Elements c =f.select("td");
+        Element p =c.get(5);
+        ap_info.setMarketSupply(p.text());
+    }
+    public static void get_stock_cap(){
+        String marname = ap_info.getMarketSymbol();
+        Document cap =null;
+        try{
+            cap =Jsoup.connect("https://finance.yahoo.com/quote/"+marname+"?p="+marname).timeout(10 *10000).get();
+        } catch (IOException e){
+            e.printStackTrace();
         }
-        ArrayList<String> elements_dates = new ArrayList<String>();
-        for (Element e : divsdate) {
-            Elements tdsdate = e.select("td");
-            String resultdate = tdsdate.get(0).text();
-            elements_dates.add(resultdate);
+        Elements ez =cap.select("td[data-test]");
+        ap_info.setMarketCap(ez.get(8).text());
+
+    }
+    public static void get_stock_points() {
+
+        String marname = ap_info.getMarketSymbol();
+        Document d = null;
+        try {
+            d = Jsoup.connect("https://finance.yahoo.com/quote/" + marname + "/history?p=" + marname).timeout(10 * 10000).get();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
-        for (int j = elements.size() - 1; j >= 0; j--) {
-            if (j % 2 == 0) { // Even
-                number.add(elements.get(j));
-            } else { // Odd
-                name.add(elements.get(j));
+        Element u = d.getElementById("Lead-2-QuoteHeader-Proxy");
+        Elements x = u.select("div>span");
+        String c = x.get(2).text();
+        String cuap = c.replace(",","");
+        ap_info.setCurrent_Aequity_Price(cuap);
+        String c3 = x.get(3).text();
+        String[] spit = c3.split(" ");
+        spit[1]=spit[1].replaceAll("\\(","");
+        spit[1]=spit[1].replaceAll("\\)","");
+        ap_info.setCurrent_Aequity_Price_Change(spit[1]);
+
+        ArrayList <String> temp = new ArrayList();
+        Elements tables = d.select("table");
+        Elements trs = tables.select("tr");
+        for (Element g : trs) {
+            Elements p = g.select("td");
+            temp.add(p.text());
+
+        }
+        temp.remove(0);
+        temp.remove(0);
+        for (int counter = 0; counter < temp.size(); counter++) {
+            String sev = temp.get(counter);
+            String [] split = sev.split(" ");
+            graph_date.add(split[0]+" "+split[1]+" "+split[2]);
+            if(split[7].equals("adjusted"))
+            {
+                graph_high.add(ap_info.getCurrent_Aequity_Price());
             }
+            else
+                {
+            graph_high.add(split[7]);}
+            if(split[8].equals("for")||split[8].contains("-"))
+            {graph_volume.add("0");}else{
+            graph_volume.add(split[8]);}
+
         }
-        for (int counter = 0; counter < number.size(); counter++) {
-            graph_date.add(elements_dates.get(counter));
-            graph_volume.add(name.get(counter));
-            graph_high.add(number.get(counter));
-        }
+
         List<String> numbers = graph_high;
         Collections.reverse(numbers);
         _AllDays = numbers;
@@ -187,8 +220,9 @@ public class Executor_Chosen_Aequity
         String end_url;
         String url_1st = "https://i.ytimg.com/vi/";
         String url_3rd = "/hqdefault.jpg";
+        String market_combo = ap_info.getMarketName()+"+"+ap_info.getMarketType();
         try {
-            Document doc = Jsoup.connect(url).data("search_query", ap_info.getMarketName()).userAgent("Mozilla/5.0").timeout(10 * 10000).get();
+            Document doc = Jsoup.connect(url).data("search_query", market_combo).userAgent("Mozilla/5.0").timeout(10 * 10000).get();
 
             for (Element a : doc.select(".yt-lockup-title > a[title]")) {
                 begin_url = (a.attr("href") + " " + a.attr("title"));
@@ -208,30 +242,53 @@ public class Executor_Chosen_Aequity
 
     }
 
-    //THIS METHOD IS TOO SLOW
     public static void get_crypto_points() {
         Element price;
         Document doc = null;
         DateFormat sdf = new SimpleDateFormat("yyyyMMdd");
         Date begindate = new Date();
 
-        //market_name="tron";
+       String f = ap_info.getMarketName();
+        System.out.println("SYMBO NAME "+f);
+       if (f.contains(" ")){
+       f= f.replaceAll(" ","-");}
+
         try {
-            doc = Jsoup.connect("https://coinmarketcap.com/currencies/" + ap_info.getMarketName() + "/historical-data/?start=20000101&end=" + sdf.format(begindate)).timeout(10 * 1000).get();
+            doc = Jsoup.connect("https://coinmarketcap.com/currencies/" + f + "/historical-data/?start=20000101&end=" + sdf.format(begindate)).timeout(10 * 1000).get();
             //
         } catch (IOException e) {
             e.printStackTrace();
         }
 
 
+        String b= "B";
+        String m = "M";
+        Elements a = doc.select("span[data-currency-value]");
+        int counter = a.get(1).text().split("\\,", -1).length - 1;
+        String aa =a.get(1).text().replaceFirst(",",".");
+        aa =aa.replace(",","");
+        aa =aa.substring(0,6);
+        if (counter==3){
+            ap_info.setMarketCap(aa+" "+b);}
+        if (counter==2){
+            ap_info.setMarketCap(aa+" "+m);
+        }
+
+        Elements dd = doc.select("span[data-format-supply]");
+        ap_info.setMarketSupply(dd.get(1).text());
 
 
         price = doc.getElementById("quote_price");
+        Elements vv = doc.select("span[data-format-percentage]");
+        String [] flit = vv.text().split(" ");
+        System.out.println("QUOTE PRICE  "+vv.text());
+
+        ap_info.setCurrent_Aequity_Price_Change(flit[0]+" %");
         String v = price.text();
         String[] splitz = v.split(" ");
         double d = Double.parseDouble(splitz[0]);
         DecimalFormat df = new DecimalFormat("#0.000");
-        get_current_aequity_price =df.format(d);
+        ap_info.setCurrent_Aequity_Price(df.format(d));
         Elements divs = doc.select("table");
         for (Element tz : divs) {
             Elements tds = tz.select("td");
@@ -320,17 +377,20 @@ public class Executor_Chosen_Aequity
         try {
             URL url;
             Context context;
-            String repo;
-            repo = ap_info.getMarketName();
-            repo = repo.replace("  ", " ");
-            System.out.println("BIG BOOBS1 " + repo);
-            if (repo.contains(" ")) {
-                String remove = repo.substring(repo.lastIndexOf(" "));
-                repo = repo.replace(remove, "");
+            String address;
+            String type =ap_info.getMarketType();
+            String repo = ap_info.getMarketName();
+            if (repo.contains(" "))
+            {
+                repo =repo.replaceAll(" ","%20");
             }
-            repo = repo.replace(" ", "%20");
-            String address = "https://news.google.com/news/rss/search/section/q/" + repo + "?ned=us&gl=US&hl=en";
+            String repo_type = repo+"%20"+type;
+            if (type.equals("Cryptocurrency")){
+                address = "https://news.google.com/news/rss/search/section/q/" + repo_type + "?ned=us&gl=US&hl=en";
 
+            }else {
+                address = "https://news.google.com/news/rss/search/section/q/" + repo + "?ned=us&gl=US&hl=en";
+            }
             url = new URL(address);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");

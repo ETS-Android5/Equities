@@ -20,16 +20,12 @@ public class Database_Local_Aequities extends SQLiteOpenHelper {
     public static final String TAG = "TAG";
     private static Database_Local_Aequities mInstance = null;
     private static final String DATABASE_NAME = "Database_Local_Aequities";
-
-    // Contacts table name
-    private static final String TABLE_AEQUITY_INFO = "Equity_Info";
-
-    // Contacts Table Columns names
-    private static final String KEY_ID = "id";
-    private static final String KEY_AEQUITY_SYMBOL = "KEY_EQUITY_SYMBOL";
-    private static final String KEY_AEQUITY_NAME = "KEY_EQUITY_NAME";
-    private static final String KEY_AEQUITY_TYPE = "KEY_EQUITY_TYPE";
-
+    private static final String TABLE_AEQUITY_INFO = "TABLE_AEQUITY_INFO";
+    private static final String KEY_ID = "KEY_ID";
+    public static final String KEY_AEQUITY_SYMBOL = "KEY_AEQUITY_SYMBOL";
+    public static final String KEY_AEQUITY_NAME = "KEY_AEQUITY_NAME";
+    public static final String KEY_AEQUITY_TYPE = "KEY_AEQUITY_TYPE";
+    private Context context;
 
     public static Database_Local_Aequities getInstance(Context context) {
 
@@ -37,21 +33,16 @@ public class Database_Local_Aequities extends SQLiteOpenHelper {
         // don't accidentally leak an Activity's context.
         // See this article for more information: http://bit.ly/6LRzfx
         if (mInstance == null) {
-            mInstance = new Database_Local_Aequities(context.getApplicationContext());
+            mInstance = new Database_Local_Aequities(context);
         }
         return mInstance;
     }
 
-    /**
-     * Constructor should be private to prevent direct instantiation.
-     * make call to static factory method "getInstance()" instead.
-     */
-
     public Database_Local_Aequities(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        this.context = context;
     }
 
-    // Creating Tables
     @Override
     public void onCreate(SQLiteDatabase db) {
         String CREATE_TABLE_EQUITY_INFO  = "CREATE TABLE " + TABLE_AEQUITY_INFO + "("
@@ -62,93 +53,90 @@ public class Database_Local_Aequities extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLE_EQUITY_INFO );
     }
 
-    // Upgrading database
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        // Drop older table if existed
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_AEQUITY_INFO);
-
-        // Create tables again
         onCreate(db);
     }
 
-    public void add_equity_info(String symbol,String name,String type) {
+    public long add_equity_info(String symbol,String name,String type) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(KEY_AEQUITY_SYMBOL, symbol);
         values.put(KEY_AEQUITY_NAME, name);
         values.put(KEY_AEQUITY_TYPE, type);
-        // Inserting Row
         db.insert(TABLE_AEQUITY_INFO, null, values);
-        db.close(); // Closing database connection
-    }
-
-    public ArrayList<String> get_all_equities() {
-        ArrayList<String> arrayList=new ArrayList<>();
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res =  db.rawQuery( "select * from "+TABLE_AEQUITY_INFO, null );
-        res.moveToFirst();
-        if (res != null)
-        {
-            while(res.isAfterLast() == false){
-                arrayList.add(res.getString(res.getColumnIndex(KEY_AEQUITY_SYMBOL)));
-                res.moveToNext();
-            }}
-        res.close();
-        return arrayList;
-
-    }
-    public ArrayList<String> getAllFriends(int id) {
-        ArrayList<String> friendsNames = new ArrayList<>();
-        SQLiteDatabase sqLiteDatabase = null;
-        try {
-            Cursor res =  sqLiteDatabase.rawQuery( "select * from "+TABLE_AEQUITY_INFO, null );
-            while (res.moveToNext()) {
-                friendsNames.add(res.getString(res.getColumnIndex(KEY_AEQUITY_SYMBOL)));
-            }
-        }catch(Exception ex){
-            Log.e(TAG,"Erro in geting friends "+ex.toString());
-        }
-        return friendsNames;
-    }
-
-
-    //Get name based  on equity_symbol
-    public String get_equity_name(String equsymbol) {
-
-        SQLiteDatabase db = this.getReadableDatabase();
-        String query = "Select * FROM " + TABLE_AEQUITY_INFO + " WHERE " + KEY_AEQUITY_SYMBOL + " =  \"" + equsymbol + "\"";
-
-
-        Cursor cursor = db.rawQuery(query, null);
-
-
-
-        String varaible1="";
-        if (cursor.moveToFirst()) {
-            cursor.moveToFirst();
-            varaible1 = cursor.getString(cursor.getColumnIndex("KEY_EQUITY_NAME"));
-
-            cursor.close();
-            //Log.i(JSONParser.TAG, "I love " + varaible1);
-
-        } else {
-            varaible1 = null;
-        }
+        long id = db.insert(TABLE_AEQUITY_INFO, null, values);
         db.close();
-        return varaible1;
+        return id;
     }
 
-
-
-
-
-
-
-    public List<String> getAllEquities() {
-        List<String> tableNames = new ArrayList<>();
+    public ArrayList getSymbol() {
+        ArrayList<String> symbol = new ArrayList<>();
         try {
-            String query = "SELECT  * FROM " + TABLE_AEQUITY_INFO;
+            String query = "SELECT DISTINCT * FROM " + TABLE_AEQUITY_INFO;
+            SQLiteDatabase db = this.getWritableDatabase();
+            Cursor cursor = db.rawQuery(query, null);
+            if (cursor.moveToFirst()) {
+                while (!cursor.isAfterLast()) {
+                    symbol.add(cursor.getString(cursor.getColumnIndex(KEY_AEQUITY_SYMBOL)));
+                    cursor.moveToNext();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return symbol;
+    }
+
+    public ArrayList getName() {
+        ArrayList<String> name = new ArrayList<>();
+        try {
+            String query = "SELECT DISTINCT * FROM " + TABLE_AEQUITY_INFO;
+            SQLiteDatabase db = this.getWritableDatabase();
+            Cursor cursor = db.rawQuery(query, null);
+            if (cursor.moveToFirst()) {
+                while (!cursor.isAfterLast()) {
+                    name.add(cursor.getString(cursor.getColumnIndex(KEY_AEQUITY_NAME)));
+                    cursor.moveToNext();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return name;
+    }
+
+    public void deleteDuplicates(){
+        String p ="";
+        getWritableDatabase().execSQL("DELETE FROM "+TABLE_AEQUITY_INFO+" WHERE KEY_ID NOT IN (SELECT MIN(KEY_ID ) FROM TABLE_AEQUITY_INFO GROUP BY KEY_AEQUITY_NAME)");
+    }
+
+    public ArrayList<String> getType() {
+        ArrayList<String> type = new ArrayList<>();
+        try {
+            String query = "SELECT DISTINCT * FROM " + TABLE_AEQUITY_INFO;
+            SQLiteDatabase db = this.getWritableDatabase();
+            Cursor cursor = db.rawQuery(query, null);
+            if (cursor.moveToFirst()) {
+                while (!cursor.isAfterLast()) {
+                    type.add(cursor.getString(cursor.getColumnIndex(KEY_AEQUITY_TYPE)));
+                    cursor.moveToNext();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return type;
+    }
+
+    public ArrayList<String> getAllAequities() {
+        ArrayList<String> tableNames = new ArrayList<>();
+        try {
+            String query = "SELECT KEY_AEQUITY_SYMBOL FROM " + TABLE_AEQUITY_INFO;
             SQLiteDatabase db = this.getWritableDatabase();
             Cursor cursor = db.rawQuery(query, null);
             if (cursor.moveToFirst()) {
