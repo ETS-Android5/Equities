@@ -9,7 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import static airhawk.com.myapplication.Constructor_App_Variables.feedItems;
-import static airhawk.com.myapplication.Activity_Main.progress;
+
 
 /**
  * Created by Julian Dinkins on 4/25/2018.

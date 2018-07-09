@@ -9,6 +9,12 @@
         android:title="@string/title_search"
         app:showAsAction="always"/>
 
+
+    <item
+        android:id="@+id/action_settings"
+        android:icon="@android:drawable/ic_menu_set_as"
+        android:title="@string/title_search"
+        app:showAsAction="never"/>
     <item
         android:id="@+id/action_gratitude"
         android:icon="@android:drawable/ic_menu_search"
@@ -16,8 +22,8 @@
         app:showAsAction="never"/>
 
     <item
-        android:id="@+id/action_exchanges"
+        android:id="@+id/action_about"
         android:icon="@android:drawable/ic_menu_search"
-        android:title="@string/title_exchanges"
+        android:title="@string/title_about"
         app:showAsAction="never"/>
 </menu>

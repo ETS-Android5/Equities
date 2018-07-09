@@ -45,11 +45,13 @@ public class Adapter_News_Feed extends RecyclerView.Adapter<Adapter_News_Feed.My
    @Override  
    public void onBindViewHolder(MyViewHolder holder, int position) {  
      Constructor_News_Feed item = feedItems.get(position);
-     holder.tv_desc.setText(item.getDescription());  
-     holder.tv_link.setText(item.getLink());  
+//     holder.tv_desc.setText(item.getDescription());
+//     holder.tv_link.setText(item.getLink());
      holder.tv_pubdate.setText(item.getPubDate());  
      holder.tv_title.setText(item.getTitle());
-     Picasso.with(context).load(item.getThumbnailUrl()).memoryPolicy(MemoryPolicy.NO_CACHE).into(holder.tv_image);
+     if(item.getThumbnailUrl() !=null){
+     Picasso.with(context).load(item.getThumbnailUrl()).memoryPolicy(MemoryPolicy.NO_CACHE).noFade().into(holder.tv_image);}
+     else{Picasso.with(context).load(R.drawable.news).memoryPolicy(MemoryPolicy.NO_CACHE).noFade().into(holder.tv_image);}
      holder.textlink=item.getLink();
    }  
    
@@ -72,9 +74,9 @@ public class Adapter_News_Feed extends RecyclerView.Adapter<Adapter_News_Feed.My
        super(itemView);
 
        tv_title=itemView.findViewById(R.id.news_title);
-       tv_desc=itemView.findViewById(R.id.news_desc);
+       //tv_desc=itemView.findViewById(R.id.news_desc);
        tv_pubdate=itemView.findViewById(R.id.news_pubdate);
-       tv_link=itemView.findViewById(R.id.news_link);
+       //tv_link=itemView.findViewById(R.id.news_link);
        tv_image=itemView.findViewById(R.id.news_image);
        this.myClickWebView=myClickWebView;  
    
@@ -86,13 +88,7 @@ public class Adapter_News_Feed extends RecyclerView.Adapter<Adapter_News_Feed.My
        });
 
 
-       tv_link.setOnClickListener(new View.OnClickListener() {
-         @Override
-         public void onClick(View view) {
-           Intent intent=new Intent(context,Activity_Web_View.class);
 
-         }
-       });
    
      }  
    

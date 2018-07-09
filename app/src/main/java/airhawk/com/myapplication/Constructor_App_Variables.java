@@ -1,5 +1,7 @@
 package airhawk.com.myapplication;
 
+import android.graphics.Typeface;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +19,10 @@ public class Constructor_App_Variables {
     public static ArrayList graph_low = new ArrayList<>();
     public static ArrayList graph_volume = new ArrayList<>();
     public static ArrayList graph_market_cap = new ArrayList<>();
+    public static boolean dow_flow;
+    public static boolean sp_flow;
+    public static boolean nd_flow;
+    public static boolean btc_flow;
     public static String sp_name;
     public static String sp_amount;
     public static String sp_change;
@@ -31,12 +37,19 @@ public class Constructor_App_Variables {
     public static String btc_market_cap_amount;
     public static String btc_market_cap_change;
     protected static ArrayList<Constructor_News_Feed> feedItems = new ArrayList<>();
+    protected static ArrayList<Constructor_News_Feed> all_feedItems = new ArrayList<>();
     public static List<String> _AllDays =new ArrayList();
     public static String market_symbol;
     public static String market_name;
     public static String market_change;
     public static String market_type;
-    protected static String newname;
+    public static String market_supply;
+    public static String current_aequity_price;
+    public static String current_aequity_price_change;
+    public static String market_cap;
+    public static String binan="https://www.binance.com/?ref=13398675";
+    public static String cobe="https://www.coinbase.com/join/5a2cc6b6f3b80300ef643aa4";
+    public static String rbh="http://share.robinhood.com/juliand141";
 
 
     public Constructor_App_Variables(){}
@@ -59,6 +72,15 @@ public class Constructor_App_Variables {
     public void setMarketType(String market_type){
         this.market_type = market_type;
     }
+    public String getCurrent_Aequity_Price(){ return this.current_aequity_price; }
+    public void setCurrent_Aequity_Price(String current_aequity_price){
+        this.current_aequity_price=current_aequity_price;
+    }
+
+    public String getCurrent_Aequity_Price_Change(){ return this.current_aequity_price_change; }
+    public void setCurrent_Aequity_Price_Change(String current_aequity_price_change){
+        this.current_aequity_price_change=current_aequity_price_change;
+    }
 
     public String getMarketChange(){
         return this.market_change;
@@ -66,5 +88,22 @@ public class Constructor_App_Variables {
     public void setMarketChange(String market_change){
         this.market_change = market_change;
     }
+
+
+    public String getMarketCap(){
+        return this.market_cap;
+    }
+    public void setMarketCap(String market_cap){
+        this.market_cap = market_cap;
+    }
+
+
+    public String getMarketSupply(){
+        return this.market_supply;
+    }
+    public void setMarketSupply(String market_supply){
+        this.market_supply = market_supply;
+    }
+
 
 }
