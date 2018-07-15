@@ -55,7 +55,7 @@ public class Adapter_Graph_Points extends RecyclerView.Adapter<Adapter_Graph_Poi
 
     @Override
     public void onBindViewHolder(Adapter_Graph_Points.MyViewHolder holder, int position) {
-         holder.aequity_amount.setText("$ "+graph_high.get(position));
+          holder.aequity_amount.setText("$ "+graph_high.get(position));
          String s1 = (String) graph_high.get(position);
          s1=s1.replace(",","");
          s1=s1.replace("-","");
@@ -90,7 +90,7 @@ public class Adapter_Graph_Points extends RecyclerView.Adapter<Adapter_Graph_Poi
 
     @Override
     public int getItemCount() {
-        return graph_date.size();
+        return graph_high.size();
     }
 
 

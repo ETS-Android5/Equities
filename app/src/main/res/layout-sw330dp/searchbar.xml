@@ -2,11 +2,11 @@
 
 <AutoCompleteTextView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/searchtool"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:ems="10"
-    android:hint="Search Stock. Crypto, ETF"
+    android:hint="Search for Aequities"
     android:imeOptions="actionDone"
-    android:textAppearance="?android:attr/textAppearanceMedium"
+    android:textAppearance="?android:attr/textAppearanceSmall"
     android:textColor="#ffffff"
-    android:textColorHint="#ffffff"></AutoCompleteTextView>
+    android:textColorHint="#d3d3d3"></AutoCompleteTextView>

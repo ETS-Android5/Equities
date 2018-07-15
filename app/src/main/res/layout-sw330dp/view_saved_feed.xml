@@ -20,7 +20,7 @@
         android:layout_weight="1"
         android:gravity="left|center"
         android:singleLine="true"
-        android:text="Symbol"
+        android:text="BTC"
         android:textColor="@color/darkTextColor"
         android:textSize="16sp" />
 
@@ -31,10 +31,22 @@
         android:layout_weight=".6"
         android:gravity="left|center"
         android:singleLine="true"
-        android:text="Symbol"
+        android:text="BITCOIN"
         android:textColor="@color/darkTextColor"
         android:textSize="16sp" />
 
+    <TextView
+        android:id="@+id/current_change"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="end"
+        android:layout_weight=".5"
+        android:singleLine="true"
+        android:text="8.3%"
+        android:textAlignment="textEnd"
+        android:textColor="@color/darkTextColor"
+        android:textSize="16sp"
+        android:textStyle="bold" />
     <TextView
         android:id="@+id/type"
         android:layout_width="match_parent"
@@ -46,5 +58,6 @@
         android:textAlignment="textEnd"
         android:textColor="@color/darkTextColor"
         android:textSize="16sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:visibility="gone"/>
 </TableRow>

@@ -11,12 +11,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import static airhawk.com.myapplication.Executor_Winners_Losers_Kings.stock_win_changelist;
-import static airhawk.com.myapplication.Executor_Winners_Losers_Kings.stock_win_namelist;
-import static airhawk.com.myapplication.Executor_Winners_Losers_Kings.stock_win_symbollist;
-import static airhawk.com.myapplication.Executor_Winners_Losers_Kings.crypto_winners_changelist;
-import static airhawk.com.myapplication.Executor_Winners_Losers_Kings.crypto_winners_namelist;
-import static airhawk.com.myapplication.Executor_Winners_Losers_Kings.crypto_winners_symbollist;
+import static airhawk.com.myapplication.Service_Main_Aequities.stock_win_changelist;
+import static airhawk.com.myapplication.Service_Main_Aequities.stock_win_namelist;
+import static airhawk.com.myapplication.Service_Main_Aequities.stock_win_symbollist;
+import static airhawk.com.myapplication.Service_Main_Aequities.crypto_winners_changelist;
+import static airhawk.com.myapplication.Service_Main_Aequities.crypto_winners_namelist;
+import static airhawk.com.myapplication.Service_Main_Aequities.crypto_winners_symbollist;
 
 /**
  * Created by Julian Dinkins on 4/25/2018.
@@ -31,15 +31,15 @@ public class Fragment_Winners extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
 
-        View rootView = inflater.inflate(R.layout.fragment_winners, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_leaders, container, false);
         stock = rootView.findViewById(R.id.stock);
         crypto = rootView.findViewById(R.id.crypto);
         stockitems= rootView.findViewById(R.id.stock_items);
         stockitems.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-        stockitems.setAdapter(new Adapter_Winners_Losers_Kings(getActivity(), "Stock_Winner", stock_win_symbollist,stock_win_namelist,stock_win_changelist));
+        stockitems.setAdapter(new Adapter_Main_Equities(getActivity(), "Stock_Winner", stock_win_symbollist,stock_win_namelist,stock_win_changelist));
         cryptoitems= rootView.findViewById(R.id.crypto_items);
         cryptoitems.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-        cryptoitems.setAdapter(new Adapter_Winners_Losers_Kings(getActivity(), "Crypto_Winner",crypto_winners_symbollist,crypto_winners_namelist,crypto_winners_changelist));
+        cryptoitems.setAdapter(new Adapter_Main_Equities(getActivity(), "Crypto_Winner",crypto_winners_symbollist,crypto_winners_namelist,crypto_winners_changelist));
         Typeface custom_font = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Oregon.ttf");
 
         stock.setTypeface(custom_font);

@@ -37,6 +37,7 @@ public class Constructor_App_Variables {
     public static String btc_market_cap_amount;
     public static String btc_market_cap_change;
     protected static ArrayList<Constructor_News_Feed> feedItems = new ArrayList<>();
+    protected static ArrayList<Constructor_Stock_Twits> stocktwits_feedItems = new ArrayList<>();
     protected static ArrayList<Constructor_News_Feed> all_feedItems = new ArrayList<>();
     public static List<String> _AllDays =new ArrayList();
     public static String market_symbol;
@@ -50,9 +51,18 @@ public class Constructor_App_Variables {
     public static String binan="https://www.binance.com/?ref=13398675";
     public static String cobe="https://www.coinbase.com/join/5a2cc6b6f3b80300ef643aa4";
     public static String rbh="http://share.robinhood.com/juliand141";
+    public static ArrayList cpr;
 
 
     public Constructor_App_Variables(){}
+
+
+    public ArrayList getCpr() {
+        return cpr;
+    }
+    public void setCpr(ArrayList cpr){
+        this.cpr=cpr;
+    }
 
     public String getMarketName(){
         return this.market_name;

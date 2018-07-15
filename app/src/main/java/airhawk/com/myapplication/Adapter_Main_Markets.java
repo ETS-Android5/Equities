@@ -42,9 +42,6 @@ public class Adapter_Main_Markets extends RecyclerView.Adapter<Adapter_Main_Mark
             mIdView = itemView.findViewById(R.id.id_text);
             mPriceView = itemView.findViewById(R.id.price);
             mChangeView = itemView.findViewById(R.id.change);
-
-
-
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -93,8 +90,7 @@ public class Adapter_Main_Markets extends RecyclerView.Adapter<Adapter_Main_Mark
     @NonNull
     @Override
     public Adapter_Main_Markets.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.activity_main_item_list_content, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_main_item_list_content, parent, false);
         return new Adapter_Main_Markets.MyViewHolder(view);
     }
 

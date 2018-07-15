@@ -27,7 +27,7 @@ public class Adapter_News_Feed extends RecyclerView.Adapter<Adapter_News_Feed.My
    @Override  
    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
      LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-     final View view = inflater.inflate(R.layout.news_recyclerview, parent, false);
+     final View view = inflater.inflate(R.layout.recyclerview_news, parent, false);
 
      MyViewHolder mvh = new MyViewHolder(view, new MyViewHolder.myClickWebView() {  
        @Override  
@@ -45,8 +45,6 @@ public class Adapter_News_Feed extends RecyclerView.Adapter<Adapter_News_Feed.My
    @Override  
    public void onBindViewHolder(MyViewHolder holder, int position) {  
      Constructor_News_Feed item = feedItems.get(position);
-//     holder.tv_desc.setText(item.getDescription());
-//     holder.tv_link.setText(item.getLink());
      holder.tv_pubdate.setText(item.getPubDate());  
      holder.tv_title.setText(item.getTitle());
      if(item.getThumbnailUrl() !=null){
@@ -63,9 +61,7 @@ public class Adapter_News_Feed extends RecyclerView.Adapter<Adapter_News_Feed.My
    public static class MyViewHolder extends RecyclerView.ViewHolder{
    
        TextView tv_title;
-       TextView tv_desc;
        TextView tv_pubdate;
-       TextView tv_link;
        ImageView tv_image;
        String textlink;
        myClickWebView myClickWebView;
@@ -74,9 +70,7 @@ public class Adapter_News_Feed extends RecyclerView.Adapter<Adapter_News_Feed.My
        super(itemView);
 
        tv_title=itemView.findViewById(R.id.news_title);
-       //tv_desc=itemView.findViewById(R.id.news_desc);
        tv_pubdate=itemView.findViewById(R.id.news_pubdate);
-       //tv_link=itemView.findViewById(R.id.news_link);
        tv_image=itemView.findViewById(R.id.news_image);
        this.myClickWebView=myClickWebView;  
    

@@ -9,4 +9,5 @@
     android:imeOptions="actionDone"
     android:textAppearance="?android:attr/textAppearanceMedium"
     android:textColor="#ffffff"
-    android:textColorHint="#ffffff"></AutoCompleteTextView>
+    android:textColorHint="#ffffff"
+    android:textSize="10sp"></AutoCompleteTextView>
