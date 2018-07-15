@@ -1,34 +1,34 @@
 package airhawk.com.myapplication;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.AssetManager;
-import android.graphics.Color;
-import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -43,17 +43,24 @@ import org.jsoup.nodes.Element;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Iterator;
 
 import static airhawk.com.myapplication.Constructor_App_Variables.feedItems;
 import static airhawk.com.myapplication.Constructor_App_Variables.graph_date;
 import static airhawk.com.myapplication.Constructor_App_Variables.graph_high;
 import static airhawk.com.myapplication.Constructor_App_Variables.graph_volume;
 import static airhawk.com.myapplication.Constructor_App_Variables.image_video_url;
+import static airhawk.com.myapplication.Constructor_App_Variables.stocktwits_feedItems;
 import static airhawk.com.myapplication.Constructor_App_Variables.video_title;
 import static airhawk.com.myapplication.Constructor_App_Variables.video_url;
 
 public class Activity_Main extends AppCompatActivity {
+    final int[] ICONS = new int[]{
+            R.drawable.up,
+            R.drawable.down,
+            R.drawable.news,
+            R.drawable.kings};
+    ImageView search_button;
     static Element price = null;
     protected ArrayAdapter<String> ad;
     private Toolbar toolbar;
@@ -63,34 +70,17 @@ public class Activity_Main extends AppCompatActivity {
     public static ArrayList<String> aequity_name_arraylist = new ArrayList<>();
     public static ArrayList<String> aequity_type_arraylist = new ArrayList<>();
     public ViewPager pager, market_pager;
-    private View recyclerView;
+    RecyclerView recyclerView;
     Database_Local_Aequities ld = new Database_Local_Aequities(Activity_Main.this);
     private static final String TAG = "ActivityMain";
     static Boolean async_analysis_page = false;
     static Constructor_App_Variables ap_info = new Constructor_App_Variables();
+    Database_Local_Aequities check_saved = new Database_Local_Aequities(Activity_Main.this);
+
     FrameLayout fu;
+    Context context =this;
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.options_menu, menu);
 
-        //MenuInflater inflater = getMenuInflater();
-        //inflater.inflate(R.menu.menu_top, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_settings:
-                return true;
-            case R.id.action_search:
-                openSearchView();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
 
     public static String AssetJSONFile(String filename, Context context) throws IOException {
         AssetManager manager = context.getAssets();
@@ -102,42 +92,28 @@ public class Activity_Main extends AppCompatActivity {
     }
 
     public void onBackPressed() {
-        toolbar = findViewById(R.id.toolbar);
-        fu=findViewById(R.id.frameLayout);
-        fu.setVisibility(View.VISIBLE);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-        pager = findViewById(R.id.viewpager);
-        pager.setVisibility(View.VISIBLE);
-        market_pager = findViewById(R.id.market_pager);
-        market_pager.setVisibility(View.GONE);
-        Adapter_Pager_Winners_Losers_Kings wlv_adapter = new Adapter_Pager_Winners_Losers_Kings(this, getSupportFragmentManager());
-        TabLayout tabs = findViewById(R.id.tabs);
-        tabs.setupWithViewPager(pager);
-        tabs.setSelectedTabIndicatorHeight(0);
-        //if (isSearchOpened) {
-        //     return;
-        // }
-
-        //super.onBackPressed();
-        mainbar.setVisibility(View.VISIBLE);
+        setMainPage();
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setDATAMain();
+
+
     }
 
     private void setDATAMain() {
+
         ProgressBar progress;
         setContentView(R.layout.splash);
         progress = (ProgressBar) findViewById(R.id.splash_bar);
         new AsyncTask<Void, Void, Void>() {
-
+            long startTime;
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
+                startTime = System.nanoTime();
                 progress.setVisibility(View.VISIBLE);
             }
 
@@ -146,12 +122,17 @@ public class Activity_Main extends AppCompatActivity {
                 super.onPostExecute(aVoid);
                 progress.setVisibility(View.GONE);
                 setMainPage();
+                long endTime = System.nanoTime();
+                long duration = (endTime - startTime);
+                System.out.println("SERVICE MAIN TIME IS " + duration / 1000000000 + " seconds");
             }
 
             @Override
             protected Void doInBackground(Void... params) {
-                Executor_Winners_Losers_Kings cst = new Executor_Winners_Losers_Kings();
+                Service_Main_Aequities cst = new Service_Main_Aequities();
                 cst.main();
+                Service_Saved_Aequity csa =new Service_Saved_Aequity(context);
+                csa.main();
                 return null;
             }
         }.execute();
@@ -164,6 +145,15 @@ public class Activity_Main extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
         fu=findViewById(R.id.frameLayout);
         fu.setVisibility(View.VISIBLE);
+        search_button=findViewById(R.id.search_button);
+
+        search_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                openSearchView();
+            }
+        });
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         ViewPager pager = findViewById(R.id.viewpager);
@@ -171,16 +161,46 @@ public class Activity_Main extends AppCompatActivity {
         ViewPager market_pager = findViewById(R.id.market_pager);
         market_pager.setVisibility(View.GONE);
         TabLayout tabs = findViewById(R.id.tabs);
-        tabs.addTab(tabs.newTab().setText(getString(R.string.leaders)));
-        tabs.addTab(tabs.newTab().setText(getString(R.string.losers)));
-        tabs.addTab(tabs.newTab().setText(getString(R.string.volume)));
-        Adapter_Pager_Winners_Losers_Kings wlv_adapter = new Adapter_Pager_Winners_Losers_Kings(this, getSupportFragmentManager());
-        pager.setAdapter(wlv_adapter);
+        setupMainViewPager(pager);
         tabs.setupWithViewPager(pager);
+        tabs.getTabAt(0).setIcon(ICONS[0]);
+        tabs.getTabAt(1).setIcon(ICONS[1]);
+        if (check_saved.getName().isEmpty()){
+            tabs.getTabAt(2).setIcon(ICONS[2]);
+            tabs.getTabAt(3).setIcon(ICONS[3]);
+        }else{
+            tabs.getTabAt(2).setIcon(android.R.drawable.btn_star_big_on);
+            tabs.getTabAt(3).setIcon(ICONS[2]);
+            tabs.getTabAt(4).setIcon(ICONS[3]);}
         recyclerView = findViewById(R.id.item_list);
+
         //assert recyclerView != null;
-        setupRecyclerView((RecyclerView) recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        recyclerView.setAdapter(new Adapter_Main_Markets());
+
+
     }
+
+    private void setupMainViewPager(ViewPager viewPager) {
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        adapter.addFrag(new Fragment_Winners(), getString(R.string.leaders));
+        adapter.addFrag(new Fragment_Losers(), getString(R.string.losers));
+        if (check_saved.getName().isEmpty()){}else{
+        adapter.addFrag(new Fragment_Saved(), getString(R.string.saved));}
+        adapter.addFrag(new Fragment_App_News(), getString(R.string.news));
+        adapter.addFrag(new Fragment_Market_Kings(), getString(R.string.market_kings));
+        viewPager.setAdapter(adapter);
+    }
+    private void setupChosenViewPager(ViewPager viewPager) {
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        adapter.addFrag(new Fragment_Analysis(), getString(R.string.action_analysis));
+        adapter.addFrag(new Fragment_News(), getString(R.string.title_news));
+        adapter.addFrag(new Fragment_Video(), getString(R.string.title_video));
+        adapter.addFrag(new Fragment_Exchanges(), getString(R.string.title_exchanges));
+        adapter.addFrag(new Fragment_StockTwits(),getString(R.string.stocktwits));
+        viewPager.setAdapter(adapter);
+    }
+
 
     public void setJSON_INFO() {
 //General Method for reading JSON file in Assets
@@ -209,10 +229,6 @@ public class Activity_Main extends AppCompatActivity {
         }
     }
 
-    private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setAdapter(new Adapter_Main_Markets());
-    }
-
     public void Launch_Progress(){
         new CountDownTimer(1500, 1000) {
 
@@ -238,30 +254,32 @@ public class Activity_Main extends AppCompatActivity {
         pager.setVisibility(View.VISIBLE);
         market_pager = findViewById(R.id.market_pager);
         market_pager.setVisibility(View.GONE);
-        Adapter_Pager_Winners_Losers_Kings wlv_adapter = new Adapter_Pager_Winners_Losers_Kings(this, getSupportFragmentManager());
         TabLayout tabs = findViewById(R.id.tabs);
-        pager.setAdapter(wlv_adapter);
+        setupMainViewPager(pager);
         tabs.setupWithViewPager(pager);
-        tabs.setSelectedTabIndicatorHeight(0);
+        tabs.getTabAt(0).setIcon(ICONS[0]);
+        tabs.getTabAt(1).setIcon(ICONS[1]);
+        Database_Local_Aequities check_saved = new Database_Local_Aequities(Activity_Main.this);
+        if (check_saved.getName().isEmpty()){}else{
+            tabs.getTabAt(2).setIcon(ICONS[2]);}
+        tabs.getTabAt(3).setIcon(ICONS[3]);
+        tabs.getTabAt(4).setIcon(ICONS[4]);
         mainbar.setVisibility(View.VISIBLE);
     }
 
     public void setMarketPage() {
-
         toolbar = findViewById(R.id.toolbar);
-        fu=findViewById(R.id.frameLayout);
-        fu.setVisibility(View.GONE);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(true);
         if (async_analysis_page) {
             reloadAllData();
-
-            Executor_Chosen_Aequity shoe = new Executor_Chosen_Aequity();
+            getStockTwitsData();
+            Service_Chosen_Aequity shoe = new Service_Chosen_Aequity();
             shoe.main();
             System.out.println("ASYNC HAS BEEN CALLED PREVIOUSLY");
         } else {
-
-            Executor_Chosen_Aequity shoe = new Executor_Chosen_Aequity();
+            getStockTwitsData();
+            Service_Chosen_Aequity shoe = new Service_Chosen_Aequity();
             shoe.main();
             System.out.println("ASYNC HAS NOT BEEN CALLED");
 
@@ -273,14 +291,15 @@ public class Activity_Main extends AppCompatActivity {
         pager.setVisibility(View.GONE);
         market_pager = findViewById(R.id.market_pager);
         market_pager.setVisibility(View.VISIBLE);
-        Adapter_Chosen_Aequity maa_adapter = new Adapter_Chosen_Aequity(this, getSupportFragmentManager());
-        market_pager.setAdapter(maa_adapter);
-        Adapter_Pager_Winners_Losers_Kings wlv_adapter = new Adapter_Pager_Winners_Losers_Kings(this, getSupportFragmentManager());
-        wlv_adapter.notifyDataSetChanged();
+
         TabLayout tabs = findViewById(R.id.tabs);
-        tabs.removeAllTabs();
+        setupChosenViewPager(market_pager);
         tabs.setupWithViewPager(market_pager);
-        tabs.setSelectedTabIndicatorHeight(0);
+        tabs.getTabAt(0).setIcon(R.drawable.info);
+        tabs.getTabAt(1).setIcon(R.drawable.news);
+        tabs.getTabAt(2).setIcon(R.drawable.yt);
+        tabs.getTabAt(3).setIcon(R.drawable.exchange);
+        tabs.getTabAt(4).setIcon(R.drawable.socialmedia);
         mainbar = findViewById(R.id.mainbar);
         mainbar.setIndeterminate(false);
         mainbar.setVisibility(View.GONE);
@@ -291,6 +310,7 @@ public class Activity_Main extends AppCompatActivity {
         graph_high.clear();
         graph_volume.clear();
         feedItems.clear();
+        stocktwits_feedItems.clear();
         image_video_url.clear();
         video_url.clear();
         video_title.clear();
@@ -300,8 +320,14 @@ public class Activity_Main extends AppCompatActivity {
         LayoutInflater i = (LayoutInflater) Activity_Main.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         final View v = i.inflate(R.layout.searchbar, null);
         toolbar = findViewById(R.id.toolbar);
-        toolbar.addView(v);
-
+        if(toolbar.getVisibility()==View.VISIBLE){
+            toolbar.removeAllViews();
+            toolbar.setVisibility(View.GONE);
+            return;
+        }else {
+            toolbar.setVisibility(View.VISIBLE);
+            toolbar.addView(v);
+        }
         ad = new ArrayAdapter(Activity_Main.this, android.R.layout.simple_dropdown_item_1line, searchview_arraylist);
         AutoCompleteTextView chosen_searchView_item = v.findViewById(R.id.searchtool);
         chosen_searchView_item.setAdapter(ad);
@@ -321,29 +347,12 @@ public class Activity_Main extends AppCompatActivity {
                 toolbar.removeView(v);
                 chosen_searchView_item.onEditorAction(EditorInfo.IME_ACTION_DONE);
                 Launch_Progress();
+                toolbar.setVisibility(View.GONE);
 
             }
         });
     }
 
-    public void setSpecialView() {
-
-
-        pager = findViewById(R.id.viewpager);
-        pager.setVisibility(View.GONE);
-        market_pager = findViewById(R.id.market_pager);
-        market_pager.setVisibility(View.VISIBLE);
-        Adapter_Chosen_Aequity maa_adapter = new Adapter_Chosen_Aequity(this, getSupportFragmentManager());
-        market_pager.setAdapter(maa_adapter);
-        Adapter_Pager_Winners_Losers_Kings wlv_adapter = new Adapter_Pager_Winners_Losers_Kings(this, getSupportFragmentManager());
-        wlv_adapter.notifyDataSetChanged();
-        TabLayout tabs = findViewById(R.id.tabs);
-        tabs.removeAllTabs();
-        tabs.setupWithViewPager(market_pager);
-        tabs.setSelectedTabIndicatorHeight(0);
-
-
-    }
 
     //Get's updated data from Firebase about new aequities
     private void UpdateData() {
@@ -369,5 +378,53 @@ public class Activity_Main extends AppCompatActivity {
             }
         };
         userRef.addValueEventListener(postListener);
+    }
+
+
+
+    private void getStockTwitsData(){
+        String market_symbol=ap_info.getMarketSymbol();
+        Constructor_Stock_Twits cst = new Constructor_Stock_Twits();
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        final String url = "https://api.stocktwits.com/api/2/streams/symbol/"+market_symbol+".json";
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    JSONArray responseJSONArray = response.getJSONArray("messages");
+                    for (int i = 0; i < 2; i++) {
+                        JSONObject user_info = (JSONObject) responseJSONArray.getJSONObject(i).get("user");
+                        String message_time = (String) responseJSONArray.getJSONObject(i).get("created_at");
+                        String message = (String) responseJSONArray.getJSONObject(i).get("body");
+                        Iterator x = user_info.keys();
+
+                        cst.setMessage_time(message_time);
+                        cst.setUser_name(""+user_info.get("username"));
+                        String url = user_info.get("avatar_url_ssl").toString();
+                        cst.setUser_image_url(url);
+                        cst.setMessage(message);
+                        
+
+                    }
+                    stocktwits_feedItems.add(cst);
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                System.out.println();
+                System.out.println("THIS IS THE BIG MESSAGE "+cst.getMessage()+" "+ cst.getMessage_time()+" "+cst.getUser_name()+" "+cst.getUser_image_url());
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                System.out.println("An Error occured while making the request");
+            }
+        });
+        requestQueue.add(jsonObjectRequest);
+
     }
 }

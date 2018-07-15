@@ -15,8 +15,7 @@
         android:gravity="center"
         android:text="@string/stock_volume_leaders"
         android:textColor="@color/darkTextColor"
-        android:textSize="26sp"
-        android:textStyle="bold" />
+        android:textSize="26sp" />
 
     <TableRow
         android:layout_width="match_parent"
@@ -79,8 +78,7 @@
         android:gravity="center"
         android:text="@string/crypto_volume_leaders"
         android:textColor="@color/darkTextColor"
-        android:textSize="26sp"
-        android:textStyle="bold" />
+        android:textSize="26sp" />
     <TableRow
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

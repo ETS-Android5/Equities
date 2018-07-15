@@ -32,7 +32,7 @@ import static airhawk.com.myapplication.Constructor_App_Variables.graph_volume;
  */
 
 public class Fragment_Analysis extends Fragment {
-    TextView a_price,a_price_change,a_name,a_symbol,a_type,a_supply,a_cap,sup,buy,saved;
+    TextView a_price,a_price_change,a_name,a_symbol,a_type,a_supply,a_cap,sup,saved;
     ImageView save;
     Constructor_App_Variables ap_info =new Constructor_App_Variables();
     private Database_Local_Aequities db;
@@ -92,9 +92,9 @@ public class Fragment_Analysis extends Fragment {
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                save.setBackgroundResource(android.R.drawable.btn_star_big_on);
                 db = new Database_Local_Aequities(getActivity().getApplicationContext());
                 db.add_equity_info(app_info.getMarketSymbol(), ap_info.getMarketName(), app_info.getMarketType());
-                save.setBackgroundResource(android.R.drawable.btn_star_big_on);
                 ((Activity_Main)getActivity()).setMarketPage();
 
             }

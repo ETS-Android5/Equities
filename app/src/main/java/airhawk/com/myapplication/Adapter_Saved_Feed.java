@@ -23,22 +23,25 @@ public class Adapter_Saved_Feed extends RecyclerView.Adapter<Adapter_Saved_Feed.
     String name;
     String symbol;
     String type;
+    ArrayList currentchange;
     Context context;
 
 
-    public Adapter_Saved_Feed(Context context, String symbol, String name, String type) {
+    public Adapter_Saved_Feed(Context context, String symbol, String name, ArrayList currentchange, String type) {
         this.symbol = symbol;
         this.name = name;
+        this.currentchange =currentchange;
         this.type = type;
         this.context=context;
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView symbol, name, type;
+        public TextView symbol, name, currentchange, type;
         public MyViewHolder(View itemView) {
         super(itemView);
         symbol = itemView.findViewById(R.id.symbol);
         name = itemView.findViewById(R.id.name);
+        currentchange = itemView.findViewById(R.id.current_change);
         type = itemView.findViewById(R.id.type);
 
 
@@ -66,9 +69,12 @@ public class Adapter_Saved_Feed extends RecyclerView.Adapter<Adapter_Saved_Feed.
     @Override
     public void onBindViewHolder(Adapter_Saved_Feed.MyViewHolder holder, int position) {
        Database_Local_Aequities ld =new Database_Local_Aequities(context.getApplicationContext());
-       ld.deleteDuplicates();
+        Constructor_App_Variables cav =new Constructor_App_Variables();
+        System.out.println("ALL SAVED "+cav.getCpr());
+        ld.deleteDuplicates();
        holder.symbol.setText(""+ ld.getSymbol().get(position));
        holder.name.setText(""+ld.getName().get(position));
+       holder.currentchange.setText(""+cav.getCpr().get(position));
        if(ld.getType().get(position).equals("Cryptocurrency")){
            holder.type.setText("Crypto");
        }else{

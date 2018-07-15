@@ -7,6 +7,5 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
-    app:layoutManager="LinearLayoutManager"
     tools:context="airhawk.com.myapplication.Activity_Main"
     tools:listitem="@layout/activity_main_item_list_content" />

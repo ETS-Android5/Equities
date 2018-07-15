@@ -11,12 +11,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import static airhawk.com.myapplication.Executor_Winners_Losers_Kings.crypto_kings_marketcaplist;
-import static airhawk.com.myapplication.Executor_Winners_Losers_Kings.crypto_kings_namelist;
-import static airhawk.com.myapplication.Executor_Winners_Losers_Kings.crypto_kings_symbolist;
-import static airhawk.com.myapplication.Executor_Winners_Losers_Kings.stock_kings_changelist;
-import static airhawk.com.myapplication.Executor_Winners_Losers_Kings.stock_kings_namelist;
-import static airhawk.com.myapplication.Executor_Winners_Losers_Kings.stock_kings_symbollist;
+import static airhawk.com.myapplication.Service_Main_Aequities.crypto_kings_marketcaplist;
+import static airhawk.com.myapplication.Service_Main_Aequities.crypto_kings_namelist;
+import static airhawk.com.myapplication.Service_Main_Aequities.crypto_kings_symbolist;
+import static airhawk.com.myapplication.Service_Main_Aequities.stock_kings_changelist;
+import static airhawk.com.myapplication.Service_Main_Aequities.stock_kings_namelist;
+import static airhawk.com.myapplication.Service_Main_Aequities.stock_kings_symbollist;
 
 
 /**
@@ -40,10 +40,10 @@ public class Fragment_Market_Kings extends Fragment {
         crypto = rootView.findViewById(R.id.crypto);
         stockitems= rootView.findViewById(R.id.stock_items);
         stockitems.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-        stockitems.setAdapter(new Adapter_Winners_Losers_Kings(getActivity(), "Stock_Kings", stock_kings_symbollist,stock_kings_namelist,stock_kings_changelist));
+        stockitems.setAdapter(new Adapter_Main_Equities(getActivity(), "Stock_Kings", stock_kings_symbollist,stock_kings_namelist,stock_kings_changelist));
         cryptoitems= rootView.findViewById(R.id.crypto_items);
         cryptoitems.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-        cryptoitems.setAdapter(new Adapter_Winners_Losers_Kings(getActivity(), "Crypto_Kings",crypto_kings_symbolist,crypto_kings_namelist,crypto_kings_marketcaplist));
+        cryptoitems.setAdapter(new Adapter_Main_Equities(getActivity(), "Crypto_Kings",crypto_kings_symbolist,crypto_kings_namelist,crypto_kings_marketcaplist));
         Typeface custom_font = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Oregon.ttf");
         stock.setTypeface(custom_font);
         crypto.setTypeface(custom_font);

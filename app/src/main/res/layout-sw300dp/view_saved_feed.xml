@@ -22,7 +22,7 @@
         android:singleLine="true"
         android:text="Symbol"
         android:textColor="@color/darkTextColor"
-        android:textSize="16sp" />
+        android:textSize="12sp" />
 
     <TextView
         android:id="@+id/name"
@@ -33,7 +33,7 @@
         android:singleLine="true"
         android:text="Symbol"
         android:textColor="@color/darkTextColor"
-        android:textSize="16sp" />
+        android:textSize="12sp" />
 
     <TextView
         android:id="@+id/type"
@@ -45,6 +45,6 @@
         android:text="Symbol"
         android:textAlignment="textEnd"
         android:textColor="@color/darkTextColor"
-        android:textSize="16sp"
+        android:textSize="12sp"
         android:textStyle="bold" />
 </TableRow>

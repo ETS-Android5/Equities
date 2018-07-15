@@ -90,6 +90,67 @@ public class Database_Local_Aequities extends SQLiteOpenHelper {
         return symbol;
     }
 
+    public ArrayList getstockSymbol() {
+        ArrayList<String> symbol = new ArrayList<>();
+        String sto ="stock";
+        try {
+            String query = "SELECT DISTINCT * FROM " + TABLE_AEQUITY_INFO + " WHERE "+KEY_AEQUITY_TYPE+" LIKE '%stock%'";
+            SQLiteDatabase db = this.getWritableDatabase();
+            Cursor cursor = db.rawQuery(query, null);
+            if (cursor.moveToFirst()) {
+                while (!cursor.isAfterLast()) {
+                    symbol.add(cursor.getString(cursor.getColumnIndex(KEY_AEQUITY_SYMBOL)));
+                    cursor.moveToNext();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return symbol;
+    }
+
+    public ArrayList getcryptoSymbol() {
+        ArrayList<String> symbol = new ArrayList<>();
+        String sto ="stock";
+        try {
+            String query = "SELECT DISTINCT * FROM " + TABLE_AEQUITY_INFO + " WHERE "+KEY_AEQUITY_TYPE+" LIKE '%Cryptocurrency%'";
+            SQLiteDatabase db = this.getWritableDatabase();
+            Cursor cursor = db.rawQuery(query, null);
+            if (cursor.moveToFirst()) {
+                while (!cursor.isAfterLast()) {
+                    symbol.add(cursor.getString(cursor.getColumnIndex(KEY_AEQUITY_SYMBOL)));
+                    cursor.moveToNext();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return symbol;
+    }
+
+
+    public ArrayList getcryptoName() {
+        ArrayList<String> symbol = new ArrayList<>();
+        String sto ="stock";
+        try {
+            String query = "SELECT DISTINCT * FROM " + TABLE_AEQUITY_INFO + " WHERE "+KEY_AEQUITY_TYPE+" LIKE '%Cryptocurrency%'";
+            SQLiteDatabase db = this.getWritableDatabase();
+            Cursor cursor = db.rawQuery(query, null);
+            if (cursor.moveToFirst()) {
+                while (!cursor.isAfterLast()) {
+                    symbol.add(cursor.getString(cursor.getColumnIndex(KEY_AEQUITY_NAME)));
+                    cursor.moveToNext();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return symbol;
+    }
+
     public ArrayList getName() {
         ArrayList<String> name = new ArrayList<>();
         try {
