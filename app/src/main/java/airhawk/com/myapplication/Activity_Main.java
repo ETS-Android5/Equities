@@ -22,6 +22,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -45,6 +46,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import static airhawk.com.myapplication.Constructor_App_Variables.btc_market_cap_change;
 import static airhawk.com.myapplication.Constructor_App_Variables.feedItems;
 import static airhawk.com.myapplication.Constructor_App_Variables.graph_date;
 import static airhawk.com.myapplication.Constructor_App_Variables.graph_high;
@@ -53,6 +55,8 @@ import static airhawk.com.myapplication.Constructor_App_Variables.image_video_ur
 import static airhawk.com.myapplication.Constructor_App_Variables.stocktwits_feedItems;
 import static airhawk.com.myapplication.Constructor_App_Variables.video_title;
 import static airhawk.com.myapplication.Constructor_App_Variables.video_url;
+import static airhawk.com.myapplication.Service_Main_Aequities.crypto_kings_marketcaplist;
+import static airhawk.com.myapplication.Service_Main_Aequities.crypto_kings_namelist;
 
 public class Activity_Main extends AppCompatActivity {
     final int[] ICONS = new int[]{
@@ -60,6 +64,7 @@ public class Activity_Main extends AppCompatActivity {
             R.drawable.down,
             R.drawable.news,
             R.drawable.kings};
+    int[] names = new int[]{R.string.leaders, R.string.losers, R.string.news, R.string.market_kings};
     ImageView search_button;
     static Element price = null;
     protected ArrayAdapter<String> ad;
@@ -142,6 +147,7 @@ public class Activity_Main extends AppCompatActivity {
     private void setMainPage() {
         setContentView(R.layout.activity_main);
         setJSON_INFO();
+        getCryptoData();
         toolbar = findViewById(R.id.toolbar);
         fu=findViewById(R.id.frameLayout);
         fu.setVisibility(View.VISIBLE);
@@ -172,6 +178,8 @@ public class Activity_Main extends AppCompatActivity {
             tabs.getTabAt(2).setIcon(android.R.drawable.btn_star_big_on);
             tabs.getTabAt(3).setIcon(ICONS[2]);
             tabs.getTabAt(4).setIcon(ICONS[3]);}
+
+
         recyclerView = findViewById(R.id.item_list);
 
         //assert recyclerView != null;
@@ -381,7 +389,46 @@ public class Activity_Main extends AppCompatActivity {
     }
 
 
+    private void getCryptoData(){
+        long startTime = System.nanoTime();
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        final String url = "https://api.coinmarketcap.com/v2/ticker/?limit=10&sort=rank";
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
 
+
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    JSONObject obj = response.getJSONObject("data");
+                    JSONArray keys = obj.names ();
+
+                    for (int i = 0; i < keys.length (); ++i) {
+
+                        String key = keys.getString (i); // Here's your key
+                        String value = obj.getString (key);// Here's your value
+                        JSONObject jsonObject = new JSONObject(value);
+                        String name = jsonObject.getString("name");
+                        String symbol = jsonObject.getString("symbol");
+                        //String market_cap =jsonObject.getString("")
+                        System.out.println(name);
+                    }
+                    //btc_market_cap_change=
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                System.out.println("An Error occured while making the request");
+            }
+        });
+        requestQueue.add(jsonObjectRequest);
+        long endTime = System.nanoTime();
+        long duration = (endTime - startTime);
+        System.out.println("CRYPTO TIME IS " + duration / 1000000000 + " seconds");
+    }
     private void getStockTwitsData(){
         String market_symbol=ap_info.getMarketSymbol();
         Constructor_Stock_Twits cst = new Constructor_Stock_Twits();
@@ -405,7 +452,7 @@ public class Activity_Main extends AppCompatActivity {
                         String url = user_info.get("avatar_url_ssl").toString();
                         cst.setUser_image_url(url);
                         cst.setMessage(message);
-                        
+
 
                     }
                     stocktwits_feedItems.add(cst);

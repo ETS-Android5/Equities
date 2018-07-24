@@ -10,4 +10,4 @@
     android:textAppearance="?android:attr/textAppearanceMedium"
     android:textColor="#ffffff"
     android:textColorHint="#ffffff"
-    android:textSize="26sp"></AutoCompleteTextView>
+    android:textSize="30sp"></AutoCompleteTextView>

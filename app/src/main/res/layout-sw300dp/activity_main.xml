@@ -76,8 +76,8 @@
                         app:tabIndicatorHeight="0dp"
                         app:tabMode="scrollable"
                         app:tabSelectedTextColor="#ffffff"
-                        app:tabTextAppearance="@style/TextAppearance.AppCompat.Small"
-                        app:tabTextColor="@color/colorPrimary" />
+                        app:tabTextColor="@color/colorPrimary"
+                        app:tabTextAppearance="@style/TextAppearance.AppCompat.Small"/>
                 </LinearLayout>
             </TableRow>
 
