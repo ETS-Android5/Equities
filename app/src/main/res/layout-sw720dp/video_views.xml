@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/parent_relativeLayout"
     android:layout_width="match_parent"
-    android:layout_height="275dp"
+    android:layout_height="400dp"
     android:layout_margin="10dp"
     android:background="@drawable/rounded_corners">
 
@@ -33,7 +33,7 @@
                 android:gravity="center"
                 android:text="test"
                 android:textColor="@color/colorBlack"
-                android:textSize="38sp" />
+                android:textSize="40sp" />
 
             <com.google.android.youtube.player.YouTubeThumbnailView
                 android:id="@+id/youtube_thumbnail"

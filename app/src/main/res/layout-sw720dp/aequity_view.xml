@@ -14,7 +14,7 @@
         android:gravity="left|center"
         android:singleLine="true"
         android:textColor="@color/darkTextColor"
-        android:textSize="16sp"
+        android:textSize="20sp"
         android:visibility="gone" />
 
     <TextView
@@ -26,7 +26,7 @@
         android:singleLine="true"
         android:text="Loser"
         android:textColor="@color/darkTextColor"
-        android:textSize="16sp"
+        android:textSize="20sp"
         android:visibility="gone" />
 
     <TextView
@@ -38,7 +38,7 @@
         android:singleLine="true"
         android:text="#"
         android:textColor="@color/darkTextColor"
-        android:textSize="20sp" />
+        android:textSize="28sp" />
 
     <ImageView
         android:id="@+id/circle"
@@ -55,7 +55,7 @@
         android:singleLine="true"
         android:text="Symbol"
         android:textColor="@color/darkTextColor"
-        android:textSize="26sp"
+        android:textSize="28sp"
         android:textStyle="bold" />
 
     <TextView
@@ -67,7 +67,7 @@
         android:singleLine="true"
         android:text="Symbol"
         android:textColor="@color/darkTextColor"
-        android:textSize="26sp"
+        android:textSize="28sp"
         android:textStyle="bold" />
 
     <TextView
@@ -80,6 +80,6 @@
         android:text="Symbol"
         android:textAlignment="textEnd"
         android:textColor="@color/darkTextColor"
-        android:textSize="26sp"
+        android:textSize="28sp"
         android:textStyle="bold" />
 </TableRow>

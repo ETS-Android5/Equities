@@ -15,7 +15,7 @@
         android:gravity="center"
         android:text="@string/stock_volume_leaders"
         android:textColor="@color/darkTextColor"
-        android:textSize="36sp"
+        android:textSize="40sp"
         android:textStyle="bold" />
 
     <TableRow
@@ -30,7 +30,7 @@
             android:gravity="left|center"
             android:singleLine="true"
             android:textColor="@color/darkTextColor"
-            android:textSize="26sp" />
+            android:textSize="30sp" />
 
         <TextView
             android:layout_width="match_parent"
@@ -40,7 +40,7 @@
             android:singleLine="true"
             android:text="Symbol"
             android:textColor="@color/darkTextColor"
-            android:textSize="26sp" />
+            android:textSize="30sp" />
 
         <TextView
             android:layout_width="match_parent"
@@ -50,18 +50,18 @@
             android:singleLine="true"
             android:text="Name"
             android:textColor="@color/darkTextColor"
-            android:textSize="26sp" />
+            android:textSize="30sp" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"
             android:layout_gravity="end"
+            android:layout_weight="1"
             android:singleLine="true"
-            android:textAlignment="textEnd"
             android:text="Amount"
+            android:textAlignment="textEnd"
             android:textColor="@color/darkTextColor"
-            android:textSize="26sp" />
+            android:textSize="30sp" />
     </TableRow>
     <android.support.v7.widget.RecyclerView
         android:id="@+id/stock_items"
@@ -79,7 +79,7 @@
         android:gravity="center"
         android:text="@string/crypto_volume_leaders"
         android:textColor="@color/darkTextColor"
-        android:textSize="36sp"
+        android:textSize="40sp"
         android:textStyle="bold" />
     <TableRow
         android:layout_width="match_parent"
@@ -93,7 +93,7 @@
             android:gravity="left|center"
             android:singleLine="true"
             android:textColor="@color/darkTextColor"
-            android:textSize="26sp" />
+            android:textSize="30sp" />
 
         <TextView
             android:layout_width="match_parent"
@@ -103,7 +103,7 @@
             android:singleLine="true"
             android:text="Symbol"
             android:textColor="@color/darkTextColor"
-            android:textSize="26sp" />
+            android:textSize="30sp" />
 
         <TextView
             android:layout_width="match_parent"
@@ -113,18 +113,18 @@
             android:singleLine="true"
             android:text="Name"
             android:textColor="@color/darkTextColor"
-            android:textSize="26sp" />
+            android:textSize="30sp" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"
             android:layout_gravity="end"
+            android:layout_weight="1"
             android:singleLine="true"
-            android:textAlignment="textEnd"
             android:text="Amount"
+            android:textAlignment="textEnd"
             android:textColor="@color/darkTextColor"
-            android:textSize="26sp" />
+            android:textSize="30sp" />
     </TableRow>
     <android.support.v7.widget.RecyclerView
         android:id="@+id/crypto_items"
