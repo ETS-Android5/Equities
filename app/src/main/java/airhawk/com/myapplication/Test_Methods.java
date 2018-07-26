@@ -26,30 +26,56 @@ import java.io.IOException;
 import javax.net.ssl.HttpsURLConnection;
 
 public class Test_Methods {
-    public static Context MYcontext;
-    public Test_Methods(Context context)
-    {
-        MYcontext = context;
+    private static Context context;
+
+    public static void setContext(Context cntxt) {
+        context = cntxt;
     }
-    static RequestQueue requestQueue = Volley.newRequestQueue(MYcontext);
-    // Do not set text variables through adapter when speed is a factor. Instead set variables in fragment. App crashes because of false NPex/ slow speed when user not using wifi.
+
+    public static Context getContext() {
+        return context;
+    }
 
 
     public static void main(String[] args) {
+        Test_Methods tm =new Test_Methods();
 
-        final String url = "https://api.stocktwits.com/api/2/streams/symbol/GSAT.json";
+
+        long startTime = System.nanoTime();
+        RequestQueue requestQueue = Volley.newRequestQueue(getContext());
+        final String url = "https://api.coinmarketcap.com/v2/ticker/?limit=10&sort=rank";
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+
 
             @Override
             public void onResponse(JSONObject response) {
                 try {
-                    StringBuilder formattedResult = new StringBuilder();
-                    JSONArray responseJSONArray = response.getJSONArray("messages");
-                    for (int i = 0; i < responseJSONArray.length(); i++) {
-                        formattedResult.append(responseJSONArray.getJSONObject(i).get("user"));
+                    JSONObject obj = response.getJSONObject("data");
+                    JSONArray keys = obj.names ();
+                    String market_cap = null;
+                    for (int i = 0; i < keys.length (); ++i) {
+                        String key = keys.getString (i); // Here's your key
+                        String value = obj.getString (key);// Here's your value
+                        JSONObject jsonObject = new JSONObject(value);
+                        String name = jsonObject.getString("name");
+                        // crypto_kings_namelist.add(name);
+                        String symbol = jsonObject.getString("symbol");
+                        // crypto_kings_symbolist.add(symbol);
+                        JSONObject quotes =jsonObject.getJSONObject("quotes");
+                        JSONArray ke = quotes.names ();
+                        for(int a =0; a < ke.length(); ++a){
+                            String keyz = ke.getString (a); // Here's your key
+                            String valuez = quotes.getString (keyz);
+                            JSONObject jzO = new JSONObject(valuez);
+                            market_cap= jzO.getString("market_cap");
+                            //    crypto_kings_marketcaplist.add(market_cap);
+                        }
+                        // JSONArray keyz =quotes.names();
+                        //String market_cap =jsonObject.getString("")
+                        System.out.println("This is the information "+name+" "+symbol+" "+market_cap);
                     }
-                    System.out.println("List of Restaurants \n" + " Name" + "\t Rating \n" + formattedResult);
-                    System.out.println(formattedResult);
+                    //btc_market_cap_change=
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -61,8 +87,14 @@ public class Test_Methods {
             }
         });
         requestQueue.add(jsonObjectRequest);
+        long endTime = System.nanoTime();
+        long duration = (endTime - startTime);
+        System.out.println("CRYPTO TIME IS " + duration / 1000000000 + " seconds");
 
     }
+
+
+
 
 
     public void BackUpCryptoMethod(){

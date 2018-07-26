@@ -4,6 +4,15 @@ import android.app.Service;
 import android.content.Context;
 import android.text.Html;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -122,19 +131,7 @@ public class Service_Main_Aequities {
             }
         });
 
-        callables.add(new Callable<String>() {
-            @Override
-            public String call() throws Exception {
-                long startTime = System.nanoTime();
-                getCrypto_Kings();
-                long endTime = System.nanoTime();
-                long duration = (endTime - startTime);
-                //4 seconds crypto kings
-                //21 seconds Boost Mobile
-                System.out.println("getCrypto_Kings TIME IS " + duration / 1000000000 + " seconds");
-                return null;
-            }
-        });
+
 
 
 
@@ -187,12 +184,10 @@ public class Service_Main_Aequities {
         try {
             List<Future<String>> futures = service.invokeAll(callables);
             for (Future<String> future : futures) {
-                System.out.println(future.get());
+//                System.out.println(future.get());
                 //Where to check all variables
             }
         } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
             e.printStackTrace();
         }
     }
@@ -324,65 +319,6 @@ public class Service_Main_Aequities {
 
     }
     //16
-    public static void getCrypto_Kings() {
-        String added;
-        Document bb = null;
-        try {
-            bb = Jsoup.connect("https://coinmarketcap.com").timeout(10 * 10000).get();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        Elements trw = bb.select("tr");
-        Elements ts =trw.select("td[data-usd]");
-        Elements tf =trw.select("td[data-percentusd]");
-        String y =tf.text().substring(0,4);
-        btc_market_cap_change=(y+" %");
-        Elements presto =bb.select("span>a[href]");
-        Elements aaa =trw.select("img[src$=.png]");
-        for(int i =0; i<aaa.size();i++){
-            if (i % 2 == 0){
-                try{
-                    crypto_kings_namelist.add(aaa.get(i).attr("alt"));}
-                catch (IndexOutOfBoundsException e) {
-                    System.out.println("SO WHAT! " +e);
-                } }
-            String fixed = ts.get(i).text().replace("$","");
-            String findStr = ",";
-            int lastIndex = 0;
-            int count = 0;
-            String cut = fixed.substring(0,5);
-            String change =cut.replace(",",".");
-            while(lastIndex != -1)
-            {
-                lastIndex = fixed.indexOf(findStr,lastIndex);
-                if(lastIndex != -1){
-                    count ++;
-                    lastIndex += findStr.length();
-                }
-            }
-            int c  = count; //Number of commas
-            if (c==4)
-            {
-                crypto_kings_marketcaplist.add(change+" T");
-            }
-            if (c==3)
-            {
-                crypto_kings_marketcaplist.add(change+" B");
-            }
-            if (c==2)
-            {
-                crypto_kings_marketcaplist.add(change+" M");
-            }
-
-
-            btc_market_cap_amount=""+crypto_kings_marketcaplist.get(0);
-            crypto_kings_symbolist.add(presto.get(i).text());}
-
-
-
-
-
-    }
     //15
     public static void getStocks_Market_Caps() {
         try {

@@ -245,6 +245,8 @@ public class Service_Chosen_Aequity
     }
 
     public static void get_crypto_points() {
+
+
         Element price;
         Document doc = null;
         DateFormat sdf = new SimpleDateFormat("yyyyMMdd");
@@ -263,34 +265,8 @@ public class Service_Chosen_Aequity
         }
 
 
-        String b= "B";
-        String m = "M";
-        Elements a = doc.select("span[data-currency-value]");
-        int counter = a.get(1).text().split("\\,", -1).length - 1;
-        String aa =a.get(1).text().replaceFirst(",",".");
-        aa =aa.replace(",","");
-        aa =aa.substring(0,6);
-        if (counter==3){
-            ap_info.setMarketCap(aa+" "+b);}
-        if (counter==2){
-            ap_info.setMarketCap(aa+" "+m);
-        }
-
-        Elements dd = doc.select("span[data-format-supply]");
-        ap_info.setMarketSupply(dd.get(1).text());
-
-
         price = doc.getElementById("quote_price");
-        Elements vv = doc.select("span[data-format-percentage]");
-        String [] flit = vv.text().split(" ");
-        System.out.println("QUOTE PRICE  "+vv.text());
-
-        ap_info.setCurrent_Aequity_Price_Change(flit[0]+" %");
         String v = price.text();
-        String[] splitz = v.split(" ");
-        double d = Double.parseDouble(splitz[0]);
-        DecimalFormat df = new DecimalFormat("#0.000");
-        ap_info.setCurrent_Aequity_Price(df.format(d));
         Elements divs = doc.select("table");
         for (Element tz : divs) {
             Elements tds = tz.select("td");

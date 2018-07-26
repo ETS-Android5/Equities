@@ -130,8 +130,8 @@ public class Adapter_Main_Equities extends RecyclerView.Adapter<Adapter_Main_Equ
                 holder.types.setText("Cryptocurrency");}
             if (("Crypto_Kings".equals(type_and_case))){
                 holder.number.setText((1+position)+".");
-                holder.symbol.setText(""+crypto_kings_symbolist.get(position));
                 holder.name.setText(""+crypto_kings_namelist.get(position));
+                holder.symbol.setText(""+crypto_kings_symbolist.get(position));
                 holder.value.setText(""+crypto_kings_marketcaplist.get(position));
                 holder.value.setTextColor(Color.parseColor("#00cc00"));
                 holder.types.setText("Cryptocurrency");}

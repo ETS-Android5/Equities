@@ -22,12 +22,12 @@ import android.widget.AutoCompleteTextView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.firebase.database.DataSnapshot;
@@ -46,17 +46,10 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import static airhawk.com.myapplication.Constructor_App_Variables.btc_market_cap_change;
-import static airhawk.com.myapplication.Constructor_App_Variables.feedItems;
-import static airhawk.com.myapplication.Constructor_App_Variables.graph_date;
-import static airhawk.com.myapplication.Constructor_App_Variables.graph_high;
-import static airhawk.com.myapplication.Constructor_App_Variables.graph_volume;
-import static airhawk.com.myapplication.Constructor_App_Variables.image_video_url;
-import static airhawk.com.myapplication.Constructor_App_Variables.stocktwits_feedItems;
-import static airhawk.com.myapplication.Constructor_App_Variables.video_title;
-import static airhawk.com.myapplication.Constructor_App_Variables.video_url;
+import static airhawk.com.myapplication.Constructor_App_Variables.*;
 import static airhawk.com.myapplication.Service_Main_Aequities.crypto_kings_marketcaplist;
 import static airhawk.com.myapplication.Service_Main_Aequities.crypto_kings_namelist;
+import static airhawk.com.myapplication.Service_Main_Aequities.crypto_kings_symbolist;
 
 public class Activity_Main extends AppCompatActivity {
     final int[] ICONS = new int[]{
@@ -147,7 +140,7 @@ public class Activity_Main extends AppCompatActivity {
     private void setMainPage() {
         setContentView(R.layout.activity_main);
         setJSON_INFO();
-        getCryptoData();
+        getCrypto_Kings();
         toolbar = findViewById(R.id.toolbar);
         fu=findViewById(R.id.frameLayout);
         fu.setVisibility(View.VISIBLE);
@@ -199,6 +192,7 @@ public class Activity_Main extends AppCompatActivity {
         adapter.addFrag(new Fragment_Market_Kings(), getString(R.string.market_kings));
         viewPager.setAdapter(adapter);
     }
+
     private void setupChosenViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFrag(new Fragment_Analysis(), getString(R.string.action_analysis));
@@ -208,7 +202,6 @@ public class Activity_Main extends AppCompatActivity {
         adapter.addFrag(new Fragment_StockTwits(),getString(R.string.stocktwits));
         viewPager.setAdapter(adapter);
     }
-
 
     public void setJSON_INFO() {
 //General Method for reading JSON file in Assets
@@ -278,6 +271,9 @@ public class Activity_Main extends AppCompatActivity {
     public void setMarketPage() {
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        if (ap_info.getMarketType().equals("Cryptocurrency")) {
+            getChosenCryptoInfo();
+        }
         getSupportActionBar().setDisplayShowTitleEnabled(true);
         if (async_analysis_page) {
             reloadAllData();
@@ -360,8 +356,6 @@ public class Activity_Main extends AppCompatActivity {
             }
         });
     }
-
-
     //Get's updated data from Firebase about new aequities
     private void UpdateData() {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -388,11 +382,11 @@ public class Activity_Main extends AppCompatActivity {
         userRef.addValueEventListener(postListener);
     }
 
+    public void getCrypto_Kings() {
 
-    private void getCryptoData(){
         long startTime = System.nanoTime();
         RequestQueue requestQueue = Volley.newRequestQueue(this);
-        final String url = "https://api.coinmarketcap.com/v2/ticker/?limit=10&sort=rank";
+        final String url = "https://api.coinmarketcap.com/v2/ticker/?sort=rank";
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
 
 
@@ -401,16 +395,27 @@ public class Activity_Main extends AppCompatActivity {
                 try {
                     JSONObject obj = response.getJSONObject("data");
                     JSONArray keys = obj.names ();
-
+                    String market_cap = null;
                     for (int i = 0; i < keys.length (); ++i) {
-
                         String key = keys.getString (i); // Here's your key
                         String value = obj.getString (key);// Here's your value
                         JSONObject jsonObject = new JSONObject(value);
                         String name = jsonObject.getString("name");
+                        crypto_kings_namelist.add(name);
                         String symbol = jsonObject.getString("symbol");
+                        crypto_kings_symbolist.add(symbol);
+                        JSONObject quotes =jsonObject.getJSONObject("quotes");
+                        JSONArray ke = quotes.names ();
+                        for(int a =0; a < ke.length(); ++a){
+                            String keyz = ke.getString (a); // Here's your key
+                            String valuez = quotes.getString (keyz);
+                            JSONObject jzO = new JSONObject(valuez);
+                            market_cap= jzO.getString("market_cap");
+                            crypto_kings_marketcaplist.add(market_cap);
+                        }
+                        // JSONArray keyz =quotes.names();
                         //String market_cap =jsonObject.getString("")
-                        System.out.println(name);
+                        System.out.println("This is the information "+name+" "+symbol+" "+market_cap);
                     }
                     //btc_market_cap_change=
 
@@ -428,7 +433,55 @@ public class Activity_Main extends AppCompatActivity {
         long endTime = System.nanoTime();
         long duration = (endTime - startTime);
         System.out.println("CRYPTO TIME IS " + duration / 1000000000 + " seconds");
+
     }
+
+    public void getChosenCryptoInfo(){
+
+        long startTime = System.nanoTime();
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+
+        final String url = "https://api.coinmarketcap.com/v1/ticker/"+ap_info.getMarketName();
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+
+
+            @Override
+            public void onResponse(JSONArray response) {
+
+                for (int i = 0; i < response.length(); i++) {
+                    JSONObject heroObject = null;
+                    try {
+                        heroObject = response.getJSONObject(i);
+                        ap_info.setMarketSymbol(heroObject.getString("symbol"));
+                        ap_info.setCurrent_Aequity_Price(heroObject.getString("price_usd"));
+                        //volume_24 =heroObject.getString("24h_volume_usd");
+                        ap_info.setMarketSupply(heroObject.getString("total_supply"));
+                        ap_info.setCurrent_Aequity_Price_Change(heroObject.getString("percent_change_24h"));
+                        ap_info.setMarketCap(heroObject.getString("market_cap_usd"));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+
+                }
+
+                //btc_market_cap_change=
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                System.out.println("Something ahppened An Error occured while making the request "+error);
+            }
+        });
+        requestQueue.add(jsonArrayRequest);
+
+        long endTime = System.nanoTime();
+        long duration = (endTime - startTime);
+        System.out.println("CRYPTO TIME IS " + duration / 1000000000 + " seconds");
+
+    }
+
     private void getStockTwitsData(){
         String market_symbol=ap_info.getMarketSymbol();
         Constructor_Stock_Twits cst = new Constructor_Stock_Twits();
@@ -441,7 +494,8 @@ public class Activity_Main extends AppCompatActivity {
             public void onResponse(JSONObject response) {
                 try {
                     JSONArray responseJSONArray = response.getJSONArray("messages");
-                    for (int i = 0; i < 2; i++) {
+
+                    for (int i = 0; i < responseJSONArray.length(); i++) {
                         JSONObject user_info = (JSONObject) responseJSONArray.getJSONObject(i).get("user");
                         String message_time = (String) responseJSONArray.getJSONObject(i).get("created_at");
                         String message = (String) responseJSONArray.getJSONObject(i).get("body");
@@ -468,7 +522,7 @@ public class Activity_Main extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                System.out.println("An Error occured while making the request");
+                System.out.println("An Error occured while making the ST request");
             }
         });
         requestQueue.add(jsonObjectRequest);
