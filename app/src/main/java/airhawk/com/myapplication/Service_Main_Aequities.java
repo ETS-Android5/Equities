@@ -95,6 +95,7 @@ public class Service_Main_Aequities {
     static ArrayList crypto_kings_symbolist = new ArrayList();
     static ArrayList crypto_kings_namelist = new ArrayList();
     static ArrayList crypto_kings_marketcaplist = new ArrayList();
+    static ArrayList crypto_kings_changelist =new ArrayList();
 
     public static void main() {
         ExecutorService service = Executors.newCachedThreadPool();

@@ -47,6 +47,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import static airhawk.com.myapplication.Constructor_App_Variables.*;
+import static airhawk.com.myapplication.Service_Main_Aequities.crypto_kings_changelist;
 import static airhawk.com.myapplication.Service_Main_Aequities.crypto_kings_marketcaplist;
 import static airhawk.com.myapplication.Service_Main_Aequities.crypto_kings_namelist;
 import static airhawk.com.myapplication.Service_Main_Aequities.crypto_kings_symbolist;
@@ -236,6 +237,7 @@ public class Activity_Main extends AppCompatActivity {
             public void onTick(long millisUntilFinished) {
                 mainbar = findViewById(R.id.mainbar);
                 mainbar.setIndeterminate(true);
+                mainbar.setVisibility(View.VISIBLE);
             }
 
             public void onFinish() {
@@ -382,6 +384,8 @@ public class Activity_Main extends AppCompatActivity {
         userRef.addValueEventListener(postListener);
     }
 
+
+
     public void getCrypto_Kings() {
 
         long startTime = System.nanoTime();
@@ -412,16 +416,21 @@ public class Activity_Main extends AppCompatActivity {
                             JSONObject jzO = new JSONObject(valuez);
                             market_cap= jzO.getString("market_cap");
                             crypto_kings_marketcaplist.add(market_cap);
+                            String mc =jzO.getString("percent_change_24h");
+                            crypto_kings_changelist.add(mc);
                         }
-                        // JSONArray keyz =quotes.names();
-                        //String market_cap =jsonObject.getString("")
-                        System.out.println("This is the information "+name+" "+symbol+" "+market_cap);
+
+
+
+
                     }
-                    //btc_market_cap_change=
 
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+                btc_market_cap_amount =(String) crypto_kings_marketcaplist.get(0);
+                btc_market_cap_change =(String)crypto_kings_changelist.get(0);
+                System.out.println("This is the information "+btc_market_cap_amount+" "+btc_market_cap_change);
             }
         }, new Response.ErrorListener() {
             @Override
@@ -430,9 +439,7 @@ public class Activity_Main extends AppCompatActivity {
             }
         });
         requestQueue.add(jsonObjectRequest);
-        long endTime = System.nanoTime();
-        long duration = (endTime - startTime);
-        System.out.println("CRYPTO TIME IS " + duration / 1000000000 + " seconds");
+
 
     }
 
