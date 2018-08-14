@@ -1,7 +1,6 @@
 package airhawk.com.myapplication;
 
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -53,28 +52,28 @@ public class Adapter_Main_Markets extends RecyclerView.Adapter<Adapter_Main_Mark
                             ap_info.setMarketName(mIdView.getText().toString());
                             ap_info.setMarketSymbol("%5EDJI");
                             ap_info.setMarketType("Stock");
-                            connect.Launch_Progress();
+                            connect.Launch_Chosen_Progress();
                             break;
                         case 1:
                             temp = "S P 500";
                             ap_info.setMarketName(temp);
                             ap_info.setMarketSymbol("%5EGSPC");
                             ap_info.setMarketType("Stock");
-                            connect.Launch_Progress();
+                            connect.Launch_Chosen_Progress();
                             break;
                         case 2:
                             temp = "Nasdaq";
                             ap_info.setMarketName(temp);
                             ap_info.setMarketSymbol("%5EIXIC");
                             ap_info.setMarketType("Stock");
-                            connect.Launch_Progress();
+                            connect.Launch_Chosen_Progress();
                             break;
                         case 3:
                             temp = "Bitcoin";
                             ap_info.setMarketName(temp);
                             ap_info.setMarketSymbol("BTC");
                             ap_info.setMarketType("Cryptocurrency");
-                            connect.Launch_Progress();
+                            connect.Launch_Chosen_Progress();
                             break;
 
                         default:

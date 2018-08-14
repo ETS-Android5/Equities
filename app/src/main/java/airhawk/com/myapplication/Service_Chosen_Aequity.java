@@ -68,7 +68,7 @@ public class Service_Chosen_Aequity
                 String a = ax.getMarketType();
                 if (a.equals("Cryptocurrency") || a.equals("Crypto"))
                 {
-                    get_crypto_points();
+
                 }
                 else {
                     get_stock_shares();
@@ -244,64 +244,7 @@ public class Service_Chosen_Aequity
 
     }
 
-    public static void get_crypto_points() {
 
-
-        Element price;
-        Document doc = null;
-        DateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-        Date begindate = new Date();
-
-       String f = ap_info.getMarketName();
-        System.out.println("SYMBO NAME "+f);
-       if (f.contains(" ")){
-       f= f.replaceAll(" ","-");}
-
-        try {
-            doc = Jsoup.connect("https://coinmarketcap.com/currencies/" + f + "/historical-data/?start=20000101&end=" + sdf.format(begindate)).timeout(10 * 1000).get();
-            //
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-
-        price = doc.getElementById("quote_price");
-        String v = price.text();
-        Elements divs = doc.select("table");
-        for (Element tz : divs) {
-            Elements tds = tz.select("td");
-            Elements s = tz.getElementsByClass("text-right");
-            for (Element ss : s) {
-                Elements p = ss.select("td[data-format-fiat]");
-                String g = p.text();
-                String[] splited = g.split("\\s+");
-                if (v != null && !g.isEmpty()) {
-                    graph_high.add(splited[3]);
-                    graph_low.add(splited[2]);
-                }
-                Elements pn = ss.select("td[data-format-market-cap]");
-                String vp = pn.text();
-                String[] split = vp.split("\\s+");
-                if (vp != null && !vp.isEmpty()) {
-                    graph_volume.add(split[0]);
-                    graph_market_cap.add(split[1]);
-                }
-            }
-            for (Element bb : tds) {
-                Elements gdate = bb.getElementsByClass("text-left");
-                String result0 = gdate.text();
-                if (result0 != null && !result0.isEmpty()) {
-                    graph_date.add(String.valueOf(result0));
-                }
-            }
-        }_AllDays = graph_high;
-        //for (int counter = 0; counter < numbers.size(); counter++) {
-       //     System.out.println("VOLUME " + graph_volume.get(counter) + " NUMBER " + graph_high.get(counter) + " DATE " + graph_date.get(counter));
-
-        //}
-
-
-    }
     private static void ProcessXml(org.w3c.dom.Document data) {
         if (data != null) {
             String st, sd, sp, sl;

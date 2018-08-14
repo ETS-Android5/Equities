@@ -29,6 +29,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -39,11 +40,21 @@ import com.google.firebase.database.ValueEventListener;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.lang.ref.WeakReference;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 
 import static airhawk.com.myapplication.Constructor_App_Variables.*;
@@ -98,9 +109,64 @@ public class Activity_Main extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setDATAMain();
-
+        //new setAsyncDataMain(this).execute();
 
     }
+
+    private class setAsyncDataMain extends AsyncTask<Void, Void, String> {
+
+        private WeakReference<Activity_Main> activityReference;
+        setAsyncDataMain(Activity_Main context) {
+            activityReference = new WeakReference<>(context);
+        }
+        long startTime;
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            startTime = System.nanoTime();
+            ProgressBar progress;
+            setContentView(R.layout.splash);
+            progress = (ProgressBar) findViewById(R.id.splash_bar);
+            progress.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected String doInBackground(Void... params) {
+            Service_Main_Aequities cst = new Service_Main_Aequities();
+            cst.main();
+            Service_Saved_Aequity csa =new Service_Saved_Aequity(context);
+            csa.main();
+            return "task finished";
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+
+            // get a reference to the activity if it is still there
+            Activity_Main activity = activityReference.get();
+            if (activity == null || activity.isFinishing()) return;
+            ProgressBar progress = activity.findViewById(R.id.splash_bar);
+
+            progress.setVisibility(View.GONE);
+            setMainPage();
+            long endTime = System.nanoTime();
+            long duration = (endTime - startTime);
+            System.out.println("SERVICE MAIN TIME IS " + duration / 1000000000 + " seconds");
+
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
 
     private void setDATAMain() {
 
@@ -231,13 +297,15 @@ public class Activity_Main extends AppCompatActivity {
         }
     }
 
-    public void Launch_Progress(){
+    public void Launch_Chosen_Progress(){
         new CountDownTimer(1500, 1000) {
 
             public void onTick(long millisUntilFinished) {
                 mainbar = findViewById(R.id.mainbar);
                 mainbar.setIndeterminate(true);
                 mainbar.setVisibility(View.VISIBLE);
+                pager = findViewById(R.id.viewpager);
+                pager.setVisibility(View.GONE);
             }
 
             public void onFinish() {
@@ -246,6 +314,25 @@ public class Activity_Main extends AppCompatActivity {
         }.start();
     }
 
+    public void Launch_Main_Progress(){
+        ProgressBar progress;
+        setContentView(R.layout.splash);
+        progress = (ProgressBar) findViewById(R.id.splash_bar);
+        progress.setVisibility(View.VISIBLE);
+        new CountDownTimer(1500, 1000) {
+
+            public void onTick(long millisUntilFinished) {
+                Service_Main_Aequities cst = new Service_Main_Aequities();
+                cst.main();
+                Service_Saved_Aequity csa =new Service_Saved_Aequity(context);
+                csa.main();
+            }
+
+            public void onFinish() {
+                setMarketPage();
+            }
+        }.start();
+    }
     public void Update_Saved_Data(){
 
         toolbar = findViewById(R.id.toolbar);
@@ -275,6 +362,7 @@ public class Activity_Main extends AppCompatActivity {
         setSupportActionBar(toolbar);
         if (ap_info.getMarketType().equals("Cryptocurrency")) {
             getChosenCryptoInfo();
+            get_crypto_points();
         }
         getSupportActionBar().setDisplayShowTitleEnabled(true);
         if (async_analysis_page) {
@@ -352,7 +440,7 @@ public class Activity_Main extends AppCompatActivity {
                 ap_info.setMarketType(split_marketinfo[2]);
                 toolbar.removeView(v);
                 chosen_searchView_item.onEditorAction(EditorInfo.IME_ACTION_DONE);
-                Launch_Progress();
+                Launch_Chosen_Progress();
                 toolbar.setVisibility(View.GONE);
 
             }
@@ -383,8 +471,6 @@ public class Activity_Main extends AppCompatActivity {
         };
         userRef.addValueEventListener(postListener);
     }
-
-
 
     public void getCrypto_Kings() {
 
@@ -424,13 +510,13 @@ public class Activity_Main extends AppCompatActivity {
 
 
                     }
-
+                    btc_market_cap_amount =(String) crypto_kings_marketcaplist.get(0);
+                    btc_market_cap_change =(String)crypto_kings_changelist.get(0);
+                    System.out.println("This is the information "+btc_market_cap_amount+" "+btc_market_cap_change);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                btc_market_cap_amount =(String) crypto_kings_marketcaplist.get(0);
-                btc_market_cap_change =(String)crypto_kings_changelist.get(0);
-                System.out.println("This is the information "+btc_market_cap_amount+" "+btc_market_cap_change);
+
             }
         }, new Response.ErrorListener() {
             @Override
@@ -447,8 +533,11 @@ public class Activity_Main extends AppCompatActivity {
 
         long startTime = System.nanoTime();
         RequestQueue requestQueue = Volley.newRequestQueue(this);
-
-        final String url = "https://api.coinmarketcap.com/v1/ticker/"+ap_info.getMarketName();
+        String newString =ap_info.getMarketName();
+        if(newString.contains(" ")){
+            newString =newString.replace(" ","-");
+        }
+        final String url = "https://api.coinmarketcap.com/v1/ticker/"+newString;
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
 
 
@@ -489,7 +578,90 @@ public class Activity_Main extends AppCompatActivity {
 
     }
 
-    private void getStockTwitsData(){
+    public void get_crypto_points() {
+
+
+        long startTime = System.nanoTime();
+        DateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        Date begindate = new Date();
+        String f = ap_info.getMarketName();
+        System.out.println("SYMBO NAME "+f);
+        if (f.contains(" ")){
+            f= f.replaceAll(" ","-");}
+        String url = "https://coinmarketcap.com/currencies/" + f + "/historical-data/?start=20000101&end=" + sdf.format(begindate);
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        // Request a string response from the provided URL.
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            String response_utf8 = URLDecoder.decode(URLEncoder.encode(response, "iso8859-1"), "UTF-8");
+                            Document doc = Jsoup.parse(response_utf8);
+                            Element price = doc.getElementById("quote_price");
+                            String v = price.text();
+                            Elements divs = doc.select("table");
+                            for (Element tz : divs) {
+                                Elements tds = tz.select("td");
+                                Elements s = tz.getElementsByClass("text-right");
+                                for (Element ss : s) {
+                                    Elements p = ss.select("td[data-format-fiat]");
+                                    String g = p.text();
+                                    String[] splited = g.split("\\s+");
+                                    if (v != null && !g.isEmpty()) {
+                                        graph_high.add(splited[3]);
+                                        graph_low.add(splited[2]);
+                                    }
+                                    Elements pn = ss.select("td[data-format-market-cap]");
+                                    String vp = pn.text();
+                                    String[] split = vp.split("\\s+");
+                                    if (vp != null && !vp.isEmpty()) {
+                                        graph_volume.add(split[0]);
+                                        graph_market_cap.add(split[1]);
+                                    }
+                                }
+                                for (Element bb : tds) {
+                                    Elements gdate = bb.getElementsByClass("text-left");
+                                    String result0 = gdate.text();
+                                    if (result0 != null && !result0.isEmpty()) {
+                                        graph_date.add(String.valueOf(result0));
+                                    }
+                                }
+                            }_AllDays = graph_high;
+                        } catch (UnsupportedEncodingException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+                        Log.d("log2=", error.toString());
+                        //requestQueue.stop();
+                    }
+                });
+        // Add the request to the RequestQueue.
+        requestQueue.add(stringRequest);
+        requestQueue.start();
+        long endTime = System.nanoTime();
+        long duration = (endTime - startTime);
+        System.out.println("CRYPTO POINTS TIME IS " + duration / 1000000000 + " seconds");
+
+
+
+
+
+
+        //for (int counter = 0; counter < numbers.size(); counter++) {
+        //     System.out.println("VOLUME " + graph_volume.get(counter) + " NUMBER " + graph_high.get(counter) + " DATE " + graph_date.get(counter));
+
+        //}
+
+
+    }
+
+    public void getStockTwitsData(){
         String market_symbol=ap_info.getMarketSymbol();
         Constructor_Stock_Twits cst = new Constructor_Stock_Twits();
 
