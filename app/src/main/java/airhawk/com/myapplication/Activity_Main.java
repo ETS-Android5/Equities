@@ -22,6 +22,8 @@ import android.widget.AutoCompleteTextView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -64,6 +66,9 @@ import static airhawk.com.myapplication.Service_Main_Aequities.crypto_kings_name
 import static airhawk.com.myapplication.Service_Main_Aequities.crypto_kings_symbolist;
 
 public class Activity_Main extends AppCompatActivity {
+    Integer count =1;
+    RelativeLayout progresslayout;
+    TextView txt;
     final int[] ICONS = new int[]{
             R.drawable.up,
             R.drawable.down,
@@ -80,6 +85,8 @@ public class Activity_Main extends AppCompatActivity {
     public static ArrayList<String> aequity_name_arraylist = new ArrayList<>();
     public static ArrayList<String> aequity_type_arraylist = new ArrayList<>();
     public ViewPager pager, market_pager;
+    public TabLayout tabs;
+    ProgressBar progress;
     RecyclerView recyclerView;
     Database_Local_Aequities ld = new Database_Local_Aequities(Activity_Main.this);
     private static final String TAG = "ActivityMain";
@@ -102,40 +109,141 @@ public class Activity_Main extends AppCompatActivity {
     }
 
     public void onBackPressed() {
-        setMainPage();
+        new setAsyncDataMain(this).cancel(true);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        ViewPager pager = findViewById(R.id.viewpager);
+        pager.setVisibility(View.VISIBLE);
+        ViewPager market_pager = findViewById(R.id.market_pager);
+        market_pager.setVisibility(View.GONE);
+        TabLayout tabs = findViewById(R.id.tabs);
+        setupMainViewPager(pager);
+        tabs.setupWithViewPager(pager);
+        tabs.getTabAt(0).setIcon(ICONS[0]);
+        tabs.getTabAt(1).setIcon(ICONS[1]);
+        if (check_saved.getName().isEmpty()){
+            tabs.getTabAt(2).setIcon(ICONS[2]);
+            tabs.getTabAt(3).setIcon(ICONS[3]);
+        }else{
+            tabs.getTabAt(2).setIcon(android.R.drawable.btn_star_big_on);
+            tabs.getTabAt(3).setIcon(ICONS[2]);
+            tabs.getTabAt(4).setIcon(ICONS[3]);}
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setDATAMain();
-        //new setAsyncDataMain(this).execute();
+        setContentView(R.layout.splash);
+        count =1;
+        progress= (ProgressBar) findViewById(R.id.progressBar);
+        progress.setMax(10);
+        progress.setProgress(0);
+        txt = (TextView) findViewById(R.id.output);
+        new setAsyncDataMain(this).execute(10);
 
     }
 
-    private class setAsyncDataMain extends AsyncTask<Void, Void, String> {
+    public class setAsyncDataMain extends AsyncTask<Integer, Integer, String> {
 
         private WeakReference<Activity_Main> activityReference;
         setAsyncDataMain(Activity_Main context) {
             activityReference = new WeakReference<>(context);
         }
         long startTime;
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+
             startTime = System.nanoTime();
-            ProgressBar progress;
-            setContentView(R.layout.splash);
-            progress = (ProgressBar) findViewById(R.id.splash_bar);
-            progress.setVisibility(View.VISIBLE);
         }
 
         @Override
-        protected String doInBackground(Void... params) {
+        protected String doInBackground(Integer... params) {
+            for (; count <= params[0]; count++) {
+                try {
+                    Thread.sleep(100);
+                    publishProgress(count);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
             Service_Main_Aequities cst = new Service_Main_Aequities();
             cst.main();
             Service_Saved_Aequity csa =new Service_Saved_Aequity(context);
             csa.main();
+            return "task finished";
+        }
+
+
+
+        @Override
+        protected void onPostExecute(String result) {
+
+            // get a reference to the activity if it is still there
+            Activity_Main activity = activityReference.get();
+            if (activity == null || activity.isFinishing()) return;
+            setMainPage();
+            long endTime = System.nanoTime();
+            long duration = (endTime - startTime);
+            System.out.println("SERVICE MAIN TIME IS " + duration / 1000000000 + " seconds");
+
+        }
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            txt.setText(values[0]+"0 %");
+            progress.setProgress(values[0]);
+        }
+    }
+
+
+    class setAsyncChosenData extends AsyncTask<Void, Void, String> {
+
+        private WeakReference<Activity_Main> activityReference;
+        setAsyncChosenData(Activity_Main context) {
+            activityReference = new WeakReference<>(context);
+        }
+        long startTime;
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            startTime = System.nanoTime();
+            Activity_Main activity = activityReference.get();
+            mainbar = activity.findViewById(R.id.mainbar);
+            mainbar.setIndeterminate(true);
+            mainbar.setVisibility(View.VISIBLE);
+            pager = activity.findViewById(R.id.viewpager);
+            pager.setVisibility(View.GONE);
+        }
+
+        @Override
+        protected String doInBackground(Void... params) {
+            if(isCancelled())
+            {
+                System.out.println("Async Cancelled");return null;}
+            Activity_Main activity = activityReference.get();
+            if (ap_info.getMarketType().equals("Cryptocurrency")) {
+                activity.getChosenCryptoInfo();
+                activity.get_crypto_points();
+            }
+//            getSupportActionBar().setDisplayShowTitleEnabled(true);
+            if (async_analysis_page) {
+                reloadAllData();
+                activity.getStockTwitsData();
+                Service_Chosen_Aequity shoe = new Service_Chosen_Aequity();
+                shoe.main();
+                System.out.println("ASYNC HAS BEEN CALLED PREVIOUSLY");
+            } else {
+                activity.getStockTwitsData();
+                Service_Chosen_Aequity shoe = new Service_Chosen_Aequity();
+                shoe.main();
+                System.out.println("ASYNC HAS NOT BEEN CALLED");
+
+                async_analysis_page = true;
+
+
+            }
             return "task finished";
         }
 
@@ -145,64 +253,36 @@ public class Activity_Main extends AppCompatActivity {
             // get a reference to the activity if it is still there
             Activity_Main activity = activityReference.get();
             if (activity == null || activity.isFinishing()) return;
-            ProgressBar progress = activity.findViewById(R.id.splash_bar);
 
-            progress.setVisibility(View.GONE);
-            setMainPage();
+            pager = activity.findViewById(R.id.viewpager);
+            pager.setVisibility(View.GONE);
+            market_pager = activity.findViewById(R.id.market_pager);
+            market_pager.setVisibility(View.VISIBLE);
+
+            tabs = activity.findViewById(R.id.tabs);
+            activity.setupChosenViewPager(market_pager);
+            tabs.setupWithViewPager(market_pager);
+            tabs.getTabAt(0).setIcon(R.drawable.info);
+            tabs.getTabAt(1).setIcon(R.drawable.news);
+            tabs.getTabAt(2).setIcon(R.drawable.yt);
+            tabs.getTabAt(3).setIcon(R.drawable.exchange);
+            tabs.getTabAt(4).setIcon(R.drawable.socialmedia);
+            mainbar = activity.findViewById(R.id.mainbar);
+            mainbar.setIndeterminate(false);
+            mainbar.setVisibility(View.GONE);
             long endTime = System.nanoTime();
             long duration = (endTime - startTime);
             System.out.println("SERVICE MAIN TIME IS " + duration / 1000000000 + " seconds");
 
         }
+
+
     }
 
 
 
 
 
-
-
-
-
-
-
-
-
-    private void setDATAMain() {
-
-        ProgressBar progress;
-        setContentView(R.layout.splash);
-        progress = (ProgressBar) findViewById(R.id.splash_bar);
-        new AsyncTask<Void, Void, Void>() {
-            long startTime;
-            @Override
-            protected void onPreExecute() {
-                super.onPreExecute();
-                startTime = System.nanoTime();
-                progress.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            protected void onPostExecute(Void aVoid) {
-                super.onPostExecute(aVoid);
-                progress.setVisibility(View.GONE);
-                setMainPage();
-                long endTime = System.nanoTime();
-                long duration = (endTime - startTime);
-                System.out.println("SERVICE MAIN TIME IS " + duration / 1000000000 + " seconds");
-            }
-
-            @Override
-            protected Void doInBackground(Void... params) {
-                Service_Main_Aequities cst = new Service_Main_Aequities();
-                cst.main();
-                Service_Saved_Aequity csa =new Service_Saved_Aequity(context);
-                csa.main();
-                return null;
-            }
-        }.execute();
-
-    }
 
     private void setMainPage() {
         setContentView(R.layout.activity_main);
@@ -440,7 +520,7 @@ public class Activity_Main extends AppCompatActivity {
                 ap_info.setMarketType(split_marketinfo[2]);
                 toolbar.removeView(v);
                 chosen_searchView_item.onEditorAction(EditorInfo.IME_ACTION_DONE);
-                Launch_Chosen_Progress();
+                new setAsyncChosenData(Activity_Main.this).execute();
                 toolbar.setVisibility(View.GONE);
 
             }

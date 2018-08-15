@@ -69,7 +69,10 @@ public class Adapter_Main_Equities extends RecyclerView.Adapter<Adapter_Main_Equ
                         ap_info.setMarketName(name.getText().toString());
                         ap_info.setMarketType(types.getText().toString());
                         ap_info.setMarketChange(value.getText().toString());
-                        ((Activity_Main) context).Launch_Chosen_Progress();}
+                        //((Activity_Main) context).Launch_Chosen_Progress();
+                        Activity_Main activity_main = new Activity_Main();
+                        activity_main.new setAsyncChosenData((Activity_Main) context)
+                                .execute();}
                 });
             }
         }

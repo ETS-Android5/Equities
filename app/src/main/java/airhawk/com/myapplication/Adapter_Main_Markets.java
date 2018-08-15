@@ -1,5 +1,6 @@
 package airhawk.com.myapplication;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -8,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+
+import java.lang.ref.WeakReference;
 
 import static airhawk.com.myapplication.Constructor_App_Variables.btc_market_cap_amount;
 import static airhawk.com.myapplication.Constructor_App_Variables.btc_market_cap_change;
@@ -28,7 +31,16 @@ public class Adapter_Main_Markets extends RecyclerView.Adapter<Adapter_Main_Mark
     String[] int_list = new String[]{dow_amount,sp_amount,nas_amount,btc_market_cap_amount};
     String[] change_list = new String[]{dow_change,sp_change, nas_change, btc_market_cap_change};
     Constructor_App_Variables ap_info = new Constructor_App_Variables();
+    Context context; //global
+    public Adapter_Main_Markets(Context context)
+    {
+        this.context = context;
+    }
 
+    private WeakReference<Activity_Main> activityReference;
+    Adapter_Main_Markets(Activity_Main context) {
+        activityReference = new WeakReference<>(context);
+    }
 
     public Adapter_Main_Markets(){}
     public class MyViewHolder extends RecyclerView.ViewHolder{
@@ -52,28 +64,32 @@ public class Adapter_Main_Markets extends RecyclerView.Adapter<Adapter_Main_Mark
                             ap_info.setMarketName(mIdView.getText().toString());
                             ap_info.setMarketSymbol("%5EDJI");
                             ap_info.setMarketType("Stock");
-                            connect.Launch_Chosen_Progress();
+                            connect.new setAsyncChosenData((Activity_Main) context)
+                                .execute();
                             break;
                         case 1:
                             temp = "S P 500";
                             ap_info.setMarketName(temp);
                             ap_info.setMarketSymbol("%5EGSPC");
                             ap_info.setMarketType("Stock");
-                            connect.Launch_Chosen_Progress();
+                            connect.new setAsyncChosenData((Activity_Main)context)
+                                    .execute();
                             break;
                         case 2:
                             temp = "Nasdaq";
                             ap_info.setMarketName(temp);
                             ap_info.setMarketSymbol("%5EIXIC");
                             ap_info.setMarketType("Stock");
-                            connect.Launch_Chosen_Progress();
+                            connect.new setAsyncChosenData((Activity_Main) context)
+                                    .execute();
                             break;
                         case 3:
                             temp = "Bitcoin";
                             ap_info.setMarketName(temp);
                             ap_info.setMarketSymbol("BTC");
                             ap_info.setMarketType("Cryptocurrency");
-                            connect.Launch_Chosen_Progress();
+                            connect.new setAsyncChosenData((Activity_Main) context)
+                                    .execute();
                             break;
 
                         default:
