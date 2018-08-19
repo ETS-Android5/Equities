@@ -131,8 +131,12 @@ public class Service_Saved_Aequity
         ArrayList d = co.getcryptoName();
         for(int i=0;i<d.size();i++){
             Document cap =null;
+                String g = String.valueOf(d.get(i));
+                if(g.contains(" ")){
+                    g= g.replace(" ","-");
+                }
                 try {
-                    cap = Jsoup.connect("https://coinmarketcap.com/currencies/" + d.get(i)).timeout(10 *10000).get();
+                    cap = Jsoup.connect("https://coinmarketcap.com/currencies/" + g).timeout(10 *10000).get();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

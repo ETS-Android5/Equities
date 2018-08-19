@@ -614,6 +614,7 @@ public class Activity_Main extends AppCompatActivity {
         long startTime = System.nanoTime();
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         String newString =ap_info.getMarketName();
+        System.out.println(newString);
         if(newString.contains(" ")){
             newString =newString.replace(" ","-");
         }
