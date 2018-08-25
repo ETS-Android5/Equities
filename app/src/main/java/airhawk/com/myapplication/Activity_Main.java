@@ -650,20 +650,29 @@ public class Activity_Main extends AppCompatActivity {
                         DecimalFormat df = new DecimalFormat("0.00");
                         df.setMaximumFractionDigits(2);
                         String y = heroObject.getString("available_supply");
-                        System.out.println("Total Supply "+y);
-                        double dd = Double.parseDouble(y);
-                        y =df.format(dd);
-                        int z =y.length();
-                        long tt = 1000000000000L;
-                        if (z<10){y= String.valueOf(dd/1000);
-                            ap_info.setMarketSupply(y.substring(0,5)+"TH");}
-                        if (z<=12){y= String.valueOf(dd/1000000);
-                            ap_info.setMarketSupply(y.substring(0,5)+"M");}
-                        if (z>12){y= String.valueOf(dd/1000000000);
-                            ap_info.setMarketSupply(y.substring(0,5)+"B");}
-                        if (z>15){y= String.valueOf(dd/tt);
-                            ap_info.setMarketSupply(y.substring(0,5)+"T");}
-                        ap_info.setCurrent_Aequity_Price_Change(heroObject.getString("percent_change_24h")+"%");
+                        if(y !="null") {
+                            double dd = Double.parseDouble(y);
+                            y = df.format(dd);
+                            int z = y.length();
+                            long tt = 1000000000000L;
+                            if (z < 10) {
+                                y = String.valueOf(dd / 1000);
+                                ap_info.setMarketSupply(y.substring(0, 5) + "TH");
+                            }
+                            if (z <= 12) {
+                                y = String.valueOf(dd / 1000000);
+                                ap_info.setMarketSupply(y.substring(0, 5) + "M");
+                            }
+                            if (z > 12) {
+                                y = String.valueOf(dd / 1000000000);
+                                ap_info.setMarketSupply(y.substring(0, 5) + "B");
+                            }
+                            if (z > 15) {
+                                y = String.valueOf(dd / tt);
+                                ap_info.setMarketSupply(y.substring(0, 5) + "T");
+                            }
+
+                            ap_info.setCurrent_Aequity_Price_Change(heroObject.getString("percent_change_24h") + "%");
                         String p =heroObject.getString("market_cap_usd");
                         double d = Double.parseDouble(p);
                         p =df.format(d);
@@ -676,8 +685,10 @@ public class Activity_Main extends AppCompatActivity {
                         if (l>12){p= String.valueOf(d/1000000000);
                             ap_info.setMarketCap(p.substring(0,5)+"B");}
                         if (l>15){p= String.valueOf(d/t);
-                            ap_info.setMarketCap(p.substring(0,5)+"T");}
-
+                            ap_info.setMarketCap(p.substring(0,5)+"T");}}
+                        else{ap_info.setMarketSupply("Unknown");
+                            ap_info.setMarketCap("Unknown");
+                        ap_info.setCurrent_Aequity_Price_Change("Unknown");}
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -703,8 +714,6 @@ public class Activity_Main extends AppCompatActivity {
     }
 
     public void get_crypto_points() {
-
-
         long startTime = System.nanoTime();
         DateFormat sdf = new SimpleDateFormat("yyyyMMdd");
         Date begindate = new Date();

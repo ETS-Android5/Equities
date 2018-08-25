@@ -7,7 +7,7 @@
         android:label ="@string/app_name"
         android:icon="@drawable/aeq"
         android:roundIcon="@drawable/aeq"
-        android:hardwareAccelerated="false"
+        android:hardwareAccelerated="true"
         android:largeHeap="true"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">

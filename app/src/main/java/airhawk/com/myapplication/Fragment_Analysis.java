@@ -16,6 +16,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.LineGraphSeries;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -37,12 +41,14 @@ public class Fragment_Analysis extends Fragment {
     Constructor_App_Variables ap_info =new Constructor_App_Variables();
     private Database_Local_Aequities db;
     TabLayout tabchoice;
+    GraphView graph_view;
 
     @Override
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_analysis, container, false);
         RecyclerView historical_listview =rootView.findViewById(R.id.historical_listview);
+        graph_view=rootView.findViewById(R.id.graph_view);
         String ap_pc = ap_info.getCurrent_Aequity_Price_Change();
         a_name =rootView.findViewById(R.id.aequity_name);
         a_type =rootView.findViewById(R.id.aequity_type);
@@ -100,16 +106,13 @@ public class Fragment_Analysis extends Fragment {
 
             }
         });
+        Integer integer =7;
         historical_listview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-        Adapter_Graph_Points ab =new Adapter_Graph_Points(getContext(),graph_high,graph_volume,graph_date);
+        Adapter_Graph_Points ab =new Adapter_Graph_Points(getContext(),integer,graph_high,graph_volume,graph_date);
         historical_listview.setAdapter(ab);
 
 
 
-       // for (int i = 0; i < _AllDays.size(); i++)
-        //{
-        //    dataModels.add(new Historical_Data_Model(graph_high.get(i), graph_volume.get(i), graph_date.get(i)));
-        //    System.out.println(Arrays.asList(dataModels.get(i)));}
         TabLayout tabLayoutchoice = (TabLayout)rootView.findViewById(R.id.tabchoice);
         tabLayoutchoice.addTab(tabLayoutchoice.newTab().setText("LIST"));
         tabLayoutchoice.addTab(tabLayoutchoice.newTab().setText("GRAPH"));
@@ -118,11 +121,29 @@ public class Fragment_Analysis extends Fragment {
             public void onTabSelected(TabLayout.Tab tab) {
                 int position = tab.getPosition();
                 switch (position) {
-                    case 1:
+                    case 0:
 //SHOW LIST
+                        historical_listview.setVisibility(View.VISIBLE);
+                        graph_view.setVisibility(View.GONE);
                         break;
-                    case 2:
+                    case 1:
 //SHOW GRAPH
+                        
+                        historical_listview.setVisibility(View.GONE);
+                        graph_view.setVisibility(View.VISIBLE);
+                        graph_view.setTitle("Poof");
+                        graph_view.setTitleColor(Color.parseColor("#00ff00"));
+                        DataPoint[] dp = new DataPoint[graph_high.size()];
+
+                        for(int i=0; i<graph_high.size();i++){
+                            double x = Double.parseDouble(String.valueOf(graph_high.get(i)));
+                            double y = Double.parseDouble(String.valueOf(graph_high.get(position)));
+                            dp[i] = new DataPoint(x, y);}
+                            LineGraphSeries<DataPoint> series = new LineGraphSeries<>(dp);
+                            series.setBackgroundColor(getResources().getColor(android.R.color.holo_green_light));
+                            series.setColor(Color.GREEN);
+                            series.setDrawDataPoints(true);
+                        graph_view.addSeries(series);
                         break;
 
 
@@ -159,35 +180,58 @@ public class Fragment_Analysis extends Fragment {
             public void onTabSelected(TabLayout.Tab tab) {
                 int position = tab.getPosition();
                 switch (position) {
+                    case 0:
+                        //updateReceiptsList();
+                        Integer integer =1;
+                        historical_listview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+                        Adapter_Graph_Points ab =new Adapter_Graph_Points(getContext(),integer,graph_high,graph_volume,graph_date);
+                        historical_listview.setAdapter(ab);
+                        break;
                     case 1:
                         //updateReceiptsList();
-
+                        integer =7;
+                        historical_listview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+                        ab =new Adapter_Graph_Points(getContext(),integer,graph_high,graph_volume,graph_date);
+                        historical_listview.setAdapter(ab);
                         break;
                     case 2:
                         //updateReceiptsList();
-
+                        integer =30;
+                        historical_listview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+                        ab =new Adapter_Graph_Points(getContext(),integer,graph_high,graph_volume,graph_date);
+                        historical_listview.setAdapter(ab);
                         break;
                     case 3:
-                        //updateReceiptsList();
-
+                        integer =90;
+                        historical_listview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+                        ab =new Adapter_Graph_Points(getContext(),integer,graph_high,graph_volume,graph_date);
+                        historical_listview.setAdapter(ab);
                         break;
                     case 4:
-                        //updateReceiptsList();
-
+                        integer =180;
+                        historical_listview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+                        ab =new Adapter_Graph_Points(getContext(),integer,graph_high,graph_volume,graph_date);
+                        historical_listview.setAdapter(ab);
                         break;
                     case 5:
-                        //updateReceiptsList();
+                        integer =365;
+                        historical_listview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+                        ab =new Adapter_Graph_Points(getContext(),integer,graph_high,graph_volume,graph_date);
+                        historical_listview.setAdapter(ab);
 
                         break;
                     case 6:
-                        //updateReceiptsList();
-
-
+                        integer =graph_high.size();
+                        historical_listview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+                        ab =new Adapter_Graph_Points(getContext(),integer,graph_high,graph_volume,graph_date);
+                        historical_listview.setAdapter(ab);
                         break;
-                    case 7:
 
-                        break;
                     default:
+                        integer =7;
+                        historical_listview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+                        ab =new Adapter_Graph_Points(getContext(),integer,graph_high,graph_volume,graph_date);
+                        historical_listview.setAdapter(ab);
                     break;
                 }
 

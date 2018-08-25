@@ -19,14 +19,16 @@ public class Adapter_Graph_Points extends RecyclerView.Adapter<Adapter_Graph_Poi
     ArrayList graph_h;
     ArrayList graph_v;
     ArrayList graph_d;
+    Integer integer;
     Context context;
     double saved_volume =0;
     double saved_high=0;
 
-    public Adapter_Graph_Points(Context context, ArrayList graph_h, ArrayList graph_v, ArrayList graph_d) {
+    public Adapter_Graph_Points(Context context, Integer integer, ArrayList graph_h, ArrayList graph_v, ArrayList graph_d) {
         this.graph_h = graph_h;
         this.graph_v = graph_v;
         this.graph_d = graph_d;
+        this.integer =integer;
         this.context=context;
 
     }
@@ -91,9 +93,7 @@ public class Adapter_Graph_Points extends RecyclerView.Adapter<Adapter_Graph_Poi
     @Override
     public int getItemCount() {
 
-
-        if(graph_high.size()>=30){return 30;}
-        else{return graph_high.size();}
+    return integer;
     }
 
 
