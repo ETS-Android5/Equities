@@ -74,12 +74,13 @@ public class Service_Chosen_Aequity
                     get_stock_shares();
                     get_stock_cap();
                     get_stock_points();
+                    long endTime = System.nanoTime();
+                    long duration = (endTime - startTime);
+                    //29 seconds Boost Mobile
+                    System.out.println("GET get_stock_points TIME IS "+duration/1000000000+" seconds");
                     }
 
-                long endTime = System.nanoTime();
-                long duration = (endTime - startTime);
-                //29 seconds Boost Mobile
-                System.out.println("GET get_crypto_points/get_stock_points TIME IS "+duration/1000000000+" seconds");
+
                 return null;
             }
         });
@@ -140,7 +141,7 @@ public class Service_Chosen_Aequity
             e.printStackTrace();
         }
         Elements e =doc.select("tbody");
-        Element f =e.get(9);
+        Element f =e.get(8);
         Elements c =f.select("td");
         Element p =c.get(5);
         ap_info.setMarketSupply(p.text());

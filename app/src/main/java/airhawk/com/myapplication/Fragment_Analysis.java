@@ -36,6 +36,7 @@ public class Fragment_Analysis extends Fragment {
     ImageView save;
     Constructor_App_Variables ap_info =new Constructor_App_Variables();
     private Database_Local_Aequities db;
+    TabLayout tabchoice;
 
     @Override
 
@@ -109,14 +110,47 @@ public class Fragment_Analysis extends Fragment {
         //{
         //    dataModels.add(new Historical_Data_Model(graph_high.get(i), graph_volume.get(i), graph_date.get(i)));
         //    System.out.println(Arrays.asList(dataModels.get(i)));}
+        TabLayout tabLayoutchoice = (TabLayout)rootView.findViewById(R.id.tabchoice);
+        tabLayoutchoice.addTab(tabLayoutchoice.newTab().setText("LIST"));
+        tabLayoutchoice.addTab(tabLayoutchoice.newTab().setText("GRAPH"));
+        tabLayoutchoice.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                int position = tab.getPosition();
+                switch (position) {
+                    case 1:
+//SHOW LIST
+                        break;
+                    case 2:
+//SHOW GRAPH
+                        break;
 
 
-        /* This to be added in version 2 with graphs
-        tabLayout = (TabLayout)rootView.findViewById(R.id.tabs);
-        tabLayout.addTab(tabLayout.newTab().setText("7D"));
+                    default:
+                        break;
+                }
+
+
+
+
+
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+            }
+        });
+        //This to be added in version 2 with graphs
+        TabLayout tabLayout = (TabLayout)rootView.findViewById(R.id.tabs);
+        tabLayout.addTab(tabLayout.newTab().setText("1D"));
+        tabLayout.addTab(tabLayout.newTab().setText("1W"));
         tabLayout.addTab(tabLayout.newTab().setText("1M"));
         tabLayout.addTab(tabLayout.newTab().setText("3M"));
-        tabLayout.addTab(tabLayout.newTab().setText("6M"));
+        tabLayout.addTab(tabLayout.newTab().setText("6Y"));
         tabLayout.addTab(tabLayout.newTab().setText("1Y"));
         tabLayout.addTab(tabLayout.newTab().setText("MAX"));
         tabLayout.setSelectedTabIndicatorColor(Color.TRANSPARENT);
@@ -126,26 +160,32 @@ public class Fragment_Analysis extends Fragment {
                 int position = tab.getPosition();
                 switch (position) {
                     case 1:
+                        //updateReceiptsList();
+
                         break;
                     case 2:
+                        //updateReceiptsList();
+
                         break;
                     case 3:
+                        //updateReceiptsList();
+
                         break;
                     case 4:
+                        //updateReceiptsList();
+
                         break;
                     case 5:
+                        //updateReceiptsList();
+
                         break;
                     case 6:
-                        updateReceiptsList();
-                        for (int i = 0; i < _AllDays.size(); i++) {
+                        //updateReceiptsList();
 
-                        }
 
                         break;
                     case 7:
-                        for (int i = 0; i < _AllDays.size(); i++) {
 
-                        }
                         break;
                     default:
                     break;
@@ -165,7 +205,7 @@ public class Fragment_Analysis extends Fragment {
             public void onTabReselected(TabLayout.Tab tab) {
             }
         });
-*/
+
         return rootView;
 
     }

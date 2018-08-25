@@ -54,6 +54,7 @@ import java.lang.ref.WeakReference;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -168,10 +169,13 @@ public class Activity_Main extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
+
+            getCrypto_Kings();
             Service_Main_Aequities cst = new Service_Main_Aequities();
             cst.main();
-            Service_Saved_Aequity csa =new Service_Saved_Aequity(context);
-            csa.main();
+            //Service_Saved_Aequity csa =new Service_Saved_Aequity(context);
+            //csa.main();
+            //SAVED METHOD SLOWS DOWN APP BY 6 SECONDS. DONT FORGET TO UNHIDE CODE OM FRAGMENT_SAVED WHEN THIS IS REPAIRED
             return "task finished";
         }
 
@@ -197,7 +201,7 @@ public class Activity_Main extends AppCompatActivity {
     }
 
 
-    class setAsyncChosenData extends AsyncTask<Void, Void, String> {
+    public class setAsyncChosenData extends AsyncTask<Void, Void, String> {
 
         private WeakReference<Activity_Main> activityReference;
         setAsyncChosenData(Activity_Main context) {
@@ -223,7 +227,8 @@ public class Activity_Main extends AppCompatActivity {
             {
                 System.out.println("Async Cancelled");return null;}
             Activity_Main activity = activityReference.get();
-            if (ap_info.getMarketType().equals("Cryptocurrency")) {
+            System.out.println("CHSOEN TYPE EQUALS "+ap_info.getMarketType());
+            if (ap_info.getMarketType().equals("Crypto")||(ap_info.getMarketType().equals("Cryptocurrency"))) {
                 activity.getChosenCryptoInfo();
                 activity.get_crypto_points();
             }
@@ -287,7 +292,6 @@ public class Activity_Main extends AppCompatActivity {
     private void setMainPage() {
         setContentView(R.layout.activity_main);
         setJSON_INFO();
-        getCrypto_Kings();
         toolbar = findViewById(R.id.toolbar);
         fu=findViewById(R.id.frameLayout);
         fu.setVisibility(View.VISIBLE);
@@ -404,8 +408,8 @@ public class Activity_Main extends AppCompatActivity {
             public void onTick(long millisUntilFinished) {
                 Service_Main_Aequities cst = new Service_Main_Aequities();
                 cst.main();
-                Service_Saved_Aequity csa =new Service_Saved_Aequity(context);
-                csa.main();
+                //Service_Saved_Aequity csa =new Service_Saved_Aequity(context);
+                //csa.main();
             }
 
             public void onFinish() {
@@ -551,7 +555,6 @@ public class Activity_Main extends AppCompatActivity {
         };
         userRef.addValueEventListener(postListener);
     }
-
     public void getCrypto_Kings() {
 
         long startTime = System.nanoTime();
@@ -581,7 +584,19 @@ public class Activity_Main extends AppCompatActivity {
                             String valuez = quotes.getString (keyz);
                             JSONObject jzO = new JSONObject(valuez);
                             market_cap= jzO.getString("market_cap");
-                            crypto_kings_marketcaplist.add(market_cap);
+                            DecimalFormat df = new DecimalFormat("0.00");
+                            df.setMaximumFractionDigits(2);
+                            String p =market_cap;
+                            double d = Double.parseDouble(p);
+                            p =df.format(d);
+                            int l =p.length();
+                            long t = 1000000000000L;
+                            if (l<=12){p= String.valueOf(d/1000000);
+                                crypto_kings_marketcaplist.add(p.substring(0,5)+" M");}
+                            if (l>12){p= String.valueOf(d/1000000000);
+                                crypto_kings_marketcaplist.add(p.substring(0,5)+" B");}
+                            if (l>15){p= String.valueOf(d/t);
+                                crypto_kings_marketcaplist.add(p.substring(0,5)+" T");}
                             String mc =jzO.getString("percent_change_24h");
                             crypto_kings_changelist.add(mc);
                         }
@@ -630,11 +645,39 @@ public class Activity_Main extends AppCompatActivity {
                     try {
                         heroObject = response.getJSONObject(i);
                         ap_info.setMarketSymbol(heroObject.getString("symbol"));
-                        ap_info.setCurrent_Aequity_Price(heroObject.getString("price_usd"));
+                        ap_info.setCurrent_Aequity_Price(heroObject.getString("price_usd").substring(0,6));
                         //volume_24 =heroObject.getString("24h_volume_usd");
-                        ap_info.setMarketSupply(heroObject.getString("total_supply"));
-                        ap_info.setCurrent_Aequity_Price_Change(heroObject.getString("percent_change_24h"));
-                        ap_info.setMarketCap(heroObject.getString("market_cap_usd"));
+                        DecimalFormat df = new DecimalFormat("0.00");
+                        df.setMaximumFractionDigits(2);
+                        String y = heroObject.getString("available_supply");
+                        System.out.println("Total Supply "+y);
+                        double dd = Double.parseDouble(y);
+                        y =df.format(dd);
+                        int z =y.length();
+                        long tt = 1000000000000L;
+                        if (z<10){y= String.valueOf(dd/1000);
+                            ap_info.setMarketSupply(y.substring(0,5)+"TH");}
+                        if (z<=12){y= String.valueOf(dd/1000000);
+                            ap_info.setMarketSupply(y.substring(0,5)+"M");}
+                        if (z>12){y= String.valueOf(dd/1000000000);
+                            ap_info.setMarketSupply(y.substring(0,5)+"B");}
+                        if (z>15){y= String.valueOf(dd/tt);
+                            ap_info.setMarketSupply(y.substring(0,5)+"T");}
+                        ap_info.setCurrent_Aequity_Price_Change(heroObject.getString("percent_change_24h")+"%");
+                        String p =heroObject.getString("market_cap_usd");
+                        double d = Double.parseDouble(p);
+                        p =df.format(d);
+                        int l =p.length();
+                        long t = 1000000000000L;
+                        if (l<10){p= String.valueOf(d/1000);
+                            ap_info.setMarketCap(p.substring(0,5)+"TH");}
+                        if (l<=12){p= String.valueOf(d/1000000);
+                            ap_info.setMarketCap(p.substring(0,5)+"M");}
+                        if (l>12){p= String.valueOf(d/1000000000);
+                            ap_info.setMarketCap(p.substring(0,5)+"B");}
+                        if (l>15){p= String.valueOf(d/t);
+                            ap_info.setMarketCap(p.substring(0,5)+"T");}
+
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

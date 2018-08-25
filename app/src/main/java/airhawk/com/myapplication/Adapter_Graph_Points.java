@@ -90,7 +90,10 @@ public class Adapter_Graph_Points extends RecyclerView.Adapter<Adapter_Graph_Poi
 
     @Override
     public int getItemCount() {
-        return graph_high.size();
+
+
+        if(graph_high.size()>=30){return 30;}
+        else{return graph_high.size();}
     }
 
 
