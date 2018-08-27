@@ -52,4 +52,5 @@
     <string name="market_cap">Market Cap</string>
     <string name="default_font" translatable="false">sans-serif-light</string>
     <string name="stocktwits">Social Media</string>
+    <string name="compare">Chart</string>
 </resources>

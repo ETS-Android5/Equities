@@ -74,7 +74,8 @@ public class Activity_Main extends AppCompatActivity {
             R.drawable.up,
             R.drawable.down,
             R.drawable.news,
-            R.drawable.kings};
+            R.drawable.kings,
+            R.drawable.chart};
     int[] names = new int[]{R.string.leaders, R.string.losers, R.string.news, R.string.market_kings};
     ImageView search_button;
     static Element price = null;
@@ -125,10 +126,12 @@ public class Activity_Main extends AppCompatActivity {
         if (check_saved.getName().isEmpty()){
             tabs.getTabAt(2).setIcon(ICONS[2]);
             tabs.getTabAt(3).setIcon(ICONS[3]);
+            tabs.getTabAt(4).setIcon(ICONS[4]);
         }else{
             tabs.getTabAt(2).setIcon(android.R.drawable.btn_star_big_on);
             tabs.getTabAt(3).setIcon(ICONS[2]);
-            tabs.getTabAt(4).setIcon(ICONS[3]);}
+            tabs.getTabAt(4).setIcon(ICONS[3]);
+            tabs.getTabAt(5).setIcon(ICONS[4]);}
     }
 
     @Override
@@ -318,10 +321,12 @@ public class Activity_Main extends AppCompatActivity {
         if (check_saved.getName().isEmpty()){
             tabs.getTabAt(2).setIcon(ICONS[2]);
             tabs.getTabAt(3).setIcon(ICONS[3]);
+            tabs.getTabAt(4).setIcon(ICONS[4]);
         }else{
             tabs.getTabAt(2).setIcon(android.R.drawable.btn_star_big_on);
             tabs.getTabAt(3).setIcon(ICONS[2]);
-            tabs.getTabAt(4).setIcon(ICONS[3]);}
+            tabs.getTabAt(4).setIcon(ICONS[3]);
+            tabs.getTabAt(5).setIcon(ICONS[4]);}
 
 
         recyclerView = findViewById(R.id.item_list);
@@ -341,6 +346,7 @@ public class Activity_Main extends AppCompatActivity {
         adapter.addFrag(new Fragment_Saved(), getString(R.string.saved));}
         adapter.addFrag(new Fragment_App_News(), getString(R.string.news));
         adapter.addFrag(new Fragment_Market_Kings(), getString(R.string.market_kings));
+        adapter.addFrag(new Fragment_stockVScrypto(),getString(R.string.compare));
         viewPager.setAdapter(adapter);
     }
 
@@ -438,6 +444,7 @@ public class Activity_Main extends AppCompatActivity {
             tabs.getTabAt(2).setIcon(ICONS[2]);}
         tabs.getTabAt(3).setIcon(ICONS[3]);
         tabs.getTabAt(4).setIcon(ICONS[4]);
+        tabs.getTabAt(5).setIcon(ICONS[5]);
         mainbar.setVisibility(View.VISIBLE);
     }
 
