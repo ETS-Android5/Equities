@@ -407,8 +407,12 @@ public class Service_Main_Aequities {
         Elements table_body3 = sv.select("tr td:eq(3)");
         for(int i=1; i<=10;i++)
         {
+            String s =table_body2.get(i).text();
+            if (s.contains(".")){
+                s =s.replace(".","-");
+            }
             stock_kings_namelist.add(table_body.get(i).text());
-            stock_kings_symbollist.add(table_body2.get(i).text());
+            stock_kings_symbollist.add(s);
             Double add = Double.parseDouble(table_body3.get(i).text());
             String added =null;
             if (add >1000){

@@ -38,6 +38,7 @@ public class Fragment_Analysis extends Fragment {
     private Database_Local_Aequities db;
     TabLayout tabchoice;
     GraphView graph_view;
+    Adapter_Graph_Points ab;
     static Integer integer;
 
     @Override
@@ -105,8 +106,8 @@ public class Fragment_Analysis extends Fragment {
         });
         final Integer[] integer = {7};
         historical_listview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-        Adapter_Graph_Points ab =new Adapter_Graph_Points(getContext(), integer[0],graph_high,graph_volume,graph_date);
-        historical_listview.setAdapter(ab);
+        final Adapter_Graph_Points[] ab = {new Adapter_Graph_Points(getContext(), integer[0], graph_high, graph_volume, graph_date)};
+        historical_listview.setAdapter(ab[0]);
 
 
 
@@ -167,19 +168,18 @@ public class Fragment_Analysis extends Fragment {
                 int position = tab.getPosition();
                 switch (position) {
                     case 0:
-                        //updateReceiptsList();
+                        graph_view.removeAllSeries();
+                        ab[0].notifyDataSetChanged();
                         integer[0] =1;
                         historical_listview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-                        Adapter_Graph_Points ab =new Adapter_Graph_Points(getContext(), integer[0],graph_high,graph_volume,graph_date);
-                        historical_listview.setAdapter(ab);
-                        break;
-                    case 1:
-                        //updateReceiptsList();
-                        integer[0] =7;
+                        ab[0] =new Adapter_Graph_Points(getContext(), integer[0],graph_high,graph_volume,graph_date);
+                        historical_listview.setAdapter(ab[0]);
                         historical_listview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-                        ab =new Adapter_Graph_Points(getContext(), integer[0],graph_high,graph_volume,graph_date);
-                        historical_listview.setAdapter(ab);
+                        ab[0] =new Adapter_Graph_Points(getContext(), integer[0],graph_high,graph_volume,graph_date);
+                        historical_listview.setAdapter(ab[0]);
                         Collections.reverse(graph_high);
+                        if (integer[0] <=graph_high.size())
+                    {}
                         LineGraphSeries<DataPoint> series = new LineGraphSeries<>();
                         for (int i= 0; i < integer[0];i++){
                             double xx = Double.parseDouble(String.valueOf(graph_high.get(i)));
@@ -191,12 +191,37 @@ public class Fragment_Analysis extends Fragment {
                         //series.setDrawDataPoints(true);
                         graph_view.addSeries(series);
                         break;
+                    case 1:
+                        //updateReceiptsList();
+                        graph_view.removeAllSeries();
+                        ab[0].notifyDataSetChanged();
+                        integer[0] =7;
+                        historical_listview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+                        ab[0] =new Adapter_Graph_Points(getContext(), integer[0],graph_high,graph_volume,graph_date);
+                        historical_listview.setAdapter(ab[0]);
+                        Collections.reverse(graph_high);
+                        System.out.println(Arrays.asList(graph_high));
+                        series = new LineGraphSeries<>();
+                        for (int i= 0; i < integer[0];i++){
+                            double xx = Double.parseDouble(String.valueOf(graph_high.get(i)));
+                            DataPoint point = new DataPoint(i,xx);
+                            series.appendData(point,true,graph_high.size());
+                        }
+                        series.setBackgroundColor(getResources().getColor(android.R.color.holo_green_light));
+                        series.setColor(Color.GREEN);
+                        series.setDrawBackground(true);
+
+                        //series.setDrawDataPoints(true);
+                        graph_view.addSeries(series);
+                        break;
                     case 2:
                         //updateReceiptsList();
+                        graph_view.removeAllSeries();
+                        ab[0].notifyDataSetChanged();
                         integer[0] =30;
                         historical_listview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-                        ab =new Adapter_Graph_Points(getContext(), integer[0],graph_high,graph_volume,graph_date);
-                        historical_listview.setAdapter(ab);
+                        ab[0] =new Adapter_Graph_Points(getContext(), integer[0],graph_high,graph_volume,graph_date);
+                        historical_listview.setAdapter(ab[0]);
                         Collections.reverse(graph_high);
                         series = new LineGraphSeries<>();
                         for (int i= 0; i < integer[0];i++){
@@ -210,6 +235,8 @@ public class Fragment_Analysis extends Fragment {
                         graph_view.addSeries(series);
                         break;
                     case 3:
+                        graph_view.removeAllSeries();
+                        ab[0].notifyDataSetChanged();
                         integer[0] =90;
                         Collections.reverse(graph_high);
                         series = new LineGraphSeries<>();
@@ -223,34 +250,72 @@ public class Fragment_Analysis extends Fragment {
                         //series.setDrawDataPoints(true);
                         graph_view.addSeries(series);
                         historical_listview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-                        ab =new Adapter_Graph_Points(getContext(), integer[0],graph_high,graph_volume,graph_date);
-                        historical_listview.setAdapter(ab);
+                        ab[0] =new Adapter_Graph_Points(getContext(), integer[0],graph_high,graph_volume,graph_date);
+                        historical_listview.setAdapter(ab[0]);
                         break;
                     case 4:
+                        graph_view.removeAllSeries();
+                        ab[0].notifyDataSetChanged();
+                        //if integer is not null
                         integer[0] =180;
+
+                        Collections.reverse(graph_high);
+                        series = new LineGraphSeries<>();
+                        for (int i= 0; i < integer[0];i++){
+                            double xx = Double.parseDouble(String.valueOf(graph_high.get(i)));
+                            DataPoint point = new DataPoint(i,xx);
+                            series.appendData(point,true,graph_high.size());
+                        }
+                        series.setBackgroundColor(getResources().getColor(android.R.color.holo_green_light));
+                        series.setColor(Color.GREEN);
+                        //series.setDrawDataPoints(true);
+                        graph_view.addSeries(series);
                         historical_listview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-                        ab =new Adapter_Graph_Points(getContext(), integer[0],graph_high,graph_volume,graph_date);
-                        historical_listview.setAdapter(ab);
+                        ab[0] =new Adapter_Graph_Points(getContext(), integer[0],graph_high,graph_volume,graph_date);
+                        historical_listview.setAdapter(ab[0]);
                         break;
                     case 5:
+                        graph_view.removeAllSeries();
+                        ab[0].notifyDataSetChanged();
                         integer[0] =365;
+                        Collections.reverse(graph_high);
+                        series = new LineGraphSeries<>();
+                        for (int i= 0; i < integer[0];i++){
+                            double xx = Double.parseDouble(String.valueOf(graph_high.get(i)));
+                            DataPoint point = new DataPoint(i,xx);
+                            series.appendData(point,true,graph_high.size());
+                        }
+                        series.setBackgroundColor(getResources().getColor(android.R.color.holo_green_light));
+                        series.setColor(Color.GREEN);
+                        //series.setDrawDataPoints(true);
+                        graph_view.addSeries(series);
                         historical_listview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-                        ab =new Adapter_Graph_Points(getContext(), integer[0],graph_high,graph_volume,graph_date);
-                        historical_listview.setAdapter(ab);
+                        ab[0] =new Adapter_Graph_Points(getContext(), integer[0],graph_high,graph_volume,graph_date);
+                        historical_listview.setAdapter(ab[0]);
 
                         break;
                     case 6:
+                        graph_view.removeAllSeries();
+                        ab[0].notifyDataSetChanged();
                         integer[0] =graph_high.size();
+                        Collections.reverse(graph_high);
+                        series = new LineGraphSeries<>();
+                        for (int i= 0; i < integer[0];i++){
+                            double xx = Double.parseDouble(String.valueOf(graph_high.get(i)));
+                            DataPoint point = new DataPoint(i,xx);
+                            series.appendData(point,true,graph_high.size());
+                        }
+                        series.setBackgroundColor(getResources().getColor(android.R.color.holo_green_light));
+                        series.setColor(Color.GREEN);
+                        //series.setDrawDataPoints(true);
+                        graph_view.addSeries(series);
                         historical_listview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-                        ab =new Adapter_Graph_Points(getContext(), integer[0],graph_high,graph_volume,graph_date);
-                        historical_listview.setAdapter(ab);
+                        ab[0] =new Adapter_Graph_Points(getContext(), integer[0],graph_high,graph_volume,graph_date);
+                        historical_listview.setAdapter(ab[0]);
                         break;
 
                     default:
-                        integer[0] =7;
-                        historical_listview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-                        ab =new Adapter_Graph_Points(getContext(), integer[0],graph_high,graph_volume,graph_date);
-                        historical_listview.setAdapter(ab);
+
                     break;
                 }
 

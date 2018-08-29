@@ -22,8 +22,14 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
+
+import static airhawk.com.myapplication.Activity_Main.ap_info;
+import static airhawk.com.myapplication.Constructor_App_Variables.*;
 
 public class Test_Methods {
     private static Context context;
@@ -38,66 +44,73 @@ public class Test_Methods {
 
 
     public static void main(String[] args) {
-        Test_Methods tm =new Test_Methods();
+        get_stock_points();
 
-
-        long startTime = System.nanoTime();
-        RequestQueue requestQueue = Volley.newRequestQueue(getContext());
-        final String url = "https://api.coinmarketcap.com/v2/ticker/?limit=10&sort=rank";
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
-
-
-            @Override
-            public void onResponse(JSONObject response) {
-                try {
-                    JSONObject obj = response.getJSONObject("data");
-                    JSONArray keys = obj.names ();
-                    String market_cap = null;
-                    for (int i = 0; i < keys.length (); ++i) {
-                        String key = keys.getString (i); // Here's your key
-                        String value = obj.getString (key);// Here's your value
-                        JSONObject jsonObject = new JSONObject(value);
-                        String name = jsonObject.getString("name");
-                        // crypto_kings_namelist.add(name);
-                        String symbol = jsonObject.getString("symbol");
-                        // crypto_kings_symbolist.add(symbol);
-                        JSONObject quotes =jsonObject.getJSONObject("quotes");
-                        JSONArray ke = quotes.names ();
-                        for(int a =0; a < ke.length(); ++a){
-                            String keyz = ke.getString (a); // Here's your key
-                            String valuez = quotes.getString (keyz);
-                            JSONObject jzO = new JSONObject(valuez);
-                            market_cap= jzO.getString("market_cap");
-                            //    crypto_kings_marketcaplist.add(market_cap);
-                        }
-                        // JSONArray keyz =quotes.names();
-                        //String market_cap =jsonObject.getString("")
-                        System.out.println("This is the information "+name+" "+symbol+" "+market_cap);
-                    }
-                    //btc_market_cap_change=
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                System.out.println("An Error occured while making the request");
-            }
-        });
-        requestQueue.add(jsonObjectRequest);
-        long endTime = System.nanoTime();
-        long duration = (endTime - startTime);
-        System.out.println("CRYPTO TIME IS " + duration / 1000000000 + " seconds");
 
     }
 
+    public static void get_stock_points() {
+
+        String marname = "AMZN";
+        Document d = null;
+        try {
+            d = Jsoup.connect("https://finance.yahoo.com/quote/" + marname + "/history?p=" + marname).timeout(10 * 10000).get();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Element u = d.getElementById("Lead-2-QuoteHeader-Proxy");
+        Elements x = u.select("div>span");
+        String c = x.get(2).text();
+        String cuap = c.replace(",","");
+        ap_info.setCurrent_Aequity_Price(cuap);
+        String c3 = x.get(3).text();
+        String[] spit = c3.split(" ");
+        spit[1]=spit[1].replaceAll("\\(","");
+        spit[1]=spit[1].replaceAll("\\)","");
+        ap_info.setCurrent_Aequity_Price_Change(spit[1]);
+
+        ArrayList<String> temp = new ArrayList();
+        Elements tables = d.select("table");
+        Elements trs = tables.select("tr");
+        for (Element g : trs) {
+            Elements p = g.select("td");
+            temp.add(p.text());
+
+        }
+        temp.remove(0);
+        temp.remove(0);
+        for (int counter = 0; counter < temp.size(); counter++) {
+            String sev = temp.get(counter);
+            String [] split = sev.split(" ");
+            graph_date.add(split[0]+" "+split[1]+" "+split[2]);
+            if(split[7].equals("adjusted"))
+            {
+                graph_high.add(ap_info.getCurrent_Aequity_Price());
+            }
+            else
+            {
+                String split7 =split[7];
+                if (split7.contains(",")){
+                    split7 =split7.replace(",","");
+                }
+                double dudu = Double.parseDouble(split7);
+                graph_high.add(dudu);}
+            System.out.println("GRAPH HIGH LIST "+graph_high);
+            if(split[8].equals("for")||split[8].contains("-"))
+            {graph_volume.add("0");}else{
+                graph_volume.add(split[8]);}
+
+        }
 
 
+        List<String> numbers = graph_high;
+        Collections.reverse(numbers);
+        _AllDays = numbers;
 
+    }
 
-    public void BackUpCryptoMethod(){
+    public void BackUpCryptoMethod() {
         /*
         long startTime = System.nanoTime();
 
@@ -130,40 +143,7 @@ public class Test_Methods {
         System.out.println("main METHOD TIME IS " + duration / 1000000000 + " seconds");
         */
     }
-    public static void go(){
-    Document cap =null;
-    try{
-        cap =Jsoup.connect("https://finance.yahoo.com/quote/AMZN").get();
-    } catch (IOException e){
-        e.printStackTrace();
-    }
-    Element table = cap.getElementById("Lead-2-QuoteHeader-Proxy");
-    Elements as = table.select("div>span");
-    String f =as.get(3).text();
-    String[] ff=f.split(" ");
-    f= ff[1];
-    f= f.replaceAll("\\(","").replaceAll("\\)","");
-    System.out.println(f);
-
-
 }
-    public static void no(){
 
-        //Get crypto name not symbol !
-        Document cap =null;
-        try{
-            cap =Jsoup.connect("https://coinmarketcap.com/currencies/bitcoin/").get();
-        } catch (IOException e){
-            e.printStackTrace();
-        }
-        //Element table = cap.getElementById("div");
-        Elements as = cap.select("div>span");
-        String f =as.get(4).text();
-        f= f.replaceAll("\\(","").replaceAll("\\)","");
-        System.out.println(f);
-
-
-    }
-}
 
 

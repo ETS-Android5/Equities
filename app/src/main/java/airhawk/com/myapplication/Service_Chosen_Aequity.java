@@ -199,7 +199,18 @@ public class Service_Chosen_Aequity
             }
             else
                 {
-            graph_high.add(split[7]);}
+                    String split7 =split[7];
+                    if (split7.contains(",")){
+                        split7 =split7.replace(",","");
+                    }
+                    if (split7.contains("-")){
+                        split7 =split7.replace("-","");
+                    }
+                    if (split7.contains("+")){
+                        split7 =split7.replace("+","");
+                    }
+                    double dudu = Double.parseDouble(split7);
+            graph_high.add(dudu);}
             System.out.println("GRAPH HIGH LIST "+graph_high);
             if(split[8].equals("for")||split[8].contains("-"))
             {graph_volume.add("0");}else{
