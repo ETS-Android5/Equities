@@ -2,10 +2,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/colorPrimary"
-    android:fitsSystemWindows="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:background="@color/colorPrimary"
     android:orientation="vertical">
 
     <TableRow
@@ -21,7 +21,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="Tron"
-            android:textColor="#ffffff"
+            android:textColor="@color/darkTextColor"
             android:textSize="16sp"
             android:textStyle="bold" />
 
@@ -33,7 +33,7 @@
             android:layout_marginRight="5dp"
             android:layout_weight="10"
             android:background="@android:drawable/btn_star_big_off"
-            android:textColor="@color/darkTextColor" />
+            android:textColor="@color/darkTextColor"/>
     </TableRow>
 
     <TableRow
@@ -54,20 +54,20 @@
                 android:id="@+id/aequity_symbol"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="TRX"
-                android:textColor="#ffffff"
                 android:layout_weight="1"
-                android:textSize="14sp"
+                android:text="TRX"
+                android:textColor="@color/darkTextColor"
+                android:textSize="12sp"
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/aequity_type"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="@string/crypto"
                 android:layout_weight="1"
-                android:textColor="#ffffff"
-                android:textSize="14sp"
+                android:text="@string/crypto"
+                android:textColor="@color/darkTextColor"
+                android:textSize="12sp"
                 android:textStyle="bold" />
 
             <TableRow
@@ -82,8 +82,8 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="99,000,000,000"
-                    android:textColor="#ffffff"
-                    android:textSize="14sp"
+                    android:textColor="@color/darkTextColor"
+                    android:textSize="12sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -93,23 +93,23 @@
                     android:layout_marginLeft="10dp"
                     android:gravity="left|center"
                     android:text="Supply"
-                    android:textColor="#ffffff"
-                    android:textSize="14sp"
+                    android:textColor="@color/darkTextColor"
+                    android:textSize="12sp"
                     android:textStyle="bold" />
             </TableRow>
 
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_weight="1"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_weight="1">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:text="@string/market_cap"
-                    android:textColor="#ffffff"
-                    android:textSize="10sp"
+                    android:textColor="@color/darkTextColor"
+                    android:textSize="12sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -119,8 +119,8 @@
                     android:layout_marginLeft="10dp"
                     android:gravity="left|center"
                     android:text="623.06M"
-                    android:textColor="#ffffff"
-                    android:textSize="10sp"
+                    android:textColor="@color/darkTextColor"
+                    android:textSize="12sp"
                     android:textStyle="bold" />
             </TableRow>
         </LinearLayout>
@@ -139,8 +139,8 @@
                 android:layout_marginRight="5dp"
                 android:gravity="top|right"
                 android:text="$2.46"
-                android:textColor="#ffffff"
-                android:textSize="20sp" />
+                android:textColor="@color/darkTextColor"
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/aequity_price_change"
@@ -149,24 +149,24 @@
                 android:layout_marginRight="5dp"
                 android:gravity="top|right"
                 android:text="-7.36 %"
-                android:textColor="#ffffff"
-                android:textSize="16sp" />
+                android:textColor="@color/darkTextColor"
+                android:textSize="12sp" />
 
 
-            <TextView
-                android:id="@+id/buy"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="5dp"
-                android:gravity="top|right"
-                android:text="@string/title_buy"
-                android:textColor="#ffffff"
-                android:textSize="16sp" />
+
 
 
         </LinearLayout>
     </TableRow>
 
+    <TextView
+        android:id="@+id/saved"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="SAVED"
+        android:textColor="@color/darkTextColor"
+        android:visibility="invisible" />
 
     <android.support.design.widget.TabLayout
         android:id="@+id/tabs"
@@ -174,7 +174,18 @@
         android:layout_height="wrap_content"
         app:tabGravity="fill"
         app:tabIndicatorColor="@color/green_color_text"
+        app:tabMode="scrollable"
+        app:tabSelectedTextColor="@color/green_color_text"
+        app:tabTextAppearance="@style/TabTextSize"
+        app:tabTextColor="#ffffff " />
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tabchoice"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:tabGravity="fill"
+        app:tabIndicatorColor="@color/green_color_text"
         app:tabMode="fixed"
+        app:tabTextAppearance="@style/TabTextSize"
         app:tabSelectedTextColor="@color/green_color_text"
         app:tabTextColor="#ffffff " />
 
@@ -190,7 +201,7 @@
             android:layout_weight="1"
             android:gravity="left|center"
             android:text="@string/price"
-            android:textColor="#ffffff"
+            android:textColor="@color/darkTextColor"
             android:textStyle="bold" />
 
         <TextView
@@ -199,7 +210,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="@string/volume"
-            android:textColor="#ffffff"
+            android:textColor="@color/darkTextColor"
             android:textStyle="bold" />
 
         <TextView
@@ -208,7 +219,7 @@
             android:layout_weight="1"
             android:gravity="right|center"
             android:text="@string/date"
-            android:textColor="#ffffff"
+            android:textColor="@color/darkTextColor"
             android:textStyle="bold" />
     </TableRow>
 
@@ -217,4 +228,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"></android.support.v7.widget.RecyclerView>
+    <com.jjoe64.graphview.GraphView
+        android:id="@+id/graph_view"
+        android:background="@drawable/gradient"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:visibility="gone"></com.jjoe64.graphview.GraphView>
 </LinearLayout>

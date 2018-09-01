@@ -812,23 +812,29 @@ public class Activity_Main extends AppCompatActivity {
             @Override
             public void onResponse(JSONObject response) {
                 try {
-                    JSONArray responseJSONArray = response.getJSONArray("messages");
+                    JSONObject JObject = response.getJSONObject("messages");
+                    System.out.println("Messages "+JObject.length());
+                    JSONObject user_info = null;
+                    String message_time=null;
+                    String message=null;
+                    for (int i = 0; i < JObject.length(); i++) {
+                        user_info = (JSONObject) JObject.get("user");
 
-                    for (int i = 0; i < responseJSONArray.length(); i++) {
-                        JSONObject user_info = (JSONObject) responseJSONArray.getJSONObject(i).get("user");
-                        String message_time = (String) responseJSONArray.getJSONObject(i).get("created_at");
-                        String message = (String) responseJSONArray.getJSONObject(i).get("body");
+                        message_time = (String) JObject.get("created_at");
+                        message = (String) JObject.get("body");
+
                         Iterator x = user_info.keys();
 
                         cst.setMessage_time(message_time);
-                        cst.setUser_name(""+user_info.get("username"));
+                        cst.setUser_name("" + user_info.get("username"));
                         String url = user_info.get("avatar_url_ssl").toString();
                         cst.setUser_image_url(url);
                         cst.setMessage(message);
-
-
                     }
                     stocktwits_feedItems.add(cst);
+
+
+
 
 
                 } catch (JSONException e) {

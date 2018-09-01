@@ -181,7 +181,7 @@ public class Fragment_Analysis extends Fragment {
                         if (integer[0] <=graph_high.size())
                     {}
                         LineGraphSeries<DataPoint> series = new LineGraphSeries<>();
-                        for (int i= 0; i < integer[0];i++){
+                        for (int i= 0; i < integer[0]&& integer[0]<graph_high.size();i++){
                             double xx = Double.parseDouble(String.valueOf(graph_high.get(i)));
                             DataPoint point = new DataPoint(i,xx);
                             series.appendData(point,true,graph_high.size());
@@ -202,7 +202,7 @@ public class Fragment_Analysis extends Fragment {
                         Collections.reverse(graph_high);
                         System.out.println(Arrays.asList(graph_high));
                         series = new LineGraphSeries<>();
-                        for (int i= 0; i < integer[0];i++){
+                        for (int i= 0; i < integer[0]&& integer[0]<graph_high.size();i++){
                             double xx = Double.parseDouble(String.valueOf(graph_high.get(i)));
                             DataPoint point = new DataPoint(i,xx);
                             series.appendData(point,true,graph_high.size());
@@ -224,7 +224,7 @@ public class Fragment_Analysis extends Fragment {
                         historical_listview.setAdapter(ab[0]);
                         Collections.reverse(graph_high);
                         series = new LineGraphSeries<>();
-                        for (int i= 0; i < integer[0];i++){
+                        for (int i= 0; i < integer[0]&& integer[0]<graph_high.size();i++){
                             double xx = Double.parseDouble(String.valueOf(graph_high.get(i)));
                             DataPoint point = new DataPoint(i,xx);
                             series.appendData(point,true,graph_high.size());
@@ -240,7 +240,7 @@ public class Fragment_Analysis extends Fragment {
                         integer[0] =90;
                         Collections.reverse(graph_high);
                         series = new LineGraphSeries<>();
-                        for (int i= 0; i < integer[0];i++){
+                        for (int i= 0; i < integer[0]&& integer[0]<graph_high.size();i++){
                             double xx = Double.parseDouble(String.valueOf(graph_high.get(i)));
                             DataPoint point = new DataPoint(i,xx);
                             series.appendData(point,true,graph_high.size());
@@ -261,7 +261,7 @@ public class Fragment_Analysis extends Fragment {
 
                         Collections.reverse(graph_high);
                         series = new LineGraphSeries<>();
-                        for (int i= 0; i < integer[0];i++){
+                        for (int i= 0; i < integer[0]&& integer[0]<graph_high.size();i++){
                             double xx = Double.parseDouble(String.valueOf(graph_high.get(i)));
                             DataPoint point = new DataPoint(i,xx);
                             series.appendData(point,true,graph_high.size());
@@ -280,7 +280,7 @@ public class Fragment_Analysis extends Fragment {
                         integer[0] =365;
                         Collections.reverse(graph_high);
                         series = new LineGraphSeries<>();
-                        for (int i= 0; i < integer[0];i++){
+                        for (int i= 0; i < integer[0]&& integer[0]<graph_high.size();i++){
                             double xx = Double.parseDouble(String.valueOf(graph_high.get(i)));
                             DataPoint point = new DataPoint(i,xx);
                             series.appendData(point,true,graph_high.size());
@@ -300,7 +300,7 @@ public class Fragment_Analysis extends Fragment {
                         integer[0] =graph_high.size();
                         Collections.reverse(graph_high);
                         series = new LineGraphSeries<>();
-                        for (int i= 0; i < integer[0];i++){
+                        for (int i= 0; i < integer[0]&& integer[0]<graph_high.size();i++){
                             double xx = Double.parseDouble(String.valueOf(graph_high.get(i)));
                             DataPoint point = new DataPoint(i,xx);
                             series.appendData(point,true,graph_high.size());
