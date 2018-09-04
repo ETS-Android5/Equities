@@ -1,22 +1,15 @@
 package airhawk.com.myapplication;
 
 import android.content.Context;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import org.w3c.dom.Element;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import static airhawk.com.myapplication.Activity_Main.ap_info;
-import static airhawk.com.myapplication.Constructor_App_Variables.graph_date;
-import static airhawk.com.myapplication.Constructor_App_Variables.graph_high;
-import static airhawk.com.myapplication.Constructor_App_Variables.graph_volume;
 
 public class Adapter_Saved_Feed extends RecyclerView.Adapter<Adapter_Saved_Feed.MyViewHolder> {
 
@@ -52,7 +45,7 @@ public class Adapter_Saved_Feed extends RecyclerView.Adapter<Adapter_Saved_Feed.
                     ap_info.setMarketName(name.getText().toString());
                     ap_info.setMarketSymbol(symbol.getText().toString());
                     ap_info.setMarketType(type.getText().toString());
-                    ((Activity_Main)context).setMarketPage();
+                    ((Activity_Main)context).setSavedMarketPage();
 
                 }
             });

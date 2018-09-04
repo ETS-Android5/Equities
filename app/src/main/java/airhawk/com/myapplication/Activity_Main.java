@@ -14,6 +14,8 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -57,8 +59,10 @@ import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 
 import static airhawk.com.myapplication.Constructor_App_Variables.*;
 import static airhawk.com.myapplication.Service_Main_Aequities.crypto_kings_changelist;
@@ -95,7 +99,7 @@ public class Activity_Main extends AppCompatActivity {
     static Boolean async_analysis_page = false;
     static Constructor_App_Variables ap_info = new Constructor_App_Variables();
     Database_Local_Aequities check_saved = new Database_Local_Aequities(Activity_Main.this);
-
+    Animation animLinear;
     FrameLayout fu;
     Context context =this;
 
@@ -138,6 +142,7 @@ public class Activity_Main extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash);
+        animLinear = AnimationUtils.loadAnimation(this, R.anim.linear);
         count =1;
         progress= (ProgressBar) findViewById(R.id.progressBar);
         progress.setMax(10);
@@ -239,14 +244,18 @@ public class Activity_Main extends AppCompatActivity {
             if (async_analysis_page) {
                 reloadAllData();
                 activity.getStockTwitsData();
+                activity.get_stock_points();
+                activity.get_current_stock_info();
                 Service_Chosen_Aequity shoe = new Service_Chosen_Aequity();
                 shoe.main();
-                System.out.println("ASYNC HAS BEEN CALLED PREVIOUSLY");
+                System.out.println("ASYNC* HAS BEEN CALLED PREVIOUSLY");
             } else {
                 activity.getStockTwitsData();
+                activity.get_stock_points();
+                activity.get_current_stock_info();
                 Service_Chosen_Aequity shoe = new Service_Chosen_Aequity();
                 shoe.main();
-                System.out.println("ASYNC HAS NOT BEEN CALLED");
+                System.out.println("ASYNC* HAS NOT BEEN CALLED");
 
                 async_analysis_page = true;
 
@@ -286,11 +295,6 @@ public class Activity_Main extends AppCompatActivity {
 
 
     }
-
-
-
-
-
 
     private void setMainPage() {
         setContentView(R.layout.activity_main);
@@ -332,10 +336,10 @@ public class Activity_Main extends AppCompatActivity {
         recyclerView = findViewById(R.id.item_list);
 
         //assert recyclerView != null;
-        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true));
         recyclerView.setAdapter(new Adapter_Main_Markets());
 
-
+        recyclerView.startAnimation(animLinear);
     }
 
     private void setupMainViewPager(ViewPager viewPager) {
@@ -343,7 +347,7 @@ public class Activity_Main extends AppCompatActivity {
         adapter.addFrag(new Fragment_Winners(), getString(R.string.leaders));
         adapter.addFrag(new Fragment_Losers(), getString(R.string.losers));
         if (check_saved.getName().isEmpty()){}else{
-        adapter.addFrag(new Fragment_Saved(), getString(R.string.saved));}
+            adapter.addFrag(new Fragment_Saved(), getString(R.string.saved));}
         adapter.addFrag(new Fragment_App_News(), getString(R.string.news));
         adapter.addFrag(new Fragment_Market_Kings(), getString(R.string.market_kings));
         adapter.addFrag(new Fragment_stockVScrypto(),getString(R.string.compare));
@@ -387,42 +391,9 @@ public class Activity_Main extends AppCompatActivity {
         }
     }
 
-    public void Launch_Chosen_Progress(){
-        new CountDownTimer(1500, 1000) {
 
-            public void onTick(long millisUntilFinished) {
-                mainbar = findViewById(R.id.mainbar);
-                mainbar.setIndeterminate(true);
-                mainbar.setVisibility(View.VISIBLE);
-                pager = findViewById(R.id.viewpager);
-                pager.setVisibility(View.GONE);
-            }
 
-            public void onFinish() {
-                setMarketPage();
-            }
-        }.start();
-    }
 
-    public void Launch_Main_Progress(){
-        ProgressBar progress;
-        setContentView(R.layout.splash);
-        progress = (ProgressBar) findViewById(R.id.splash_bar);
-        progress.setVisibility(View.VISIBLE);
-        new CountDownTimer(1500, 1000) {
-
-            public void onTick(long millisUntilFinished) {
-                Service_Main_Aequities cst = new Service_Main_Aequities();
-                cst.main();
-                //Service_Saved_Aequity csa =new Service_Saved_Aequity(context);
-                //csa.main();
-            }
-
-            public void onFinish() {
-                setMarketPage();
-            }
-        }.start();
-    }
     public void Update_Saved_Data(){
 
         toolbar = findViewById(R.id.toolbar);
@@ -448,7 +419,7 @@ public class Activity_Main extends AppCompatActivity {
         mainbar.setVisibility(View.VISIBLE);
     }
 
-    public void setMarketPage() {
+    public void setSavedMarketPage() {
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         if (ap_info.getMarketType().equals("Cryptocurrency")) {
@@ -459,14 +430,19 @@ public class Activity_Main extends AppCompatActivity {
         if (async_analysis_page) {
             reloadAllData();
             getStockTwitsData();
+
+            get_stock_points();
+            System.out.println("get stock called!");
             Service_Chosen_Aequity shoe = new Service_Chosen_Aequity();
             shoe.main();
-            System.out.println("ASYNC HAS BEEN CALLED PREVIOUSLY");
+            System.out.println("ASYNC! HAS BEEN CALLED PREVIOUSLY");
         } else {
             getStockTwitsData();
+            get_stock_points();
+            System.out.println("get stock called!");
             Service_Chosen_Aequity shoe = new Service_Chosen_Aequity();
             shoe.main();
-            System.out.println("ASYNC HAS NOT BEEN CALLED");
+            System.out.println("ASYNC! HAS NOT BEEN CALLED");
 
             async_analysis_page = true;
 
@@ -613,7 +589,7 @@ public class Activity_Main extends AppCompatActivity {
 
                     }
                     btc_market_cap_amount =(String) crypto_kings_marketcaplist.get(0);
-                    btc_market_cap_change =(String)crypto_kings_changelist.get(0);
+                    btc_market_cap_change =(String)crypto_kings_changelist.get(0)+"%";
                     System.out.println("This is the information "+btc_market_cap_amount+" "+btc_market_cap_change);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -680,22 +656,22 @@ public class Activity_Main extends AppCompatActivity {
                             }
 
                             ap_info.setCurrent_Aequity_Price_Change(heroObject.getString("percent_change_24h") + "%");
-                        String p =heroObject.getString("market_cap_usd");
-                        double d = Double.parseDouble(p);
-                        p =df.format(d);
-                        int l =p.length();
-                        long t = 1000000000000L;
-                        if (l<10){p= String.valueOf(d/1000);
-                            ap_info.setMarketCap(p.substring(0,5)+"TH");}
-                        if (l<=12){p= String.valueOf(d/1000000);
-                            ap_info.setMarketCap(p.substring(0,5)+"M");}
-                        if (l>12){p= String.valueOf(d/1000000000);
-                            ap_info.setMarketCap(p.substring(0,5)+"B");}
-                        if (l>15){p= String.valueOf(d/t);
-                            ap_info.setMarketCap(p.substring(0,5)+"T");}}
+                            String p =heroObject.getString("market_cap_usd");
+                            double d = Double.parseDouble(p);
+                            p =df.format(d);
+                            int l =p.length();
+                            long t = 1000000000000L;
+                            if (l<10){p= String.valueOf(d/1000);
+                                ap_info.setMarketCap(p.substring(0,5)+"TH");}
+                            if (l<=12){p= String.valueOf(d/1000000);
+                                ap_info.setMarketCap(p.substring(0,5)+"M");}
+                            if (l>12){p= String.valueOf(d/1000000000);
+                                ap_info.setMarketCap(p.substring(0,5)+"B");}
+                            if (l>15){p= String.valueOf(d/t);
+                                ap_info.setMarketCap(p.substring(0,5)+"T");}}
                         else{ap_info.setMarketSupply("Unknown");
                             ap_info.setMarketCap("Unknown");
-                        ap_info.setCurrent_Aequity_Price_Change("Unknown");}
+                            ap_info.setCurrent_Aequity_Price_Change("Unknown");}
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -801,37 +777,26 @@ public class Activity_Main extends AppCompatActivity {
 
     }
 
-    public void getStockTwitsData(){
-        String market_symbol=ap_info.getMarketSymbol();
-        Constructor_Stock_Twits cst = new Constructor_Stock_Twits();
-
+    public void get_current_stock_info(){
+        String symbol =ap_info.getMarketSymbol();
+        String apikey ="XBA42BUC2B6U6G5C";
+        String url ="https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol="+symbol+"&apikey="+apikey;
         RequestQueue requestQueue = Volley.newRequestQueue(this);
-        final String url = "https://api.stocktwits.com/api/2/streams/symbol/"+market_symbol+".json";
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
 
             @Override
             public void onResponse(JSONObject response) {
                 try {
-                    JSONObject JObject = response.getJSONObject("messages");
-                    System.out.println("Messages "+JObject.length());
-                    JSONObject user_info = null;
-                    String message_time=null;
-                    String message=null;
-                    for (int i = 0; i < JObject.length(); i++) {
-                        user_info = (JSONObject) JObject.get("user");
+                    // your response
+                    JSONObject jsonObject = new JSONObject(String.valueOf(response));
+                    // get Time
+                    JSONObject time = jsonObject.getJSONObject("Global Quote");
+                    Iterator<String> iterator = time.keys();
 
-                        message_time = (String) JObject.get("created_at");
-                        message = (String) JObject.get("body");
-
-                        Iterator x = user_info.keys();
-
-                        cst.setMessage_time(message_time);
-                        cst.setUser_name("" + user_info.get("username"));
-                        String url = user_info.get("avatar_url_ssl").toString();
-                        cst.setUser_image_url(url);
-                        cst.setMessage(message);
-                    }
-                    stocktwits_feedItems.add(cst);
+                        String price = time.getString("05. price");
+                        String change= time.getString("10. change percent");
+                        ap_info.setCurrent_Aequity_Price(price);
+                        ap_info.setCurrent_Aequity_Price_Change(change);
 
 
 
@@ -840,8 +805,6 @@ public class Activity_Main extends AppCompatActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                System.out.println();
-                System.out.println("THIS IS THE BIG MESSAGE "+cst.getMessage()+" "+ cst.getMessage_time()+" "+cst.getUser_name()+" "+cst.getUser_image_url());
 
             }
         }, new Response.ErrorListener() {
@@ -851,6 +814,119 @@ public class Activity_Main extends AppCompatActivity {
             }
         });
         requestQueue.add(jsonObjectRequest);
+
+
+
+
+    }
+
+    public void getStockTwitsData(){
+        String market_symbol=ap_info.getMarketSymbol();
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        final String url = "https://api.stocktwits.com/api/2/streams/symbol/"+market_symbol+".json";
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    StringBuilder formattedResult = new StringBuilder();
+                    JSONArray responseJSONArray = response.getJSONArray("messages");
+                    for (int i = 0; i < responseJSONArray.length(); i++) {
+                        JSONObject user_info = (JSONObject) responseJSONArray.getJSONObject(i).get("user");
+                        String message_time = (String) responseJSONArray.getJSONObject(i).get("created_at");
+                        String message = (String) responseJSONArray.getJSONObject(i).get("body");
+                        //System.out.println(key);
+                        System.out.println("THIS IS THE TIME "+message_time);
+                        System.out.println("THIS IS THE USERNAME "+user_info.get("username"));
+                        System.out.println("THIS IS THE IMAGE URL "+user_info.get("avatar_url"));
+                        System.out.println("THIS IS THE MESSAGE "+message);
+                        Iterator x = user_info.keys();
+                        Constructor_App_Variables.Smessage_time.add(message_time);
+                        Constructor_App_Variables.Suser_name.add("" + user_info.get("username"));
+                        String url = user_info.get("avatar_url_ssl").toString();
+                        Constructor_App_Variables.Simg_url.add(url);
+                        Constructor_App_Variables.Smessage.add(message);
+
+                        JSONArray jsonArray =new JSONArray();
+                        while(x.hasNext()){
+                            String key = (String) x.next();
+                            jsonArray.put(user_info.get(key));
+
+                        }
+
+
+
+
+                    }
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+//                findViewById(R.id.progressBar).setVisibility(View.GONE);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                System.out.println("An Error occured while making the request");
+            }
+        });
+        requestQueue.add(jsonObjectRequest);
+
+    }
+
+    public void get_stock_points() {
+
+        String symbol =ap_info.getMarketSymbol();
+        String apikey ="XBA42BUC2B6U6G5C";
+        String url ="https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol="+symbol+"&outputsize=full&apikey="+apikey;
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    // your response
+                    JSONObject jsonObject = new JSONObject(String.valueOf(response));
+                    // get Time
+                    JSONObject time = jsonObject.getJSONObject("Time Series (Daily)");
+                    Iterator<String> iterator = time.keys();
+
+                    while (iterator.hasNext()) {
+                        String date = iterator.next().toString();
+                        JSONObject dateJson = time.getJSONObject(date);
+                        // get string
+                        String close = dateJson.getString("4. close");
+                        String volume =dateJson.getString("5. volume");
+                        graph_date.add(date);
+                        graph_volume.add(volume);
+                        graph_high.add(close);
+
+                    }
+                    //Collections.reverse(graph_high);
+                    //Collections.reverse(graph_volume);
+                    //Collections.reverse(graph_date);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                System.out.println("An Error occured while making the ST request");
+            }
+        });
+        requestQueue.add(jsonObjectRequest);
+
+        ///System.out.println("GRAPH HIGH LIST "+graph_high);
+        //System.out.println("GRAPH VOLUUMR LIST "+graph_volume);
+        // System.out.println("GRAPH DATE LIST "+graph_date);
+
+        List<String> numbers = graph_high;
+        Collections.reverse(numbers);
+        _AllDays = numbers;
 
     }
 }

@@ -2,7 +2,19 @@ package airhawk.com.myapplication;
 
 import android.content.Context;
 import android.text.Html;
+import android.util.Log;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.RequestFuture;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -12,8 +24,11 @@ import org.w3c.dom.NodeList;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -22,6 +37,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Callable;
@@ -29,6 +45,8 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -44,6 +62,7 @@ import static airhawk.com.myapplication.Constructor_App_Variables.graph_high;
 import static airhawk.com.myapplication.Constructor_App_Variables.graph_low;
 import static airhawk.com.myapplication.Constructor_App_Variables.graph_market_cap;
 import static airhawk.com.myapplication.Constructor_App_Variables.graph_volume;
+import static airhawk.com.myapplication.Constructor_App_Variables.stocktwits_feedItems;
 
 //The original version of this code was found on StackOverflow.com from user flup
 //https://stackoverflow.com/users/1973271/flup
@@ -73,7 +92,6 @@ public class Service_Chosen_Aequity
                 else {
                     get_stock_shares();
                     get_stock_cap();
-                    get_stock_points();
                     long endTime = System.nanoTime();
                     long duration = (endTime - startTime);
                     //29 seconds Boost Mobile
@@ -158,72 +176,7 @@ public class Service_Chosen_Aequity
         ap_info.setMarketCap(ez.get(8).text());
 
     }
-    public static void get_stock_points() {
 
-        String marname = ap_info.getMarketSymbol();
-        Document d = null;
-        try {
-            d = Jsoup.connect("https://finance.yahoo.com/quote/" + marname + "/history?p=" + marname).timeout(10 * 10000).get();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        Element u = d.getElementById("Lead-2-QuoteHeader-Proxy");
-        Elements x = u.select("div>span");
-        String c = x.get(2).text();
-        String cuap = c.replace(",","");
-        ap_info.setCurrent_Aequity_Price(cuap);
-        String c3 = x.get(3).text();
-        String[] spit = c3.split(" ");
-        spit[1]=spit[1].replaceAll("\\(","");
-        spit[1]=spit[1].replaceAll("\\)","");
-        ap_info.setCurrent_Aequity_Price_Change(spit[1]);
-
-        ArrayList <String> temp = new ArrayList();
-        Elements tables = d.select("table");
-        Elements trs = tables.select("tr");
-        for (Element g : trs) {
-            Elements p = g.select("td");
-            temp.add(p.text());
-
-        }
-        temp.remove(0);
-        temp.remove(0);
-        for (int counter = 0; counter < temp.size(); counter++) {
-            String sev = temp.get(counter);
-            String [] split = sev.split(" ");
-            graph_date.add(split[0]+" "+split[1]+" "+split[2]);
-            if(split[7].equals("adjusted"))
-            {
-                graph_high.add(ap_info.getCurrent_Aequity_Price());
-            }
-            else
-                {
-                    String split7 =split[7];
-                    if (split7.contains(",")){
-                        split7 =split7.replace(",","");
-                    }
-                    if (split7.contains("-")){
-                        split7 =split7.replace("-","");
-                    }
-                    if (split7.contains("+")){
-                        split7 =split7.replace("+","");
-                    }
-                    double dudu = Double.parseDouble(split7);
-            graph_high.add(dudu);}
-            System.out.println("GRAPH HIGH LIST "+graph_high);
-            if(split[8].equals("for")||split[8].contains("-"))
-            {graph_volume.add("0");}else{
-            graph_volume.add(split[8]);}
-
-        }
-
-
-        List<String> numbers = graph_high;
-        Collections.reverse(numbers);
-        _AllDays = numbers;
-
-    }
     public static void getVideoInfo() {
 
 

@@ -7,21 +7,31 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import static airhawk.com.myapplication.Constructor_App_Variables.Simg_url;
+import static airhawk.com.myapplication.Constructor_App_Variables.Smessage;
+import static airhawk.com.myapplication.Constructor_App_Variables.Smessage_time;
+import static airhawk.com.myapplication.Constructor_App_Variables.Suser_name;
+import static airhawk.com.myapplication.Constructor_App_Variables.image_video_url;
 import static airhawk.com.myapplication.Constructor_App_Variables.stocktwits_feedItems;
 
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Adapter_StockTwits_Feed extends RecyclerView.Adapter<Adapter_StockTwits_Feed.MyViewHolder> {
 
    private static Context context;
-    private final List<Constructor_Stock_Twits> stocktwits_feedItems;
+    private ArrayList<String> timeList=Smessage_time;
+    public ArrayList<String> nameList=Suser_name;
+    public ArrayList<String> messsageList=Smessage;
+    public ArrayList<String> imagelist=Simg_url;
+
 
     public Adapter_StockTwits_Feed(Context context, List<Constructor_Stock_Twits> items){
      this.context=context;  
-     this.stocktwits_feedItems = items;
    }
 
 
@@ -44,21 +54,19 @@ public class Adapter_StockTwits_Feed extends RecyclerView.Adapter<Adapter_StockT
    }  
    
    @Override  
-   public void onBindViewHolder(MyViewHolder holder, int position) {  
-     Constructor_Stock_Twits item = stocktwits_feedItems.get(position);
-
-     holder.tv_message_time.setText(item.getMessage_time());
-     holder.tv_user_name.setText(item.getUser_name());
-     holder.tv_message.setText(item.getMessage());
-     if(item.getUser_image_url() !=null){
-     Picasso.with(context).load(item.getUser_image_url()).memoryPolicy(MemoryPolicy.NO_CACHE).fit().centerInside().noFade().into(holder.tv_image);}
+   public void onBindViewHolder(MyViewHolder holder, int position) {
+     holder.tv_message_time.setText(""+Smessage_time.get(position));
+     holder.tv_user_name.setText(""+Suser_name.get(position));
+     holder.tv_message.setText(""+Smessage.get(position));
+     if(imagelist !=null){
+     Picasso.with(context).load(imagelist.get(position)).memoryPolicy(MemoryPolicy.NO_CACHE).fit().centerInside().noFade().into(holder.tv_image);}
      else{Picasso.with(context).load(R.drawable.socialmedia).memoryPolicy(MemoryPolicy.NO_CACHE).noFade().into(holder.tv_image);}
      //holder.textlink=item.getLink();
    }
    
    @Override  
    public int getItemCount() {  
-     return stocktwits_feedItems.size();
+     return Smessage.size();
    }  
    
    public static class MyViewHolder extends RecyclerView.ViewHolder{

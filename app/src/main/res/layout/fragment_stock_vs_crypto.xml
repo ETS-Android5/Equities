@@ -2,5 +2,10 @@
 <android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="match_parent">
-
+    <com.jjoe64.graphview.GraphView
+        android:id="@+id/graph_view"
+        android:background="@drawable/gradient"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        ></com.jjoe64.graphview.GraphView>
 </android.support.constraint.ConstraintLayout>

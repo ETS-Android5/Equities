@@ -32,6 +32,7 @@ public class Adapter_Graph_Points extends RecyclerView.Adapter<Adapter_Graph_Poi
         this.context=context;
 
     }
+
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView aequity_amount, aequity_volume, aequity_date;
         public MyViewHolder(View itemView) {
@@ -57,8 +58,9 @@ public class Adapter_Graph_Points extends RecyclerView.Adapter<Adapter_Graph_Poi
 
     @Override
     public void onBindViewHolder(Adapter_Graph_Points.MyViewHolder holder, int position) {
-         holder.aequity_amount.setText("$ "+graph_high.get(0));
-         Double as = Double.parseDouble(String.valueOf(graph_high.get(0)));
+        if(position<graph_date.size()){
+         holder.aequity_amount.setText("$ "+graph_high.get(position));
+         Double as = Double.parseDouble(String.valueOf(graph_high.get(position)));
 
          if(as>saved_high)
          {
@@ -84,8 +86,9 @@ public class Adapter_Graph_Points extends RecyclerView.Adapter<Adapter_Graph_Poi
              }
              saved_volume = Double.parseDouble(s);
          }
+
          holder.aequity_date.setText(""+graph_date.get(position));
-    }
+    }}
 
     @Override
     public int getItemCount() {

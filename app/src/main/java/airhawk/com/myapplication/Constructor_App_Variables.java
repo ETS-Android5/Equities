@@ -14,6 +14,10 @@ public class Constructor_App_Variables {
     static ArrayList video_url = new ArrayList<>();
     static ArrayList image_video_url = new ArrayList<>();
     static ArrayList video_title = new ArrayList<>();
+    static ArrayList Smessage_time=new ArrayList<>();
+    static ArrayList Suser_name=new ArrayList<>();
+    static ArrayList Smessage=new ArrayList<>();
+    static ArrayList Simg_url=new ArrayList<>();
     public static ArrayList graph_date = new ArrayList<>();
     public static ArrayList graph_high = new ArrayList<>();
     public static ArrayList graph_low = new ArrayList<>();
