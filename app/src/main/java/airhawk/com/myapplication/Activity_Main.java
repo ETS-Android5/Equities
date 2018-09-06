@@ -64,6 +64,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+
 import static airhawk.com.myapplication.Constructor_App_Variables.*;
 import static airhawk.com.myapplication.Service_Main_Aequities.crypto_kings_changelist;
 import static airhawk.com.myapplication.Service_Main_Aequities.crypto_kings_marketcaplist;
@@ -72,6 +73,9 @@ import static airhawk.com.myapplication.Service_Main_Aequities.crypto_kings_symb
 
 public class Activity_Main extends AppCompatActivity {
     Integer count =1;
+    ArrayList temp =new ArrayList();
+    Database_Local_Aequities co =new Database_Local_Aequities(this);
+    Constructor_App_Variables cav =new Constructor_App_Variables();
     RelativeLayout progresslayout;
     TextView txt;
     final int[] ICONS = new int[]{
@@ -82,6 +86,7 @@ public class Activity_Main extends AppCompatActivity {
             R.drawable.chart};
     int[] names = new int[]{R.string.leaders, R.string.losers, R.string.news, R.string.market_kings};
     ImageView search_button;
+    ImageView imageView;
     static Element price = null;
     protected ArrayAdapter<String> ad;
     private Toolbar toolbar;
@@ -93,14 +98,14 @@ public class Activity_Main extends AppCompatActivity {
     public ViewPager pager, market_pager;
     public TabLayout tabs;
     ProgressBar progress;
-    RecyclerView recyclerView;
+    static RecyclerView recyclerView;
     Database_Local_Aequities ld = new Database_Local_Aequities(Activity_Main.this);
     private static final String TAG = "ActivityMain";
     static Boolean async_analysis_page = false;
     static Constructor_App_Variables ap_info = new Constructor_App_Variables();
     Database_Local_Aequities check_saved = new Database_Local_Aequities(Activity_Main.this);
-    Animation animLinear;
-    FrameLayout fu;
+    Animation animLinear,centerLinear;
+    FrameLayout fu,frameLayout;
     Context context =this;
 
 
@@ -142,7 +147,9 @@ public class Activity_Main extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash);
-        animLinear = AnimationUtils.loadAnimation(this, R.anim.linear);
+        centerLinear = AnimationUtils.loadAnimation(this, R.anim.center);
+        imageView =findViewById(R.id.imageView);
+        //imageView.startAnimation(centerLinear);
         count =1;
         progress= (ProgressBar) findViewById(R.id.progressBar);
         progress.setMax(10);
@@ -179,8 +186,10 @@ public class Activity_Main extends AppCompatActivity {
             }
 
             getCrypto_Kings();
+            getSaved_stock_points();
             Service_Main_Aequities cst = new Service_Main_Aequities();
             cst.main();
+
             //Service_Saved_Aequity csa =new Service_Saved_Aequity(context);
             //csa.main();
             //SAVED METHOD SLOWS DOWN APP BY 6 SECONDS. DONT FORGET TO UNHIDE CODE OM FRAGMENT_SAVED WHEN THIS IS REPAIRED
@@ -208,7 +217,6 @@ public class Activity_Main extends AppCompatActivity {
         }
     }
 
-
     public class setAsyncChosenData extends AsyncTask<Void, Void, String> {
 
         private WeakReference<Activity_Main> activityReference;
@@ -222,7 +230,7 @@ public class Activity_Main extends AppCompatActivity {
 
             startTime = System.nanoTime();
             Activity_Main activity = activityReference.get();
-            mainbar = activity.findViewById(R.id.mainbar);
+            ProgressBar mainbar = activity.findViewById(R.id.mainbar);
             mainbar.setIndeterminate(true);
             mainbar.setVisibility(View.VISIBLE);
             pager = activity.findViewById(R.id.viewpager);
@@ -299,6 +307,7 @@ public class Activity_Main extends AppCompatActivity {
     private void setMainPage() {
         setContentView(R.layout.activity_main);
         setJSON_INFO();
+        frameLayout=findViewById(R.id.frameLayout);
         toolbar = findViewById(R.id.toolbar);
         fu=findViewById(R.id.frameLayout);
         fu.setVisibility(View.VISIBLE);
@@ -334,12 +343,9 @@ public class Activity_Main extends AppCompatActivity {
 
 
         recyclerView = findViewById(R.id.item_list);
-
-        //assert recyclerView != null;
-        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true));
+        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         recyclerView.setAdapter(new Adapter_Main_Markets());
 
-        recyclerView.startAnimation(animLinear);
     }
 
     private void setupMainViewPager(ViewPager viewPager) {
@@ -390,9 +396,6 @@ public class Activity_Main extends AppCompatActivity {
             e.printStackTrace();
         }
     }
-
-
-
 
     public void Update_Saved_Data(){
 
@@ -512,8 +515,8 @@ public class Activity_Main extends AppCompatActivity {
 
             }
         });
-    }
-    //Get's updated data from Firebase about new aequities
+    }//Get's updated data from Firebase about new aequities
+
     private void UpdateData() {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference userRef = database.getReference("ALL");
@@ -538,6 +541,7 @@ public class Activity_Main extends AppCompatActivity {
         };
         userRef.addValueEventListener(postListener);
     }
+
     public void getCrypto_Kings() {
 
         long startTime = System.nanoTime();
@@ -589,7 +593,7 @@ public class Activity_Main extends AppCompatActivity {
 
                     }
                     btc_market_cap_amount =(String) crypto_kings_marketcaplist.get(0);
-                    btc_market_cap_change =(String)crypto_kings_changelist.get(0)+"%";
+                    btc_market_cap_change =crypto_kings_changelist.get(0)+"%";
                     System.out.println("This is the information "+btc_market_cap_amount+" "+btc_market_cap_change);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -875,9 +879,76 @@ public class Activity_Main extends AppCompatActivity {
 
     }
 
+    public void getSaved_stock_points(){
+
+        ArrayList a = co.getSymbol();
+        ArrayList aa = co.getType();
+        ArrayList b = co.getstockSymbol();
+        String apikey ="XBA42BUC2B6U6G5C";
+
+        for(int i=0;i<a.size();i++){
+            if(aa.get(i).equals("Stock")) {
+                String url ="https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol="+b.get(i)+"&apikey="+apikey;
+
+                RequestQueue requestQueue = Volley.newRequestQueue(this);
+                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(String.valueOf(response));
+                            // get Time
+                            JSONObject time = jsonObject.getJSONObject("Global Quote");
+                            //Iterator<String> iterator = time.keys();
+
+                            //String price = time.getString("05. price");
+                            String change= time.getString("10. change percent");
+                            temp.add(change);
+                            ap_info.setCurrent_Aequity_Price_Change(change);
+
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        System.out.println("An Error occured while making the ST request");
+                    }
+                });
+                requestQueue.add(jsonObjectRequest);
+
+           }
+            cav.setCpr(temp);
+
+    }
+
+        ArrayList d = co.getcryptoName();
+        for(int i=0;i<d.size();i++) {
+            Document cap = null;
+            String g = String.valueOf(d.get(i));
+            if (g.contains(" ")) {
+                g = g.replace(" ", "-");
+            }
+            try {
+                cap = Jsoup.connect("https://coinmarketcap.com/currencies/" + g).timeout(10 * 10000).get();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            Elements as = cap.select("div>span");
+            String f = as.get(4).text();
+            f = f.replaceAll("\\(", "").replaceAll("\\)", "");
+            System.out.println("It's a crypto " + f);
+            temp.add(f);
+        }
+        }
+
     public void get_stock_points() {
 
         String symbol =ap_info.getMarketSymbol();
+        System.out.println("THIS IS THE SYMBOL ITS SEARCHING FOR "+symbol);
         String apikey ="XBA42BUC2B6U6G5C";
         String url ="https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol="+symbol+"&outputsize=full&apikey="+apikey;
 

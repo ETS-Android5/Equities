@@ -38,8 +38,8 @@ public class Fragment_Saved extends Fragment {
         progressBar2.setVisibility(View.GONE);
         saved_feed.setVisibility(View.VISIBLE);
         Constructor_App_Variables cav =new Constructor_App_Variables();
-        //saved_feed.setLayoutManager(new WrapContentLinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
-        //saved_feed.setAdapter(new Adapter_Saved_Feed(getActivity(),Database_Local_Aequities.KEY_AEQUITY_SYMBOL,Database_Local_Aequities.KEY_AEQUITY_NAME,cav.getCpr(),Database_Local_Aequities.KEY_AEQUITY_TYPE));
+        saved_feed.setLayoutManager(new WrapContentLinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+        saved_feed.setAdapter(new Adapter_Saved_Feed(getActivity(),Database_Local_Aequities.KEY_AEQUITY_SYMBOL,Database_Local_Aequities.KEY_AEQUITY_NAME,cav.getCpr(),Database_Local_Aequities.KEY_AEQUITY_TYPE));
 
 
         return rootView;

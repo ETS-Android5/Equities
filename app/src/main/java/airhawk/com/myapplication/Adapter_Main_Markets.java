@@ -2,16 +2,19 @@ package airhawk.com.myapplication;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
 
 import java.lang.ref.WeakReference;
 
+import static airhawk.com.myapplication.Activity_Main.recyclerView;
 import static airhawk.com.myapplication.Constructor_App_Variables.btc_market_cap_amount;
 import static airhawk.com.myapplication.Constructor_App_Variables.btc_market_cap_change;
 import static airhawk.com.myapplication.Constructor_App_Variables.dow_amount;
@@ -50,9 +53,13 @@ public class Adapter_Main_Markets extends RecyclerView.Adapter<Adapter_Main_Mark
 
         public MyViewHolder(View itemView) {
             super(itemView);
+
+
+
             mIdView = itemView.findViewById(R.id.id_text);
             mPriceView = itemView.findViewById(R.id.price);
             mChangeView = itemView.findViewById(R.id.change);
+
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -65,7 +72,7 @@ public class Adapter_Main_Markets extends RecyclerView.Adapter<Adapter_Main_Mark
                             ap_info.setMarketSymbol("%5EDJI");
                             ap_info.setMarketType("Stock");
                             connect.new setAsyncChosenData((Activity_Main) context)
-                                .execute();
+                                    .execute();
                             break;
                         case 1:
                             temp = "S P 500";
@@ -97,7 +104,7 @@ public class Adapter_Main_Markets extends RecyclerView.Adapter<Adapter_Main_Mark
 
                     }
 
-                    }
+                }
             });
         }
     }
@@ -106,31 +113,39 @@ public class Adapter_Main_Markets extends RecyclerView.Adapter<Adapter_Main_Mark
     @Override
     public Adapter_Main_Markets.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_main_item_list_content, parent, false);
+
+
+
         return new Adapter_Main_Markets.MyViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull Adapter_Main_Markets.MyViewHolder holder, int position) {
+
         holder.mIdView.setText("" + market_list[position]);
         holder.mPriceView.setText("$ " + int_list[position]);
         //if (mValues.get(position).change !=null && mValues.get(position).change.isEmpty()){
-       /* if (change_list[position].contains("-")) {
+        if (change_list[position].contains("-")) {
             holder.mIdView.setTextColor(Color.parseColor("#FFFFFF"));
             holder.mPriceView.setTextColor(Color.parseColor("#FFFFFF"));
             holder.mChangeView.setTextColor(Color.parseColor("#FF0000"));
         } else {
-        */
-            holder.mIdView.setTextColor(Color.parseColor("#FFFFFF"));
-            holder.mPriceView.setTextColor(Color.parseColor("#FFFFFF"));
-            holder.mChangeView.setTextColor(Color.parseColor("#00CC00"));
-            //}
-            holder.mChangeView.setText(change_list[position]);
-            //}
 
-       // }
+        holder.mIdView.setTextColor(Color.parseColor("#FFFFFF"));
+        holder.mPriceView.setTextColor(Color.parseColor("#FFFFFF"));
+        holder.mChangeView.setTextColor(Color.parseColor("#00CC00"));
+       }
+        holder.mChangeView.setText(change_list[position]);
+        //}
+
+        // }
     }
     @Override
     public int getItemCount() {
         return 4;
+    }
+
+    public Object getItem(int position) {
+        return market_list[position];
     }
 }
