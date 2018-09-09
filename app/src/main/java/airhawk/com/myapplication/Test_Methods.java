@@ -24,6 +24,9 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.URL;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -40,10 +43,25 @@ public class Test_Methods {
 
 
     public static void main(String[] args) {
-
+        Document doc =null;
+        try {
+            doc = Jsoup.connect("https://info.binance.com/en/currencies").timeout(10 * 1000).get();
+            //
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Elements a =doc.getElementsByClass("name");
+        Elements b =a.select("span.abbr");
+        for (Element symbol:b){
+            String s = symbol.text();
+        System.out.println(s);}
     }
 
-}
 
 
 
+
+
+
+
+   }
