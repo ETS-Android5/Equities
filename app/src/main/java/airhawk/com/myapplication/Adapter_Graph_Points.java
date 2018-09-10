@@ -3,7 +3,6 @@ package airhawk.com.myapplication;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,9 +10,10 @@ import android.widget.TextView;
 import static airhawk.com.myapplication.Constructor_App_Variables.graph_date;
 import static airhawk.com.myapplication.Constructor_App_Variables.graph_high;
 import static airhawk.com.myapplication.Constructor_App_Variables.graph_volume;
-import static airhawk.com.myapplication.Database_Local_Aequities.TAG;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+
 public class Adapter_Graph_Points extends RecyclerView.Adapter<Adapter_Graph_Points.MyViewHolder> {
 
     ArrayList graph_h;
@@ -21,8 +21,6 @@ public class Adapter_Graph_Points extends RecyclerView.Adapter<Adapter_Graph_Poi
     ArrayList graph_d;
     Integer integer;
     Context context;
-    double saved_volume =0;
-    double saved_high=0;
 
     public Adapter_Graph_Points(Context context, Integer integer, ArrayList graph_h, ArrayList graph_v, ArrayList graph_d) {
         this.graph_h = graph_h;
@@ -58,42 +56,55 @@ public class Adapter_Graph_Points extends RecyclerView.Adapter<Adapter_Graph_Poi
 
     @Override
     public void onBindViewHolder(Adapter_Graph_Points.MyViewHolder holder, int position) {
-        if(position<graph_date.size()){
-         holder.aequity_amount.setText("$ "+graph_high.get(position));
-         Double as = Double.parseDouble(String.valueOf(graph_high.get(position)));
-
-         if(as>saved_high)
-         {
-         holder.aequity_amount.setTextColor(Color.parseColor("#00ff00"));
-         }
-         else
-         {
-         holder.aequity_amount.setTextColor(Color.parseColor("#ff0000"));
-         }
-         saved_high =as;
+        Double as= 0.00;
+        Double as1=0.00;
+            try{
+            holder.aequity_amount.setText("$ "+graph_high.get(position));
+            as = Double.parseDouble(String.valueOf(graph_high.get(position)));
 
 
-         String s = (String) graph_volume.get(position);
-         s=s.replace(",","");
-         s=s.replace("-","");
-         if (s!=null) {
-             Double a = Double.parseDouble(s);
-             holder.aequity_volume.setText("" + graph_volume.get(position));
-             if (a > saved_volume) {
-                 holder.aequity_volume.setTextColor(Color.parseColor("#00ff00"));
-             } else {
-                 holder.aequity_volume.setTextColor(Color.parseColor("#ff0000"));
-             }
-             saved_volume = Double.parseDouble(s);
-         }
+                as1 = Double.parseDouble(String.valueOf(graph_high.get(position + 1)));
 
-         holder.aequity_date.setText(""+graph_date.get(position));
-    }}
+            if(as>as1)
+            {
+                holder.aequity_amount.setTextColor(Color.parseColor("#00ff00"));
+            }
+            else
+            {
+                holder.aequity_amount.setTextColor(Color.parseColor("#ff0000"));
+            }
+
+
+
+            String s = (String) graph_volume.get(position);
+            s=s.replace(",","");
+            s=s.replace("-","");
+            String sl=null;
+
+                sl = (String) graph_volume.get(position + 1);
+                sl=sl.replace(",","");
+                sl=sl.replace("-","");
+
+
+            if (s!=null) {
+                Double a = Double.parseDouble(s);
+                Double al = Double.parseDouble(sl);
+                holder.aequity_volume.setText("" + graph_volume.get(position));
+                if (a > al) {
+                    holder.aequity_volume.setTextColor(Color.parseColor("#00ff00"));
+                } else {
+                    holder.aequity_volume.setTextColor(Color.parseColor("#ff0000"));
+                }
+            }
+
+
+            holder.aequity_date.setText(""+graph_date.get(position));}
+ catch (IndexOutOfBoundsException e){}}
 
     @Override
     public int getItemCount() {
 
-    return integer;
+        return integer;
     }
 
 
@@ -101,5 +112,4 @@ public class Adapter_Graph_Points extends RecyclerView.Adapter<Adapter_Graph_Poi
 
 
 
-         }
-
+}

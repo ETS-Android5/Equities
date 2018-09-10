@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 
 import static airhawk.com.myapplication.Activity_Main.recyclerView;
 import static airhawk.com.myapplication.Constructor_App_Variables.btc_market_cap_amount;
@@ -53,6 +54,7 @@ public class Adapter_Main_Markets extends RecyclerView.Adapter<Adapter_Main_Mark
 
         public MyViewHolder(View itemView) {
             super(itemView);
+
 
 
 
@@ -124,7 +126,6 @@ public class Adapter_Main_Markets extends RecyclerView.Adapter<Adapter_Main_Mark
 
         holder.mIdView.setText("" + market_list[position]);
         holder.mPriceView.setText("$ " + int_list[position]);
-        //if (mValues.get(position).change !=null && mValues.get(position).change.isEmpty()){
         if (change_list[position].contains("-")) {
             holder.mIdView.setTextColor(Color.parseColor("#FFFFFF"));
             holder.mPriceView.setTextColor(Color.parseColor("#FFFFFF"));
@@ -136,16 +137,15 @@ public class Adapter_Main_Markets extends RecyclerView.Adapter<Adapter_Main_Mark
         holder.mChangeView.setTextColor(Color.parseColor("#00CC00"));
        }
         holder.mChangeView.setText(change_list[position]);
-        //}
 
-        // }
     }
     @Override
     public int getItemCount() {
         return 4;
     }
 
-    public Object getItem(int position) {
-        return market_list[position];
-    }
+
+
+
+
 }

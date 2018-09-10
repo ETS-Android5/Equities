@@ -2,19 +2,7 @@ package airhawk.com.myapplication;
 
 import android.content.Context;
 import android.text.Html;
-import android.util.Log;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.RequestFuture;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -24,29 +12,15 @@ import org.w3c.dom.NodeList;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
-import java.text.DateFormat;
-import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Date;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -54,15 +28,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import static airhawk.com.myapplication.Activity_Main.ap_info;
-
-import static airhawk.com.myapplication.Constructor_App_Variables._AllDays;
 import static airhawk.com.myapplication.Constructor_App_Variables.feedItems;
-import static airhawk.com.myapplication.Constructor_App_Variables.graph_date;
-import static airhawk.com.myapplication.Constructor_App_Variables.graph_high;
-import static airhawk.com.myapplication.Constructor_App_Variables.graph_low;
-import static airhawk.com.myapplication.Constructor_App_Variables.graph_market_cap;
-import static airhawk.com.myapplication.Constructor_App_Variables.graph_volume;
-import static airhawk.com.myapplication.Constructor_App_Variables.stocktwits_feedItems;
 
 //The original version of this code was found on StackOverflow.com from user flup
 //https://stackoverflow.com/users/1973271/flup
@@ -176,7 +142,6 @@ public class Service_Chosen_Aequity
         ap_info.setMarketCap(ez.get(8).text());
 
     }
-
     public static void getVideoInfo() {
 
 
@@ -208,8 +173,6 @@ public class Service_Chosen_Aequity
 
 
     }
-
-
     private static void ProcessXml(org.w3c.dom.Document data) {
         if (data != null) {
             String st, sd, sp, sl;

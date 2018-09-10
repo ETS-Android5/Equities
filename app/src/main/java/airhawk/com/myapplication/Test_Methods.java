@@ -39,29 +39,42 @@ import static airhawk.com.myapplication.Activity_Main.ap_info;
 import static airhawk.com.myapplication.Constructor_App_Variables.*;
 
 public class Test_Methods {
-
-
+    static String binance_list;
+    static String cryptopia_list;
 
     public static void main(String[] args) {
-        Document doc =null;
-        try {
-            doc = Jsoup.connect("https://info.binance.com/en/currencies").timeout(10 * 1000).get();
-            //
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        Elements a =doc.getElementsByClass("name");
-        Elements b =a.select("span.abbr");
-        for (Element symbol:b){
-            String s = symbol.text();
-        System.out.println(s);}
+     get_binance_listings();
+     get_cryptopia_listings();
     }
 
 
 
 
 
+public static void get_binance_listings() {
+    Document doc = null;
+    try {
+        doc = Jsoup.connect("https://info.binance.com/en/currencies").timeout(10 * 1000).get();
+    } catch (IOException e) {
+        e.printStackTrace(); }
+    Elements a = doc.getElementsByClass("name");
+    Elements b = a.select("span.abbr");
+    for (Element symbol : b) {
+        binance_list = symbol.text();
+        System.out.println(binance_list);
+    }
+}
+
+public static void get_cryptopia_listings() {
+        Document doc = null;
+        try {
+            doc = Jsoup.connect("https://coinmarketcap.com/exchanges/cryptopia/").timeout(10 * 1000).get();
+        } catch (IOException e) {
+            e.printStackTrace(); }
+        Elements a = doc.select("tbody");
+        Element e = doc.select("td[class=data-sort]").first();
 
 
-
+    System.out.println(e);
+    }
    }

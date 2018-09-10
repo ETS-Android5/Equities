@@ -27,9 +27,11 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
@@ -73,6 +75,7 @@ import static airhawk.com.myapplication.Service_Main_Aequities.crypto_kings_symb
 
 public class Activity_Main extends AppCompatActivity {
     Integer count =1;
+    boolean forward;    RequestQueue requestQueue;
     ArrayList temp =new ArrayList();
     Database_Local_Aequities co =new Database_Local_Aequities(this);
     Constructor_App_Variables cav =new Constructor_App_Variables();
@@ -82,8 +85,7 @@ public class Activity_Main extends AppCompatActivity {
             R.drawable.up,
             R.drawable.down,
             R.drawable.news,
-            R.drawable.kings,
-            R.drawable.chart};
+            R.drawable.kings};
     int[] names = new int[]{R.string.leaders, R.string.losers, R.string.news, R.string.market_kings};
     ImageView search_button;
     ImageView imageView;
@@ -120,6 +122,9 @@ public class Activity_Main extends AppCompatActivity {
     }
 
     public void onBackPressed() {
+        graph_date.clear();
+        graph_high.clear();
+        graph_volume.clear();
         new setAsyncDataMain(this).cancel(true);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -134,13 +139,12 @@ public class Activity_Main extends AppCompatActivity {
         tabs.getTabAt(1).setIcon(ICONS[1]);
         if (check_saved.getName().isEmpty()){
             tabs.getTabAt(2).setIcon(ICONS[2]);
-            tabs.getTabAt(3).setIcon(ICONS[3]);
-            tabs.getTabAt(4).setIcon(ICONS[4]);
+            tabs.getTabAt(3).setIcon(ICONS[3]);;
         }else{
             tabs.getTabAt(2).setIcon(android.R.drawable.btn_star_big_on);
             tabs.getTabAt(3).setIcon(ICONS[2]);
-            tabs.getTabAt(4).setIcon(ICONS[3]);
-            tabs.getTabAt(5).setIcon(ICONS[4]);}
+            tabs.getTabAt(4).setIcon(ICONS[3]);}
+
     }
 
     @Override
@@ -187,6 +191,8 @@ public class Activity_Main extends AppCompatActivity {
 
             getCrypto_Kings();
             getSaved_stock_points();
+            //get_main_graph();
+
             Service_Main_Aequities cst = new Service_Main_Aequities();
             cst.main();
 
@@ -243,27 +249,45 @@ public class Activity_Main extends AppCompatActivity {
             {
                 System.out.println("Async Cancelled");return null;}
             Activity_Main activity = activityReference.get();
-            System.out.println("CHSOEN TYPE EQUALS "+ap_info.getMarketType());
-            if (ap_info.getMarketType().equals("Crypto")||(ap_info.getMarketType().equals("Cryptocurrency"))) {
-                activity.getChosenCryptoInfo();
-                activity.get_crypto_points();
-            }
+
+
 //            getSupportActionBar().setDisplayShowTitleEnabled(true);
             if (async_analysis_page) {
                 reloadAllData();
-                activity.getStockTwitsData();
-                activity.get_stock_points();
-                activity.get_current_stock_info();
-                Service_Chosen_Aequity shoe = new Service_Chosen_Aequity();
-                shoe.main();
-                System.out.println("ASYNC* HAS BEEN CALLED PREVIOUSLY");
+                if (ap_info.getMarketType().equals("Crypto")||(ap_info.getMarketType().equals("Cryptocurrency"))) {
+                    activity.get_crypto_points();
+                    activity.getChosenCryptoInfo();
+                    activity.getStockTwitsData();
+                    Service_Chosen_Aequity shoe = new Service_Chosen_Aequity();
+                    shoe.main();
+                    System.out.println("ASYNC C HAS BEEN CALLED PREVIOUSLY");
+                }else{
+                    activity.get_stock_points();
+                    activity.get_current_stock_info();
+                    activity.getStockTwitsData();
+                    Service_Chosen_Aequity shoe = new Service_Chosen_Aequity();
+                    System.out.println("ASYNC S HAS BEEN CALLED PREVIOUSLY");
+                    shoe.main();
+                }
+
+
+
             } else {
-                activity.getStockTwitsData();
-                activity.get_stock_points();
-                activity.get_current_stock_info();
-                Service_Chosen_Aequity shoe = new Service_Chosen_Aequity();
-                shoe.main();
-                System.out.println("ASYNC* HAS NOT BEEN CALLED");
+                if (ap_info.getMarketType().equals("Crypto")||(ap_info.getMarketType().equals("Cryptocurrency"))) {
+                    activity.get_crypto_points();
+                    activity.getChosenCryptoInfo();
+                    activity.getStockTwitsData();
+                    Service_Chosen_Aequity shoe = new Service_Chosen_Aequity();
+                    shoe.main();
+                    System.out.println("ASYNC* HAS NOT BEEN CALLED PREVIOUSLY");
+                }else{
+                    activity.get_stock_points();
+                    activity.get_current_stock_info();
+                    activity.getStockTwitsData();
+                    Service_Chosen_Aequity shoe = new Service_Chosen_Aequity();
+                    System.out.println("ASYNC* HAS NOT BEEN CALLED PREVIOUSLY");
+                    shoe.main();
+                }
 
                 async_analysis_page = true;
 
@@ -272,12 +296,16 @@ public class Activity_Main extends AppCompatActivity {
             return "task finished";
         }
 
+
+
         @Override
         protected void onPostExecute(String result) {
 
+
             // get a reference to the activity if it is still there
             Activity_Main activity = activityReference.get();
-            if (activity == null || activity.isFinishing()) return;
+            String a=ap_info.getCurrent_Aequity_Price();
+            if (activity == null || activity.isFinishing()&&graph_high.size()>0&&requestQueue !=null&& forward) return;
 
             pager = activity.findViewById(R.id.viewpager);
             pager.setVisibility(View.GONE);
@@ -333,19 +361,17 @@ public class Activity_Main extends AppCompatActivity {
         tabs.getTabAt(1).setIcon(ICONS[1]);
         if (check_saved.getName().isEmpty()){
             tabs.getTabAt(2).setIcon(ICONS[2]);
-            tabs.getTabAt(3).setIcon(ICONS[3]);
-            tabs.getTabAt(4).setIcon(ICONS[4]);
+            tabs.getTabAt(3).setIcon(ICONS[3]);;
         }else{
             tabs.getTabAt(2).setIcon(android.R.drawable.btn_star_big_on);
             tabs.getTabAt(3).setIcon(ICONS[2]);
-            tabs.getTabAt(4).setIcon(ICONS[3]);
-            tabs.getTabAt(5).setIcon(ICONS[4]);}
+            tabs.getTabAt(4).setIcon(ICONS[3]);}
 
 
         recyclerView = findViewById(R.id.item_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         recyclerView.setAdapter(new Adapter_Main_Markets());
-
+        //recyclerView.startAnimation(AnimationUtils.loadAnimation(this, R.anim.linear));
     }
 
     private void setupMainViewPager(ViewPager viewPager) {
@@ -356,7 +382,7 @@ public class Activity_Main extends AppCompatActivity {
             adapter.addFrag(new Fragment_Saved(), getString(R.string.saved));}
         adapter.addFrag(new Fragment_App_News(), getString(R.string.news));
         adapter.addFrag(new Fragment_Market_Kings(), getString(R.string.market_kings));
-        adapter.addFrag(new Fragment_stockVScrypto(),getString(R.string.compare));
+        //adapter.addFrag(new Fragment_stockVScrypto(),getString(R.string.compare));
         viewPager.setAdapter(adapter);
     }
 
@@ -435,14 +461,12 @@ public class Activity_Main extends AppCompatActivity {
             getStockTwitsData();
 
             get_stock_points();
-            System.out.println("get stock called!");
             Service_Chosen_Aequity shoe = new Service_Chosen_Aequity();
             shoe.main();
             System.out.println("ASYNC! HAS BEEN CALLED PREVIOUSLY");
         } else {
             getStockTwitsData();
             get_stock_points();
-            System.out.println("get stock called!");
             Service_Chosen_Aequity shoe = new Service_Chosen_Aequity();
             shoe.main();
             System.out.println("ASYNC! HAS NOT BEEN CALLED");
@@ -594,7 +618,6 @@ public class Activity_Main extends AppCompatActivity {
                     }
                     btc_market_cap_amount =(String) crypto_kings_marketcaplist.get(0);
                     btc_market_cap_change =crypto_kings_changelist.get(0)+"%";
-                    System.out.println("This is the information "+btc_market_cap_amount+" "+btc_market_cap_change);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -616,7 +639,6 @@ public class Activity_Main extends AppCompatActivity {
         long startTime = System.nanoTime();
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         String newString =ap_info.getMarketName();
-        System.out.println(newString);
         if(newString.contains(" ")){
             newString =newString.replace(" ","-");
         }
@@ -705,7 +727,6 @@ public class Activity_Main extends AppCompatActivity {
         DateFormat sdf = new SimpleDateFormat("yyyyMMdd");
         Date begindate = new Date();
         String f = ap_info.getMarketName();
-        System.out.println("SYMBO NAME "+f);
         if (f.contains(" ")){
             f= f.replaceAll(" ","-");}
         String url = "https://coinmarketcap.com/currencies/" + f + "/historical-data/?start=20000101&end=" + sdf.format(begindate);
@@ -748,6 +769,7 @@ public class Activity_Main extends AppCompatActivity {
                                     }
                                 }
                             }_AllDays = graph_high;
+
                         } catch (UnsupportedEncodingException e) {
                             e.printStackTrace();
                         }
@@ -774,7 +796,7 @@ public class Activity_Main extends AppCompatActivity {
 
 
         //for (int counter = 0; counter < numbers.size(); counter++) {
-        //     System.out.println("VOLUME " + graph_volume.get(counter) + " NUMBER " + graph_high.get(counter) + " DATE " + graph_date.get(counter));
+        //     println("VOLUME " + graph_volume.get(counter) + " NUMBER " + graph_high.get(counter) + " DATE " + graph_date.get(counter));
 
         //}
 
@@ -799,7 +821,10 @@ public class Activity_Main extends AppCompatActivity {
 
                         String price = time.getString("05. price");
                         String change= time.getString("10. change percent");
-                        ap_info.setCurrent_Aequity_Price(price);
+                    DecimalFormat numberFormat = new DecimalFormat("#.00");
+                    double d =Double.parseDouble(price);
+                    String fclose=numberFormat.format(d);
+                        ap_info.setCurrent_Aequity_Price(fclose);
                         ap_info.setCurrent_Aequity_Price_Change(change);
 
 
@@ -826,6 +851,9 @@ public class Activity_Main extends AppCompatActivity {
 
     public void getStockTwitsData(){
         String market_symbol=ap_info.getMarketSymbol();
+        if (ap_info.getMarketType().equals("Crypto")||(ap_info.getMarketType().equals("Cryptocurrency"))) {
+            market_symbol =market_symbol+".X";
+        }
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         final String url = "https://api.stocktwits.com/api/2/streams/symbol/"+market_symbol+".json";
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
@@ -839,11 +867,6 @@ public class Activity_Main extends AppCompatActivity {
                         JSONObject user_info = (JSONObject) responseJSONArray.getJSONObject(i).get("user");
                         String message_time = (String) responseJSONArray.getJSONObject(i).get("created_at");
                         String message = (String) responseJSONArray.getJSONObject(i).get("body");
-                        //System.out.println(key);
-                        System.out.println("THIS IS THE TIME "+message_time);
-                        System.out.println("THIS IS THE USERNAME "+user_info.get("username"));
-                        System.out.println("THIS IS THE IMAGE URL "+user_info.get("avatar_url"));
-                        System.out.println("THIS IS THE MESSAGE "+message);
                         Iterator x = user_info.keys();
                         Constructor_App_Variables.Smessage_time.add(message_time);
                         Constructor_App_Variables.Suser_name.add("" + user_info.get("username"));
@@ -940,17 +963,87 @@ public class Activity_Main extends AppCompatActivity {
             Elements as = cap.select("div>span");
             String f = as.get(4).text();
             f = f.replaceAll("\\(", "").replaceAll("\\)", "");
-            System.out.println("It's a crypto " + f);
             temp.add(f);
         }
         }
 
     public void get_stock_points() {
-
+        forward=false;
         String symbol =ap_info.getMarketSymbol();
-        System.out.println("THIS IS THE SYMBOL ITS SEARCHING FOR "+symbol);
         String apikey ="XBA42BUC2B6U6G5C";
         String url ="https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol="+symbol+"&outputsize=full&apikey="+apikey;
+        requestQueue = Volley.newRequestQueue(this);
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    // your response
+                    JSONObject jsonObject = new JSONObject(String.valueOf(response));
+                    // get Time
+
+                    JSONObject time = jsonObject.getJSONObject("Time Series (Daily)");
+                    System.out.println("Response : "+time);
+                    Iterator<String> iterator = time.keys();
+
+                    while (iterator.hasNext()) {
+                        String date = iterator.next().toString();
+                        JSONObject dateJson = time.getJSONObject(date);
+                        // get string
+                        String close = dateJson.getString("4. close");
+                        String volume =dateJson.getString("5. volume");
+                        DecimalFormat numberFormat = new DecimalFormat("#.00");
+                        double d =Double.parseDouble(close);
+                        String fclose=numberFormat.format(d);
+
+                        graph_date.add(date);
+                        graph_volume.add(volume);
+                        graph_high.add(fclose);
+
+                    }
+                    String a =ap_info.getCurrent_Aequity_Price();
+                    if (graph_high.size()>0&&a!=null)
+                    {
+                        forward=true;
+                        System.out.println("Graph high size is "+graph_high.size());
+                    }
+                    else{
+                        forward=false;
+                        System.out.println("Had to start over "+graph_high.size());
+
+
+                    }
+                    //Collections.reverse(graph_high);
+                    //Collections.reverse(graph_volume);
+                    //Collections.reverse(graph_date);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                System.out.println("An Error occured while making the ST request");
+            }
+        });
+        int socketTimeout = 30000;//30 seconds - change to what you want
+        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        jsonObjectRequest.setRetryPolicy(policy);
+        requestQueue.add(jsonObjectRequest);
+
+
+
+        List<String> numbers = graph_high;
+        Collections.reverse(numbers);
+        _AllDays = numbers;
+
+    }
+
+    public void get_stock_daily_points(){
+        String symbol =ap_info.getMarketSymbol();
+        String apikey ="XBA42BUC2B6U6G5C";
+        String url ="https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol="+symbol+"&interval=5min&apikey="+apikey;
 
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
@@ -961,7 +1054,7 @@ public class Activity_Main extends AppCompatActivity {
                     // your response
                     JSONObject jsonObject = new JSONObject(String.valueOf(response));
                     // get Time
-                    JSONObject time = jsonObject.getJSONObject("Time Series (Daily)");
+                    JSONObject time = jsonObject.getJSONObject("Time Series (5min)");
                     Iterator<String> iterator = time.keys();
 
                     while (iterator.hasNext()) {
@@ -970,9 +1063,13 @@ public class Activity_Main extends AppCompatActivity {
                         // get string
                         String close = dateJson.getString("4. close");
                         String volume =dateJson.getString("5. volume");
-                        graph_date.add(date);
-                        graph_volume.add(volume);
-                        graph_high.add(close);
+                        DecimalFormat numberFormat = new DecimalFormat("#.00");
+                        double d =Double.parseDouble(close);
+                        String fclose=numberFormat.format(d);
+
+                        graph_date_today.add(date);
+                        graph_volume_today.add(volume);
+                        graph_high_today.add(fclose);
 
                     }
                     //Collections.reverse(graph_high);
@@ -990,14 +1087,42 @@ public class Activity_Main extends AppCompatActivity {
             }
         });
         requestQueue.add(jsonObjectRequest);
-
-        ///System.out.println("GRAPH HIGH LIST "+graph_high);
-        //System.out.println("GRAPH VOLUUMR LIST "+graph_volume);
-        // System.out.println("GRAPH DATE LIST "+graph_date);
-
-        List<String> numbers = graph_high;
-        Collections.reverse(numbers);
-        _AllDays = numbers;
-
     }
+
+    public void get_exchange_check(){
+        if(ap_info.getMarketType().equals("Cryptocurrency")||ap_info.getMarketType().equals("Crypto")){
+            String crypto_name=ap_info.getMarketName();
+            String url = "https://info.binance.com/en/currencies"+crypto_name;
+            RequestQueue requestQueue = Volley.newRequestQueue(this);
+            // Request a string response from the provided URL.
+            StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            try {
+
+                                JSONObject jsonObject = new JSONObject(String.valueOf(response));
+                            }   catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            error.printStackTrace();
+                            Log.d("log2=", error.toString());
+                            //requestQueue.stop();
+                        }
+                    });
+            // Add the request to the RequestQueue.
+            requestQueue.add(stringRequest);
+            requestQueue.start();
+
+        }else{
+
+            //Check stock exchanges
+        }
+    }
+
 }

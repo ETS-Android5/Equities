@@ -10,7 +10,9 @@ import java.util.List;
  */
 
 public class Constructor_App_Variables {
-
+    static ArrayList exchange_text=new ArrayList<>();
+    static ArrayList exchange_image=new ArrayList<>();
+    protected static ArrayList<Constructor_Exchanges> exchanges_feedItems = new ArrayList<>();
     static ArrayList video_url = new ArrayList<>();
     static ArrayList image_video_url = new ArrayList<>();
     static ArrayList video_title = new ArrayList<>();
@@ -18,6 +20,9 @@ public class Constructor_App_Variables {
     static ArrayList Suser_name=new ArrayList<>();
     static ArrayList Smessage=new ArrayList<>();
     static ArrayList Simg_url=new ArrayList<>();
+    public static ArrayList graph_date_today = new ArrayList<>();
+    public static ArrayList graph_high_today = new ArrayList<>();
+    public static ArrayList graph_volume_today = new ArrayList<>();
     public static ArrayList graph_date = new ArrayList<>();
     public static ArrayList graph_high = new ArrayList<>();
     public static ArrayList graph_low = new ArrayList<>();

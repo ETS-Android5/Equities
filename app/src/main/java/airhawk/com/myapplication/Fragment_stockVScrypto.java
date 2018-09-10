@@ -29,8 +29,8 @@ GraphView graph_view;
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_stock_vs_crypto, container, false);
         graph_view=rootView.findViewById(R.id.graph_view);
-        final Integer[] integer = {7};
-        Adapter_Graph_Points ab_list = new Adapter_Graph_Points(getContext(),integer[0], graph_high, graph_volume, graph_date);
+        final Integer integer = 7;
+        Adapter_Graph_Points ab_list = new Adapter_Graph_Points(getContext(),integer, graph_high, graph_volume, graph_date);
         return rootView;
     }
 }

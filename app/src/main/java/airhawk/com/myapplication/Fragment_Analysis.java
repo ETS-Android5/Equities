@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -17,9 +18,11 @@ import com.jjoe64.graphview.helper.StaticLabelsFormatter;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
+import static airhawk.com.myapplication.Constructor_App_Variables._AllDays;
 import static airhawk.com.myapplication.Constructor_App_Variables.graph_date;
 import static airhawk.com.myapplication.Constructor_App_Variables.graph_high;
 import static airhawk.com.myapplication.Constructor_App_Variables.graph_volume;
@@ -31,13 +34,14 @@ import static airhawk.com.myapplication.Constructor_App_Variables.graph_volume;
 public class Fragment_Analysis extends Fragment {
     TextView a_price,a_price_change,a_name,a_symbol,a_type,a_supply,a_cap,sup,saved;
     ImageView save;
+    LineGraphSeries<DataPoint> series = new LineGraphSeries<>();
     double xx= 0;
     Constructor_App_Variables ap_info =new Constructor_App_Variables();
     private Database_Local_Aequities db;
     TabLayout tabchoice;
     GraphView graph_view;
     Adapter_Graph_Points ab;
-    static Integer integer;
+
 
     @Override
 
@@ -55,7 +59,14 @@ public class Fragment_Analysis extends Fragment {
         saved =rootView.findViewById(R.id.saved);
         a_cap =rootView.findViewById(R.id.aequity_cap);
         a_cap.setText(ap_info.getMarketCap());
-        a_price.setText("$ "+ap_info.getCurrent_Aequity_Price());
+        try{
+        a_price.setText("$ "+graph_high.get(0));}
+        catch(IndexOutOfBoundsException e){
+
+            System.out.println("Had to start over ");
+        }
+        String test=a_price.getText().toString();
+
         a_price_change.setText(ap_pc);
 
 
@@ -107,6 +118,7 @@ public class Fragment_Analysis extends Fragment {
         final Adapter_Graph_Points[] ab = {new Adapter_Graph_Points(getContext(), integer[0], graph_high, graph_volume, graph_date)};
         final Adapter_Graph_Points ab_list = new Adapter_Graph_Points(getContext(),integer[0], graph_high, graph_volume, graph_date);
         historical_listview.setAdapter(ab_list);
+
         //Collections.reverse(graph_high);
 
 
@@ -152,13 +164,10 @@ public class Fragment_Analysis extends Fragment {
             public void onTabReselected(TabLayout.Tab tab) {
             }
         });
-        //This to be added in version 2 with graphs
-        TabLayout tabLayout = (TabLayout)rootView.findViewById(R.id.tabs);
-        tabLayout.addTab(tabLayout.newTab().setText("1D"));
-        if (graph_high.size()>1){
-        tabLayout.addTab(tabLayout.newTab().setText("1W"));}
+        TabLayout tabLayout = rootView.findViewById(R.id.tabs);
+        tabLayout.addTab(tabLayout.newTab().setText("7D"));
         if (graph_high.size()>7){
-        tabLayout.addTab(tabLayout.newTab().setText("1M"));}
+        tabLayout.addTab(tabLayout.newTab().setText("30D"));}
         if (graph_high.size()>30){
         tabLayout.addTab(tabLayout.newTab().setText("3M"));}
         if (graph_high.size()>90){
@@ -176,48 +185,41 @@ public class Fragment_Analysis extends Fragment {
                     case 0:
                         graph_view.removeAllSeries();
                         ab[0].notifyDataSetChanged();
-                        integer[0] =1;
+                        integer[0] =7;
+
                         historical_listview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
                         ab[0] =new Adapter_Graph_Points(getContext(), integer[0],graph_high,graph_volume,graph_date);
                         historical_listview.setAdapter(ab[0]);
-                        historical_listview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-                        ab[0] =new Adapter_Graph_Points(getContext(), integer[0],graph_high,graph_volume,graph_date);
-                        historical_listview.setAdapter(ab[0]);
-                        if (integer[0] <=graph_high.size())
-                    {}
-                        LineGraphSeries<DataPoint> series = new LineGraphSeries<>();
+                        series = new LineGraphSeries<>();
+
                         for (int i= 0; i < integer[0];i++){
                             try {
-                                xx = Double.parseDouble(String.valueOf(graph_high.get(i)));
+                                xx = Double.parseDouble(String.valueOf(graph_high.get(integer[0]-i)));
                                 DataPoint point = new DataPoint(i,xx);
                                 series.appendData(point,true,integer[0]);
                             } catch (IndexOutOfBoundsException e) {
                                 System.out.println("Invalid date");
                             }
                             continue;
-
-
                         }
                         graph_view.getGridLabelRenderer().setGridColor(Color.TRANSPARENT);
                         graph_view.getGridLabelRenderer().setHorizontalLabelsColor(Color.WHITE);
                         graph_view.getGridLabelRenderer().setVerticalLabelsColor(Color.WHITE);
-                        series.setColor(Color.RED);
+                        series.setColor(Color.GREEN);
                         graph_view.addSeries(series);
                         break;
                     case 1:
-                        //updateReceiptsList();
                         graph_view.removeAllSeries();
                         ab[0].notifyDataSetChanged();
-                        integer[0] =7;
+                        integer[0] =30;
+
                         historical_listview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
                         ab[0] =new Adapter_Graph_Points(getContext(), integer[0],graph_high,graph_volume,graph_date);
                         historical_listview.setAdapter(ab[0]);
-                        //Collections.reverse(graph_high);
-                        //System.out.println(Arrays.asList(graph_high));
                         series = new LineGraphSeries<>();
                         for (int i= 0; i < integer[0];i++){
                             try {
-                                xx = Double.parseDouble(String.valueOf(graph_high.get(i)));
+                                xx = Double.parseDouble(String.valueOf(graph_high.get(integer[0]-i)));
                                 DataPoint point = new DataPoint(i,xx);
                                 series.appendData(point,true,integer[0]);
                             } catch (IndexOutOfBoundsException e) {
@@ -232,18 +234,14 @@ public class Fragment_Analysis extends Fragment {
                         graph_view.addSeries(series);
                         break;
                     case 2:
-                        //updateReceiptsList();
                         graph_view.removeAllSeries();
                         ab[0].notifyDataSetChanged();
-                        integer[0] =30;
-                        historical_listview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-                        ab[0] =new Adapter_Graph_Points(getContext(), integer[0],graph_high,graph_volume,graph_date);
-                        historical_listview.setAdapter(ab[0]);
-                        //Collections.reverse(graph_high);
+                        integer[0] =90;
+
                         series = new LineGraphSeries<>();
                         for (int i= 0; i < integer[0];i++){
                             try {
-                                xx = Double.parseDouble(String.valueOf(graph_high.get(i)));
+                                xx = Double.parseDouble(String.valueOf(graph_high.get(integer[0]-i)));
                                 DataPoint point = new DataPoint(i,xx);
                                 series.appendData(point,true,integer[0]);
                             } catch (IndexOutOfBoundsException e) {
@@ -255,18 +253,20 @@ public class Fragment_Analysis extends Fragment {
                         graph_view.getGridLabelRenderer().setHorizontalLabelsColor(Color.WHITE);
                         graph_view.getGridLabelRenderer().setVerticalLabelsColor(Color.WHITE);
                         series.setColor(Color.GREEN);
-                        //series.setDrawDataPoints(true);
                         graph_view.addSeries(series);
+                        historical_listview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+                        ab[0] =new Adapter_Graph_Points(getContext(), integer[0],graph_high,graph_volume,graph_date);
+                        historical_listview.setAdapter(ab[0]);
                         break;
                     case 3:
                         graph_view.removeAllSeries();
                         ab[0].notifyDataSetChanged();
-                        integer[0] =90;
-                        //Collections.reverse(graph_high);
+                        integer[0] =180;
+
                         series = new LineGraphSeries<>();
                         for (int i= 0; i < integer[0];i++){
                             try {
-                                xx = Double.parseDouble(String.valueOf(graph_high.get(i)));
+                                xx = Double.parseDouble(String.valueOf(graph_high.get(integer[0]-i)));
                                 DataPoint point = new DataPoint(i,xx);
                                 series.appendData(point,true,integer[0]);
                             } catch (IndexOutOfBoundsException e) {
@@ -278,7 +278,6 @@ public class Fragment_Analysis extends Fragment {
                         graph_view.getGridLabelRenderer().setHorizontalLabelsColor(Color.WHITE);
                         graph_view.getGridLabelRenderer().setVerticalLabelsColor(Color.WHITE);
                         series.setColor(Color.GREEN);
-                        //series.setDrawDataPoints(true);
                         graph_view.addSeries(series);
                         historical_listview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
                         ab[0] =new Adapter_Graph_Points(getContext(), integer[0],graph_high,graph_volume,graph_date);
@@ -287,14 +286,12 @@ public class Fragment_Analysis extends Fragment {
                     case 4:
                         graph_view.removeAllSeries();
                         ab[0].notifyDataSetChanged();
-                        //if integer is not null
-                        integer[0] =180;
+                        integer[0] =365;
 
-                        //Collections.reverse(graph_high);
                         series = new LineGraphSeries<>();
                         for (int i= 0; i < integer[0];i++){
                             try {
-                                xx = Double.parseDouble(String.valueOf(graph_high.get(i)));
+                                xx = Double.parseDouble(String.valueOf(graph_high.get(integer[0]-i)));
                                 DataPoint point = new DataPoint(i,xx);
                                 series.appendData(point,true,integer[0]);
                             } catch (IndexOutOfBoundsException e) {
@@ -305,56 +302,32 @@ public class Fragment_Analysis extends Fragment {
                         graph_view.getGridLabelRenderer().setGridColor(Color.TRANSPARENT);
                         graph_view.getGridLabelRenderer().setHorizontalLabelsColor(Color.WHITE);
                         graph_view.getGridLabelRenderer().setVerticalLabelsColor(Color.WHITE);
-                        series.setColor(Color.GREEN);
-                        //series.setDrawDataPoints(true);
                         graph_view.addSeries(series);
+                        series.setColor(Color.GREEN);
                         historical_listview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
                         ab[0] =new Adapter_Graph_Points(getContext(), integer[0],graph_high,graph_volume,graph_date);
                         historical_listview.setAdapter(ab[0]);
+
                         break;
                     case 5:
                         graph_view.removeAllSeries();
                         ab[0].notifyDataSetChanged();
-                        integer[0] =365;
-                        //Collections.reverse(graph_high);
+                        System.out.println(_AllDays.size());
+                        integer[0] =_AllDays.size();
                         series = new LineGraphSeries<>();
-                        for (int i= 0; i <integer[0];i++){
-                            try {
-                                xx = Double.parseDouble(String.valueOf(graph_high.get(i)));
-                                DataPoint point = new DataPoint(i,xx);
-                                series.appendData(point,true,integer[0]);
-                            } catch (IndexOutOfBoundsException e) {
-                                System.out.println("Invalid date");
-                            }
-                            continue;
-                        }
-                        graph_view.getGridLabelRenderer().setGridColor(Color.TRANSPARENT);
-                        graph_view.getGridLabelRenderer().setHorizontalLabelsColor(Color.WHITE);
-                        graph_view.getGridLabelRenderer().setVerticalLabelsColor(Color.WHITE);
-                        graph_view.addSeries(series);
-                        series.setColor(Color.GREEN);
-                        historical_listview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-                        ab[0] =new Adapter_Graph_Points(getContext(), integer[0],graph_high,graph_volume,graph_date);
-                        historical_listview.setAdapter(ab[0]);
-
-                        break;
-                    case 6:
-                        graph_view.removeAllSeries();
-                        ab[0].notifyDataSetChanged();
-                        integer[0] =graph_high.size();
-                        //Collections.reverse(graph_high);
-                        series = new LineGraphSeries<>();
-
                         for (int i= 0; i < integer[0];i++){
                             try {
-                                xx = Double.parseDouble(String.valueOf(graph_high.get(i)));
+                                xx = Double.parseDouble(String.valueOf(graph_high.get(integer[0]-i)));
+
                                 DataPoint point = new DataPoint(i,xx);
                                 series.appendData(point,true,integer[0]);
                             } catch (IndexOutOfBoundsException e) {
-                                System.out.println("Invalid date");
+
                             }
-                            continue;
+
                         }
+                        //System.out.println("SIZE of iteration"+integer[0]);
+                        //System.out.println("SIZE OF ALL DAYS "+_AllDays.size());
                         graph_view.getGridLabelRenderer().setGridColor(Color.TRANSPARENT);
                         graph_view.getGridLabelRenderer().setHorizontalLabelsColor(Color.WHITE);
                         graph_view.getGridLabelRenderer().setVerticalLabelsColor(Color.WHITE);
