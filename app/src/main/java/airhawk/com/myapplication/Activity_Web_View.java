@@ -20,9 +20,10 @@ public class Activity_Web_View extends AppCompatActivity {
     wv_url=findViewById(R.id.wv_url);
 
     wv_url.setWebViewClient(new WebViewClient());
+    wv_url.getSettings().setJavaScriptEnabled(true);
+      wv_url.getSettings().setDomStorageEnabled(true);
 
-    //load the url in Webview
-    wv_url.loadUrl(webviewurl);
+      wv_url.loadUrl(webviewurl);
 
   }
 }

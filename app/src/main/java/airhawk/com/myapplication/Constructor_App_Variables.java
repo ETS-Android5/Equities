@@ -4,14 +4,27 @@ import android.graphics.Typeface;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Julian Dinkins on 6/13/2018.
  */
 
 public class Constructor_App_Variables {
+    static Set<String> kracken_list;
+
+    static ArrayList binance_list=new ArrayList<>();
+    static ArrayList exchange_list=new ArrayList<>();
+    //static ArrayList binance_list=new ArrayList<>();
+    static ArrayList crypto_exchange_url =new ArrayList<>();
+    static ArrayList crypto_exchange_name =new ArrayList<>();
+    static ArrayList stock_exchange_url =new ArrayList<>();
+    static ArrayList stock_exchange_name =new ArrayList<>();
+    static ArrayList aequity_exchanges =new ArrayList();
+
     static ArrayList exchange_text=new ArrayList<>();
     static ArrayList exchange_image=new ArrayList<>();
+    static ArrayList exchange_message=new ArrayList<>();
     protected static ArrayList<Constructor_Exchanges> exchanges_feedItems = new ArrayList<>();
     static ArrayList video_url = new ArrayList<>();
     static ArrayList image_video_url = new ArrayList<>();

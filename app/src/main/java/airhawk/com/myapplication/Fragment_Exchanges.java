@@ -1,32 +1,21 @@
 package airhawk.com.myapplication;
 
-import android.app.Activity;
-import android.content.Context;
-import android.graphics.drawable.Drawable;
+import android.app.SearchManager;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
-import android.widget.ImageView;
-import android.widget.ListAdapter;
-import android.widget.ListView;
+import android.widget.TableRow;
 import android.widget.TextView;
 
-import com.squareup.picasso.MemoryPolicy;
-import com.squareup.picasso.Picasso;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import static airhawk.com.myapplication.Activity_Main.ap_info;
+import static airhawk.com.myapplication.Constructor_App_Variables.aequity_exchanges;
 import static airhawk.com.myapplication.Constructor_App_Variables.exchanges_feedItems;
-import static airhawk.com.myapplication.Constructor_App_Variables.stocktwits_feedItems;
+import static airhawk.com.myapplication.Constructor_App_Variables.stock_exchange_name;
 
 /**
  * Created by Julian Dinkins on 4/25/2018.
@@ -34,7 +23,8 @@ import static airhawk.com.myapplication.Constructor_App_Variables.stocktwits_fee
 
 public class Fragment_Exchanges extends Fragment {
     private RecyclerView exchange_feed;
-
+    TextView yes;
+    TableRow yesnotable;
 
     @Override
 
@@ -43,22 +33,49 @@ public class Fragment_Exchanges extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_exchanges, container, false);
         TextView t = rootView.findViewById(R.id.greeting);
-        String buy = "Buy " + ap_info.getMarketName() + " at these exchanges";
-        t.setText(buy);
+        yes =rootView.findViewById(R.id.yes);
+        yesnotable =rootView.findViewById(R.id.yesnotable);
+        if (ap_info.getMarketType().equals("Cryptocurrency") || ap_info.getMarketType().equals("Crypto")) {}
+        else{
+            for(int i = 0; i < stock_exchange_name.size();i++){
+                aequity_exchanges.add(stock_exchange_name.get(i));
+            }
+        }
+        if (aequity_exchanges.size()<1){
+            String buy =  ap_info.getMarketName()+" is not sold on any known markets\nWould you like to search for "+ ap_info.getMarketName()+" using Google search?";
+            yesnotable.setVisibility(View.VISIBLE);
+            t.setText(buy);
+        }else{
+            yesnotable.setVisibility(View.GONE);
+        String buy = "Buy " + ap_info.getMarketName() + " at these exchanges. \nTouch an image to go their site.";
+        t.setText(buy);}
+        Constructor_Exchanges it = new Constructor_Exchanges();
         exchange_feed = rootView.findViewById(R.id.list);
-        if (ap_info.getMarketType().equals("Cryptocurrency") || ap_info.getMarketType().equals("Crypto")) {
 
-            Constructor_App_Variables.exchange_text.add("Binance");
-            Constructor_App_Variables.exchange_text.add("Coinbase");
-            Constructor_App_Variables.exchange_image.add("R.drawable.bin");
-            Constructor_App_Variables.exchange_image.add("R.drawable.coinb");
+
+
+
+
 
 
             exchange_feed.setAdapter(new Adapter_Exchanges_Feed(getActivity(), exchanges_feedItems));
             exchange_feed.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-        }
 
 
+        yes.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v) {
+                try {
+                    Intent intent = new Intent(Intent.ACTION_WEB_SEARCH);
+                    String search = "https://www.google.com/search?ei=how+to+buy+" + ap_info.getMarketName() + "+coin";
+                    intent.putExtra(SearchManager.QUERY, search);
+                    startActivity(intent);
+                } catch (Exception e) {
+                    // TODO: handle exception
+                }
+            }
+
+   });
         return rootView;
 
 

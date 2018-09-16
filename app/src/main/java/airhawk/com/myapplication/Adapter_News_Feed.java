@@ -35,7 +35,7 @@ public class Adapter_News_Feed extends RecyclerView.Adapter<Adapter_News_Feed.My
          Intent intent=new Intent(view.getContext(),Activity_Web_View.class);
          intent.putExtra("url",textlink);
 
-
+           System.out.println("NEWS "+textlink);
            view.getContext().startActivity(intent);
        }  
      });  

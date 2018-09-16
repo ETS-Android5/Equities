@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.res.AssetManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -46,6 +45,7 @@ import com.google.firebase.database.ValueEventListener;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.jsoup.HttpStatusException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -61,8 +61,10 @@ import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
@@ -122,6 +124,9 @@ public class Activity_Main extends AppCompatActivity {
     }
 
     public void onBackPressed() {
+       exchange_list.clear();
+        aequity_exchanges.clear();
+        stocktwits_feedItems.clear();
         graph_date.clear();
         graph_high.clear();
         graph_volume.clear();
@@ -150,6 +155,8 @@ public class Activity_Main extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        get_crypto_exchange_info();
+        get_stock_exchange_info();
         setContentView(R.layout.splash);
         centerLinear = AnimationUtils.loadAnimation(this, R.anim.center);
         imageView =findViewById(R.id.imageView);
@@ -159,6 +166,7 @@ public class Activity_Main extends AppCompatActivity {
         progress.setMax(10);
         progress.setProgress(0);
         txt = (TextView) findViewById(R.id.output);
+
         new setAsyncDataMain(this).execute(10);
 
     }
@@ -258,6 +266,7 @@ public class Activity_Main extends AppCompatActivity {
                     activity.get_crypto_points();
                     activity.getChosenCryptoInfo();
                     activity.getStockTwitsData();
+                    activity.get_coinmarketcap_exchange_listing();
                     Service_Chosen_Aequity shoe = new Service_Chosen_Aequity();
                     shoe.main();
                     System.out.println("ASYNC C HAS BEEN CALLED PREVIOUSLY");
@@ -277,6 +286,7 @@ public class Activity_Main extends AppCompatActivity {
                     activity.get_crypto_points();
                     activity.getChosenCryptoInfo();
                     activity.getStockTwitsData();
+                    activity.get_coinmarketcap_exchange_listing();
                     Service_Chosen_Aequity shoe = new Service_Chosen_Aequity();
                     shoe.main();
                     System.out.println("ASYNC* HAS NOT BEEN CALLED PREVIOUSLY");
@@ -526,7 +536,12 @@ public class Activity_Main extends AppCompatActivity {
 
                 InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 inputMethodManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
-
+                exchange_list.clear();
+                aequity_exchanges.clear();
+                stocktwits_feedItems.clear();
+                graph_date.clear();
+                graph_high.clear();
+                graph_volume.clear();
                 feedItems.clear();
                 String[] split_marketinfo = ad.getItem(position).toString().split("  ");
                 ap_info.setMarketSymbol(split_marketinfo[0]);
@@ -674,7 +689,11 @@ public class Activity_Main extends AppCompatActivity {
                             }
                             if (z > 12) {
                                 y = String.valueOf(dd / 1000000000);
-                                ap_info.setMarketSupply(y.substring(0, 5) + "B");
+                                try{
+                                ap_info.setMarketSupply(y.substring(0, 5) + "B");}
+                                catch (StringIndexOutOfBoundsException e){
+                                    ap_info.setMarketSupply("UNKNOWN");
+                                }
                             }
                             if (z > 15) {
                                 y = String.valueOf(dd / tt);
@@ -1089,40 +1108,303 @@ public class Activity_Main extends AppCompatActivity {
         requestQueue.add(jsonObjectRequest);
     }
 
-    public void get_exchange_check(){
-        if(ap_info.getMarketType().equals("Cryptocurrency")||ap_info.getMarketType().equals("Crypto")){
-            String crypto_name=ap_info.getMarketName();
-            String url = "https://info.binance.com/en/currencies"+crypto_name;
-            RequestQueue requestQueue = Volley.newRequestQueue(this);
-            // Request a string response from the provided URL.
-            StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                    new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String response) {
-                            try {
+    public void after_launch_crypto_listings(){
+        exchange_text.add("BTC");
+        exchange_text.add("ETH");
+        exchange_text.add("BCH");
+        exchange_text.add("LTC");
 
-                                JSONObject jsonObject = new JSONObject(String.valueOf(response));
-                            }   catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                        }
-                    },
-                    new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            error.printStackTrace();
-                            Log.d("log2=", error.toString());
-                            //requestQueue.stop();
-                        }
-                    });
-            // Add the request to the RequestQueue.
-            requestQueue.add(stringRequest);
-            requestQueue.start();
-
-        }else{
-
-            //Check stock exchanges
+        Document doc = null;
+        try {
+            doc = Jsoup.connect("https://info.binance.com/en/all").timeout(10 * 1000).get();
+        } catch (IOException e) {
+            e.printStackTrace(); }
+        Elements a = doc.getElementsByClass("name");
+        Elements b = a.select("span.abbr");
+        for (int i =0;i<b.size();i++) {
+            binance_list.add(b.get(i).text());
+            System.out.println(i+" "+b.get(i).text());
         }
+
+
     }
 
+    public static void get_coinmarketcap_exchange_listing() {
+        Document doc = null;
+        String symbol = ap_info.getMarketName();
+
+        try {
+            doc = Jsoup.connect("https://coinmarketcap.com/currencies/"+symbol+"/#markets").timeout(10 * 1000).get();
+            Element tb = doc.getElementById("markets-table");
+            Elements rows = tb.select("tr");
+
+            for(int i =0; i<rows.size();i++){
+                Element row = rows.get(i);
+                Elements cols = row.select("td");
+                for(int z =0; z<cols.size();z++) {
+                    String line = cols.get(1).text();
+                    if(!exchange_list.contains(line))
+                        exchange_list.add(line);
+                }
+            }
+            System.out.println("EXCHANGE LIST"+exchange_list);
+        } catch (HttpStatusException x){
+            System.out.println("There is no information about "+symbol +", so now we try world coinindex");
+            try {
+                doc = Jsoup.connect("https://www.worldcoinindex.com/coin/"+symbol).timeout(10 * 1000).get();
+                String s = doc.getElementsByClass("mob-exchange exchange").text();
+                List<String> myList = new ArrayList<String>(Arrays.asList(s.split(" ")));
+                for(int i=0; i<myList.size();i++){
+                    exchange_list.add(myList.get(i));
+                    //System.out.println(i+" "+exchange_list.get(i));
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } catch (IOException e) {
+
+            e.printStackTrace(); }
+        HashSet<String> set = new HashSet<String>();
+
+        for (int i = 0; i < crypto_exchange_name.size(); i++)
+        {
+            for (int j = 0; j < exchange_list.size(); j++)
+            {
+                if(crypto_exchange_name.get(i).equals(exchange_list.get(j)))
+                {
+                    aequity_exchanges.add(""+ crypto_exchange_name.get(i));
+                }
+            }
+        }
+
+        // return common elements.
+        //System.out.println("Common element : "+(aequity_exchanges));
+
+
+
+
+    }
+    public static void get_crypto_exchange_info() {
+
+        crypto_exchange_url.add("https://www.Binance.com/m-HomePage.html ");
+        crypto_exchange_url.add("https://www.OKEx.com");
+        crypto_exchange_url.add("https://www.Huobi.com");
+        crypto_exchange_url.add("https://www.Bithumb.com");
+        crypto_exchange_url.add("https://www.ZB.com");
+        crypto_exchange_url.add("https://www.Bitfinex.com");
+        crypto_exchange_url.add("https://www.HitBTC.com");
+        crypto_exchange_url.add("https://www.Bit-Z.com");
+        crypto_exchange_url.add("https://www.Bibox.com");
+        crypto_exchange_url.add("https://www.Coinsuper.com");
+        crypto_exchange_url.add("https://www.BCEX.com");
+        crypto_exchange_url.add("https://www.LBank.com");
+        crypto_exchange_url.add("https://www.DigiFinex.com");
+        crypto_exchange_url.add("https://www.Upbit.com");
+        crypto_exchange_url.add("https://pro.Coinbase.com");
+        crypto_exchange_url.add("https://www.Simex.com");
+        crypto_exchange_url.add("https://www.OEX.com");
+        crypto_exchange_url.add("https://www.Kraken.com");
+        crypto_exchange_url.add("https://www.Cryptonex.com");
+        crypto_exchange_url.add("https://www.BitMart.com");
+        crypto_exchange_url.add("https://www.Allcoin.com");
+        crypto_exchange_url.add("https://www.IDAX.com");
+        crypto_exchange_url.add("https://www.RightBTC.com");
+        crypto_exchange_url.add("https://www.IDCM.com");
+        crypto_exchange_url.add("https://www.YoBit.com");
+        crypto_exchange_url.add("https://www.DragonEX.io");
+        crypto_exchange_url.add("https://www.Gate.io");
+        crypto_exchange_url.add("https://www.Fatbtc.com");
+        crypto_exchange_url.add("https://www.Exrates.com");
+        crypto_exchange_url.add("https://www.CoinsBank.com");
+        crypto_exchange_url.add("https://www.BTCBOX.com");
+        crypto_exchange_url.add("https://www.Kryptono.exchange");
+        crypto_exchange_url.add("https://www.UEX.com");
+        crypto_exchange_url.add("https://www.Bitlish.com");
+        crypto_exchange_url.add("https://www.Sistemkoin.com");
+        crypto_exchange_url.add("https://www.Bitstamp.com");
+        crypto_exchange_url.add("https://www.Bitbank.com");
+        crypto_exchange_url.add("https://www.CoinTiger.com");
+        crypto_exchange_url.add("https://www.CoinBene.com");
+        crypto_exchange_url.add("https://www.LATOKEN.com");
+        crypto_exchange_url.add("https://www.Bitstamp.com");
+        crypto_exchange_url.add("https://www.Bittrex.com");
+        crypto_exchange_url.add("https://www.Poloniex.com");
+        crypto_exchange_url.add("https://www.CoinEgg.com");
+        crypto_exchange_url.add("https://www.Exmo.com");
+        crypto_exchange_url.add("https://www.Hotbit.com");
+        crypto_exchange_url.add("https://www.bitFlyer.com");
+        crypto_exchange_url.add("https://www.B2BX.com");
+        crypto_exchange_url.add("https://www.Rfinex.com");
+        crypto_exchange_url.add("https://www.CPDAX.com");
+        crypto_exchange_url.add("https://www.C2CX.com");
+        crypto_exchange_url.add("https://www.Livecoin.com");
+        crypto_exchange_url.add("https://www.BtcTrade.im");
+        crypto_exchange_url.add("https://www.xBTCe.com");
+        crypto_exchange_url.add("https://www.Coinone.com");
+        crypto_exchange_url.add("https://www.Kucoin.com");
+        crypto_exchange_url.add("https://www.BitBay.com");
+        crypto_exchange_url.add("https://www.Gemini.com");
+        crypto_exchange_url.add("https://www.Coinbe.net");
+        crypto_exchange_url.add("https://www.InfinityCoin.exchange");
+        crypto_exchange_url.add("https://www.Tradebytrade.com");
+        crypto_exchange_url.add("https://www.BiteBTC.com");
+        crypto_exchange_url.add("https://www.Coinsquare.com");
+        crypto_exchange_url.add("https://www.HADAX.com");
+        crypto_exchange_url.add("https://www.Coinroom.com");
+        crypto_exchange_url.add("https://www.Mercatox.com");
+        crypto_exchange_url.add("https://www.Coinhub.com");
+        crypto_exchange_url.add("https://www.BigONE.com");
+        crypto_exchange_url.add("https://www.BitShares.org");
+        crypto_exchange_url.add("https://www.CEX.IO");
+        crypto_exchange_url.add("https://www.ChaoEX.com");
+        crypto_exchange_url.add("https://www.Bitsane.com");
+        crypto_exchange_url.add("https://www.BitForex.com");
+        crypto_exchange_url.add("https://www.LocalTrade.com");
+        crypto_exchange_url.add("https://www.Bitinka.com");
+        crypto_exchange_url.add("https://www.Liqui.io");
+        crypto_exchange_url.add("https://www.Liquid.com");
+        crypto_exchange_url.add("https://www.BTC-Alpha.com");
+        crypto_exchange_url.add("https://www.Instantbitex.com");
+        crypto_exchange_url.add("https://www.Cryptopia.com");
+        crypto_exchange_url.add("https://www.GOPAX.com");
+        crypto_exchange_url.add("https://www.Korbit.com");
+        crypto_exchange_url.add("https://www.itBit.com");
+        crypto_exchange_url.add("https://www.Indodax.com");
+        crypto_exchange_url.add("https://www.Vebitcoin.com");
+        crypto_exchange_url.add("https://www.Allbit.com");
+        crypto_exchange_url.add("https://www.Indodax.com");
+        crypto_exchange_url.add("https://www.BtcTurk.com");
+        crypto_exchange_url.add("https://www.Ovis.com");
+        crypto_exchange_url.add("https://www.BTCC.com");
+        crypto_exchange_url.add("https://www.IDEX.market");
+        crypto_exchange_url.add("https://www.Ethfinex.com");
+        crypto_exchange_url.add("https://www.QuadrigaCX.com");
+        crypto_exchange_url.add("https://www.CoinExchange.io");
+        crypto_exchange_url.add("https://www.Tidex.com");
+        crypto_exchange_url.add("https://www.https://www.negociecoins.com/br");
+        crypto_exchange_url.add("https://www.CryptoBridge.com");
+        crypto_exchange_url.add("https://www.LakeBTC.com");
+        crypto_exchange_url.add("https://www.Bancor.network");
+        crypto_exchange_url.add("https://www.QBTC.com");
+        crypto_exchange_url.add("https://www.WEX.com");
+        crypto_exchange_name.add("Binance");
+        crypto_exchange_name.add("OKEx");
+        crypto_exchange_name.add("Huobi");
+        crypto_exchange_name.add("Bithumb");
+        crypto_exchange_name.add("ZB.COM");
+        crypto_exchange_name.add("Bitfinex");
+        crypto_exchange_name.add("HitBTC");
+        crypto_exchange_name.add("Bit-Z");
+        crypto_exchange_name.add("Bibox");
+        crypto_exchange_name.add("Coinsuper");
+        crypto_exchange_name.add("BCEX");
+        crypto_exchange_name.add("LBank");
+        crypto_exchange_name.add("DigiFinex");
+        crypto_exchange_name.add("Upbit");
+        crypto_exchange_name.add("Coinbase Pro");
+        crypto_exchange_name.add("Simex");
+        crypto_exchange_name.add("OEX");
+        crypto_exchange_name.add("Kraken");
+        crypto_exchange_name.add("Cryptonex");
+        crypto_exchange_name.add("BitMart");
+        crypto_exchange_name.add("Allcoin");
+        crypto_exchange_name.add("IDAX");
+        crypto_exchange_name.add("RightBTC");
+        crypto_exchange_name.add("IDCM");
+        crypto_exchange_name.add("YoBit");
+        crypto_exchange_name.add("DragonEX");
+        crypto_exchange_name.add("Gate.io");
+        crypto_exchange_name.add("Fatbtc");
+        crypto_exchange_name.add("Exrates");
+        crypto_exchange_name.add("CoinsBank");
+        crypto_exchange_name.add("BTCBOX");
+        crypto_exchange_name.add("Kryptono");
+        crypto_exchange_name.add("UEX");
+        crypto_exchange_name.add("Bitlish");
+        crypto_exchange_name.add("Sistemkoin");
+        crypto_exchange_name.add("Bitstamp");
+        crypto_exchange_name.add("Bitbank");
+        crypto_exchange_name.add("CoinTiger");
+        crypto_exchange_name.add("CoinBene");
+        crypto_exchange_name.add("LATOKEN");
+        crypto_exchange_name.add("Bitstamp");
+        crypto_exchange_name.add("Bittrex");
+        crypto_exchange_name.add("Poloniex");
+        crypto_exchange_name.add("CoinEgg");
+        crypto_exchange_name.add("Exmo");
+        crypto_exchange_name.add("Hotbit");
+        crypto_exchange_name.add("B2BX");
+        crypto_exchange_name.add("bitFlyer");
+        crypto_exchange_name.add("Rfinex");
+        crypto_exchange_name.add("CPDAX");
+        crypto_exchange_name.add("C2CX");
+        crypto_exchange_name.add("Livecoin");
+        crypto_exchange_name.add("BtcTrade.im");
+        crypto_exchange_name.add("xBTCe");
+        crypto_exchange_name.add("Coinone");
+        crypto_exchange_name.add("Kucoin");
+        crypto_exchange_name.add("BitBay");
+        crypto_exchange_name.add("Gemini");
+        crypto_exchange_name.add("Coinbe");
+        crypto_exchange_name.add("InfinityCoin Exchange");
+        crypto_exchange_name.add("Trade By Trade");
+        crypto_exchange_name.add("BiteBTC");
+        crypto_exchange_name.add("Coinsquare");
+        crypto_exchange_name.add("HADAX");
+        crypto_exchange_name.add("Coinroom");
+        crypto_exchange_name.add("Mercatox");
+        crypto_exchange_name.add("Coinhub");
+        crypto_exchange_name.add("BigONE");
+        crypto_exchange_name.add("BitShares Exchange");
+        crypto_exchange_name.add("CEX.IO");
+        crypto_exchange_name.add("ChaoEX");
+        crypto_exchange_name.add("Bitsane");
+        crypto_exchange_name.add("BitForex");
+        crypto_exchange_name.add("LocalTrade");
+        crypto_exchange_name.add("Bitinka");
+        crypto_exchange_name.add("Liqui");
+        crypto_exchange_name.add("Liquid");
+        crypto_exchange_name.add("BTC-Alpha");
+        crypto_exchange_name.add("Instant Bitex");
+        crypto_exchange_name.add("Cryptopia");
+        crypto_exchange_name.add("GOPAX");
+        crypto_exchange_name.add("Korbit");
+        crypto_exchange_name.add("itBit");
+        crypto_exchange_name.add("Indodax");
+        crypto_exchange_name.add("Vebitcoin");
+        crypto_exchange_name.add("Allbit");
+        crypto_exchange_name.add("Coindeal");
+        crypto_exchange_name.add("BtcTurk");
+        crypto_exchange_name.add("Ovis");
+        crypto_exchange_name.add("BTCC");
+        crypto_exchange_name.add("IDEX");
+        crypto_exchange_name.add("Ethfinex");
+        crypto_exchange_name.add("QuadrigaCX");
+        crypto_exchange_name.add("CoinExchange");
+        crypto_exchange_name.add("Tidex");
+        crypto_exchange_name.add("Negocie Coins");
+        crypto_exchange_name.add("CryptoBridge");
+        crypto_exchange_name.add("LakeBTC");
+        crypto_exchange_name.add("Bancor Network");
+        crypto_exchange_name.add("QBTC");
+        crypto_exchange_name.add("WEX");
+
+
+
+    }
+
+    public static void get_stock_exchange_info(){
+        stock_exchange_name.add("E*TRADE");
+        stock_exchange_name.add("TD Ameritrade");
+        stock_exchange_name.add("Merrill Edge");
+        stock_exchange_name.add("Charles Schwab ");
+        stock_exchange_name.add("Robinhood");
+
+        stock_exchange_url.add("https://www.etrade.com");
+        stock_exchange_url.add("https://www.tdameritrade.com/home.page");
+        stock_exchange_url.add("https://www.merrilledge.com/");
+        stock_exchange_url.add("https://www.schwab.com/");
+        stock_exchange_url.add("https://www.robinhood.com/");
+
+    }
 }

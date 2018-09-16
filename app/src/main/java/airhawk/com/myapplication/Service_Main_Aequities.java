@@ -296,6 +296,7 @@ public class Service_Main_Aequities {
             }
         }
     }
+
     public static org.w3c.dom.Document GoogleRSFeed() {
         try {
             URL url;
@@ -398,7 +399,7 @@ public class Service_Main_Aequities {
     public static void getStock_Kings() {
         Document sv = null;
         try {
-            sv = Jsoup.connect("http://www.iweblists.com/us/commerce/MarketCapitalization.html").get();
+            sv = Jsoup.connect("https://www.statista.com/statistics/263264/top-companies-in-the-world-by-market-value/").get();
         } catch (IOException e) {
             e.printStackTrace();
         }
