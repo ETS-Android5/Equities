@@ -74,6 +74,9 @@ import static airhawk.com.myapplication.Service_Main_Aequities.crypto_kings_chan
 import static airhawk.com.myapplication.Service_Main_Aequities.crypto_kings_marketcaplist;
 import static airhawk.com.myapplication.Service_Main_Aequities.crypto_kings_namelist;
 import static airhawk.com.myapplication.Service_Main_Aequities.crypto_kings_symbolist;
+import static airhawk.com.myapplication.Service_Main_Aequities.stock_kings_changelist;
+import static airhawk.com.myapplication.Service_Main_Aequities.stock_kings_namelist;
+import static airhawk.com.myapplication.Service_Main_Aequities.stock_kings_symbollist;
 
 public class Activity_Main extends AppCompatActivity {
     Integer count =1;
@@ -124,7 +127,7 @@ public class Activity_Main extends AppCompatActivity {
     }
 
     public void onBackPressed() {
-       exchange_list.clear();
+        exchange_list.clear();
         aequity_exchanges.clear();
         stocktwits_feedItems.clear();
         graph_date.clear();
@@ -1132,6 +1135,9 @@ public class Activity_Main extends AppCompatActivity {
     public static void get_coinmarketcap_exchange_listing() {
         Document doc = null;
         String symbol = ap_info.getMarketName();
+        if (symbol.contains(" ")){
+            symbol =symbol.replace(" ","-");
+        }
 
         try {
             doc = Jsoup.connect("https://coinmarketcap.com/currencies/"+symbol+"/#markets").timeout(10 * 1000).get();
@@ -1407,4 +1413,7 @@ public class Activity_Main extends AppCompatActivity {
         stock_exchange_url.add("https://www.robinhood.com/");
 
     }
+
+
+
 }

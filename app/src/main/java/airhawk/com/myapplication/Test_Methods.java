@@ -31,11 +31,13 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.UnknownHostException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -44,8 +46,11 @@ import java.util.stream.Collectors;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLHandshakeException;
 
+import static airhawk.com.myapplication.Activity_Main.aequity_name_arraylist;
+import static airhawk.com.myapplication.Activity_Main.aequity_symbol_arraylist;
 import static airhawk.com.myapplication.Activity_Main.ap_info;
 import static airhawk.com.myapplication.Constructor_App_Variables.*;
+import static airhawk.com.myapplication.Service_Main_Aequities.myContext;
 import static airhawk.com.myapplication.Service_Main_Aequities.stock_kings_changelist;
 import static airhawk.com.myapplication.Service_Main_Aequities.stock_kings_namelist;
 import static airhawk.com.myapplication.Service_Main_Aequities.stock_kings_symbollist;
@@ -61,15 +66,42 @@ public class Test_Methods {
     static String cryptopia_list;
 
     public static void main(String[] args) {
-        get_crypto_listings();
+        //get_crypto_listings();
 
 
-     //getStock_Kings();
+     getStock_Kings();
     }
 
+    public static void getStock_Kings() {
+        Document sv = null;
+        String t ;
+        try {
+            sv = Jsoup.connect("http://fortune.com/global500/list/filtered?sortBy=profits&first500").get();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Elements e =sv.select("li");
+        for(int i=0;i<e.size();i++){
+            Elements z =e.select("span");
+            for(int x=1;x<z.size();x=x+3){
+            stock_kings_namelist.add(z.get(x).text());
+                t =z.get(x).text();
+                for (int s =0;s<aequity_name_arraylist.size();s++){
+                    if (aequity_name_arraylist.contains(t)){
+                        stock_kings_symbollist.add(aequity_symbol_arraylist.get(s));
+                        System.out.println("Yo "+aequity_symbol_arraylist.get(s));
+                    }}
+            //    aequity_name_arraylist;
+            //ap_info.setMarketSymbol();
+            //stock_kings_changelist.add();
+            }
+            for(int n=2;n<z.size();n=n+3){
+                System.out.println(z.get(n).text().substring(1,5).replace(",",".")+" B");
+                stock_kings_changelist.add(z.get(n).text().substring(1,5).replace(",",".")+" B");
+            }
+        }
 
-
-
+    }
 
 
 
@@ -288,17 +320,4 @@ public class Test_Methods {
 
 
     }
-    public static void getStock_Kings() {
-        Document sv = null;
-        try {
-            sv = Jsoup.connect("https://www.statista.com/statistics/263264/top-companies-in-the-world-by-market-value").get();
-        } catch (IOException e) {
-            e.printStackTrace();
-
-        }
-        Elements a =sv.select("tbody");
-        Elements t =a.select("td");
-        System.out.println(t);
-    }
-
    }

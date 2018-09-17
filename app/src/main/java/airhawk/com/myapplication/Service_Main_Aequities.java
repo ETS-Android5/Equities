@@ -39,6 +39,8 @@ import java.util.regex.Pattern;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import static airhawk.com.myapplication.Activity_Main.aequity_name_arraylist;
+import static airhawk.com.myapplication.Activity_Main.aequity_symbol_arraylist;
 import static airhawk.com.myapplication.Constructor_App_Variables.all_market_cap_amount;
 import static airhawk.com.myapplication.Constructor_App_Variables.alt_market_cap_amount;
 import static airhawk.com.myapplication.Constructor_App_Variables.btc_market_cap_amount;
@@ -177,6 +179,21 @@ public class Service_Main_Aequities {
                 return null;
             }
         });
+
+        callables.add(new Callable<String>() {
+            @Override
+            public String call() throws Exception {
+                long startTime = System.nanoTime();
+                getStock_Kings();
+                long endTime = System.nanoTime();
+                long duration = (endTime - startTime);
+                //wifi 1 second
+                //Boost Mobile 5 seconds
+                System.out.println("getStock_Kings TIME IS " + duration / 1000000000 + " seconds");
+                return null;
+            }
+        });
+
 
 
 
@@ -396,35 +413,7 @@ public class Service_Main_Aequities {
 
     }
 
-    public static void getStock_Kings() {
-        Document sv = null;
-        try {
-            sv = Jsoup.connect("https://www.statista.com/statistics/263264/top-companies-in-the-world-by-market-value/").get();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        Elements table_body = sv.select("tr td:eq(1)");
-        Elements table_body2 = sv.select("tr td:eq(2)");
-        Elements table_body3 = sv.select("tr td:eq(3)");
-        for(int i=1; i<=10;i++)
-        {
-            String s =table_body2.get(i).text();
-            if (s.contains(".")){
-                s =s.replace(".","-");
-            }
-            stock_kings_namelist.add(table_body.get(i).text());
-            stock_kings_symbollist.add(s);
-            Double add = Double.parseDouble(table_body3.get(i).text());
-            String added =null;
-            if (add >1000){
-                added =table_body3.get(i).text()+" T";
-            }else{
-                added =table_body3.get(i).text()+" B";
-            }
-            stock_kings_changelist.add(added);
-        }
 
-    }
 
     public void getSaved_Crypto_Price() {
 
@@ -441,4 +430,30 @@ public class Service_Main_Aequities {
 
     public void Connect_Stocktwits(){}
 
+
+    public static void getStock_Kings() {
+        Document sv = null;
+        try {
+            sv = Jsoup.connect("http://www.iweblists.com/us/commerce/MarketCapitalization.html").get();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Elements table_body = sv.select("tr td:eq(1)");
+        Elements table_body2 = sv.select("tr td:eq(2)");
+        Elements table_body3 = sv.select("tr td:eq(3)");
+        for(int i=1; i<=10;i++)
+        {
+            stock_kings_namelist.add(table_body.get(i).text());
+            stock_kings_symbollist.add(table_body2.get(i).text());
+            Double add = Double.parseDouble(table_body3.get(i).text());
+            String added =null;
+            if (add >1000){
+                added =table_body3.get(i).text()+" T";
+            }else{
+                added =table_body3.get(i).text()+" B";
+            }
+            stock_kings_changelist.add(added);
+        }
+
+    }
 }
