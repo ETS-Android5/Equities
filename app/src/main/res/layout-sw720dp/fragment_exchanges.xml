@@ -3,7 +3,7 @@
 xmlns:app="http://schemas.android.com/apk/res-auto"
 android:layout_width="match_parent"
 android:layout_height="match_parent"
-android:background="@drawable/gradient"
+android:background="@drawable/background_gradient"
 android:orientation="vertical">
 
 <LinearLayout
@@ -15,18 +15,18 @@ android:orientation="vertical">
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        app:srcCompat="@drawable/bin" />
+        app:srcCompat="@drawable/exchange_crypto_binance" />
     <ImageView
         android:id="@+id/imageButton2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        app:srcCompat="@drawable/bin" />
+        app:srcCompat="@drawable/exchange_crypto_binance" />
     <ImageView
         android:id="@+id/imageButton3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        app:srcCompat="@drawable/bin" />
+        app:srcCompat="@drawable/exchange_crypto_binance" />
 </LinearLayout>
 </LinearLayout>

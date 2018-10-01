@@ -8,12 +8,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import static airhawk.com.myapplication.Activity_Main.fullScreen;
 import static airhawk.com.myapplication.Constructor_App_Variables.Simg_url;
 import static airhawk.com.myapplication.Constructor_App_Variables.Smessage;
+import static airhawk.com.myapplication.Constructor_App_Variables.Smessage_link;
 import static airhawk.com.myapplication.Constructor_App_Variables.Smessage_time;
 import static airhawk.com.myapplication.Constructor_App_Variables.Suser_name;
-import static airhawk.com.myapplication.Constructor_App_Variables.image_video_url;
-import static airhawk.com.myapplication.Constructor_App_Variables.stocktwits_feedItems;
 
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
@@ -25,6 +25,7 @@ public class Adapter_StockTwits_Feed extends RecyclerView.Adapter<Adapter_StockT
 
    private static Context context;
     private ArrayList<String> timeList=Smessage_time;
+    private ArrayList<String> linkList=Smessage_link;
     public ArrayList<String> nameList=Suser_name;
     public ArrayList<String> messsageList=Smessage;
     public ArrayList<String> imagelist=Simg_url;
@@ -40,17 +41,17 @@ public class Adapter_StockTwits_Feed extends RecyclerView.Adapter<Adapter_StockT
      LayoutInflater inflater = LayoutInflater.from(parent.getContext());
      final View view = inflater.inflate(R.layout.recyclerview_stocktwits, parent, false);
 
-     MyViewHolder mvh = new MyViewHolder(view, new MyViewHolder.myClickWebView() {  
-       @Override  
-       public void gotoWebView(String textlink) {  
+     MyViewHolder mvh = new MyViewHolder(view, new MyViewHolder.myClickWebView() {
+       @Override
+       public void gotoWebView(String textlink) {
          //Intent intent=new Intent(view.getContext(),Activity_Web_View.class);
          //intent.putExtra("url",textlink);
 
 
            //view.getContext().startActivity(intent);
-       }  
-     });  
-     return mvh;  
+       }
+     });
+     return mvh;
    }  
    
    @Override  
@@ -60,8 +61,8 @@ public class Adapter_StockTwits_Feed extends RecyclerView.Adapter<Adapter_StockT
      holder.tv_message.setText(""+Smessage.get(position));
      if(imagelist !=null){
      Picasso.with(context).load(imagelist.get(position)).memoryPolicy(MemoryPolicy.NO_CACHE).fit().centerInside().noFade().into(holder.tv_image);}
-     else{Picasso.with(context).load(R.drawable.socialmedia).memoryPolicy(MemoryPolicy.NO_CACHE).noFade().into(holder.tv_image);}
-     //holder.textlink=item.getLink();
+     else{Picasso.with(context).load(R.drawable.direction_socialmedia).memoryPolicy(MemoryPolicy.NO_CACHE).noFade().into(holder.tv_image);}
+     holder.textlink= String.valueOf(Smessage.get(position));
    }
    
    @Override  
@@ -75,7 +76,7 @@ public class Adapter_StockTwits_Feed extends RecyclerView.Adapter<Adapter_StockT
        TextView tv_message;
        TextView tv_message_time;
        ImageView tv_image;
-       //String textlink;
+       String textlink;
        myClickWebView myClickWebView;
    
      public MyViewHolder(View itemView, final myClickWebView myClickWebView) {  
@@ -85,18 +86,18 @@ public class Adapter_StockTwits_Feed extends RecyclerView.Adapter<Adapter_StockT
        tv_message=itemView.findViewById(R.id.message);
        tv_message_time=itemView.findViewById(R.id.message_time);
        tv_image=itemView.findViewById(R.id.user_image);
-       this.myClickWebView=myClickWebView;  
-   
-       itemView.setOnClickListener(new View.OnClickListener() {  
-         @Override  
-         public void onClick(View view) {  
+       this.myClickWebView=myClickWebView;
+       fullScreen ="go";
+       itemView.setOnClickListener(new View.OnClickListener() {
+         @Override
+         public void onClick(View view) {
           //myClickWebView.gotoWebView(textlink);
-         }  
+         }
        });
 
 
 
-   
+
      }  
    
      //interface to handle onclick event and send some extras to another activity  

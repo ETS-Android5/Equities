@@ -194,6 +194,25 @@ public class Database_Local_Aequities extends SQLiteOpenHelper {
         return type;
     }
 
+    public String getType(String name) {
+        String type = new String();
+        try {
+            String query = "SELECT DISTINCT * FROM " + TABLE_AEQUITY_INFO+" WHERE KEY_AEQUITY_NAME="+"\""+name+"\"";
+            SQLiteDatabase db = this.getWritableDatabase();
+            Cursor cursor = db.rawQuery(query, null);
+            if (cursor.moveToFirst()) {
+                while (!cursor.isAfterLast()) {
+                    type=cursor.getString(cursor.getColumnIndex(KEY_AEQUITY_TYPE));
+                    cursor.moveToNext();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return type;
+    }
+
     public ArrayList<String> getAllAequities() {
         ArrayList<String> tableNames = new ArrayList<>();
         try {

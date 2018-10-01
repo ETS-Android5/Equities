@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/gradient"
+    android:background="@drawable/background_gradient"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
     tools:context="airhawk.com.myapplication.Activity_Main">
@@ -43,26 +43,26 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight=".1"
             android:orientation="vertical">
-
-
 
 
             <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
+
                 <ImageView
                     android:id="@+id/search_button"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:src="@android:drawable/ic_menu_search"/>
+                    android:src="@android:drawable/ic_menu_search" />
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight=".2">
+
                     <android.support.design.widget.TabLayout
                         android:id="@+id/tabs"
                         android:layout_width="match_parent"
@@ -70,17 +70,42 @@
                         app:tabIndicatorHeight="0dp"
                         app:tabMode="scrollable"
                         app:tabSelectedTextColor="#ffffff"
-                        app:tabTextColor="@color/colorPrimary"
-                        app:tabTextAppearance="@style/TextAppearance.AppCompat.Small"/>
+                        app:tabTextAppearance="@style/TextAppearance.AppCompat.Small"
+                        app:tabTextColor="@color/colorPrimary" />
                 </LinearLayout>
             </TableRow>
-            <ProgressBar
-                android:id="@+id/mainbar"
+
+            <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:id="@+id/progLayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/colorPrimary"
-                android:indeterminateDrawable="@drawable/progressbardraw"
-                android:visibility="gone"/>
+                android:layout_weight="1"
+                android:background="@color/colorPrimary">
+
+
+                <TextView
+                    android:id="@+id/output2"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_centerInParent="true"
+                    android:gravity="center"
+                    android:textStyle="italic"
+                    android:text="25%"
+                    android:textColor="#ffffff"
+                    android:textSize="20sp" />
+
+                <ProgressBar
+                    android:id="@+id/mainbar"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="6dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerInParent="true"
+                    android:indeterminate="true" />
+
+            </RelativeLayout>
+
             <android.support.v4.view.ViewPager
                 android:id="@+id/viewpager"
                 android:layout_width="fill_parent"

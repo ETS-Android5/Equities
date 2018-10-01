@@ -15,6 +15,7 @@ import android.widget.TextView;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
+import static airhawk.com.myapplication.Activity_Main.l;
 import static airhawk.com.myapplication.Activity_Main.recyclerView;
 import static airhawk.com.myapplication.Constructor_App_Variables.btc_market_cap_amount;
 import static airhawk.com.myapplication.Constructor_App_Variables.btc_market_cap_change;
@@ -54,6 +55,11 @@ public class Adapter_Main_Markets extends RecyclerView.Adapter<Adapter_Main_Mark
 
         public MyViewHolder(View itemView) {
             super(itemView);
+
+                //l.scrollToPosition(0);
+                //itemView.startAnimation(AnimationUtils.loadAnimation(itemView.getContext(), R.anim.linear));
+
+
 
 
 

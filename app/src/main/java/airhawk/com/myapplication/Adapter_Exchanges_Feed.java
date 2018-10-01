@@ -2,6 +2,7 @@ package airhawk.com.myapplication;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,23 +10,28 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.MemoryPolicy;
+import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import static airhawk.com.myapplication.Activity_Main.ap_info;
 import static airhawk.com.myapplication.Constructor_App_Variables.aequity_exchanges;
-import static airhawk.com.myapplication.Constructor_App_Variables.exchange_image;
+import static airhawk.com.myapplication.Constructor_App_Variables.crypto_exchange_image;
 import static airhawk.com.myapplication.Constructor_App_Variables.crypto_exchange_name;
 import static airhawk.com.myapplication.Constructor_App_Variables.crypto_exchange_url;
+import static airhawk.com.myapplication.Constructor_App_Variables.stock_exchange_image;
 import static airhawk.com.myapplication.Constructor_App_Variables.stock_exchange_name;
 import static airhawk.com.myapplication.Constructor_App_Variables.stock_exchange_url;
 
 public class Adapter_Exchanges_Feed extends RecyclerView.Adapter<Adapter_Exchanges_Feed.MyViewHolder> {
-    int[] basic_crypto_array = new int[] { R.drawable.bin, R.drawable.coinb };
+    int[] basic_crypto_array = new int[] { R.drawable.exchange_crypto_binance, R.drawable.exchange_crypto_coinbase};
    private static Context context;
     private List<Constructor_Exchanges> feedItems;
     public ArrayList<String> e_text=aequity_exchanges;
-    public ArrayList<String> e_image=exchange_image;
+    public ArrayList<String> s_image=stock_exchange_image;
+    public ArrayList<String> c_image=crypto_exchange_image;
     public Adapter_Exchanges_Feed(Context context, List<Constructor_Exchanges> items){
         this.context=context;
         this.feedItems = items;
@@ -53,22 +59,45 @@ public class Adapter_Exchanges_Feed extends RecyclerView.Adapter<Adapter_Exchang
    @Override  
    public void onBindViewHolder(MyViewHolder holder, int position) {
 
-     holder.ex_text.setText(""+ aequity_exchanges.get(position));
-       System.out.println(aequity_exchanges);
-     if(exchange_image !=null){
-         //System.out.println("Image is good "+exchange_image.get(position));
-     //Picasso.with(context).load(basic_crypto_array[position]).memoryPolicy(MemoryPolicy.NO_CACHE).fit().centerInside().noFade().into(holder.ex_image);
-     }
-     else{
-         //System.out.println("Image is not good");
-         //Picasso.with(context).load(R.drawable.socialmedia).memoryPolicy(MemoryPolicy.NO_CACHE).noFade().into(holder.ex_image);
-     }
+
+       Constructor_App_Variables ax = new Constructor_App_Variables();
+       String a = ax.getMarketType();
+
+       if (a.equals("Cryptocurrency") || a.equals("Crypto"))
+       {
+           if(ap_info.getMarketName().equalsIgnoreCase("bitcoin")||
+                   ap_info.getMarketName().equalsIgnoreCase("ethereum")||
+                   ap_info.getMarketName().equalsIgnoreCase("litecoin")||
+                   ap_info.getMarketName().equalsIgnoreCase("bitcoin cash")||
+                   ap_info.getMarketName().equalsIgnoreCase("ethereum classic")){
+                   aequity_exchanges.add("Coinbase");
+           }
+           holder.ex_text.setText(""+ aequity_exchanges.get(position));
+                   String g = (String) "exchange_crypto_"+aequity_exchanges.get(position).toString().toLowerCase();
+           int productImageId = context.getResources().getIdentifier(
+                   g, "drawable", context.getPackageName());
+
+                   Picasso.with(context).load(productImageId).memoryPolicy(MemoryPolicy.NO_CACHE).fit().centerInside().noFade().into(holder.ex_image);
+
+       }
+       if (a.equalsIgnoreCase("Stock")){
+           holder.ex_text.setText(""+ aequity_exchanges.get(position));
+             System.out.println("Image is good "+s_image.get(position));
+               int productImageId = context.getResources().getIdentifier(
+                      s_image.get(position), "drawable", context.getPackageName());
+               Picasso.with(context).load(productImageId).memoryPolicy(MemoryPolicy.NO_CACHE).fit().centerInside().noFade().into(holder.ex_image);
+          }
+
+
+
+
+
 
 
    }
    
    @Override  
-   public int getItemCount() {  
+   public int getItemCount() {
      return aequity_exchanges.size();
    }  
    

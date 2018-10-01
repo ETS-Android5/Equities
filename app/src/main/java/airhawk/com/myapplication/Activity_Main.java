@@ -2,8 +2,10 @@ package airhawk.com.myapplication;
 
 import android.content.Context;
 import android.content.res.AssetManager;
+import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +13,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.Animation;
@@ -26,16 +29,17 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
-import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.MobileAds;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -53,44 +57,38 @@ import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.lang.ref.WeakReference;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
-import java.text.DateFormat;
 import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
+import java.util.regex.Pattern;
 
 
 import static airhawk.com.myapplication.Constructor_App_Variables.*;
+import static airhawk.com.myapplication.Fragment_Saved.saved_feed;
 import static airhawk.com.myapplication.Service_Main_Aequities.crypto_kings_changelist;
 import static airhawk.com.myapplication.Service_Main_Aequities.crypto_kings_marketcaplist;
 import static airhawk.com.myapplication.Service_Main_Aequities.crypto_kings_namelist;
 import static airhawk.com.myapplication.Service_Main_Aequities.crypto_kings_symbolist;
-import static airhawk.com.myapplication.Service_Main_Aequities.stock_kings_changelist;
-import static airhawk.com.myapplication.Service_Main_Aequities.stock_kings_namelist;
-import static airhawk.com.myapplication.Service_Main_Aequities.stock_kings_symbollist;
 
 public class Activity_Main extends AppCompatActivity {
-    Integer count =1;
-    boolean forward;    RequestQueue requestQueue;
+    boolean forward;
+    RequestQueue requestQueue;
     ArrayList temp =new ArrayList();
     Database_Local_Aequities co =new Database_Local_Aequities(this);
     Constructor_App_Variables cav =new Constructor_App_Variables();
     RelativeLayout progresslayout;
     TextView txt;
     final int[] ICONS = new int[]{
-            R.drawable.up,
-            R.drawable.down,
-            R.drawable.news,
-            R.drawable.kings};
+            R.drawable.direction_up,
+            R.drawable.direction_down,
+            R.drawable.direction_news,
+            R.drawable.direction_kings};
     int[] names = new int[]{R.string.leaders, R.string.losers, R.string.news, R.string.market_kings};
     ImageView search_button;
     ImageView imageView;
@@ -111,10 +109,13 @@ public class Activity_Main extends AppCompatActivity {
     static Boolean async_analysis_page = false;
     static Constructor_App_Variables ap_info = new Constructor_App_Variables();
     Database_Local_Aequities check_saved = new Database_Local_Aequities(Activity_Main.this);
-    Animation animLinear,centerLinear;
+    Animation centerLinear;
     FrameLayout fu,frameLayout;
     Context context =this;
-
+    static Adapter_Main_Markets adapter;
+    static RecyclerView.LayoutManager l;
+    private static InterstitialAd mInterstitialAd;
+    static String fullScreen ="no";
 
 
     public static String AssetJSONFile(String filename, Context context) throws IOException {
@@ -126,17 +127,75 @@ public class Activity_Main extends AppCompatActivity {
         return new String(formArray);
     }
 
+
+
+
+    private boolean checkInternetConnection() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        // test for connection
+        if (cm.getActiveNetworkInfo() != null
+                && cm.getActiveNetworkInfo().isAvailable()
+                && cm.getActiveNetworkInfo().isConnected()) {
+            return true;
+        } else {
+            Log.v(TAG, "Internet Connection Not Present");
+            this.finishAffinity();
+            return false;
+        }
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        MobileAds.initialize(this, "ca-app-pub-3940256099942544~3347511713");
+        mInterstitialAd = new InterstitialAd(this);
+        mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
+        mInterstitialAd.loadAd(new AdRequest.Builder().build());
+        checkInternetConnection();
+        get_crypto_exchange_info();
+        get_stock_exchange_info();
+        setContentView(R.layout.splash);
+        centerLinear = AnimationUtils.loadAnimation(this, R.anim.center);
+        imageView =findViewById(R.id.imageView);
+        //imageView.startAnimation(centerLinear);
+
+        progress= (ProgressBar) findViewById(R.id.progressBar);
+        txt = (TextView) findViewById(R.id.output);
+
+        new setAsyncDataMain(this).execute();
+
+    }
+
     public void onBackPressed() {
+        if (fullScreen.equalsIgnoreCase("go")) {
+            // Sample AdMob app ID: ca-app-pub-3940256099942544~3347511713
+            MobileAds.initialize(this, "ca-app-pub-3940256099942544~3347511713");
+
+            if (mInterstitialAd.isLoaded()) {
+                mInterstitialAd.show();
+            }
+            mInterstitialAd.setAdListener(new AdListener() {
+                @Override
+                public void onAdClosed() {
+                    //finish();
+                }
+            });
+        }
+        saved_feed.removeAllViews();
+        graph_change.clear();
         exchange_list.clear();
         aequity_exchanges.clear();
         stocktwits_feedItems.clear();
         graph_date.clear();
         graph_high.clear();
         graph_volume.clear();
-        new setAsyncDataMain(this).cancel(true);
+        new setAsyncChosenData(this).cancel(true);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         ViewPager pager = findViewById(R.id.viewpager);
+        if (pager.getVisibility() == View.VISIBLE) {
+            this.finishAffinity();
+        }
         pager.setVisibility(View.VISIBLE);
         ViewPager market_pager = findViewById(R.id.market_pager);
         market_pager.setVisibility(View.GONE);
@@ -152,25 +211,12 @@ public class Activity_Main extends AppCompatActivity {
             tabs.getTabAt(2).setIcon(android.R.drawable.btn_star_big_on);
             tabs.getTabAt(3).setIcon(ICONS[2]);
             tabs.getTabAt(4).setIcon(ICONS[3]);}
-
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        get_crypto_exchange_info();
-        get_stock_exchange_info();
-        setContentView(R.layout.splash);
-        centerLinear = AnimationUtils.loadAnimation(this, R.anim.center);
-        imageView =findViewById(R.id.imageView);
-        //imageView.startAnimation(centerLinear);
-        count =1;
-        progress= (ProgressBar) findViewById(R.id.progressBar);
-        progress.setMax(10);
-        progress.setProgress(0);
-        txt = (TextView) findViewById(R.id.output);
-
-        new setAsyncDataMain(this).execute(10);
+        recyclerView = findViewById(R.id.item_list);
+        l =new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        recyclerView.setLayoutManager(l);
+        adapter = new Adapter_Main_Markets();
+        recyclerView.setAdapter(adapter);
+        autoScroll();
 
     }
 
@@ -187,18 +233,16 @@ public class Activity_Main extends AppCompatActivity {
             super.onPreExecute();
 
             startTime = System.nanoTime();
+            Random rand = new Random();
+            int value = rand.nextInt(33);
+            String [] qu =getResources().getStringArray(R.array.all_quotes);
+            String q = qu[value];
+            txt.setText(q);
         }
 
         @Override
         protected String doInBackground(Integer... params) {
-            for (; count <= params[0]; count++) {
-                try {
-                    Thread.sleep(100);
-                    publishProgress(count);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
+
 
             getCrypto_Kings();
             getSaved_stock_points();
@@ -212,12 +256,8 @@ public class Activity_Main extends AppCompatActivity {
             //SAVED METHOD SLOWS DOWN APP BY 6 SECONDS. DONT FORGET TO UNHIDE CODE OM FRAGMENT_SAVED WHEN THIS IS REPAIRED
             return "task finished";
         }
-
-
-
         @Override
         protected void onPostExecute(String result) {
-
             // get a reference to the activity if it is still there
             Activity_Main activity = activityReference.get();
             if (activity == null || activity.isFinishing()) return;
@@ -227,11 +267,7 @@ public class Activity_Main extends AppCompatActivity {
             System.out.println("SERVICE MAIN TIME IS " + duration / 1000000000 + " seconds");
 
         }
-        @Override
-        protected void onProgressUpdate(Integer... values) {
-            txt.setText(values[0]+"0 %");
-            progress.setProgress(values[0]);
-        }
+
     }
 
     public class setAsyncChosenData extends AsyncTask<Void, Void, String> {
@@ -244,62 +280,83 @@ public class Activity_Main extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            Random rand = new Random();
+            int svalue = rand.nextInt(16);
+            int cvalue = rand.nextInt(13);
 
-            startTime = System.nanoTime();
             Activity_Main activity = activityReference.get();
+            String [] sq =activity.getResources().getStringArray(R.array.stock_quotes);
+            String [] cq =activity.getResources().getStringArray(R.array.crypto_quotes);
+            String q;
+            if (ap_info.getMarketType().equals("Stock")){
+                q = sq[svalue];}
+                else{
+                q = cq[cvalue];
+            }
+            TextView txt2 =activity.findViewById(R.id.output2);
+            txt2.setText(q);
+            startTime = System.nanoTime();
+            RelativeLayout progLayout =activity.findViewById(R.id.progLayout);
+            progLayout.setVisibility(View.VISIBLE);
             ProgressBar mainbar = activity.findViewById(R.id.mainbar);
             mainbar.setIndeterminate(true);
-            mainbar.setVisibility(View.VISIBLE);
             pager = activity.findViewById(R.id.viewpager);
             pager.setVisibility(View.GONE);
         }
 
         @Override
         protected String doInBackground(Void... params) {
+            Activity_Main activity = activityReference.get();
             if(isCancelled())
             {
+
                 System.out.println("Async Cancelled");return null;}
-            Activity_Main activity = activityReference.get();
+
 
 
 //            getSupportActionBar().setDisplayShowTitleEnabled(true);
             if (async_analysis_page) {
                 reloadAllData();
                 if (ap_info.getMarketType().equals("Crypto")||(ap_info.getMarketType().equals("Cryptocurrency"))) {
-                    activity.get_crypto_points();
                     activity.getChosenCryptoInfo();
                     activity.getStockTwitsData();
                     activity.get_coinmarketcap_exchange_listing();
-                    Service_Chosen_Aequity shoe = new Service_Chosen_Aequity();
+                    Service_Chosen_Aequity shoe = new Service_Chosen_Aequity(Activity_Main.this);
+
                     shoe.main();
+                    do_graph_change();
                     System.out.println("ASYNC C HAS BEEN CALLED PREVIOUSLY");
                 }else{
-                    activity.get_stock_points();
+
                     activity.get_current_stock_info();
                     activity.getStockTwitsData();
-                    Service_Chosen_Aequity shoe = new Service_Chosen_Aequity();
+                    Service_Chosen_Aequity shoe = new Service_Chosen_Aequity(Activity_Main.this);
+
                     System.out.println("ASYNC S HAS BEEN CALLED PREVIOUSLY");
                     shoe.main();
+                    do_graph_change();
                 }
 
 
 
             } else {
                 if (ap_info.getMarketType().equals("Crypto")||(ap_info.getMarketType().equals("Cryptocurrency"))) {
-                    activity.get_crypto_points();
                     activity.getChosenCryptoInfo();
                     activity.getStockTwitsData();
                     activity.get_coinmarketcap_exchange_listing();
-                    Service_Chosen_Aequity shoe = new Service_Chosen_Aequity();
+                    Service_Chosen_Aequity shoe = new Service_Chosen_Aequity(Activity_Main.this);
+
                     shoe.main();
                     System.out.println("ASYNC* HAS NOT BEEN CALLED PREVIOUSLY");
+                    do_graph_change();
                 }else{
-                    activity.get_stock_points();
+
                     activity.get_current_stock_info();
                     activity.getStockTwitsData();
-                    Service_Chosen_Aequity shoe = new Service_Chosen_Aequity();
+                    Service_Chosen_Aequity shoe = new Service_Chosen_Aequity(Activity_Main.this);
                     System.out.println("ASYNC* HAS NOT BEEN CALLED PREVIOUSLY");
                     shoe.main();
+                    do_graph_change();
                 }
 
                 async_analysis_page = true;
@@ -313,13 +370,14 @@ public class Activity_Main extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
-
-
             // get a reference to the activity if it is still there
             Activity_Main activity = activityReference.get();
+
+
             String a=ap_info.getCurrent_Aequity_Price();
             if (activity == null || activity.isFinishing()&&graph_high.size()>0&&requestQueue !=null&& forward) return;
-
+            ProgressBar mainbar = activity.findViewById(R.id.mainbar);
+            mainbar.setIndeterminate(false);
             pager = activity.findViewById(R.id.viewpager);
             pager.setVisibility(View.GONE);
             market_pager = activity.findViewById(R.id.market_pager);
@@ -328,17 +386,16 @@ public class Activity_Main extends AppCompatActivity {
             tabs = activity.findViewById(R.id.tabs);
             activity.setupChosenViewPager(market_pager);
             tabs.setupWithViewPager(market_pager);
-            tabs.getTabAt(0).setIcon(R.drawable.info);
-            tabs.getTabAt(1).setIcon(R.drawable.news);
-            tabs.getTabAt(2).setIcon(R.drawable.yt);
-            tabs.getTabAt(3).setIcon(R.drawable.exchange);
-            tabs.getTabAt(4).setIcon(R.drawable.socialmedia);
-            mainbar = activity.findViewById(R.id.mainbar);
-            mainbar.setIndeterminate(false);
-            mainbar.setVisibility(View.GONE);
+            tabs.getTabAt(0).setIcon(R.drawable.direction_info);
+            tabs.getTabAt(1).setIcon(R.drawable.direction_news);
+            tabs.getTabAt(2).setIcon(R.drawable.direction_youtube_video);
+            tabs.getTabAt(3).setIcon(R.drawable.direction_exchange);
+            tabs.getTabAt(4).setIcon(R.drawable.direction_socialmedia);
+            RelativeLayout progLayout =activity.findViewById(R.id.progLayout);
+            progLayout.setVisibility(View.GONE);
             long endTime = System.nanoTime();
             long duration = (endTime - startTime);
-            System.out.println("SERVICE MAIN TIME IS " + duration / 1000000000 + " seconds");
+            System.out.println("SERVICE Chosen TIME IS " + duration / 1000000000 + " seconds");
 
         }
 
@@ -348,12 +405,10 @@ public class Activity_Main extends AppCompatActivity {
     private void setMainPage() {
         setContentView(R.layout.activity_main);
         setJSON_INFO();
-        frameLayout=findViewById(R.id.frameLayout);
         toolbar = findViewById(R.id.toolbar);
         fu=findViewById(R.id.frameLayout);
         fu.setVisibility(View.VISIBLE);
         search_button=findViewById(R.id.search_button);
-
         search_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -382,9 +437,34 @@ public class Activity_Main extends AppCompatActivity {
 
 
         recyclerView = findViewById(R.id.item_list);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        recyclerView.setAdapter(new Adapter_Main_Markets());
-        //recyclerView.startAnimation(AnimationUtils.loadAnimation(this, R.anim.linear));
+        l =new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        recyclerView.setLayoutManager(l);
+        adapter = new Adapter_Main_Markets();
+        recyclerView.setAdapter(adapter);
+        autoScroll();
+
+
+
+
+              }
+
+    public void autoScroll(){
+        final int speedScroll = 0;
+        final Handler handler = new Handler();
+        final Runnable runnable = new Runnable() {
+            int count = -1;
+            @Override
+            public void run() {
+                if(count == adapter.getItemCount())
+                    count =0;
+                recyclerView.smoothScrollToPosition(count-count);
+                if(count < adapter.getItemCount()){
+                    recyclerView.scrollToPosition(++count);
+                    handler.postDelayed(this,3000);
+                }
+            }
+        };
+        handler.postDelayed(runnable,speedScroll);
     }
 
     private void setupMainViewPager(ViewPager viewPager) {
@@ -436,76 +516,6 @@ public class Activity_Main extends AppCompatActivity {
         }
     }
 
-    public void Update_Saved_Data(){
-
-        toolbar = findViewById(R.id.toolbar);
-        fu=findViewById(R.id.frameLayout);
-        fu.setVisibility(View.VISIBLE);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-        pager = findViewById(R.id.viewpager);
-        pager.setVisibility(View.VISIBLE);
-        market_pager = findViewById(R.id.market_pager);
-        market_pager.setVisibility(View.GONE);
-        TabLayout tabs = findViewById(R.id.tabs);
-        setupMainViewPager(pager);
-        tabs.setupWithViewPager(pager);
-        tabs.getTabAt(0).setIcon(ICONS[0]);
-        tabs.getTabAt(1).setIcon(ICONS[1]);
-        Database_Local_Aequities check_saved = new Database_Local_Aequities(Activity_Main.this);
-        if (check_saved.getName().isEmpty()){}else{
-            tabs.getTabAt(2).setIcon(ICONS[2]);}
-        tabs.getTabAt(3).setIcon(ICONS[3]);
-        tabs.getTabAt(4).setIcon(ICONS[4]);
-        tabs.getTabAt(5).setIcon(ICONS[5]);
-        mainbar.setVisibility(View.VISIBLE);
-    }
-
-    public void setSavedMarketPage() {
-        toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        if (ap_info.getMarketType().equals("Cryptocurrency")) {
-            getChosenCryptoInfo();
-            get_crypto_points();
-        }
-        getSupportActionBar().setDisplayShowTitleEnabled(true);
-        if (async_analysis_page) {
-            reloadAllData();
-            getStockTwitsData();
-
-            get_stock_points();
-            Service_Chosen_Aequity shoe = new Service_Chosen_Aequity();
-            shoe.main();
-            System.out.println("ASYNC! HAS BEEN CALLED PREVIOUSLY");
-        } else {
-            getStockTwitsData();
-            get_stock_points();
-            Service_Chosen_Aequity shoe = new Service_Chosen_Aequity();
-            shoe.main();
-            System.out.println("ASYNC! HAS NOT BEEN CALLED");
-
-            async_analysis_page = true;
-
-
-        }
-        pager = findViewById(R.id.viewpager);
-        pager.setVisibility(View.GONE);
-        market_pager = findViewById(R.id.market_pager);
-        market_pager.setVisibility(View.VISIBLE);
-
-        TabLayout tabs = findViewById(R.id.tabs);
-        setupChosenViewPager(market_pager);
-        tabs.setupWithViewPager(market_pager);
-        tabs.getTabAt(0).setIcon(R.drawable.info);
-        tabs.getTabAt(1).setIcon(R.drawable.news);
-        tabs.getTabAt(2).setIcon(R.drawable.yt);
-        tabs.getTabAt(3).setIcon(R.drawable.exchange);
-        tabs.getTabAt(4).setIcon(R.drawable.socialmedia);
-        mainbar = findViewById(R.id.mainbar);
-        mainbar.setIndeterminate(false);
-        mainbar.setVisibility(View.GONE);
-    }
-
     private void reloadAllData() {
         graph_date.clear();
         graph_high.clear();
@@ -539,6 +549,7 @@ public class Activity_Main extends AppCompatActivity {
 
                 InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 inputMethodManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                graph_change.clear();
                 exchange_list.clear();
                 aequity_exchanges.clear();
                 stocktwits_feedItems.clear();
@@ -559,33 +570,7 @@ public class Activity_Main extends AppCompatActivity {
         });
     }//Get's updated data from Firebase about new aequities
 
-    private void UpdateData() {
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference userRef = database.getReference("ALL");
-        ValueEventListener postListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot childDataSnapshot : dataSnapshot.getChildren()) {
-                    Constructor_App_Variables team = new Constructor_App_Variables();
-                    team.setMarketSymbol(String.valueOf(childDataSnapshot.child("0").getValue()));
-                    searchview_arraylist.add(String.valueOf(team));
-                    ld = new Database_Local_Aequities(Activity_Main.this);
-                }
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                // Getting Post failed, log a message
-                Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
-                // ...
-            }
-        };
-        userRef.addValueEventListener(postListener);
-    }
-
     public void getCrypto_Kings() {
-
         long startTime = System.nanoTime();
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         final String url = "https://api.coinmarketcap.com/v2/ticker/?sort=rank";
@@ -603,7 +588,10 @@ public class Activity_Main extends AppCompatActivity {
                         String value = obj.getString (key);// Here's your value
                         JSONObject jsonObject = new JSONObject(value);
                         String name = jsonObject.getString("name");
-                        crypto_kings_namelist.add(name);
+                        if (name.equalsIgnoreCase("XRP")){
+                        crypto_kings_namelist.add("Ripple");}else{
+                            crypto_kings_namelist.add(name);
+                        }
                         String symbol = jsonObject.getString("symbol");
                         crypto_kings_symbolist.add(symbol);
                         JSONObject quotes =jsonObject.getJSONObject("quotes");
@@ -657,6 +645,7 @@ public class Activity_Main extends AppCompatActivity {
         long startTime = System.nanoTime();
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         String newString =ap_info.getMarketName();
+        System.out.println("1 -"+newString);
         if(newString.contains(" ")){
             newString =newString.replace(" ","-");
         }
@@ -744,87 +733,6 @@ public class Activity_Main extends AppCompatActivity {
 
     }
 
-    public void get_crypto_points() {
-        long startTime = System.nanoTime();
-        DateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-        Date begindate = new Date();
-        String f = ap_info.getMarketName();
-        if (f.contains(" ")){
-            f= f.replaceAll(" ","-");}
-        String url = "https://coinmarketcap.com/currencies/" + f + "/historical-data/?start=20000101&end=" + sdf.format(begindate);
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        // Request a string response from the provided URL.
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            String response_utf8 = URLDecoder.decode(URLEncoder.encode(response, "iso8859-1"), "UTF-8");
-                            Document doc = Jsoup.parse(response_utf8);
-                            Element price = doc.getElementById("quote_price");
-                            String v = price.text();
-                            Elements divs = doc.select("table");
-                            for (Element tz : divs) {
-                                Elements tds = tz.select("td");
-                                Elements s = tz.getElementsByClass("text-right");
-                                for (Element ss : s) {
-                                    Elements p = ss.select("td[data-format-fiat]");
-                                    String g = p.text();
-                                    String[] splited = g.split("\\s+");
-                                    if (v != null && !g.isEmpty()) {
-                                        graph_high.add(splited[3]);
-                                        graph_low.add(splited[2]);
-                                    }
-                                    Elements pn = ss.select("td[data-format-market-cap]");
-                                    String vp = pn.text();
-                                    String[] split = vp.split("\\s+");
-                                    if (vp != null && !vp.isEmpty()) {
-                                        graph_volume.add(split[0]);
-                                        graph_market_cap.add(split[1]);
-                                    }
-                                }
-                                for (Element bb : tds) {
-                                    Elements gdate = bb.getElementsByClass("text-left");
-                                    String result0 = gdate.text();
-                                    if (result0 != null && !result0.isEmpty()) {
-                                        graph_date.add(String.valueOf(result0));
-                                    }
-                                }
-                            }_AllDays = graph_high;
-
-                        } catch (UnsupportedEncodingException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        error.printStackTrace();
-                        Log.d("log2=", error.toString());
-                        //requestQueue.stop();
-                    }
-                });
-        // Add the request to the RequestQueue.
-        requestQueue.add(stringRequest);
-        requestQueue.start();
-        long endTime = System.nanoTime();
-        long duration = (endTime - startTime);
-        System.out.println("CRYPTO POINTS TIME IS " + duration / 1000000000 + " seconds");
-
-
-
-
-
-
-        //for (int counter = 0; counter < numbers.size(); counter++) {
-        //     println("VOLUME " + graph_volume.get(counter) + " NUMBER " + graph_high.get(counter) + " DATE " + graph_date.get(counter));
-
-        //}
-
-
-    }
-
     public void get_current_stock_info(){
         String symbol =ap_info.getMarketSymbol();
         String apikey ="XBA42BUC2B6U6G5C";
@@ -838,6 +746,7 @@ public class Activity_Main extends AppCompatActivity {
                     // your response
                     JSONObject jsonObject = new JSONObject(String.valueOf(response));
                     // get Time
+
                     JSONObject time = jsonObject.getJSONObject("Global Quote");
                     Iterator<String> iterator = time.keys();
 
@@ -883,7 +792,6 @@ public class Activity_Main extends AppCompatActivity {
             @Override
             public void onResponse(JSONObject response) {
                 try {
-                    StringBuilder formattedResult = new StringBuilder();
                     JSONArray responseJSONArray = response.getJSONArray("messages");
                     for (int i = 0; i < responseJSONArray.length(); i++) {
                         JSONObject user_info = (JSONObject) responseJSONArray.getJSONObject(i).get("user");
@@ -895,6 +803,23 @@ public class Activity_Main extends AppCompatActivity {
                         String url = user_info.get("avatar_url_ssl").toString();
                         Constructor_App_Variables.Simg_url.add(url);
                         Constructor_App_Variables.Smessage.add(message);
+
+                        String[] words = message.split("\\s+");
+
+
+                        Pattern pattern = Patterns.WEB_URL;
+                        for(String word : words)
+                        {
+                            if(pattern.matcher(word).find())
+                            {
+                                if(!word.toLowerCase().contains("http://") && !word.toLowerCase().contains("https://"))
+                                {
+                                    word = "http://" + word;
+                                }
+                                Smessage_link.add(word);
+
+                            }
+                        }
 
                         JSONArray jsonArray =new JSONArray();
                         while(x.hasNext()){
@@ -932,8 +857,10 @@ public class Activity_Main extends AppCompatActivity {
         String apikey ="XBA42BUC2B6U6G5C";
 
         for(int i=0;i<a.size();i++){
+            System.out.println("Sym"+a+" Type"+aa+" St"+b);
+
             if(aa.get(i).equals("Stock")) {
-                String url ="https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol="+b.get(i)+"&apikey="+apikey;
+                String url ="https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol="+b+"&apikey="+apikey;
 
                 RequestQueue requestQueue = Volley.newRequestQueue(this);
                 JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
@@ -989,158 +916,16 @@ public class Activity_Main extends AppCompatActivity {
         }
         }
 
-    public void get_stock_points() {
-        forward=false;
-        String symbol =ap_info.getMarketSymbol();
-        String apikey ="XBA42BUC2B6U6G5C";
-        String url ="https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol="+symbol+"&outputsize=full&apikey="+apikey;
-        requestQueue = Volley.newRequestQueue(this);
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
-
-            @Override
-            public void onResponse(JSONObject response) {
-                try {
-                    // your response
-                    JSONObject jsonObject = new JSONObject(String.valueOf(response));
-                    // get Time
-
-                    JSONObject time = jsonObject.getJSONObject("Time Series (Daily)");
-                    System.out.println("Response : "+time);
-                    Iterator<String> iterator = time.keys();
-
-                    while (iterator.hasNext()) {
-                        String date = iterator.next().toString();
-                        JSONObject dateJson = time.getJSONObject(date);
-                        // get string
-                        String close = dateJson.getString("4. close");
-                        String volume =dateJson.getString("5. volume");
-                        DecimalFormat numberFormat = new DecimalFormat("#.00");
-                        double d =Double.parseDouble(close);
-                        String fclose=numberFormat.format(d);
-
-                        graph_date.add(date);
-                        graph_volume.add(volume);
-                        graph_high.add(fclose);
-
-                    }
-                    String a =ap_info.getCurrent_Aequity_Price();
-                    if (graph_high.size()>0&&a!=null)
-                    {
-                        forward=true;
-                        System.out.println("Graph high size is "+graph_high.size());
-                    }
-                    else{
-                        forward=false;
-                        System.out.println("Had to start over "+graph_high.size());
-
-
-                    }
-                    //Collections.reverse(graph_high);
-                    //Collections.reverse(graph_volume);
-                    //Collections.reverse(graph_date);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                System.out.println("An Error occured while making the ST request");
-            }
-        });
-        int socketTimeout = 30000;//30 seconds - change to what you want
-        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-        jsonObjectRequest.setRetryPolicy(policy);
-        requestQueue.add(jsonObjectRequest);
-
-
-
-        List<String> numbers = graph_high;
-        Collections.reverse(numbers);
-        _AllDays = numbers;
-
-    }
-
-    public void get_stock_daily_points(){
-        String symbol =ap_info.getMarketSymbol();
-        String apikey ="XBA42BUC2B6U6G5C";
-        String url ="https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol="+symbol+"&interval=5min&apikey="+apikey;
-
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
-
-            @Override
-            public void onResponse(JSONObject response) {
-                try {
-                    // your response
-                    JSONObject jsonObject = new JSONObject(String.valueOf(response));
-                    // get Time
-                    JSONObject time = jsonObject.getJSONObject("Time Series (5min)");
-                    Iterator<String> iterator = time.keys();
-
-                    while (iterator.hasNext()) {
-                        String date = iterator.next().toString();
-                        JSONObject dateJson = time.getJSONObject(date);
-                        // get string
-                        String close = dateJson.getString("4. close");
-                        String volume =dateJson.getString("5. volume");
-                        DecimalFormat numberFormat = new DecimalFormat("#.00");
-                        double d =Double.parseDouble(close);
-                        String fclose=numberFormat.format(d);
-
-                        graph_date_today.add(date);
-                        graph_volume_today.add(volume);
-                        graph_high_today.add(fclose);
-
-                    }
-                    //Collections.reverse(graph_high);
-                    //Collections.reverse(graph_volume);
-                    //Collections.reverse(graph_date);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                System.out.println("An Error occured while making the ST request");
-            }
-        });
-        requestQueue.add(jsonObjectRequest);
-    }
-
-    public void after_launch_crypto_listings(){
-        exchange_text.add("BTC");
-        exchange_text.add("ETH");
-        exchange_text.add("BCH");
-        exchange_text.add("LTC");
-
-        Document doc = null;
-        try {
-            doc = Jsoup.connect("https://info.binance.com/en/all").timeout(10 * 1000).get();
-        } catch (IOException e) {
-            e.printStackTrace(); }
-        Elements a = doc.getElementsByClass("name");
-        Elements b = a.select("span.abbr");
-        for (int i =0;i<b.size();i++) {
-            binance_list.add(b.get(i).text());
-            System.out.println(i+" "+b.get(i).text());
-        }
-
-
-    }
-
     public static void get_coinmarketcap_exchange_listing() {
         Document doc = null;
-        String symbol = ap_info.getMarketName();
-        if (symbol.contains(" ")){
-            symbol =symbol.replace(" ","-");
+        String name = ap_info.getMarketName();
+        System.out.println("THIS IS THE MARKET NAME "+name);
+        if (name.contains(" ")){
+            name =name.replace(" ","-");
         }
 
         try {
-            doc = Jsoup.connect("https://coinmarketcap.com/currencies/"+symbol+"/#markets").timeout(10 * 1000).get();
+            doc = Jsoup.connect("https://coinmarketcap.com/currencies/"+name+"/#markets").timeout(10 * 1000).get();
             Element tb = doc.getElementById("markets-table");
             Elements rows = tb.select("tr");
 
@@ -1155,9 +940,9 @@ public class Activity_Main extends AppCompatActivity {
             }
             System.out.println("EXCHANGE LIST"+exchange_list);
         } catch (HttpStatusException x){
-            System.out.println("There is no information about "+symbol +", so now we try world coinindex");
+            System.out.println("There is no information about "+name +", so now we try world coinindex");
             try {
-                doc = Jsoup.connect("https://www.worldcoinindex.com/coin/"+symbol).timeout(10 * 1000).get();
+                doc = Jsoup.connect("https://www.worldcoinindex.com/coin/"+name).timeout(10 * 1000).get();
                 String s = doc.getElementsByClass("mob-exchange exchange").text();
                 List<String> myList = new ArrayList<String>(Arrays.asList(s.split(" ")));
                 for(int i=0; i<myList.size();i++){
@@ -1190,210 +975,35 @@ public class Activity_Main extends AppCompatActivity {
 
 
     }
+
     public static void get_crypto_exchange_info() {
 
-        crypto_exchange_url.add("https://www.Binance.com/m-HomePage.html ");
-        crypto_exchange_url.add("https://www.OKEx.com");
-        crypto_exchange_url.add("https://www.Huobi.com");
-        crypto_exchange_url.add("https://www.Bithumb.com");
-        crypto_exchange_url.add("https://www.ZB.com");
-        crypto_exchange_url.add("https://www.Bitfinex.com");
-        crypto_exchange_url.add("https://www.HitBTC.com");
-        crypto_exchange_url.add("https://www.Bit-Z.com");
-        crypto_exchange_url.add("https://www.Bibox.com");
-        crypto_exchange_url.add("https://www.Coinsuper.com");
-        crypto_exchange_url.add("https://www.BCEX.com");
-        crypto_exchange_url.add("https://www.LBank.com");
-        crypto_exchange_url.add("https://www.DigiFinex.com");
-        crypto_exchange_url.add("https://www.Upbit.com");
-        crypto_exchange_url.add("https://pro.Coinbase.com");
-        crypto_exchange_url.add("https://www.Simex.com");
-        crypto_exchange_url.add("https://www.OEX.com");
-        crypto_exchange_url.add("https://www.Kraken.com");
-        crypto_exchange_url.add("https://www.Cryptonex.com");
-        crypto_exchange_url.add("https://www.BitMart.com");
-        crypto_exchange_url.add("https://www.Allcoin.com");
-        crypto_exchange_url.add("https://www.IDAX.com");
-        crypto_exchange_url.add("https://www.RightBTC.com");
-        crypto_exchange_url.add("https://www.IDCM.com");
-        crypto_exchange_url.add("https://www.YoBit.com");
-        crypto_exchange_url.add("https://www.DragonEX.io");
-        crypto_exchange_url.add("https://www.Gate.io");
-        crypto_exchange_url.add("https://www.Fatbtc.com");
-        crypto_exchange_url.add("https://www.Exrates.com");
-        crypto_exchange_url.add("https://www.CoinsBank.com");
-        crypto_exchange_url.add("https://www.BTCBOX.com");
-        crypto_exchange_url.add("https://www.Kryptono.exchange");
-        crypto_exchange_url.add("https://www.UEX.com");
-        crypto_exchange_url.add("https://www.Bitlish.com");
-        crypto_exchange_url.add("https://www.Sistemkoin.com");
-        crypto_exchange_url.add("https://www.Bitstamp.com");
-        crypto_exchange_url.add("https://www.Bitbank.com");
-        crypto_exchange_url.add("https://www.CoinTiger.com");
-        crypto_exchange_url.add("https://www.CoinBene.com");
-        crypto_exchange_url.add("https://www.LATOKEN.com");
-        crypto_exchange_url.add("https://www.Bitstamp.com");
-        crypto_exchange_url.add("https://www.Bittrex.com");
-        crypto_exchange_url.add("https://www.Poloniex.com");
-        crypto_exchange_url.add("https://www.CoinEgg.com");
-        crypto_exchange_url.add("https://www.Exmo.com");
-        crypto_exchange_url.add("https://www.Hotbit.com");
-        crypto_exchange_url.add("https://www.bitFlyer.com");
-        crypto_exchange_url.add("https://www.B2BX.com");
-        crypto_exchange_url.add("https://www.Rfinex.com");
-        crypto_exchange_url.add("https://www.CPDAX.com");
-        crypto_exchange_url.add("https://www.C2CX.com");
-        crypto_exchange_url.add("https://www.Livecoin.com");
-        crypto_exchange_url.add("https://www.BtcTrade.im");
-        crypto_exchange_url.add("https://www.xBTCe.com");
-        crypto_exchange_url.add("https://www.Coinone.com");
-        crypto_exchange_url.add("https://www.Kucoin.com");
-        crypto_exchange_url.add("https://www.BitBay.com");
-        crypto_exchange_url.add("https://www.Gemini.com");
-        crypto_exchange_url.add("https://www.Coinbe.net");
-        crypto_exchange_url.add("https://www.InfinityCoin.exchange");
-        crypto_exchange_url.add("https://www.Tradebytrade.com");
-        crypto_exchange_url.add("https://www.BiteBTC.com");
-        crypto_exchange_url.add("https://www.Coinsquare.com");
-        crypto_exchange_url.add("https://www.HADAX.com");
-        crypto_exchange_url.add("https://www.Coinroom.com");
-        crypto_exchange_url.add("https://www.Mercatox.com");
-        crypto_exchange_url.add("https://www.Coinhub.com");
-        crypto_exchange_url.add("https://www.BigONE.com");
-        crypto_exchange_url.add("https://www.BitShares.org");
-        crypto_exchange_url.add("https://www.CEX.IO");
-        crypto_exchange_url.add("https://www.ChaoEX.com");
-        crypto_exchange_url.add("https://www.Bitsane.com");
-        crypto_exchange_url.add("https://www.BitForex.com");
-        crypto_exchange_url.add("https://www.LocalTrade.com");
-        crypto_exchange_url.add("https://www.Bitinka.com");
-        crypto_exchange_url.add("https://www.Liqui.io");
-        crypto_exchange_url.add("https://www.Liquid.com");
-        crypto_exchange_url.add("https://www.BTC-Alpha.com");
-        crypto_exchange_url.add("https://www.Instantbitex.com");
-        crypto_exchange_url.add("https://www.Cryptopia.com");
-        crypto_exchange_url.add("https://www.GOPAX.com");
-        crypto_exchange_url.add("https://www.Korbit.com");
-        crypto_exchange_url.add("https://www.itBit.com");
-        crypto_exchange_url.add("https://www.Indodax.com");
-        crypto_exchange_url.add("https://www.Vebitcoin.com");
-        crypto_exchange_url.add("https://www.Allbit.com");
-        crypto_exchange_url.add("https://www.Indodax.com");
-        crypto_exchange_url.add("https://www.BtcTurk.com");
-        crypto_exchange_url.add("https://www.Ovis.com");
-        crypto_exchange_url.add("https://www.BTCC.com");
-        crypto_exchange_url.add("https://www.IDEX.market");
-        crypto_exchange_url.add("https://www.Ethfinex.com");
-        crypto_exchange_url.add("https://www.QuadrigaCX.com");
-        crypto_exchange_url.add("https://www.CoinExchange.io");
-        crypto_exchange_url.add("https://www.Tidex.com");
-        crypto_exchange_url.add("https://www.https://www.negociecoins.com/br");
-        crypto_exchange_url.add("https://www.CryptoBridge.com");
-        crypto_exchange_url.add("https://www.LakeBTC.com");
-        crypto_exchange_url.add("https://www.Bancor.network");
-        crypto_exchange_url.add("https://www.QBTC.com");
-        crypto_exchange_url.add("https://www.WEX.com");
         crypto_exchange_name.add("Binance");
-        crypto_exchange_name.add("OKEx");
-        crypto_exchange_name.add("Huobi");
-        crypto_exchange_name.add("Bithumb");
-        crypto_exchange_name.add("ZB.COM");
-        crypto_exchange_name.add("Bitfinex");
-        crypto_exchange_name.add("HitBTC");
-        crypto_exchange_name.add("Bit-Z");
-        crypto_exchange_name.add("Bibox");
-        crypto_exchange_name.add("Coinsuper");
-        crypto_exchange_name.add("BCEX");
-        crypto_exchange_name.add("LBank");
-        crypto_exchange_name.add("DigiFinex");
-        crypto_exchange_name.add("Upbit");
-        crypto_exchange_name.add("Coinbase Pro");
-        crypto_exchange_name.add("Simex");
-        crypto_exchange_name.add("OEX");
-        crypto_exchange_name.add("Kraken");
-        crypto_exchange_name.add("Cryptonex");
-        crypto_exchange_name.add("BitMart");
-        crypto_exchange_name.add("Allcoin");
-        crypto_exchange_name.add("IDAX");
-        crypto_exchange_name.add("RightBTC");
-        crypto_exchange_name.add("IDCM");
-        crypto_exchange_name.add("YoBit");
-        crypto_exchange_name.add("DragonEX");
-        crypto_exchange_name.add("Gate.io");
-        crypto_exchange_name.add("Fatbtc");
-        crypto_exchange_name.add("Exrates");
-        crypto_exchange_name.add("CoinsBank");
-        crypto_exchange_name.add("BTCBOX");
-        crypto_exchange_name.add("Kryptono");
-        crypto_exchange_name.add("UEX");
-        crypto_exchange_name.add("Bitlish");
-        crypto_exchange_name.add("Sistemkoin");
-        crypto_exchange_name.add("Bitstamp");
-        crypto_exchange_name.add("Bitbank");
-        crypto_exchange_name.add("CoinTiger");
-        crypto_exchange_name.add("CoinBene");
-        crypto_exchange_name.add("LATOKEN");
-        crypto_exchange_name.add("Bitstamp");
-        crypto_exchange_name.add("Bittrex");
-        crypto_exchange_name.add("Poloniex");
-        crypto_exchange_name.add("CoinEgg");
-        crypto_exchange_name.add("Exmo");
-        crypto_exchange_name.add("Hotbit");
-        crypto_exchange_name.add("B2BX");
-        crypto_exchange_name.add("bitFlyer");
-        crypto_exchange_name.add("Rfinex");
-        crypto_exchange_name.add("CPDAX");
-        crypto_exchange_name.add("C2CX");
-        crypto_exchange_name.add("Livecoin");
-        crypto_exchange_name.add("BtcTrade.im");
-        crypto_exchange_name.add("xBTCe");
-        crypto_exchange_name.add("Coinone");
-        crypto_exchange_name.add("Kucoin");
-        crypto_exchange_name.add("BitBay");
-        crypto_exchange_name.add("Gemini");
-        crypto_exchange_name.add("Coinbe");
-        crypto_exchange_name.add("InfinityCoin Exchange");
-        crypto_exchange_name.add("Trade By Trade");
-        crypto_exchange_name.add("BiteBTC");
-        crypto_exchange_name.add("Coinsquare");
-        crypto_exchange_name.add("HADAX");
-        crypto_exchange_name.add("Coinroom");
-        crypto_exchange_name.add("Mercatox");
-        crypto_exchange_name.add("Coinhub");
-        crypto_exchange_name.add("BigONE");
-        crypto_exchange_name.add("BitShares Exchange");
-        crypto_exchange_name.add("CEX.IO");
-        crypto_exchange_name.add("ChaoEX");
-        crypto_exchange_name.add("Bitsane");
-        crypto_exchange_name.add("BitForex");
-        crypto_exchange_name.add("LocalTrade");
-        crypto_exchange_name.add("Bitinka");
-        crypto_exchange_name.add("Liqui");
-        crypto_exchange_name.add("Liquid");
-        crypto_exchange_name.add("BTC-Alpha");
-        crypto_exchange_name.add("Instant Bitex");
-        crypto_exchange_name.add("Cryptopia");
-        crypto_exchange_name.add("GOPAX");
-        crypto_exchange_name.add("Korbit");
-        crypto_exchange_name.add("itBit");
-        crypto_exchange_name.add("Indodax");
-        crypto_exchange_name.add("Vebitcoin");
-        crypto_exchange_name.add("Allbit");
-        crypto_exchange_name.add("Coindeal");
-        crypto_exchange_name.add("BtcTurk");
-        crypto_exchange_name.add("Ovis");
-        crypto_exchange_name.add("BTCC");
-        crypto_exchange_name.add("IDEX");
-        crypto_exchange_name.add("Ethfinex");
-        crypto_exchange_name.add("QuadrigaCX");
-        crypto_exchange_name.add("CoinExchange");
-        crypto_exchange_name.add("Tidex");
-        crypto_exchange_name.add("Negocie Coins");
+        crypto_exchange_name.add("Hbus");
+        crypto_exchange_name.add("Coinbase");
+        crypto_exchange_name.add("Cryptopia");;
         crypto_exchange_name.add("CryptoBridge");
-        crypto_exchange_name.add("LakeBTC");
-        crypto_exchange_name.add("Bancor Network");
-        crypto_exchange_name.add("QBTC");
-        crypto_exchange_name.add("WEX");
+        crypto_exchange_name.add("HitBTC");
+
+        crypto_exchange_url.add("https://www.binance.com/?ref=35795495");
+        //Referral
+        crypto_exchange_url.add("https://www.hbus.com/invite/inviteRank?invite_code=kgd23");
+        //Referral
+        crypto_exchange_url.add("https://www.coinbase.com/join/5a2cc6b6f3b80300ef643aa4");
+        //Referral
+        crypto_exchange_url.add("https://www.cryptopia.co.nz/Register?referrer=juliansmulian");
+        //Referral
+        crypto_exchange_url.add("https://crypto-bridge.org/");
+
+        crypto_exchange_url.add("https://hitbtc.com/");
+
+
+        crypto_exchange_image.add("R.drawable.exchange_crypto_binance");
+        crypto_exchange_image.add("R.drawable.exchange_crypto_hbus");
+        crypto_exchange_image.add("R.drawable.exchange_crypto_coinbase");
+        crypto_exchange_image.add("R.drawable.exchange_crypto_cryptopia");
+        crypto_exchange_image.add("R.drawable.exchange_crypto_cryptobridge");
+        crypto_exchange_image.add("R.drawable.exchange_crypto_hitbtc");
 
 
 
@@ -1412,8 +1022,39 @@ public class Activity_Main extends AppCompatActivity {
         stock_exchange_url.add("https://www.schwab.com/");
         stock_exchange_url.add("https://www.robinhood.com/");
 
+        stock_exchange_image.add("exchange_stock_etrade");
+        stock_exchange_image.add("exchange_stock_tdameritrade");
+        stock_exchange_image.add("exchange_stock_merrill_edge");
+        stock_exchange_image.add("exchange_stock_schwab");
+        stock_exchange_image.add("exchange_stock_robinhood");
+
+
+
     }
 
+    public static void do_graph_change() {
+        //System.out.println("G HIGH B "+graph_high.size());
+        Double a = 0.00;
+        for (int i = 0; i < graph_high.size(); i++) {
+                   a= new Double(graph_high.get(i).toString().replace(",",""));
+            //System.out.println("G HIGH B "+graph_high.size()+"="+a);
 
+            if (i > 0) {
+                int z = i - 1;
+                double b = new Double(graph_high.get(z).toString().replace(",",""));
+                double c = ((a - b) / a) * 100;
+                DecimalFormat numberFormat = new DecimalFormat("#0.00");
+                String add =numberFormat.format(c).replace("-","");
+                graph_change.add(add);
+                //System.out.println("GRAPH IN AEQUITY "+graph_change.get(z));
+
+            }
+        }
+        //System.out.println("CHANGE IN AEQUITY "+graph_change.size());
+
+        // 106 - 107 = 2/106 x 100
+        //  53.31-53.71= -.40/53.31x100=.
+
+    }
 
 }

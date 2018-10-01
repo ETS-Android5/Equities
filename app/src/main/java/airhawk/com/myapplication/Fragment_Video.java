@@ -13,7 +13,7 @@ import android.view.ViewGroup;
  */
 
 public class Fragment_Video extends Fragment {
-
+    Activity_Main mainActivity = (Activity_Main) getActivity();
 
     public Fragment_Video() {
     }

@@ -17,6 +17,7 @@ import com.google.android.youtube.player.YouTubeThumbnailLoader;
 import com.google.android.youtube.player.YouTubeThumbnailView;
 import java.util.ArrayList;
 
+import static airhawk.com.myapplication.Activity_Main.fullScreen;
 import static airhawk.com.myapplication.Constructor_App_Variables.image_video_url;
 import static airhawk.com.myapplication.Constructor_App_Variables.video_title;
 import static airhawk.com.myapplication.Constructor_App_Variables.video_url;
@@ -96,6 +97,8 @@ public class Adapter_Youtube extends RecyclerView.Adapter<Adapter_Youtube.VideoI
 
             Intent intent = YouTubeStandalonePlayer.createVideoIntent((Activity) ctx, DEVELOPER_KEY, String.valueOf(video_url.get(getLayoutPosition())));
             ctx.startActivity(intent);
+            fullScreen ="go";
+            System.out.println("FULLSCREEN IS ON! "+fullScreen);
         }
     }
 }

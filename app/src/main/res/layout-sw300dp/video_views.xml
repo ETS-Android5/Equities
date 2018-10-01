@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="225dp"
     android:layout_margin="10dp"
-    android:background="@drawable/rounded_corners">
+    android:background="@drawable/background_rounded_corners">
 
     <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:card_view="http://schemas.android.com/apk/res-auto"
@@ -56,7 +56,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerInside"
-                android:src="@drawable/yt" />
+                android:src="@drawable/direction_youtube_video" />
 
         </RelativeLayout>
     </android.support.v7.widget.CardView>

@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import static airhawk.com.myapplication.Constructor_App_Variables.graph_change;
 import static airhawk.com.myapplication.Constructor_App_Variables.graph_date;
 import static airhawk.com.myapplication.Constructor_App_Variables.graph_high;
 import static airhawk.com.myapplication.Constructor_App_Variables.graph_volume;
@@ -19,11 +21,13 @@ public class Adapter_Graph_Points extends RecyclerView.Adapter<Adapter_Graph_Poi
     ArrayList graph_h;
     ArrayList graph_v;
     ArrayList graph_d;
+    ArrayList graph_c;
     Integer integer;
     Context context;
 
-    public Adapter_Graph_Points(Context context, Integer integer, ArrayList graph_h, ArrayList graph_v, ArrayList graph_d) {
+    public Adapter_Graph_Points(Context context, Integer integer, ArrayList graph_h, ArrayList graph_c, ArrayList graph_v, ArrayList graph_d) {
         this.graph_h = graph_h;
+        this.graph_c = graph_c;
         this.graph_v = graph_v;
         this.graph_d = graph_d;
         this.integer =integer;
@@ -32,12 +36,13 @@ public class Adapter_Graph_Points extends RecyclerView.Adapter<Adapter_Graph_Poi
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView aequity_amount, aequity_volume, aequity_date;
+        public TextView aequity_amount, aequity_volume, aequity_date,aequity_change;
         public MyViewHolder(View itemView) {
             super(itemView);
             aequity_amount = itemView.findViewById(R.id.aequity_amount);
             aequity_volume = itemView.findViewById(R.id.aequity_volume);
             aequity_date = itemView.findViewById(R.id.aequity_date);
+            aequity_change =itemView.findViewById(R.id.aequity_change);
 
             /*No Listener needed for now
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -58,20 +63,25 @@ public class Adapter_Graph_Points extends RecyclerView.Adapter<Adapter_Graph_Poi
     public void onBindViewHolder(Adapter_Graph_Points.MyViewHolder holder, int position) {
         Double as= 0.00;
         Double as1=0.00;
+        holder.aequity_change.setText(graph_change.get(position)+" %");
             try{
             holder.aequity_amount.setText("$ "+graph_high.get(position));
-            as = Double.parseDouble(String.valueOf(graph_high.get(position)));
+            as = Double.parseDouble(String.valueOf(graph_high.get(position)).replace(",",""));
 
 
-                as1 = Double.parseDouble(String.valueOf(graph_high.get(position + 1)));
+                as1 = Double.parseDouble(String.valueOf(graph_high.get(position + 1)).replace(",",""));
 
             if(as>as1)
             {
                 holder.aequity_amount.setTextColor(Color.parseColor("#00ff00"));
+                holder.aequity_change.setTextColor(Color.parseColor("#00ff00"));
+
             }
             else
             {
                 holder.aequity_amount.setTextColor(Color.parseColor("#ff0000"));
+                holder.aequity_change.setTextColor(Color.parseColor("#ff0000"));
+
             }
 
 

@@ -12,6 +12,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import static airhawk.com.myapplication.Activity_Main.ap_info;
+import static airhawk.com.myapplication.Service_Main_Aequities.crypto_kings_changelist;
 import static airhawk.com.myapplication.Service_Main_Aequities.crypto_kings_marketcaplist;
 import static airhawk.com.myapplication.Service_Main_Aequities.crypto_kings_namelist;
 import static airhawk.com.myapplication.Service_Main_Aequities.crypto_kings_symbolist;
@@ -91,7 +92,7 @@ public class Adapter_Main_Equities extends RecyclerView.Adapter<Adapter_Main_Equ
             if ("Stock_Winner".equals(type_and_case)){
                 holder.number.setText((1+position)+".");
                 holder.symbol.setText(""+stock_win_symbollist.get(position));
-                holder.circle.setImageResource(R.drawable.green_circle);
+                holder.circle.setImageResource(R.drawable.holder_green_circle);
                 holder.name.setText(""+stock_win_namelist.get(position));
                 holder.value.setText(""+stock_win_changelist.get(position));
                 holder.value.setTextColor(Color.parseColor("#00cc00"));
@@ -101,7 +102,7 @@ public class Adapter_Main_Equities extends RecyclerView.Adapter<Adapter_Main_Equ
                 holder.number.setText((1+position)+".");
                 holder.symbol.setText(""+stock_losers_symbollist.get(position));
                 holder.name.setText(""+stock_losers_namelist.get(position));
-                holder.circle.setImageResource(R.drawable.red_circle);
+                holder.circle.setImageResource(R.drawable.holder_red_circle);
                 holder.value.setText(""+stock_losers_changelist.get(position));
                 holder.value.setTextColor(Color.parseColor("#ff0000"));
                 holder.types.setText("Stock");
@@ -119,7 +120,7 @@ public class Adapter_Main_Equities extends RecyclerView.Adapter<Adapter_Main_Equ
                 holder.number.setText((1+position)+".");
                 holder.symbol.setText(""+crypto_winners_symbollist.get(position));
                 holder.name.setText(""+crypto_winners_namelist.get(position));
-                holder.circle.setImageResource(R.drawable.green_circle);
+                holder.circle.setImageResource(R.drawable.holder_green_circle);
                 holder.value.setText("+"+crypto_winners_changelist.get(position));
                 holder.value.setTextColor(Color.parseColor("#00cc00"));
                 holder.types.setText("Cryptocurrency");}
@@ -127,16 +128,25 @@ public class Adapter_Main_Equities extends RecyclerView.Adapter<Adapter_Main_Equ
                 holder.number.setText((1+position)+".");
                 holder.symbol.setText(""+crypto_losers_symbollist.get(position));
                 holder.name.setText(""+crypto_losers_namelist.get(position));
-                holder.circle.setImageResource(R.drawable.red_circle);
+                holder.circle.setImageResource(R.drawable.holder_red_circle);
                 holder.value.setText(""+crypto_losers_changelist.get(position));
                 holder.value.setTextColor(Color.parseColor("#ff0000"));
                 holder.types.setText("Cryptocurrency");}
             if (("Crypto_Kings".equals(type_and_case))){
                 holder.number.setText((1+position)+".");
-                holder.name.setText(""+crypto_kings_namelist.get(position));
                 holder.symbol.setText(""+crypto_kings_symbolist.get(position));
+                holder.name.setText(""+crypto_kings_namelist.get(position));
                 holder.value.setText(""+crypto_kings_marketcaplist.get(position));
-                holder.value.setTextColor(Color.parseColor("#00cc00"));
+                holder.value.setTextColor(Color.parseColor("#00ff00"));
+                //if (crypto_kings_changelist.get(position)>0){
+                //    holder.circle.setImageResource(R.drawable.holder_green_circle);
+                //holder.value.setTextColor(Color.parseColor("#00ff00"));
+                //}
+                //else{
+                //holder.circle.setImageResource(R.drawable.holder_red_circle);
+                //holder.value.setTextColor(Color.parseColor("#00ff00"));}
+
+
                 holder.types.setText("Cryptocurrency");}
 
 

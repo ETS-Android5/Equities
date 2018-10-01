@@ -169,10 +169,12 @@
         app:tabMode="fixed"
         app:tabSelectedTextColor="@color/green_color_text"
         app:tabTextColor="#ffffff " />
+
     <android.support.design.widget.TabLayout
         android:id="@+id/tabchoice"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         app:tabGravity="fill"
         app:tabIndicatorColor="@color/green_color_text"
         app:tabMode="fixed"
@@ -191,6 +193,14 @@
             android:layout_weight="1"
             android:gravity="left|center"
             android:text="@string/price"
+            android:textColor="@color/darkTextColor"
+            android:textStyle="bold" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="left|center"
+            android:text="@string/change"
             android:textColor="@color/darkTextColor"
             android:textStyle="bold" />
 
@@ -220,7 +230,7 @@
         android:layout_weight="1"></android.support.v7.widget.RecyclerView>
     <com.jjoe64.graphview.GraphView
         android:id="@+id/graph_view"
-        android:background="@drawable/gradient"
+        android:background="@drawable/background_gradient"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"

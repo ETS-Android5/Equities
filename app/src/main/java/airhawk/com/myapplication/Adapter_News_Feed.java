@@ -49,7 +49,7 @@ public class Adapter_News_Feed extends RecyclerView.Adapter<Adapter_News_Feed.My
      holder.tv_title.setText(item.getTitle());
      if(item.getThumbnailUrl() !=null){
      Picasso.with(context).load(item.getThumbnailUrl()).memoryPolicy(MemoryPolicy.NO_CACHE).noFade().into(holder.tv_image);}
-     else{Picasso.with(context).load(R.drawable.news).memoryPolicy(MemoryPolicy.NO_CACHE).noFade().into(holder.tv_image);}
+     else{Picasso.with(context).load(R.drawable.direction_news).memoryPolicy(MemoryPolicy.NO_CACHE).noFade().into(holder.tv_image);}
      holder.textlink=item.getLink();
    }  
    

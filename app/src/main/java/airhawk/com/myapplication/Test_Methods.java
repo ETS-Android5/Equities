@@ -1,6 +1,7 @@
 package airhawk.com.myapplication;
 
 import android.content.Context;
+import android.content.res.AssetManager;
 import android.os.Build;
 import android.util.Log;
 import android.view.View;
@@ -26,15 +27,22 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.net.UnknownHostException;
+import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -48,7 +56,9 @@ import javax.net.ssl.SSLHandshakeException;
 
 import static airhawk.com.myapplication.Activity_Main.aequity_name_arraylist;
 import static airhawk.com.myapplication.Activity_Main.aequity_symbol_arraylist;
+import static airhawk.com.myapplication.Activity_Main.aequity_type_arraylist;
 import static airhawk.com.myapplication.Activity_Main.ap_info;
+import static airhawk.com.myapplication.Activity_Main.searchview_arraylist;
 import static airhawk.com.myapplication.Constructor_App_Variables.*;
 import static airhawk.com.myapplication.Service_Main_Aequities.myContext;
 import static airhawk.com.myapplication.Service_Main_Aequities.stock_kings_changelist;
@@ -58,60 +68,120 @@ import static airhawk.com.myapplication.Service_Main_Aequities.stock_kings_symbo
 public class Test_Methods {
     static ArrayList exchange_url = new ArrayList<>();
     static ArrayList exchange_name = new ArrayList<>();
-
-    //1. Check if equity is on coinmarketcap.com
-         //a) If yes, proceed to get_coinmarketcap_exchange_listing.
-         //b) If no, check smaller exchanges.
-    //2. Once you get exchange list for aequity add exchange list to recyclerview
+    private static Context mContext;
     static String cryptopia_list;
 
     public static void main(String[] args) {
-        //get_crypto_listings();
 
 
-     getStock_Kings();
+        //get_crypto_points();
+get_stock_points();
+
     }
 
+
+    public static void get_stock_points() {
+        System.out.println("Get stock points called");
+        String marname = "UA";
+        Document d = null;
+        try {
+            d = Jsoup.connect("https://finance.yahoo.com/quote/" + marname + "/history?p=" + marname).timeout(10 * 10000).get();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Element u = d.getElementById("Lead-2-QuoteHeader-Proxy");
+        Elements x = u.select("div>span");
+
+        String c = x.get(2).text();
+        String cuap = c.replace(",","");
+        ap_info.setCurrent_Aequity_Price(cuap);
+        String c3 = x.get(3).text();
+        String[] spit = c3.split(" ");
+        spit[1]=spit[1].replaceAll("\\(","");
+        spit[1]=spit[1].replaceAll("\\)","");
+        ap_info.setCurrent_Aequity_Price_Change(spit[1]);
+
+        ArrayList<String> temp = new ArrayList();
+        Elements tables = d.select("table");
+        Elements trs = tables.select("tr");
+        for (Element g : trs) {
+            Elements p = g.select("td");
+            temp.add(p.text());
+
+        }
+        //temp.remove(0);
+        temp.remove(0);
+        for (int counter = 0; counter < temp.size(); counter++) {
+            String sev = temp.get(counter);
+            if (sev.contains("Dividend")) {
+            } else {
+                String[] split = sev.split(" ");
+                graph_date.add(split[0] + " " + split[1] + " " + split[2]);
+             //   System.out.print("TACOS " + split[7]);
+
+                if (split[7].equals("adjusted")) {
+                    graph_high.add(ap_info.getCurrent_Aequity_Price());
+                } else {
+                    if (split[7].contains("-")) {
+                    } else {
+                        graph_high.add(split[7]);
+                        System.out.println("Price"+split[7]);
+                    }
+
+                }
+                //System.out.println("GRAPH HIGH LIST "+graph_high);
+                if (split[8].equals("for") || split[8].contains("-")) {
+                    graph_volume.add("0");
+                } else {
+                    graph_volume.add(split[8]);
+                }
+
+            }
+
+            //System.out.println(Arrays.asList(graph_date.get(counter))+" "+graph_high.get(counter)+" "+graph_volume.get(counter));
+            List<String> numbers = graph_high;
+            Collections.reverse(numbers);
+            _AllDays = numbers;
+        }}
+
     public static void getStock_Kings() {
+        int x;
         Document sv = null;
-        String t ;
+        String t;
         try {
             sv = Jsoup.connect("http://fortune.com/global500/list/filtered?sortBy=profits&first500").get();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Elements e =sv.select("li");
-        for(int i=0;i<e.size();i++){
-            Elements z =e.select("span");
-            for(int x=1;x<z.size();x=x+3){
-            stock_kings_namelist.add(z.get(x).text());
-                t =z.get(x).text();
-                for (int s =0;s<aequity_name_arraylist.size();s++){
-                    if (aequity_name_arraylist.contains(t)){
+
+        Elements e = sv.select("li");
+        for (int i = 0; i < e.size(); i++) {
+            Elements z = e.select("span");
+            for (x = 1; x < e.size(); x = x + 3) {
+                stock_kings_namelist.add(z.get(x).text());
+                System.out.println(z.get(x).text());
+                t = z.get(x).text();
+                for (int s = 0; s < aequity_name_arraylist.size(); s++) {
+                    if (aequity_name_arraylist.contains(t)) {
                         stock_kings_symbollist.add(aequity_symbol_arraylist.get(s));
-                        System.out.println("Yo "+aequity_symbol_arraylist.get(s));
-                    }}
-            //    aequity_name_arraylist;
-            //ap_info.setMarketSymbol();
-            //stock_kings_changelist.add();
+                        System.out.println("Yo " + aequity_symbol_arraylist.get(s));
+                    }
+                }
+                //    aequity_name_arraylist;
+                //ap_info.setMarketSymbol();
+                //stock_kings_changelist.add();
             }
-            for(int n=2;n<z.size();n=n+3){
-                System.out.println(z.get(n).text().substring(1,5).replace(",",".")+" B");
-                stock_kings_changelist.add(z.get(n).text().substring(1,5).replace(",",".")+" B");
+
+
+            for (int n = 2; n < e.size(); n = n + 3) {
+                //System.out.println(z.get(n).text().substring(1, 5).replace(",", ".") + " B");
+                stock_kings_changelist.add(z.get(n).text().substring(1, 5).replace(",", ".") + " B");
             }
         }
 
     }
 
-
-
-
-
-
-
-
-
-    //This is added on first launch
     public static void get_crypto_listings() {
 
         exchange_url.add("https://www.Binance.com");
@@ -318,6 +388,91 @@ public class Test_Methods {
         exchange_name.add("WEX");
 
 
+    }
+
+    public static void get_crypto_points() {
+        long startTime = System.nanoTime();
+        DateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        Date begindate = new Date();
+        String f = "bitcoin";
+        System.out.println("NAMD!!! "+f);
+        if (f.contains(" ")){
+            f= f.replaceAll(" ","-");}
+        Document d= null;
+        String url = "https://coinmarketcap.com/currencies/" + f + "/historical-data/?start=20000101&end=" + sdf.format(begindate);
+        try {
+            d = Jsoup.connect(url).timeout(10 * 10000).get();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Element price = d.getElementById("quote_price");
+        String v = price.text();
+        Elements divs = d.select("table");
+        for (Element tz : divs) {
+            Elements tds = tz.select("td");
+            Elements s = tz.getElementsByClass("text-right");
+            for (Element ss : s) {
+                Elements p = ss.select("td[data-format-fiat]");
+                String g = p.text();
+                String[] splited = g.split("\\s+");
+                if (v != null && !g.isEmpty()) {
+                    graph_high.add(splited[3]);
+                    System.out.println("PRICE "+graph_high);
+                    graph_low.add(splited[2]);
+                }
+                Elements pn = ss.select("td[data-format-market-cap]");
+                String vp = pn.text();
+                String[] split = vp.split("\\s+");
+                if (vp != null && !vp.isEmpty()) {
+                    graph_volume.add(split[0]);
+                    graph_market_cap.add(split[1]);
+                }
+            }
+            for (Element bb : tds) {
+                Elements gdate = bb.getElementsByClass("text-left");
+                String result0 = gdate.text();
+                if (result0 != null && !result0.isEmpty()) {
+                    graph_date.add(String.valueOf(result0));
+                }
+            }
+        }
+        //System.out.println("THIs Is graph high "+ Arrays.asList(graph_high));
+        _AllDays = graph_high;
+
+
+
+
+        long endTime = System.nanoTime();
+        long duration = (endTime - startTime);
+        System.out.println("CRYPTO POINTS TIME IS " + duration / 1000000000 + " seconds");
+
+
 
     }
-   }
+
+    public static void get_stock_change() {
+        stock_kings_symbollist.add("gsat");
+        stock_kings_symbollist.add("aapl");
+        stock_kings_symbollist.add("dpw");
+        stock_kings_symbollist.add("fb");
+        stock_kings_symbollist.add("goog");
+        String symbol= null;
+        for(int z = 0; z < stock_kings_symbollist.size();++z) {
+            symbol = String.valueOf(stock_kings_symbollist.get(z));
+            Document d = null;
+            try {
+                d = Jsoup.connect("https://www.nasdaq.com/symbol/" + symbol).userAgent("Mozilla").timeout(10 * 100000).get();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            Element change = d.getElementById("qwidget_percent");
+            System.out.println("PERCENT CHANGE" + change);
+        }
+
+    }
+
+
+
+
+}

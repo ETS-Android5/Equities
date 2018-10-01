@@ -180,19 +180,6 @@ public class Service_Main_Aequities {
             }
         });
 
-        callables.add(new Callable<String>() {
-            @Override
-            public String call() throws Exception {
-                long startTime = System.nanoTime();
-                getStock_Kings();
-                long endTime = System.nanoTime();
-                long duration = (endTime - startTime);
-                //wifi 1 second
-                //Boost Mobile 5 seconds
-                System.out.println("getStock_Kings TIME IS " + duration / 1000000000 + " seconds");
-                return null;
-            }
-        });
 
 
 

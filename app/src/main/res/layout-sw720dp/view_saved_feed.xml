@@ -11,7 +11,7 @@
         android:id="@+id/circle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:srcCompat="@drawable/green_circle" />
+        app:srcCompat="@drawable/holder_green_circle" />
 
     <TextView
         android:id="@+id/symbol"

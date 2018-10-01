@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@drawable/gradient"
+    android:background="@drawable/background_gradient"
     android:fitsSystemWindows="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -22,7 +22,7 @@
             android:layout_weight="1"
             android:text="Tron"
             android:textColor="#ffffff"
-            android:textSize="30sp"
+            android:textSize="26sp"
             android:textStyle="bold" />
 
         <ImageView
@@ -54,20 +54,20 @@
                 android:id="@+id/aequity_symbol"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
                 android:text="TRX"
                 android:textColor="#ffffff"
-                android:textSize="26sp"
+                android:layout_weight="1"
+                android:textSize="20sp"
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/aequity_type"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
                 android:text="@string/crypto"
+                android:layout_weight="1"
                 android:textColor="#ffffff"
-                android:textSize="26sp"
+                android:textSize="20sp"
                 android:textStyle="bold" />
 
             <TableRow
@@ -83,7 +83,7 @@
                     android:gravity="center"
                     android:text="99,000,000,000"
                     android:textColor="#ffffff"
-                    android:textSize="26sp"
+                    android:textSize="20sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -94,7 +94,7 @@
                     android:gravity="left|center"
                     android:text="Supply"
                     android:textColor="#ffffff"
-                    android:textSize="26sp"
+                    android:textSize="20sp"
                     android:textStyle="bold" />
             </TableRow>
 
@@ -109,7 +109,7 @@
                     android:gravity="center"
                     android:text="@string/market_cap"
                     android:textColor="#ffffff"
-                    android:textSize="26sp"
+                    android:textSize="20sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -120,7 +120,7 @@
                     android:gravity="left|center"
                     android:text="623.06M"
                     android:textColor="#ffffff"
-                    android:textSize="26sp"
+                    android:textSize="20sp"
                     android:textStyle="bold" />
             </TableRow>
         </LinearLayout>
@@ -140,7 +140,7 @@
                 android:gravity="top|right"
                 android:text="$2.46"
                 android:textColor="#ffffff"
-                android:textSize="48sp" />
+                android:textSize="32sp" />
 
             <TextView
                 android:id="@+id/aequity_price_change"
@@ -150,7 +150,7 @@
                 android:gravity="top|right"
                 android:text="-7.36 %"
                 android:textColor="#ffffff"
-                android:textSize="26sp" />
+                android:textSize="24sp" />
 
 
             <TextView
@@ -161,7 +161,7 @@
                 android:gravity="top|right"
                 android:text="@string/title_buy"
                 android:textColor="#ffffff"
-                android:textSize="26sp" />
+                android:textSize="24sp" />
 
 
         </LinearLayout>
@@ -191,7 +191,6 @@
             android:gravity="left|center"
             android:text="@string/price"
             android:textColor="#ffffff"
-            android:textSize="26sp"
             android:textStyle="bold" />
 
         <TextView
@@ -201,7 +200,6 @@
             android:gravity="center"
             android:text="@string/volume"
             android:textColor="#ffffff"
-            android:textSize="26sp"
             android:textStyle="bold" />
 
         <TextView
@@ -211,7 +209,6 @@
             android:gravity="right|center"
             android:text="@string/date"
             android:textColor="#ffffff"
-            android:textSize="26sp"
             android:textStyle="bold" />
     </TableRow>
 

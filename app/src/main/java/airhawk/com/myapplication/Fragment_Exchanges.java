@@ -35,6 +35,10 @@ public class Fragment_Exchanges extends Fragment {
         TextView t = rootView.findViewById(R.id.greeting);
         yes =rootView.findViewById(R.id.yes);
         yesnotable =rootView.findViewById(R.id.yesnotable);
+        if(ap_info.getMarketType().equalsIgnoreCase("OTC")){
+            stock_exchange_name.remove(4);
+        }
+
         if (ap_info.getMarketType().equals("Cryptocurrency") || ap_info.getMarketType().equals("Crypto")) {}
         else{
             for(int i = 0; i < stock_exchange_name.size();i++){
@@ -42,14 +46,13 @@ public class Fragment_Exchanges extends Fragment {
             }
         }
         if (aequity_exchanges.size()<1){
-            String buy =  ap_info.getMarketName()+" is not sold on any known markets\nWould you like to search for "+ ap_info.getMarketName()+" using Google search?";
+            String buy =  ap_info.getMarketName()+" is not sold on any known reputable exchanges.\nWould you like to search for "+ ap_info.getMarketName()+" using Google search?";
             yesnotable.setVisibility(View.VISIBLE);
             t.setText(buy);
         }else{
             yesnotable.setVisibility(View.GONE);
         String buy = "Buy " + ap_info.getMarketName() + " at these exchanges. \nTouch an image to go their site.";
         t.setText(buy);}
-        Constructor_Exchanges it = new Constructor_Exchanges();
         exchange_feed = rootView.findViewById(R.id.list);
 
 

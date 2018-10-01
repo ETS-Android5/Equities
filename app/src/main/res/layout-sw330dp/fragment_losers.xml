@@ -5,17 +5,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-
-    <android.support.v7.widget.AppCompatTextView
-
-        android:id="@+id/stock"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:text="@string/stock_market_losers"
-        android:textColor="@color/darkTextColor"
-        android:textSize="26sp" />
+        android:layout_height="match_parent"
+        android:layout_weight="1.25"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.AppCompatTextView
+
+            android:id="@+id/stock"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="@string/stock_market_losers"
+            android:textColor="#ffffff"
+            android:textSize="26sp" />
 
     <TableRow
         android:layout_width="match_parent"
@@ -68,68 +73,76 @@
         android:layout_height="match_parent"
         android:layout_weight="1" />
 
+    </LinearLayout>
 
-    <android.support.v7.widget.AppCompatTextView
-
-        android:id="@+id/crypto"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:text="@string/crypto_losers"
-        android:textColor="@color/darkTextColor"
-        android:textSize="26sp" />
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dp">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1.1"
-            android:gravity="left|center"
-            android:singleLine="true"
-            android:textColor="@color/darkTextColor"
-            android:textSize="14sp" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="left|center"
-            android:singleLine="true"
-            android:text="Symbol"
-            android:textColor="@color/darkTextColor"
-            android:textSize="14sp" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight=".6"
-            android:gravity="left|center"
-            android:singleLine="true"
-            android:text="Name"
-            android:textColor="@color/darkTextColor"
-            android:textSize="14sp" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:layout_gravity="end"
-            android:singleLine="true"
-            android:textAlignment="textEnd"
-            android:text="Amount"
-            android:textColor="@color/darkTextColor"
-            android:textSize="14sp" />
-    </TableRow>
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/crypto_items"
-        android:layout_width="match_parent"
-        android:layout_weight="1"
         android:layout_height="match_parent"
-        />
+        android:layout_weight="1"
+        android:orientation="vertical">
 
+        <android.support.v7.widget.AppCompatTextView
+
+            android:id="@+id/crypto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="@string/crypto_losers"
+            android:textColor="#ffffff"
+            android:textSize="26sp" />
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1.1"
+                android:gravity="left|center"
+                android:singleLine="true"
+                android:textColor="@color/darkTextColor"
+                android:textSize="14sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="left|center"
+                android:singleLine="true"
+                android:text="Symbol"
+                android:textColor="@color/darkTextColor"
+                android:textSize="14sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight=".6"
+                android:gravity="left|center"
+                android:singleLine="true"
+                android:text="Name"
+                android:textColor="@color/darkTextColor"
+                android:textSize="14sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="end"
+                android:layout_weight="1"
+                android:singleLine="true"
+                android:text="Amount"
+                android:textAlignment="textEnd"
+                android:textColor="@color/darkTextColor"
+                android:textSize="14sp" />
+        </TableRow>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/crypto_items"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+    </LinearLayout>
 
 </LinearLayout>

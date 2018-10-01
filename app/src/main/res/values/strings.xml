@@ -53,4 +53,115 @@
     <string name="default_font" translatable="false">sans-serif-light</string>
     <string name="stocktwits">Social Media</string>
     <string name="compare">Chart</string>
+    <string name="change">Change</string>
+    <string name="quote1">"It's how you deal with failure that determines how you achieve success." \n\n-David Feherty</string>
+    <string name="quote2">"An investment in knowledge pays the best interest." \n\n-Benjamin Franklin</string>
+    <string name="quote3">"I will tell you the secret to getting rich on Wall Street. You try to be greedy when others are fearful. And you try to be fearful when others are greedy." \n\n-Warren Buffett</string>
+    <string name="quote4">"A nickel ain't worth a dime anymore." \n\n-Yogi Berra</string>
+    <string name="quote5">"It’s not the employer who pays the wages. Employers only handle the money. It’s the customer who pays the wages." \n\n-Henry Ford</string>
+    <string name="quote6">"You can only become truly accomplished at something you love. Don’t make money your goal. Instead, pursue the things you love doing, and then do them so well that people can’t take their eyes off you." \n\n-Maya Angelou</string>
+    <string name="quote7">"How many millionaires do you know who have become wealthy by investing in savings accounts? I rest my case." \n\n-Robert G. Allen</string>
+    <string name="quote8">"Let him who would enjoy a good future waste none of his present." \n\n-Roger Babson</string>
+    <string name="quote9">"A journey of a thousand miles must begin with a single step." \n\n-Lao Tzu</string>
+    <string name="quote10">"It takes as much energy to wish as it does to plan." \n\n-Eleanor Roosevelt</string>
+    <string name="quote11">"If we command our wealth, we shall be rich and free. If our wealth commands us, we are poor indeed." \n\n-Edmund Burke</string>
+    <string name="quote12">"Inflation is taxation without legislation. \n\n-Milton Freidman"</string>
+    <string name="quote13">"A fool is wise in his eyes." \n\n-King Solomon</string>
+    <string name="quote14">"Brass shines as fair to the ignorant as gold to the goldsmiths" \n\n-Elizabeth I</string>
+    <string name="quote15">"There is little that can withstand a man who can conquer himself" \n\n-Louis XIV</string>
+    <string name="quote16">"All money is a matter of belief" \n\n-Adam Smith</string>
+    <string name="quote17">"A man in debt is so far a slave." \n\n-Ralph Waldo Emerson</string>
+    <string name="quote18">"Be yourself, everyone else is already taken." \n\n-Oscar Wilde</string>
+    <string name="quote19">"I think the internet is going to be one of the major forces for reducing the role of government. The one thing that’s missing but that will soon be developed, is a reliable e-cash." \n\n-Milton Friedman</string>
+    <string name="quote20">"The future of money is digital currency." \n\n-Bill Gates</string>
+    <string name="quote21">"It’s a hell of a lot harder for a few hundred thousand people to watch 7 1/2 billion. But what do you think happens when 7 1/2 billion of us stare back?" \n\n-Andreas M. Antonopoulos</string>
+    <string name="quote22">"Everything will be tokenized and connected by a blockchain one day" \n\n-Fred Ehrsam</string>
+    <string name="quote23">"Anything that can conceive of as a supply chain, blockchain can vastly improve its efficiency- it doesn’t matter if its people, numbers, data, money." \n\n–Ginni Rometty, CEO IBM</string>
+    <string name="quote24">"You cannot un-invent this technology. You cannot turn this omelette back into eggs." \n\n-Andreas Antonopoulos</string>
+    <string name="quote25">"Control of a currency is one of the most powerful tools a government wields; ask anybody in Ireland, Portugal, Greece, or Cyprus who lived through those countries’ recent financial crises." \n\n-Paul Vigna</string>
+    <string name="quote26">"Bitcoin is a remarkable cryptographic achievement and the ability to create something that is not duplicable in the digital world has enormous value" \n\n-Eric Schmidt, Former CEO of Google</string>
+    <string name="quote27">"40 years from now, blockchain and all that followed from it will figure more prominently in that story than will bitcoin." \n\n-Larry Summers, US Former Treasury Secretary</string>
+    <string name="quote28">"I do think Bitcoin is the first that has the potential to do something like change the world." \n\n-Peter Thiel, Co-Founder of Paypal.</string>
+    <string name="quote29">"We need blockchain technology." \n\n-Vladimir Putin</string>
+    <string name="quote30">"Bitcoin is a technological tour de force." \n\n-Bill Gates</string>
+    <string name="quote31">"This app is pretty cool." \n\n-You, hopefully</string>
+
+
+
+    <string-array name="stock_quotes">
+        <item>@string/quote1</item>
+        <item>@string/quote2</item>
+        <item>@string/quote3</item>
+        <item>@string/quote4</item>
+        <item>@string/quote5</item>
+        <item>@string/quote6</item>
+        <item>@string/quote7</item>
+        <item>@string/quote8</item>
+        <item>@string/quote9</item>
+        <item>@string/quote10</item>
+        <item>@string/quote11</item>
+        <item>@string/quote12</item>
+        <item>@string/quote13</item>
+        <item>@string/quote14</item>
+        <item>@string/quote15</item>
+        <item>@string/quote16</item>
+        <item>@string/quote17</item>
+
+    </string-array>
+
+    <string-array name="crypto_quotes">
+        <item>@string/quote19</item>
+        <item>@string/quote20</item>
+        <item>@string/quote21</item>
+        <item>@string/quote22</item>
+        <item>@string/quote23</item>
+        <item>@string/quote24</item>
+        <item>@string/quote25</item>
+        <item>@string/quote26</item>
+        <item>@string/quote27</item>
+        <item>@string/quote28</item>
+        <item>@string/quote29</item>
+        <item>@string/quote30</item>
+        <item>@string/quote31</item>
+
+    </string-array>
+
+
+    <string-array name="all_quotes">
+        <item>@string/quote1</item>
+        <item>@string/quote2</item>
+        <item>@string/quote3</item>
+        <item>@string/quote4</item>
+        <item>@string/quote5</item>
+        <item>@string/quote6</item>
+        <item>@string/quote7</item>
+        <item>@string/quote8</item>
+        <item>@string/quote9</item>
+        <item>@string/quote10</item>
+        <item>@string/quote11</item>
+        <item>@string/quote12</item>
+        <item>@string/quote13</item>
+        <item>@string/quote14</item>
+        <item>@string/quote15</item>
+        <item>@string/quote16</item>
+        <item>@string/quote17</item>
+        <item>@string/quote18</item>
+        <item>@string/quote19</item>
+        <item>@string/quote20</item>
+        <item>@string/quote21</item>
+        <item>@string/quote22</item>
+        <item>@string/quote23</item>
+        <item>@string/quote24</item>
+        <item>@string/quote25</item>
+        <item>@string/quote26</item>
+        <item>@string/quote27</item>
+        <item>@string/quote28</item>
+        <item>@string/quote29</item>
+        <item>@string/quote30</item>
+        <item>@string/quote31</item>
+
+    </string-array>
+
+
+
 </resources>

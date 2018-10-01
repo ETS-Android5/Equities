@@ -17,6 +17,17 @@
         android:textColor="@color/darkTextColor"
         android:textStyle="bold" />
 
+    <TextView
+        android:id="@+id/aequity_change"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1.1"
+        android:gravity="left"
+        android:text="6%"
+        android:textAppearance="?android:attr/textAppearanceButton"
+        android:textColor="@color/darkTextColor"
+        android:textStyle="bold" />
+
 
     <TextView
         android:id="@+id/aequity_volume"

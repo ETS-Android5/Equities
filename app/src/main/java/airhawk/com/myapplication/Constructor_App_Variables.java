@@ -23,12 +23,14 @@ public class Constructor_App_Variables {
     static ArrayList aequity_exchanges =new ArrayList();
 
     static ArrayList exchange_text=new ArrayList<>();
-    static ArrayList exchange_image=new ArrayList<>();
+    static ArrayList crypto_exchange_image=new ArrayList<>();
+    static ArrayList stock_exchange_image=new ArrayList<>();
     static ArrayList exchange_message=new ArrayList<>();
     protected static ArrayList<Constructor_Exchanges> exchanges_feedItems = new ArrayList<>();
     static ArrayList video_url = new ArrayList<>();
     static ArrayList image_video_url = new ArrayList<>();
     static ArrayList video_title = new ArrayList<>();
+    static ArrayList Smessage_link=new ArrayList<>();
     static ArrayList Smessage_time=new ArrayList<>();
     static ArrayList Suser_name=new ArrayList<>();
     static ArrayList Smessage=new ArrayList<>();
@@ -38,6 +40,7 @@ public class Constructor_App_Variables {
     public static ArrayList graph_volume_today = new ArrayList<>();
     public static ArrayList graph_date = new ArrayList<>();
     public static ArrayList graph_high = new ArrayList<>();
+    public static ArrayList graph_change = new ArrayList<>();
     public static ArrayList graph_low = new ArrayList<>();
     public static ArrayList graph_volume = new ArrayList<>();
     public static ArrayList graph_market_cap = new ArrayList<>();

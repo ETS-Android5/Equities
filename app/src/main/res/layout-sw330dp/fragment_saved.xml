@@ -4,7 +4,13 @@
     android:layout_height="match_parent"
     android:layout_width="match_parent">
 
-
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Favorites"
+        android:textColor="#ffffff"
+        android:textSize="26sp" />
     <android.support.v7.widget.RecyclerView
         android:id="@+id/saved_feed"
         android:layout_width="match_parent"

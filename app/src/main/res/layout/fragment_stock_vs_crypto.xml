@@ -4,7 +4,7 @@
     android:layout_height="match_parent">
     <com.jjoe64.graphview.GraphView
         android:id="@+id/graph_view"
-        android:background="@drawable/gradient"
+        android:background="@drawable/background_gradient"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         ></com.jjoe64.graphview.GraphView>

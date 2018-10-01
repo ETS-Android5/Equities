@@ -21,7 +21,7 @@ import static airhawk.com.myapplication.Constructor_App_Variables.feedItems;
  */
 
 public class Fragment_Saved extends Fragment {
-    public RecyclerView saved_feed;
+    public static RecyclerView saved_feed;
     public ProgressBar progressBar2;
 
     public Fragment_Saved() {

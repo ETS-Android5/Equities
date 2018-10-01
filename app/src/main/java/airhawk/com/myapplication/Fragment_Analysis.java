@@ -2,6 +2,7 @@ package airhawk.com.myapplication;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.helper.StaticLabelsFormatter;
@@ -23,6 +25,7 @@ import java.util.Arrays;
 import java.util.Collections;
 
 import static airhawk.com.myapplication.Constructor_App_Variables._AllDays;
+import static airhawk.com.myapplication.Constructor_App_Variables.graph_change;
 import static airhawk.com.myapplication.Constructor_App_Variables.graph_date;
 import static airhawk.com.myapplication.Constructor_App_Variables.graph_high;
 import static airhawk.com.myapplication.Constructor_App_Variables.graph_volume;
@@ -39,16 +42,18 @@ public class Fragment_Analysis extends Fragment {
     Constructor_App_Variables ap_info =new Constructor_App_Variables();
     private Database_Local_Aequities db;
     TabLayout tabchoice;
-    GraphView graph_view;
+    //GraphView graph_view;
     Adapter_Graph_Points ab;
+    Adapter_Graph_Points ab_list;
 
 
     @Override
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
         View rootView = inflater.inflate(R.layout.fragment_analysis, container, false);
         RecyclerView historical_listview =rootView.findViewById(R.id.historical_listview);
-        graph_view=rootView.findViewById(R.id.graph_view);
+        //graph_view=rootView.findViewById(R.id.graph_view);
         String ap_pc = ap_info.getCurrent_Aequity_Price_Change();
         a_name =rootView.findViewById(R.id.aequity_name);
         a_type =rootView.findViewById(R.id.aequity_type);
@@ -60,7 +65,7 @@ public class Fragment_Analysis extends Fragment {
         a_cap =rootView.findViewById(R.id.aequity_cap);
         a_cap.setText(ap_info.getMarketCap());
         try{
-        a_price.setText("$ "+graph_high.get(0));}
+        a_price.setText("$ "+ap_info.getCurrent_Aequity_Price());}
         catch(IndexOutOfBoundsException e){
 
             System.out.println("Had to start over ");
@@ -80,9 +85,6 @@ public class Fragment_Analysis extends Fragment {
             sup.setText(getString(R.string.shares));}
 
             a_supply.setText(ap_info.getMarketSupply());
-
-
-
         Constructor_App_Variables app_info =new Constructor_App_Variables();
         a_name.setText(app_info.getMarketName());
         String correct =app_info.getMarketSymbol();
@@ -97,32 +99,40 @@ public class Fragment_Analysis extends Fragment {
             {
         a_symbol.setText(correct);
             }
-        a_type.setText(app_info.getMarketType());
-
-
         save =rootView.findViewById(R.id.save);
+        a_type.setText(app_info.getMarketType());
+        db = new Database_Local_Aequities(getActivity().getApplicationContext());
+        if(db.getSymbol().contains(a_symbol.getText().toString())){
+            save.setImageResource(android.R.drawable.btn_star_big_on);
+        }
+
         //dont forget shared preferences or check database if aequity is in database show big star on
 
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                save.setBackgroundResource(android.R.drawable.btn_star_big_on);
-                db = new Database_Local_Aequities(getActivity().getApplicationContext());
-                db.add_equity_info(app_info.getMarketSymbol(), ap_info.getMarketName(), app_info.getMarketType());
-                ((Activity_Main)getActivity()).setSavedMarketPage();
+                save.setImageResource(android.R.drawable.btn_star_big_on);
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    public void run() {
+
+                        db.add_equity_info(app_info.getMarketSymbol(), ap_info.getMarketName(), app_info.getMarketType());
+                        System.out.println("THIS IS INFO "+app_info.getMarketType()+" "+app_info.getMarketSymbol()+" "+ap_info.getMarketName());
+                        //Toast.makeText(getActivity(), app_info.getMarketName()+" is saved", Toast.LENGTH_SHORT).show();
+                        //((Activity_Main)getActivity()).setSavedMarketPage();
+                    }
+                }, 2000);
+
 
             }
         });
         final Integer[] integer = {7};
         historical_listview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-        final Adapter_Graph_Points[] ab = {new Adapter_Graph_Points(getContext(), integer[0], graph_high, graph_volume, graph_date)};
-        final Adapter_Graph_Points ab_list = new Adapter_Graph_Points(getContext(),integer[0], graph_high, graph_volume, graph_date);
+        final Adapter_Graph_Points[] ab = {new Adapter_Graph_Points(getContext(), integer[0], graph_high,graph_change, graph_volume, graph_date)};
+        ab_list = new Adapter_Graph_Points(getContext(),integer[0], graph_high,graph_change, graph_volume, graph_date);
         historical_listview.setAdapter(ab_list);
 
         //Collections.reverse(graph_high);
-
-
-
         TabLayout tabLayoutchoice = (TabLayout)rootView.findViewById(R.id.tabchoice);
         tabLayoutchoice.addTab(tabLayoutchoice.newTab().setText("LIST"));
         tabLayoutchoice.addTab(tabLayoutchoice.newTab().setText("GRAPH"));
@@ -134,13 +144,13 @@ public class Fragment_Analysis extends Fragment {
                     case 0:
 //SHOW LIST
                         historical_listview.setVisibility(View.VISIBLE);
-                        graph_view.setVisibility(View.GONE);
+                        //graph_view.setVisibility(View.GONE);
                         break;
                     case 1:
 //SHOW GRAPH
 
                         historical_listview.setVisibility(View.GONE);
-                        graph_view.setVisibility(View.VISIBLE);
+                        //graph_view.setVisibility(View.VISIBLE);
 
 
                         break;
@@ -183,13 +193,12 @@ public class Fragment_Analysis extends Fragment {
                 int position = tab.getPosition();
                 switch (position) {
                     case 0:
-                        graph_view.removeAllSeries();
-                        ab[0].notifyDataSetChanged();
+                        //graph_view.removeAllSeries();
+                        ab_list.notifyDataSetChanged();
                         integer[0] =7;
-
                         historical_listview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-                        ab[0] =new Adapter_Graph_Points(getContext(), integer[0],graph_high,graph_volume,graph_date);
-                        historical_listview.setAdapter(ab[0]);
+                        ab_list =new Adapter_Graph_Points(getContext(), integer[0],graph_high,graph_change,graph_volume,graph_date);
+                        historical_listview.setAdapter(ab_list);
                         series = new LineGraphSeries<>();
 
                         for (int i= 0; i < integer[0];i++){
@@ -202,19 +211,28 @@ public class Fragment_Analysis extends Fragment {
                             }
                             continue;
                         }
-                        graph_view.getGridLabelRenderer().setGridColor(Color.TRANSPARENT);
-                        graph_view.getGridLabelRenderer().setHorizontalLabelsColor(Color.WHITE);
-                        graph_view.getGridLabelRenderer().setVerticalLabelsColor(Color.WHITE);
+                        //graph_view.getGridLabelRenderer().setGridColor(Color.TRANSPARENT);
+                        //graph_view.getGridLabelRenderer().setHorizontalLabelsColor(Color.WHITE);
+                        //graph_view.getGridLabelRenderer().setVerticalLabelsColor(Color.WHITE);
+                        /*
+                        graph_view.getViewport().setMinX(1);
+                        graph_view.getViewport().setMaxX(integer[0]);
+                        graph_view.getViewport().setMinY(0);
+                        graph_view.getViewport().setMaxY(Double.parseDouble((String) graph_high.get(integer[0])));
+
+                        graph_view.getViewport().setYAxisBoundsManual(true);
+                        graph_view.getViewport().setXAxisBoundsManual(true);
+                        */
                         series.setColor(Color.GREEN);
-                        graph_view.addSeries(series);
+                        //graph_view.addSeries(series);
                         break;
                     case 1:
-                        graph_view.removeAllSeries();
+                        //graph_view.removeAllSeries();
                         ab[0].notifyDataSetChanged();
                         integer[0] =30;
 
                         historical_listview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-                        ab[0] =new Adapter_Graph_Points(getContext(), integer[0],graph_high,graph_volume,graph_date);
+                        ab[0] =new Adapter_Graph_Points(getContext(), integer[0],graph_high,graph_change,graph_volume,graph_date);
                         historical_listview.setAdapter(ab[0]);
                         series = new LineGraphSeries<>();
                         for (int i= 0; i < integer[0];i++){
@@ -227,14 +245,14 @@ public class Fragment_Analysis extends Fragment {
                             }
                             continue;
                         }
-                        graph_view.getGridLabelRenderer().setGridColor(Color.TRANSPARENT);
-                        graph_view.getGridLabelRenderer().setHorizontalLabelsColor(Color.WHITE);
-                        graph_view.getGridLabelRenderer().setVerticalLabelsColor(Color.WHITE);
+                        //graph_view.getGridLabelRenderer().setGridColor(Color.TRANSPARENT);
+                        //graph_view.getGridLabelRenderer().setHorizontalLabelsColor(Color.WHITE);
+                        //graph_view.getGridLabelRenderer().setVerticalLabelsColor(Color.WHITE);
                         series.setColor(Color.GREEN);
-                        graph_view.addSeries(series);
+                        //graph_view.addSeries(series);
                         break;
                     case 2:
-                        graph_view.removeAllSeries();
+                        //graph_view.removeAllSeries();
                         ab[0].notifyDataSetChanged();
                         integer[0] =90;
 
@@ -249,17 +267,17 @@ public class Fragment_Analysis extends Fragment {
                             }
                             continue;
                         }
-                        graph_view.getGridLabelRenderer().setGridColor(Color.TRANSPARENT);
-                        graph_view.getGridLabelRenderer().setHorizontalLabelsColor(Color.WHITE);
-                        graph_view.getGridLabelRenderer().setVerticalLabelsColor(Color.WHITE);
+                        //graph_view.getGridLabelRenderer().setGridColor(Color.TRANSPARENT);
+                        //graph_view.getGridLabelRenderer().setHorizontalLabelsColor(Color.WHITE);
+                        //graph_view.getGridLabelRenderer().setVerticalLabelsColor(Color.WHITE);
                         series.setColor(Color.GREEN);
-                        graph_view.addSeries(series);
+                        //graph_view.addSeries(series);
                         historical_listview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-                        ab[0] =new Adapter_Graph_Points(getContext(), integer[0],graph_high,graph_volume,graph_date);
+                        ab[0] =new Adapter_Graph_Points(getContext(), integer[0],graph_high,graph_change,graph_volume,graph_date);
                         historical_listview.setAdapter(ab[0]);
                         break;
                     case 3:
-                        graph_view.removeAllSeries();
+                        //graph_view.removeAllSeries();
                         ab[0].notifyDataSetChanged();
                         integer[0] =180;
 
@@ -274,17 +292,17 @@ public class Fragment_Analysis extends Fragment {
                             }
                             continue;
                         }
-                        graph_view.getGridLabelRenderer().setGridColor(Color.TRANSPARENT);
-                        graph_view.getGridLabelRenderer().setHorizontalLabelsColor(Color.WHITE);
-                        graph_view.getGridLabelRenderer().setVerticalLabelsColor(Color.WHITE);
+                        //graph_view.getGridLabelRenderer().setGridColor(Color.TRANSPARENT);
+                        //graph_view.getGridLabelRenderer().setHorizontalLabelsColor(Color.WHITE);
+                        //graph_view.getGridLabelRenderer().setVerticalLabelsColor(Color.WHITE);
                         series.setColor(Color.GREEN);
-                        graph_view.addSeries(series);
+                        //graph_view.addSeries(series);
                         historical_listview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-                        ab[0] =new Adapter_Graph_Points(getContext(), integer[0],graph_high,graph_volume,graph_date);
+                        ab[0] =new Adapter_Graph_Points(getContext(), integer[0],graph_high,graph_change,graph_volume,graph_date);
                         historical_listview.setAdapter(ab[0]);
                         break;
                     case 4:
-                        graph_view.removeAllSeries();
+                        //graph_view.removeAllSeries();
                         ab[0].notifyDataSetChanged();
                         integer[0] =365;
 
@@ -299,18 +317,18 @@ public class Fragment_Analysis extends Fragment {
                             }
                             continue;
                         }
-                        graph_view.getGridLabelRenderer().setGridColor(Color.TRANSPARENT);
-                        graph_view.getGridLabelRenderer().setHorizontalLabelsColor(Color.WHITE);
-                        graph_view.getGridLabelRenderer().setVerticalLabelsColor(Color.WHITE);
-                        graph_view.addSeries(series);
+                        //graph_view.getGridLabelRenderer().setGridColor(Color.TRANSPARENT);
+                        //graph_view.getGridLabelRenderer().setHorizontalLabelsColor(Color.WHITE);
+                        //graph_view.getGridLabelRenderer().setVerticalLabelsColor(Color.WHITE);
+                        //graph_view.addSeries(series);
                         series.setColor(Color.GREEN);
                         historical_listview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-                        ab[0] =new Adapter_Graph_Points(getContext(), integer[0],graph_high,graph_volume,graph_date);
+                        ab[0] =new Adapter_Graph_Points(getContext(), integer[0],graph_high,graph_change,graph_volume,graph_date);
                         historical_listview.setAdapter(ab[0]);
 
                         break;
                     case 5:
-                        graph_view.removeAllSeries();
+                        //graph_view.removeAllSeries();
                         ab[0].notifyDataSetChanged();
                         System.out.println(_AllDays.size());
                         integer[0] =_AllDays.size();
@@ -328,16 +346,16 @@ public class Fragment_Analysis extends Fragment {
                         }
                         //System.out.println("SIZE of iteration"+integer[0]);
                         //System.out.println("SIZE OF ALL DAYS "+_AllDays.size());
-                        graph_view.getGridLabelRenderer().setGridColor(Color.TRANSPARENT);
-                        graph_view.getGridLabelRenderer().setHorizontalLabelsColor(Color.WHITE);
-                        graph_view.getGridLabelRenderer().setVerticalLabelsColor(Color.WHITE);
-                        StaticLabelsFormatter staticLabelsFormatter = new StaticLabelsFormatter(graph_view);
+                        //graph_view.getGridLabelRenderer().setGridColor(Color.TRANSPARENT);
+                        //graph_view.getGridLabelRenderer().setHorizontalLabelsColor(Color.WHITE);
+                        //graph_view.getGridLabelRenderer().setVerticalLabelsColor(Color.WHITE);
+                        //StaticLabelsFormatter staticLabelsFormatter = new StaticLabelsFormatter(graph_view);
                         //staticLabelsFormatter.setHorizontalLabels(new String[] {"Jan", "Feb", "Mar", "Apr","May", "Jun", "Jul", "Aug","Sept"});
-                        graph_view.getGridLabelRenderer().setLabelFormatter(staticLabelsFormatter);
-                        graph_view.addSeries(series);
+                        //graph_view.getGridLabelRenderer().setLabelFormatter(staticLabelsFormatter);
+                        //graph_view.addSeries(series);
                         series.setColor(Color.GREEN);
                         historical_listview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-                        ab[0] =new Adapter_Graph_Points(getContext(), integer[0],graph_high,graph_volume,graph_date);
+                        ab[0] =new Adapter_Graph_Points(getContext(), integer[0],graph_high,graph_change,graph_volume,graph_date);
                         historical_listview.setAdapter(ab[0]);
                         break;
 
@@ -369,6 +387,8 @@ public class Fragment_Analysis extends Fragment {
         graph_high.clear();
         graph_volume.clear();
     }
+
+
 
 
 }
