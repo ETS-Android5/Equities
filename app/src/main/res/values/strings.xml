@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Aequities</string>
+    <string name="app_name">Equities</string>
     <string name="app_comp">AHV Mobile Solutions</string>
     <string name="title_item_detail">Item Detail</string>
     <string name="title_main">Main</string>
@@ -54,6 +54,8 @@
     <string name="stocktwits">Social Media</string>
     <string name="compare">Chart</string>
     <string name="change">Change</string>
+    <string name="masternodes">Masternodes</string>
+
     <string name="quote1">"It's how you deal with failure that determines how you achieve success." \n\n-David Feherty</string>
     <string name="quote2">"An investment in knowledge pays the best interest." \n\n-Benjamin Franklin</string>
     <string name="quote3">"I will tell you the secret to getting rich on Wall Street. You try to be greedy when others are fearful. And you try to be fearful when others are greedy." \n\n-Warren Buffett</string>
@@ -71,21 +73,44 @@
     <string name="quote15">"There is little that can withstand a man who can conquer himself" \n\n-Louis XIV</string>
     <string name="quote16">"All money is a matter of belief" \n\n-Adam Smith</string>
     <string name="quote17">"A man in debt is so far a slave." \n\n-Ralph Waldo Emerson</string>
-    <string name="quote18">"Be yourself, everyone else is already taken." \n\n-Oscar Wilde</string>
-    <string name="quote19">"I think the internet is going to be one of the major forces for reducing the role of government. The one thing that’s missing but that will soon be developed, is a reliable e-cash." \n\n-Milton Friedman</string>
-    <string name="quote20">"The future of money is digital currency." \n\n-Bill Gates</string>
-    <string name="quote21">"It’s a hell of a lot harder for a few hundred thousand people to watch 7 1/2 billion. But what do you think happens when 7 1/2 billion of us stare back?" \n\n-Andreas M. Antonopoulos</string>
-    <string name="quote22">"Everything will be tokenized and connected by a blockchain one day" \n\n-Fred Ehrsam</string>
-    <string name="quote23">"Anything that can conceive of as a supply chain, blockchain can vastly improve its efficiency- it doesn’t matter if its people, numbers, data, money." \n\n–Ginni Rometty, CEO IBM</string>
-    <string name="quote24">"You cannot un-invent this technology. You cannot turn this omelette back into eggs." \n\n-Andreas Antonopoulos</string>
-    <string name="quote25">"Control of a currency is one of the most powerful tools a government wields; ask anybody in Ireland, Portugal, Greece, or Cyprus who lived through those countries’ recent financial crises." \n\n-Paul Vigna</string>
-    <string name="quote26">"Bitcoin is a remarkable cryptographic achievement and the ability to create something that is not duplicable in the digital world has enormous value" \n\n-Eric Schmidt, Former CEO of Google</string>
-    <string name="quote27">"40 years from now, blockchain and all that followed from it will figure more prominently in that story than will bitcoin." \n\n-Larry Summers, US Former Treasury Secretary</string>
-    <string name="quote28">"I do think Bitcoin is the first that has the potential to do something like change the world." \n\n-Peter Thiel, Co-Founder of Paypal.</string>
-    <string name="quote29">"We need blockchain technology." \n\n-Vladimir Putin</string>
-    <string name="quote30">"Bitcoin is a technological tour de force." \n\n-Bill Gates</string>
-    <string name="quote31">"This app is pretty cool." \n\n-You, hopefully</string>
+    <string name="quote18">"Financial peace isn't the acquisition of stuff. It's learning to live on less than you make, so you can give money back and have money to invest. You can't win until you do this." \n\n-Dave Ramsey</string>
+    <string name="quote19">"No man ever steps in the same river twice, for it's not the same river and he's not the same man." \n\n-Heraclitus</string>
+    <string name="quote20">"Luck is what happens when preparation meets opportunity" \n\n-Senaca</string>
+    <string name="quote21">"It had long since come to my attention that people of accomplishment rarely sat back and let things happen to them. They went out and happened to things." \n\n-Leonardo da Vinci"</string>
+    <string name="quote22">"Good judgment comes from experience, and a lot of that comes from bad judgment." \n\n-Will Rogers</string>
+    <string name="quote23">"Know how to listen and you will profit even from those who talk badly." \n\n-Plutarch</string>
+    <string name="quote24">"Do not seek to follow in the footsteps of the men of old; seek what they sought." \n\n-Basho</string>
+    <string name="quote25">"Too often we... enjoy the comfort of opinion without the discomfort of thought." \n\n-John F. Kennedy</string>
 
+
+
+
+
+    <string name="quote26">"I think the internet is going to be one of the major forces for reducing the role of government. The one thing that’s missing but that will soon be developed, is a reliable e-cash." \n\n-Milton Friedman</string>
+    <string name="quote27">"The future of money is digital currency." \n\n-Bill Gates</string>
+    <string name="quote28">"It’s a hell of a lot harder for a few hundred thousand people to watch 7 1/2 billion. But what do you think happens when 7 1/2 billion of us stare back?" \n\n-Andreas M. Antonopoulos</string>
+    <string name="quote29">"Everything will be tokenized and connected by a blockchain one day" \n\n-Fred Ehrsam</string>
+    <string name="quote30">"Anything that can conceive of as a supply chain, blockchain can vastly improve its efficiency- it doesn’t matter if its people, numbers, data, money." \n\n–Ginni Rometty, CEO IBM</string>
+    <string name="quote31">"You cannot un-invent this technology. You cannot turn this omelette back into eggs." \n\n-Andreas Antonopoulos</string>
+    <string name="quote32">"Control of a currency is one of the most powerful tools a government wields; ask anybody in Ireland, Portugal, Greece, or Cyprus who lived through those countries’ recent financial crises." \n\n-Paul Vigna</string>
+    <string name="quote33">"Bitcoin is a remarkable cryptographic achievement and the ability to create something that is not duplicable in the digital world has enormous value" \n\n-Eric Schmidt, Former CEO of Google</string>
+    <string name="quote34">"40 years from now, blockchain and all that followed from it will figure more prominently in that story than will bitcoin." \n\n-Larry Summers, US Former Treasury Secretary</string>
+    <string name="quote35">"I do think Bitcoin is the first that has the potential to do something like change the world." \n\n-Peter Thiel, Co-Founder of Paypal.</string>
+    <string name="quote36">"We need blockchain technology." \n\n-Vladimir Putin</string>
+    <string name="quote37">"Bitcoin is a technological tour de force." \n\n-Bill Gates</string>
+    <string name="quote38">"This app is pretty cool." \n\n-You, hopefully</string>
+    <string name="quote39">"It’s money 2.0, a huge huge huge deal." \n\n-Chamath Palihapitiya</string>
+    <string name="quote40">"Mobile was Internet 2.0. It changed everything. Crypto is Internet 3.0." \n\n-Gil Penchina</string>
+    <string name="quote41">"Bitcoin may be the TCP/IP of money." \n\n-Paul Buchheit</string>
+    <string name="quote42">"You should be taking this technology as seriously as you should have been taking the development of the Internet in the early 1990’s." \n\n-Blythe Masters</string>
+    <string name="quote43">"I do not fear computers. I fear lack of them." \n\n-Isaac Asimov</string>
+    <string name="quote44">"Virtual currencies may hold long-term promise, particularly if the innovations promote a faster, more secure and more efficient payment system." \n\n-Ben Bernanke</string>
+    <string name="quote45">"Any sufficiently advanced technology is equivalent to magic." \n\n-Arthur C. Clarke </string>
+    <string name="quote46">"For a successful technology, reality must take precedence over public relations, for Nature cannot be fooled." \n\n-Richard P. Feynman</string>
+    <string name="quote47">"We see bitcoin as potentially the greatest social network of all." \n\n-Tyler Winklevoss</string>
+    <string name="quote48">"The very same things that they said about the internet in the early '90s. It is a haven for pedophiles, terrorists, drug dealers, and criminals." \n\n-Andreas M. Antonopoulos</string>
+    <string name="quote49">"How high can bitcoin go? The real question is how low can the dollar go?" \n\n-Patrick M. Byrne</string>
+    <string name="quote50">"Bitcoin is a way to have programmable scarcity. The blockchain is the data structure that records the transfer of scarce objects." \n\n-Balaji Srinivasan</string>
 
 
     <string-array name="stock_quotes">
@@ -106,10 +131,7 @@
         <item>@string/quote15</item>
         <item>@string/quote16</item>
         <item>@string/quote17</item>
-
-    </string-array>
-
-    <string-array name="crypto_quotes">
+        <item>@string/quote18</item>
         <item>@string/quote19</item>
         <item>@string/quote20</item>
         <item>@string/quote21</item>
@@ -117,12 +139,40 @@
         <item>@string/quote23</item>
         <item>@string/quote24</item>
         <item>@string/quote25</item>
+    </string-array>
+
+    <string-array name="crypto_quotes">
+
         <item>@string/quote26</item>
         <item>@string/quote27</item>
         <item>@string/quote28</item>
         <item>@string/quote29</item>
         <item>@string/quote30</item>
         <item>@string/quote31</item>
+        <item>@string/quote32</item>
+        <item>@string/quote33</item>
+        <item>@string/quote34</item>
+        <item>@string/quote35</item>
+        <item>@string/quote36</item>
+        <item>@string/quote37</item>
+        <item>@string/quote38</item>
+        <item>@string/quote39</item>
+        <item>@string/quote40</item>
+        <item>@string/quote41</item>
+        <item>@string/quote42</item>
+        <item>@string/quote43</item>
+        <item>@string/quote44</item>
+        <item>@string/quote45</item>
+        <item>@string/quote46</item>
+        <item>@string/quote47</item>
+        <item>@string/quote48</item>
+        <item>@string/quote49</item>
+        <item>@string/quote50</item>
+
+
+
+
+
 
     </string-array>
 
@@ -159,6 +209,26 @@
         <item>@string/quote29</item>
         <item>@string/quote30</item>
         <item>@string/quote31</item>
+        <item>@string/quote32</item>
+        <item>@string/quote33</item>
+        <item>@string/quote34</item>
+        <item>@string/quote35</item>
+        <item>@string/quote36</item>
+        <item>@string/quote37</item>
+        <item>@string/quote38</item>
+        <item>@string/quote39</item>
+        <item>@string/quote40</item>
+        <item>@string/quote41</item>
+        <item>@string/quote42</item>
+        <item>@string/quote43</item>
+        <item>@string/quote44</item>
+        <item>@string/quote45</item>
+        <item>@string/quote46</item>
+        <item>@string/quote47</item>
+        <item>@string/quote48</item>
+        <item>@string/quote49</item>
+        <item>@string/quote50</item>
+
 
     </string-array>
 

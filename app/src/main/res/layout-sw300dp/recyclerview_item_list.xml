@@ -5,7 +5,7 @@
     android:id="@+id/item_list"
     android:name="airhawk.com.myapplication.ItemListFragment"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:orientation="horizontal"
     tools:context="airhawk.com.myapplication.Activity_Main"
     tools:listitem="@layout/activity_main_item_list_content" />

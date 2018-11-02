@@ -1,69 +1,26 @@
 package airhawk.com.myapplication;
 
 import android.content.Context;
-import android.content.res.AssetManager;
-import android.os.Build;
-import android.util.Log;
-import android.view.View;
 
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.jsoup.HttpStatusException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
-import java.net.InetAddress;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
-import java.net.UnknownHostException;
 import java.text.DateFormat;
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLHandshakeException;
 
 import static airhawk.com.myapplication.Activity_Main.aequity_name_arraylist;
 import static airhawk.com.myapplication.Activity_Main.aequity_symbol_arraylist;
-import static airhawk.com.myapplication.Activity_Main.aequity_type_arraylist;
-import static airhawk.com.myapplication.Activity_Main.ap_info;
-import static airhawk.com.myapplication.Activity_Main.searchview_arraylist;
 import static airhawk.com.myapplication.Constructor_App_Variables.*;
-import static airhawk.com.myapplication.Service_Main_Aequities.myContext;
-import static airhawk.com.myapplication.Service_Main_Aequities.stock_kings_changelist;
-import static airhawk.com.myapplication.Service_Main_Aequities.stock_kings_namelist;
-import static airhawk.com.myapplication.Service_Main_Aequities.stock_kings_symbollist;
+import static airhawk.com.myapplication.Service_Main_Equities.stock_kings_changelist;
+import static airhawk.com.myapplication.Service_Main_Equities.stock_kings_namelist;
+import static airhawk.com.myapplication.Service_Main_Equities.stock_kings_symbollist;
 
 public class Test_Methods {
     static ArrayList exchange_url = new ArrayList<>();
@@ -72,78 +29,96 @@ public class Test_Methods {
     static String cryptopia_list;
 
     public static void main(String[] args) {
-
+getStocks_Market_Caps();
 
         //get_crypto_points();
-get_stock_points();
+//get_stock_points();
+    }
+
+
+    public static void getStocks_Market_Caps() {
+        Document z =null;
+        try {
+            z = Jsoup.connect("https://finance.yahoo.com").timeout(10 * 10000).get();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Element table = z.getElementById("Lead-2-FinanceHeader-Proxy");
+        Elements as = table.select("a[title]");
+        sp_name = as.get(0).text().replace("&", "");
+        dow_name = as.get(2).text();
+        nas_name = as.get(4).text();
+        Elements as1 = z.select("h3>span");
+        sp_amount =as1.get(0).text();
+        dow_amount=as1.get(1).text();
+        nas_amount=as1.get(2).text();
+        Elements as2 =z.select("span>span");
+        sp_change =as2.get(2).text();
+        dow_change=as2.get(3).text();
+        nas_change=as2.get(4).text();
+        if (sp_change.contains("-")){
+            sp_flow=true;
+        }
+        if (dow_change.contains("-")){
+            dow_flow=true;
+        }
+        if (nas_change.contains("-")){
+            nd_flow=true;
+        }
+        System.out.println(sp_name+" "+sp_amount+" "+sp_change);
+        System.out.println(dow_name+" "+dow_amount+" "+dow_change);
+        System.out.println(nas_name+" "+nas_amount+" "+nas_change);
+    }
+
+    public static void get_stock_points() {
+        Document cap = null;
+
+
+            try {
+                cap = Jsoup.connect("https://finance.yahoo.com/quote/gsat").get();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+              Element test = cap.select("div[data-reactid='34']").first().select("span").get(1);
+              String foofoo =test.text().toString().replace("(","").replace(")","");
+              String[] foo = foofoo.split(" ");
+              String f =foo[1];
+            System.out.println("It's a stock " + f);
+
+
 
     }
 
 
-    public static void get_stock_points() {
+    public static void get_stock_points2() {
         System.out.println("Get stock points called");
-        String marname = "UA";
+        String marname = "aapl";
         Document d = null;
         try {
-            d = Jsoup.connect("https://finance.yahoo.com/quote/" + marname + "/history?p=" + marname).timeout(10 * 10000).get();
+            d = Jsoup.connect("https://finance.yahoo.com/quote/"+marname+"/history?period1=863668800&period2=1538452800&interval=1d&filter=history&frequency=1d").timeout(10 * 10000).get();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        Element u = d.getElementById("Lead-2-QuoteHeader-Proxy");
-        Elements x = u.select("div>span");
+            Elements x = d.getElementsByAttributeValue("class","BdT Bdc($c-fuji-grey-c) Ta(end) Fz(s) Whs(nw)");
 
-        String c = x.get(2).text();
-        String cuap = c.replace(",","");
-        ap_info.setCurrent_Aequity_Price(cuap);
-        String c3 = x.get(3).text();
-        String[] spit = c3.split(" ");
-        spit[1]=spit[1].replaceAll("\\(","");
-        spit[1]=spit[1].replaceAll("\\)","");
-        ap_info.setCurrent_Aequity_Price_Change(spit[1]);
 
-        ArrayList<String> temp = new ArrayList();
-        Elements tables = d.select("table");
-        Elements trs = tables.select("tr");
-        for (Element g : trs) {
-            Elements p = g.select("td");
-            temp.add(p.text());
-
+            for(int z =0; z < x.size();z++){
+                String text =x.get(z).text();
+                if(text.contains("Dividend")){continue;}else{
+                String date =x.get(z).select("td").get(0).text();
+                graph_date.add(date);
+                String close =x.get(z).select("td").get(5).text();
+                graph_high.add(close);
+                String volume =x.get(z).select("td").get(6).text();
+                graph_volume.add(volume);
+                List<String> numbers = graph_high;
+                //Collections.reverse(numbers);
+                _AllDays = numbers;}}
+        System.out.println(graph_high.size());
         }
-        //temp.remove(0);
-        temp.remove(0);
-        for (int counter = 0; counter < temp.size(); counter++) {
-            String sev = temp.get(counter);
-            if (sev.contains("Dividend")) {
-            } else {
-                String[] split = sev.split(" ");
-                graph_date.add(split[0] + " " + split[1] + " " + split[2]);
-             //   System.out.print("TACOS " + split[7]);
+        //System.out.println(u);
 
-                if (split[7].equals("adjusted")) {
-                    graph_high.add(ap_info.getCurrent_Aequity_Price());
-                } else {
-                    if (split[7].contains("-")) {
-                    } else {
-                        graph_high.add(split[7]);
-                        System.out.println("Price"+split[7]);
-                    }
-
-                }
-                //System.out.println("GRAPH HIGH LIST "+graph_high);
-                if (split[8].equals("for") || split[8].contains("-")) {
-                    graph_volume.add("0");
-                } else {
-                    graph_volume.add(split[8]);
-                }
-
-            }
-
-            //System.out.println(Arrays.asList(graph_date.get(counter))+" "+graph_high.get(counter)+" "+graph_volume.get(counter));
-            List<String> numbers = graph_high;
-            Collections.reverse(numbers);
-            _AllDays = numbers;
-        }}
 
     public static void getStock_Kings() {
         int x;

@@ -12,6 +12,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import static airhawk.com.myapplication.Activity_Main.ap_info;
+import static airhawk.com.myapplication.Activity_Main.db_exist;
+import static airhawk.com.myapplication.Constructor_App_Variables.current_percentage_change;
 
 public class Adapter_Saved_Feed extends RecyclerView.Adapter<Adapter_Saved_Feed.MyViewHolder> {
 
@@ -57,20 +59,20 @@ public class Adapter_Saved_Feed extends RecyclerView.Adapter<Adapter_Saved_Feed.
 
     @Override
     public void onBindViewHolder(Adapter_Saved_Feed.MyViewHolder holder, int position) {
-       Database_Local_Aequities ld =new Database_Local_Aequities(context.getApplicationContext());
-        Constructor_App_Variables cav =new Constructor_App_Variables();
-        System.out.println("ALL SAVED "+cav.getCpr());
+       Database_Local_Aequities ld =new Database_Local_Aequities(context);
+       System.out.println("ALL SAVED "+current_percentage_change.get(position));
         ld.deleteDuplicates();
        holder.symbol.setText(""+ ld.getSymbol().get(position));
        holder.name.setText(""+ld.getName().get(position));
-       holder.currentchange.setText(""+cav.getCpr().get(position));
-        String cc =holder.currentchange.getText().toString();
+       holder.currentchange.setText(""+current_percentage_change.get(position));
+        String cc = String.valueOf(current_percentage_change.get(position));
         if(cc.contains("-")){
             cc.replace("-","");
             holder.currentchange.setTextColor(Color.parseColor("#ff0000"));
             holder.circle.setImageResource(R.drawable.holder_red_circle);
         }
-        else{
+        if(cc.contains("+")){
+            cc.replace("+","").replace("(","").replace(")","");
             holder.currentchange.setTextColor(Color.parseColor("#00ff00"));
             holder.circle.setImageResource(R.drawable.holder_green_circle);
         }
@@ -79,6 +81,7 @@ public class Adapter_Saved_Feed extends RecyclerView.Adapter<Adapter_Saved_Feed.
            holder.type.setText("Crypto");
        }else{
        holder.type.setText("Stock");
+       ld.close();
     }
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -88,7 +91,7 @@ public class Adapter_Saved_Feed extends RecyclerView.Adapter<Adapter_Saved_Feed.
                 ap_info.setMarketSymbol(holder.symbol.getText().toString());
                 ap_info.setMarketType(holder.type.getText().toString());
                 System.out.println("THIS SI I INFO "+ap_info.getMarketName()+" "+ap_info.getMarketSymbol()+" "+ap_info.getMarketType());
-                //adpater.notifyItemInserted(position);
+                db_exist=true;
                 ((Activity_Main)context).new setAsyncChosenData((Activity_Main)context).execute();
 
 
@@ -97,9 +100,9 @@ public class Adapter_Saved_Feed extends RecyclerView.Adapter<Adapter_Saved_Feed.
 
     @Override
     public int getItemCount() {
-       Database_Local_Aequities ld =new Database_Local_Aequities(context.getApplicationContext());
+       Database_Local_Aequities ld =new Database_Local_Aequities(context);
 
-       return ld.getSymbol().size();
+       return ld.getName().size();
     }
 
 

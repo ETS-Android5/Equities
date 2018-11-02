@@ -17,9 +17,6 @@ import static airhawk.com.myapplication.Constructor_App_Variables.aequity_exchan
 import static airhawk.com.myapplication.Constructor_App_Variables.exchanges_feedItems;
 import static airhawk.com.myapplication.Constructor_App_Variables.stock_exchange_name;
 
-/**
- * Created by Julian Dinkins on 4/25/2018.
- */
 
 public class Fragment_Exchanges extends Fragment {
     private RecyclerView exchange_feed;

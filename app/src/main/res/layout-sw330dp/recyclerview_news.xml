@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="225dp"
-    android:layout_margin="10dp"
+    android:layout_height="300dp"
+    android:layout_marginBottom="5dp"
+    android:layout_marginTop="5dp"
     android:background="#ffffff"
     android:orientation="vertical"
     android:visibility="visible">
@@ -10,7 +11,6 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="1dp"
         android:background="#000000"
         android:orientation="vertical"
         android:visibility="visible">
@@ -39,7 +39,7 @@
             android:shadowDy="0"
             android:shadowRadius="7"
             android:textColor="@color/darkTextColor"
-            android:textSize="20sp"
+            android:textSize="22sp"
             android:textStyle="bold" />
 
 
@@ -53,7 +53,7 @@
             android:fontFamily="@font/scpro"
             android:gravity="left"
             android:textColor="#ffffff"
-            android:textSize="14sp" />
+            android:textSize="16sp" />
 
     </RelativeLayout>
 </LinearLayout>

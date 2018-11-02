@@ -24,15 +24,22 @@
             android:textSize="20sp"
             android:textStyle="bold" />
 
+        <TextView
+            android:id="@+id/savedd"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="6"
+            android:textColor="@color/darkTextColor"
+            android:visibility="gone" />
+
         <ImageView
             android:id="@+id/save"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_gravity="right"
             android:layout_marginRight="5dp"
             android:layout_weight="10"
-            android:background="@android:drawable/btn_star_big_off"
-            android:textColor="@color/darkTextColor"/>
+            android:background="@android:drawable/btn_star_big_off" />
     </TableRow>
 
     <TableRow
@@ -134,7 +141,7 @@
                 android:layout_marginRight="5dp"
                 android:gravity="top|right"
                 android:textColor="@color/darkTextColor"
-                android:textSize="20sp" />
+                android:textSize="24sp" />
 
             <TextView
                 android:id="@+id/aequity_price_change"

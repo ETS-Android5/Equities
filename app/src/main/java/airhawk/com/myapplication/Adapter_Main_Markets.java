@@ -39,15 +39,12 @@ public class Adapter_Main_Markets extends RecyclerView.Adapter<Adapter_Main_Mark
     Context context; //global
     public Adapter_Main_Markets(Context context)
     {
+
         this.context = context;
     }
 
-    private WeakReference<Activity_Main> activityReference;
-    Adapter_Main_Markets(Activity_Main context) {
-        activityReference = new WeakReference<>(context);
-    }
 
-    public Adapter_Main_Markets(){}
+
     public class MyViewHolder extends RecyclerView.ViewHolder{
         TextView mIdView;
         TextView mPriceView;
@@ -58,12 +55,6 @@ public class Adapter_Main_Markets extends RecyclerView.Adapter<Adapter_Main_Mark
 
                 //l.scrollToPosition(0);
                 //itemView.startAnimation(AnimationUtils.loadAnimation(itemView.getContext(), R.anim.linear));
-
-
-
-
-
-
             mIdView = itemView.findViewById(R.id.id_text);
             mPriceView = itemView.findViewById(R.id.price);
             mChangeView = itemView.findViewById(R.id.change);
@@ -72,14 +63,14 @@ public class Adapter_Main_Markets extends RecyclerView.Adapter<Adapter_Main_Mark
                 @Override
                 public void onClick(View view) {
                     String temp = mIdView.getText().toString();
-                    Activity_Main connect =new Activity_Main();
+                    Activity_Main activity = new Activity_Main();
                     switch (getAdapterPosition()) {
                         case 0:
                             temp = "Dow Jones";
                             ap_info.setMarketName(mIdView.getText().toString());
                             ap_info.setMarketSymbol("%5EDJI");
                             ap_info.setMarketType("Stock");
-                            connect.new setAsyncChosenData((Activity_Main) context)
+                            activity.new setAsyncChosenData((Activity_Main) context)
                                     .execute();
                             break;
                         case 1:
@@ -87,7 +78,7 @@ public class Adapter_Main_Markets extends RecyclerView.Adapter<Adapter_Main_Mark
                             ap_info.setMarketName(temp);
                             ap_info.setMarketSymbol("%5EGSPC");
                             ap_info.setMarketType("Stock");
-                            connect.new setAsyncChosenData((Activity_Main)context)
+                            activity.new setAsyncChosenData((Activity_Main)context)
                                     .execute();
                             break;
                         case 2:
@@ -95,7 +86,7 @@ public class Adapter_Main_Markets extends RecyclerView.Adapter<Adapter_Main_Mark
                             ap_info.setMarketName(temp);
                             ap_info.setMarketSymbol("%5EIXIC");
                             ap_info.setMarketType("Stock");
-                            connect.new setAsyncChosenData((Activity_Main) context)
+                            activity.new setAsyncChosenData((Activity_Main) context)
                                     .execute();
                             break;
                         case 3:
@@ -103,7 +94,7 @@ public class Adapter_Main_Markets extends RecyclerView.Adapter<Adapter_Main_Mark
                             ap_info.setMarketName(temp);
                             ap_info.setMarketSymbol("BTC");
                             ap_info.setMarketType("Cryptocurrency");
-                            connect.new setAsyncChosenData((Activity_Main) context)
+                            activity.new setAsyncChosenData((Activity_Main) context)
                                     .execute();
                             break;
 
@@ -128,11 +119,11 @@ public class Adapter_Main_Markets extends RecyclerView.Adapter<Adapter_Main_Mark
     }
 
     @Override
-    public void onBindViewHolder(@NonNull Adapter_Main_Markets.MyViewHolder holder, int position) {
+    public void onBindViewHolder(Adapter_Main_Markets.MyViewHolder holder, int position) {
 
         holder.mIdView.setText("" + market_list[position]);
         holder.mPriceView.setText("$ " + int_list[position]);
-        if (change_list[position].contains("-")) {
+        if (change_list[position].contains("-")||change_list!=null) {
             holder.mIdView.setTextColor(Color.parseColor("#FFFFFF"));
             holder.mPriceView.setTextColor(Color.parseColor("#FFFFFF"));
             holder.mChangeView.setTextColor(Color.parseColor("#FF0000"));

@@ -11,12 +11,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import static airhawk.com.myapplication.Service_Main_Aequities.crypto_kings_marketcaplist;
-import static airhawk.com.myapplication.Service_Main_Aequities.crypto_kings_namelist;
-import static airhawk.com.myapplication.Service_Main_Aequities.crypto_kings_symbolist;
-import static airhawk.com.myapplication.Service_Main_Aequities.stock_kings_changelist;
-import static airhawk.com.myapplication.Service_Main_Aequities.stock_kings_namelist;
-import static airhawk.com.myapplication.Service_Main_Aequities.stock_kings_symbollist;
+import static airhawk.com.myapplication.Service_Main_Equities.crypto_kings_marketcaplist;
+import static airhawk.com.myapplication.Service_Main_Equities.crypto_kings_namelist;
+import static airhawk.com.myapplication.Service_Main_Equities.crypto_kings_symbolist;
+import static airhawk.com.myapplication.Service_Main_Equities.stock_kings_changelist;
+import static airhawk.com.myapplication.Service_Main_Equities.stock_kings_namelist;
+import static airhawk.com.myapplication.Service_Main_Equities.stock_kings_symbollist;
 
 
 /**

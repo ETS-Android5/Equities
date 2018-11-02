@@ -27,7 +27,7 @@ import static airhawk.com.myapplication.Constructor_App_Variables.stock_exchange
 
 public class Adapter_Exchanges_Feed extends RecyclerView.Adapter<Adapter_Exchanges_Feed.MyViewHolder> {
     int[] basic_crypto_array = new int[] { R.drawable.exchange_crypto_binance, R.drawable.exchange_crypto_coinbase};
-   private static Context context;
+    private static Context context;
     private List<Constructor_Exchanges> feedItems;
     public ArrayList<String> e_text=aequity_exchanges;
     public ArrayList<String> s_image=stock_exchange_image;
@@ -65,13 +65,7 @@ public class Adapter_Exchanges_Feed extends RecyclerView.Adapter<Adapter_Exchang
 
        if (a.equals("Cryptocurrency") || a.equals("Crypto"))
        {
-           if(ap_info.getMarketName().equalsIgnoreCase("bitcoin")||
-                   ap_info.getMarketName().equalsIgnoreCase("ethereum")||
-                   ap_info.getMarketName().equalsIgnoreCase("litecoin")||
-                   ap_info.getMarketName().equalsIgnoreCase("bitcoin cash")||
-                   ap_info.getMarketName().equalsIgnoreCase("ethereum classic")){
-                   aequity_exchanges.add("Coinbase");
-           }
+
            holder.ex_text.setText(""+ aequity_exchanges.get(position));
                    String g = (String) "exchange_crypto_"+aequity_exchanges.get(position).toString().toLowerCase();
            int productImageId = context.getResources().getIdentifier(
@@ -122,12 +116,13 @@ public class Adapter_Exchanges_Feed extends RecyclerView.Adapter<Adapter_Exchang
                  for (int i = 0; i< crypto_exchange_name.size(); i++){
                      if (crypto_exchange_name.get(i).equals(ex_text.getText().toString())){
                          textlink=""+ crypto_exchange_url.get(i);
+                         System.out.println(textlink);
                      }
                  }}else{
                      for (int i = 0; i< stock_exchange_name.size(); i++){
                          if (stock_exchange_name.get(i).equals(ex_text.getText().toString())){
                              textlink=""+ stock_exchange_url.get(i);}
-
+                         System.out.println(textlink);
                  }}
                  myClickWebView.gotoWebView(textlink);
 

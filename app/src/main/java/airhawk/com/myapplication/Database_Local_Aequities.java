@@ -65,7 +65,7 @@ public class Database_Local_Aequities extends SQLiteOpenHelper {
         values.put(KEY_AEQUITY_SYMBOL, symbol);
         values.put(KEY_AEQUITY_NAME, name);
         values.put(KEY_AEQUITY_TYPE, type);
-        db.insert(TABLE_AEQUITY_INFO, null, values);
+        //db.insert(TABLE_AEQUITY_INFO, null, values);
         long id = db.insert(TABLE_AEQUITY_INFO, null, values);
         db.close();
         return id;
@@ -83,6 +83,8 @@ public class Database_Local_Aequities extends SQLiteOpenHelper {
                     cursor.moveToNext();
                 }
             }
+            db.close();
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -103,6 +105,8 @@ public class Database_Local_Aequities extends SQLiteOpenHelper {
                     cursor.moveToNext();
                 }
             }
+            db.close();
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -123,6 +127,8 @@ public class Database_Local_Aequities extends SQLiteOpenHelper {
                     cursor.moveToNext();
                 }
             }
+            db.close();
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -133,7 +139,6 @@ public class Database_Local_Aequities extends SQLiteOpenHelper {
 
     public ArrayList getcryptoName() {
         ArrayList<String> symbol = new ArrayList<>();
-        String sto ="stock";
         try {
             String query = "SELECT DISTINCT * FROM " + TABLE_AEQUITY_INFO + " WHERE "+KEY_AEQUITY_TYPE+" LIKE '%Cryptocurrency%'";
             SQLiteDatabase db = this.getWritableDatabase();
@@ -144,6 +149,8 @@ public class Database_Local_Aequities extends SQLiteOpenHelper {
                     cursor.moveToNext();
                 }
             }
+            db.close();
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -163,6 +170,8 @@ public class Database_Local_Aequities extends SQLiteOpenHelper {
                     cursor.moveToNext();
                 }
             }
+            db.close();
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -187,6 +196,8 @@ public class Database_Local_Aequities extends SQLiteOpenHelper {
                     cursor.moveToNext();
                 }
             }
+            db.close();
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -206,6 +217,8 @@ public class Database_Local_Aequities extends SQLiteOpenHelper {
                     cursor.moveToNext();
                 }
             }
+            db.close();
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -227,6 +240,8 @@ public class Database_Local_Aequities extends SQLiteOpenHelper {
                     cursor.moveToNext();
                 }
             }
+            db.close();
+
         } catch (Exception e) {
             e.printStackTrace();
         }

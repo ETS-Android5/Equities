@@ -1,11 +1,15 @@
 package airhawk.com.myapplication;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -35,7 +39,7 @@ import static airhawk.com.myapplication.Constructor_App_Variables.graph_volume;
  */
 
 public class Fragment_Analysis extends Fragment {
-    TextView a_price,a_price_change,a_name,a_symbol,a_type,a_supply,a_cap,sup,saved;
+    TextView a_price,a_price_change,a_name,a_symbol,a_type,a_supply,a_cap,sup,saved,savedd;
     ImageView save;
     LineGraphSeries<DataPoint> series = new LineGraphSeries<>();
     double xx= 0;
@@ -55,6 +59,7 @@ public class Fragment_Analysis extends Fragment {
         RecyclerView historical_listview =rootView.findViewById(R.id.historical_listview);
         //graph_view=rootView.findViewById(R.id.graph_view);
         String ap_pc = ap_info.getCurrent_Aequity_Price_Change();
+        savedd =rootView.findViewById(R.id.savedd);
         a_name =rootView.findViewById(R.id.aequity_name);
         a_type =rootView.findViewById(R.id.aequity_type);
         a_symbol=rootView.findViewById(R.id.aequity_symbol);
@@ -68,7 +73,7 @@ public class Fragment_Analysis extends Fragment {
         a_price.setText("$ "+ap_info.getCurrent_Aequity_Price());}
         catch(IndexOutOfBoundsException e){
 
-            System.out.println("Had to start over ");
+            //System.out.println("Had to start over ");
         }
         String test=a_price.getText().toString();
 
@@ -112,16 +117,24 @@ public class Fragment_Analysis extends Fragment {
             @Override
             public void onClick(View v) {
                 save.setImageResource(android.R.drawable.btn_star_big_on);
-                Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    public void run() {
-
-                        db.add_equity_info(app_info.getMarketSymbol(), ap_info.getMarketName(), app_info.getMarketType());
-                        System.out.println("THIS IS INFO "+app_info.getMarketType()+" "+app_info.getMarketSymbol()+" "+ap_info.getMarketName());
-                        //Toast.makeText(getActivity(), app_info.getMarketName()+" is saved", Toast.LENGTH_SHORT).show();
-                        //((Activity_Main)getActivity()).setSavedMarketPage();
-                    }
-                }, 2000);
+                AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+                dialog.setTitle(app_info.getMarketName()+" is saved")
+                        .setIcon(R.drawable.banner_ae)
+                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialoginterface, int i) {
+                                Handler handler = new Handler();
+                                handler.postDelayed(new Runnable() {
+                                    public void run() {
+                                        System.out.println("There were "+db.getName().size()+" saved items");
+                                        db.add_equity_info(app_info.getMarketSymbol(), ap_info.getMarketName(), app_info.getMarketType());
+                                        System.out.println("THIS IS INFO "+app_info.getMarketType()+" "+app_info.getMarketSymbol()+" "+ap_info.getMarketName());
+                                        System.out.println("There are now "+db.getName().size()+" saved items");
+                                        //Toast.makeText(getActivity(), app_info.getMarketName()+" is saved", Toast.LENGTH_SHORT).show();
+                                        //((Activity_Main)getActivity()).setSavedMarketPage();
+                                    }
+                                }, 2000);
+                            }
+                        }).show();
 
 
             }
@@ -279,7 +292,10 @@ public class Fragment_Analysis extends Fragment {
                     case 3:
                         //graph_view.removeAllSeries();
                         ab[0].notifyDataSetChanged();
-                        integer[0] =180;
+                        if(ap_info.getMarketType().equalsIgnoreCase("stock")){
+                            integer[0] =98;
+                        }else{
+                        integer[0] =180;}
 
                         series = new LineGraphSeries<>();
                         for (int i= 0; i < integer[0];i++){

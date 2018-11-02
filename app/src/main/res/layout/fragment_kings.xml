@@ -9,136 +9,206 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1.1"
+        android:layout_margin="6dp"
+        android:background="@drawable/background_green_corners"
         android:orientation="vertical">
 
-        <android.support.v7.widget.AppCompatTextView
-
-            android:id="@+id/stock"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:text="@string/stock_volume_leaders"
-            android:textColor="@color/darkTextColor"
-            android:textSize="26sp" />
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/background_green_corners"
+            android:orientation="vertical">
 
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp">
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="3dp"
+                android:paddingRight="3dp">
 
-            <TextView
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:src="@drawable/direction_kings" />
+
+                <android.support.v7.widget.AppCompatTextView
+
+                    android:id="@+id/stock"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:background="#00000000"
+                    android:gravity="center"
+
+                    android:text="@string/stock_volume_leaders"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="26sp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+
+                    android:src="@drawable/direction_kings" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="3dp"
+                android:layout_marginRight="3dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1.1"
+                    android:gravity="left|center"
+                    android:singleLine="true"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="left|center"
+                    android:singleLine="true"
+                    android:text="Symbol"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight=".6"
+                    android:gravity="left|center"
+                    android:singleLine="true"
+                    android:text="Name"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="end"
+                    android:layout_weight="1"
+                    android:singleLine="true"
+                    android:text="Amount"
+                    android:textAlignment="textEnd"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="14sp" />
+            </TableRow>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/stock_items"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1.1"
-                android:gravity="left|center"
-                android:singleLine="true"
-                android:textColor="@color/darkTextColor"
-                android:textSize="14sp" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_marginLeft="3dp"
+                android:layout_marginRight="3dp"
                 android:layout_weight="1"
-                android:gravity="left|center"
-                android:singleLine="true"
-                android:text="Symbol"
-                android:textColor="@color/darkTextColor"
-                android:textSize="14sp" />
+                android:background="#ffffff" />
+        </LinearLayout>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight=".6"
-                android:gravity="left|center"
-                android:singleLine="true"
-                android:text="Name"
-                android:textColor="@color/darkTextColor"
-                android:textSize="14sp" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="end"
-                android:layout_weight="1"
-                android:singleLine="true"
-                android:text="Amount"
-                android:textAlignment="textEnd"
-                android:textColor="@color/darkTextColor"
-                android:textSize="14sp" />
-        </TableRow>
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/stock_items"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+
+            android:layout_weight="1"
+            android:background="@drawable/background_green_corners"
+            android:orientation="vertical">
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="3dp"
+                android:paddingRight="3dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:src="@drawable/direction_kings" />
+
+                <android.support.v7.widget.AppCompatTextView
+
+                    android:id="@+id/crypto"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:background="#00000000"
+                    android:gravity="center"
+
+                    android:text="@string/crypto_volume_leaders"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="26sp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+
+                    android:src="@drawable/direction_kings" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="3dp"
+                android:layout_marginRight="3dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1.1"
+                    android:gravity="left|center"
+                    android:singleLine="true"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="left|center"
+                    android:singleLine="true"
+                    android:text="Symbol"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight=".6"
+                    android:gravity="left|center"
+                    android:singleLine="true"
+                    android:text="Name"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="end"
+                    android:layout_weight="1"
+                    android:singleLine="true"
+                    android:text="Amount"
+                    android:textAlignment="textEnd"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="14sp" />
+            </TableRow>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/crypto_items"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="3dp"
+                android:layout_marginRight="3dp"
+                android:layout_weight="1"
+                android:background="#ffffff" />
+        </LinearLayout>
     </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:orientation="vertical">
-        <android.support.v7.widget.AppCompatTextView
 
-            android:id="@+id/crypto"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:text="@string/crypto_volume_leaders"
-            android:textColor="@color/darkTextColor"
-            android:textSize="26sp" />
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1.1"
-                android:gravity="left|center"
-                android:singleLine="true"
-                android:textColor="@color/darkTextColor"
-                android:textSize="14sp" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="left|center"
-                android:singleLine="true"
-                android:text="Symbol"
-                android:textColor="@color/darkTextColor"
-                android:textSize="14sp" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight=".6"
-                android:gravity="left|center"
-                android:singleLine="true"
-                android:text="Name"
-                android:textColor="@color/darkTextColor"
-                android:textSize="14sp" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:layout_gravity="end"
-                android:singleLine="true"
-                android:textAlignment="textEnd"
-                android:text="Amount"
-                android:textColor="@color/darkTextColor"
-                android:textSize="14sp" />
-        </TableRow>
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/crypto_items"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-    </LinearLayout>
 </LinearLayout>

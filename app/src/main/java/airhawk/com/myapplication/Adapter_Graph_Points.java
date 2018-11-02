@@ -62,9 +62,9 @@ public class Adapter_Graph_Points extends RecyclerView.Adapter<Adapter_Graph_Poi
     @Override
     public void onBindViewHolder(Adapter_Graph_Points.MyViewHolder holder, int position) {
         Double as= 0.00;
-        Double as1=0.00;
+        Double as1=0.00; try{
         holder.aequity_change.setText(graph_change.get(position)+" %");
-            try{
+
             holder.aequity_amount.setText("$ "+graph_high.get(position));
             as = Double.parseDouble(String.valueOf(graph_high.get(position)).replace(",",""));
 
@@ -91,14 +91,18 @@ public class Adapter_Graph_Points extends RecyclerView.Adapter<Adapter_Graph_Poi
             s=s.replace("-","");
             String sl=null;
 
-                sl = (String) graph_volume.get(position + 1);
-                sl=sl.replace(",","");
-                sl=sl.replace("-","");
+                    sl = (String) graph_volume.get(position + 1);
+                    sl = sl.replace(",", "");
+                    sl = sl.replace("-", "");
 
 
             if (s!=null) {
-                Double a = Double.parseDouble(s);
-                Double al = Double.parseDouble(sl);
+                Double a =0.00;
+                Double al=0.00;
+                if(s==""){a = Double.parseDouble("0");}else{
+                a = Double.parseDouble(s);}
+                if(sl==""){al = Double.parseDouble("0");}else{
+                al = Double.parseDouble(sl);}
                 holder.aequity_volume.setText("" + graph_volume.get(position));
                 if (a > al) {
                     holder.aequity_volume.setTextColor(Color.parseColor("#00ff00"));

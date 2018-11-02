@@ -10,12 +10,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import static airhawk.com.myapplication.Service_Main_Aequities.crypto_losers_changelist;
-import static airhawk.com.myapplication.Service_Main_Aequities.crypto_losers_namelist;
-import static airhawk.com.myapplication.Service_Main_Aequities.crypto_losers_symbollist;
-import static airhawk.com.myapplication.Service_Main_Aequities.stock_losers_changelist;
-import static airhawk.com.myapplication.Service_Main_Aequities.stock_losers_namelist;
-import static airhawk.com.myapplication.Service_Main_Aequities.stock_losers_symbollist;
+import static airhawk.com.myapplication.Service_Main_Equities.crypto_losers_changelist;
+import static airhawk.com.myapplication.Service_Main_Equities.crypto_losers_namelist;
+import static airhawk.com.myapplication.Service_Main_Equities.crypto_losers_symbollist;
+import static airhawk.com.myapplication.Service_Main_Equities.stock_losers_changelist;
+import static airhawk.com.myapplication.Service_Main_Equities.stock_losers_namelist;
+import static airhawk.com.myapplication.Service_Main_Equities.stock_losers_symbollist;
 
 /**
  * Created by Julian Dinkins on 4/25/2018.
@@ -39,10 +39,10 @@ public class Fragment_Losers extends Fragment {
         cryptoitems.setAdapter(new Adapter_Main_Equities(getActivity(), "Crypto_Loser",crypto_losers_symbollist,crypto_losers_namelist,crypto_losers_changelist));
         Typeface custom_font = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Oregon.ttf");
 
-        stock.setTypeface(custom_font);
-        crypto.setTypeface(custom_font);
-        stock.setPaintFlags(stock.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
-        crypto.setPaintFlags(stock.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
+        //stock.setTypeface(custom_font);
+        //crypto.setTypeface(custom_font);
+        //stock.setPaintFlags(stock.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
+        //crypto.setPaintFlags(stock.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
 
         return rootView;
 

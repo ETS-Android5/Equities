@@ -12,7 +12,7 @@
         android:id="@+id/frameLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
+        android:background="#00000000"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
         <include
             layout="@layout/recyclerview_item_list"
@@ -81,7 +81,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@color/colorPrimary">
+                android:background="@color/colorPrimary"
+                android:visibility="gone">
 
 
                 <TextView
@@ -90,10 +91,10 @@
                     android:layout_height="match_parent"
                     android:layout_centerInParent="true"
                     android:gravity="center"
-                    android:textStyle="italic"
                     android:text="25%"
                     android:textColor="#ffffff"
-                    android:textSize="20sp" />
+                    android:textSize="22sp"
+                    android:textStyle="italic" />
 
                 <ProgressBar
                     android:id="@+id/mainbar"
@@ -110,13 +111,15 @@
                 android:id="@+id/viewpager"
                 android:layout_width="fill_parent"
                 android:layout_height="match_parent"
+                android:layout_weight="1"
                 android:background="@color/colorPrimary" />
 
             <android.support.v4.view.ViewPager
                 android:id="@+id/market_pager"
                 android:layout_width="fill_parent"
                 android:layout_height="match_parent"
-                android:background="#ffffff"
+                android:layout_weight="1"
+                android:background="@color/colorPrimary"
                 android:visibility="gone" />
         </LinearLayout>
 

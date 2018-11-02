@@ -8,6 +8,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@drawable/background_gradient"
     android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
     tools:context="airhawk.com.myapplication.Activity_Main">
 
@@ -15,7 +16,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/background_gradient"
+
         android:orientation="vertical">
 
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -33,7 +34,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="bottom"
-                android:scaleType="fitCenter"
+                android:scaleType="fitEnd"
 
                 android:src="@drawable/banner_ae_full" />
 
@@ -41,31 +42,31 @@
         </LinearLayout>
 
 
-
         <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:tools="http://schemas.android.com/tools"
             android:id="@+id/progressLayout"
             android:layout_width="match_parent"
-            android:layout_weight="1"
             android:layout_height="match_parent"
-            >
+            android:layout_weight="1.1">
+
             <TextView
                 android:id="@+id/output"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_centerInParent="true"
-                android:gravity="center"
+                android:gravity="top|center"
                 android:text="25%"
-                android:textStyle="italic"
                 android:textColor="#ffffff"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                android:textStyle="italic" />
+
             <ProgressBar
                 android:id="@+id/progressBar"
                 style="?android:attr/progressBarStyleHorizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
                 android:layout_alignParentBottom="true"
+                android:layout_centerInParent="true"
                 android:indeterminate="true" />
         </RelativeLayout>
 

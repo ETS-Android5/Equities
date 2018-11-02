@@ -25,6 +25,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -40,11 +41,6 @@ import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -61,7 +57,6 @@ import java.lang.ref.WeakReference;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -70,52 +65,50 @@ import java.util.regex.Pattern;
 
 
 import static airhawk.com.myapplication.Constructor_App_Variables.*;
-import static airhawk.com.myapplication.Fragment_Saved.saved_feed;
-import static airhawk.com.myapplication.Service_Main_Aequities.crypto_kings_changelist;
-import static airhawk.com.myapplication.Service_Main_Aequities.crypto_kings_marketcaplist;
-import static airhawk.com.myapplication.Service_Main_Aequities.crypto_kings_namelist;
-import static airhawk.com.myapplication.Service_Main_Aequities.crypto_kings_symbolist;
+import static airhawk.com.myapplication.Service_Main_Equities.crypto_kings_changelist;
+import static airhawk.com.myapplication.Service_Main_Equities.crypto_kings_marketcaplist;
+import static airhawk.com.myapplication.Service_Main_Equities.crypto_kings_namelist;
+import static airhawk.com.myapplication.Service_Main_Equities.crypto_kings_symbolist;
 
 public class Activity_Main extends AppCompatActivity {
-    boolean forward;
+
+    Database_Local_Aequities check_saved = new Database_Local_Aequities(Activity_Main.this);
     RequestQueue requestQueue;
-    ArrayList temp =new ArrayList();
     Database_Local_Aequities co =new Database_Local_Aequities(this);
-    Constructor_App_Variables cav =new Constructor_App_Variables();
-    RelativeLayout progresslayout;
     TextView txt;
     final int[] ICONS = new int[]{
             R.drawable.direction_up,
             R.drawable.direction_down,
+            R.drawable.direction_kings,
             R.drawable.direction_news,
-            R.drawable.direction_kings};
-    int[] names = new int[]{R.string.leaders, R.string.losers, R.string.news, R.string.market_kings};
-    ImageView search_button;
-    ImageView imageView;
+            R.drawable.direction_masternode
+            };
     static Element price = null;
     protected ArrayAdapter<String> ad;
     private Toolbar toolbar;
-    ProgressBar mainbar;
+    ProgressBar mainbar,progress;
     public static ArrayList<String> searchview_arraylist = new ArrayList<>();
     public static ArrayList<String> aequity_symbol_arraylist = new ArrayList<>();
     public static ArrayList<String> aequity_name_arraylist = new ArrayList<>();
     public static ArrayList<String> aequity_type_arraylist = new ArrayList<>();
     public ViewPager pager, market_pager;
     public TabLayout tabs;
-    ProgressBar progress;
-    static RecyclerView recyclerView;
-    Database_Local_Aequities ld = new Database_Local_Aequities(Activity_Main.this);
     private static final String TAG = "ActivityMain";
-    static Boolean async_analysis_page = false;
+    static String fullScreen ="no";
     static Constructor_App_Variables ap_info = new Constructor_App_Variables();
-    Database_Local_Aequities check_saved = new Database_Local_Aequities(Activity_Main.this);
-    Animation centerLinear;
+    ImageView search_button,imageView;
+    LinearLayout lin_lay;
+    RelativeLayout progresslayout;
     FrameLayout fu,frameLayout;
+    static RecyclerView recyclerView;
+    Animation centerLinear;
+    boolean forward;
+    static Boolean async_analysis_page = false;
+    public static boolean db_exist =false;
     Context context =this;
     static Adapter_Main_Markets adapter;
     static RecyclerView.LayoutManager l;
     private static InterstitialAd mInterstitialAd;
-    static String fullScreen ="no";
 
 
     public static String AssetJSONFile(String filename, Context context) throws IOException {
@@ -147,14 +140,16 @@ public class Activity_Main extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        MobileAds.initialize(this, "ca-app-pub-3940256099942544~3347511713");
+        MobileAds.initialize(this, "ca-app-pub-6566728316210720/4471280326");
         mInterstitialAd = new InterstitialAd(this);
-        mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
+        mInterstitialAd.setAdUnitId("ca-app-pub-6566728316210720/4471280326");
         mInterstitialAd.loadAd(new AdRequest.Builder().build());
         checkInternetConnection();
         get_crypto_exchange_info();
         get_stock_exchange_info();
         setContentView(R.layout.splash);
+        lin_lay =(LinearLayout)findViewById(R.id.lin_lay);
+
         centerLinear = AnimationUtils.loadAnimation(this, R.anim.center);
         imageView =findViewById(R.id.imageView);
         //imageView.startAnimation(centerLinear);
@@ -169,19 +164,19 @@ public class Activity_Main extends AppCompatActivity {
     public void onBackPressed() {
         if (fullScreen.equalsIgnoreCase("go")) {
             // Sample AdMob app ID: ca-app-pub-3940256099942544~3347511713
-            MobileAds.initialize(this, "ca-app-pub-3940256099942544~3347511713");
+            MobileAds.initialize(this, "ca-app-pub-6566728316210720/4471280326");
 
             if (mInterstitialAd.isLoaded()) {
                 mInterstitialAd.show();
+
             }
             mInterstitialAd.setAdListener(new AdListener() {
                 @Override
                 public void onAdClosed() {
-                    //finish();
+
                 }
             });
         }
-        saved_feed.removeAllViews();
         graph_change.clear();
         exchange_list.clear();
         aequity_exchanges.clear();
@@ -190,33 +185,82 @@ public class Activity_Main extends AppCompatActivity {
         graph_high.clear();
         graph_volume.clear();
         new setAsyncChosenData(this).cancel(true);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-        ViewPager pager = findViewById(R.id.viewpager);
-        if (pager.getVisibility() == View.VISIBLE) {
-            this.finishAffinity();
+        new setSavedAsyncDataMain(this).execute();
+
+
+    }
+
+
+
+    public class setSavedAsyncDataMain extends AsyncTask<Integer, Integer, String> {
+
+        private WeakReference<Activity_Main> activityReference;
+        setSavedAsyncDataMain(Activity_Main context) {
+            activityReference = new WeakReference<>(context);
         }
-        pager.setVisibility(View.VISIBLE);
-        ViewPager market_pager = findViewById(R.id.market_pager);
-        market_pager.setVisibility(View.GONE);
-        TabLayout tabs = findViewById(R.id.tabs);
-        setupMainViewPager(pager);
-        tabs.setupWithViewPager(pager);
-        tabs.getTabAt(0).setIcon(ICONS[0]);
-        tabs.getTabAt(1).setIcon(ICONS[1]);
-        if (check_saved.getName().isEmpty()){
-            tabs.getTabAt(2).setIcon(ICONS[2]);
-            tabs.getTabAt(3).setIcon(ICONS[3]);;
-        }else{
-            tabs.getTabAt(2).setIcon(android.R.drawable.btn_star_big_on);
-            tabs.getTabAt(3).setIcon(ICONS[2]);
-            tabs.getTabAt(4).setIcon(ICONS[3]);}
-        recyclerView = findViewById(R.id.item_list);
-        l =new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        recyclerView.setLayoutManager(l);
-        adapter = new Adapter_Main_Markets();
-        recyclerView.setAdapter(adapter);
-        autoScroll();
+        long startTime;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            Activity_Main activity = activityReference.get();
+            startTime = System.nanoTime();
+            Random rand = new Random();
+            int value = rand.nextInt(50);
+            String [] qu =getResources().getStringArray(R.array.all_quotes);
+            String q = qu[value];
+            TextView txt2 =activity.findViewById(R.id.output2);
+            txt2.setText(q);
+            RelativeLayout progLayout =activity.findViewById(R.id.progLayout);
+            progLayout.setVisibility(View.VISIBLE);
+            ProgressBar mainbar = activity.findViewById(R.id.mainbar);
+            mainbar.setIndeterminate(true);
+            ViewPager mp = activity.findViewById(R.id.market_pager);
+            mp.setVisibility(View.GONE);
+        }
+
+        @Override
+        protected String doInBackground(Integer... params) {
+            getAdded_stock_point();
+            return "task finished";
+        }
+        @Override
+        protected void onPostExecute(String result) {
+            Activity_Main activity = activityReference.get();
+            if (activity == null || activity.isFinishing()) return;
+            setSupportActionBar(toolbar);
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+            ViewPager pager = findViewById(R.id.viewpager);
+            if (pager.getVisibility() == View.VISIBLE) {
+                activity.finishAffinity();
+            }
+            pager.setVisibility(View.VISIBLE);
+            ViewPager market_pager = findViewById(R.id.market_pager);
+            market_pager.setVisibility(View.GONE);
+            TabLayout tabs = findViewById(R.id.tabs);
+
+            setupMainViewPager(pager);
+            tabs.setupWithViewPager(pager);
+            tabs.getTabAt(0).setIcon(ICONS[0]);
+            tabs.getTabAt(1).setIcon(ICONS[1]);
+            if (check_saved.getName().isEmpty()){
+                tabs.getTabAt(2).setIcon(ICONS[2]);
+                tabs.getTabAt(3).setIcon(ICONS[3]);;
+            }else{
+                tabs.getTabAt(2).setIcon(android.R.drawable.btn_star_big_on);
+                tabs.getTabAt(3).setIcon(ICONS[2]);
+                tabs.getTabAt(4).setIcon(ICONS[3]);}
+            recyclerView = findViewById(R.id.item_list);
+            l =new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false);
+            recyclerView.setLayoutManager(l);
+            adapter = new Adapter_Main_Markets(Activity_Main.this);
+            recyclerView.setAdapter(adapter);
+            autoScroll();
+            long endTime = System.nanoTime();
+            long duration = (endTime - startTime);
+            System.out.println("SERVICE MAIN TIME IS " + duration / 1000000000 + " seconds");
+
+        }
 
     }
 
@@ -234,7 +278,7 @@ public class Activity_Main extends AppCompatActivity {
 
             startTime = System.nanoTime();
             Random rand = new Random();
-            int value = rand.nextInt(33);
+            int value = rand.nextInt(31);
             String [] qu =getResources().getStringArray(R.array.all_quotes);
             String q = qu[value];
             txt.setText(q);
@@ -248,10 +292,10 @@ public class Activity_Main extends AppCompatActivity {
             getSaved_stock_points();
             //get_main_graph();
 
-            Service_Main_Aequities cst = new Service_Main_Aequities();
+            Service_Main_Equities cst = new Service_Main_Equities();
             cst.main();
 
-            //Service_Saved_Aequity csa =new Service_Saved_Aequity(context);
+            //Service_Saved_Equity csa =new Service_Saved_Equity(context);
             //csa.main();
             //SAVED METHOD SLOWS DOWN APP BY 6 SECONDS. DONT FORGET TO UNHIDE CODE OM FRAGMENT_SAVED WHEN THIS IS REPAIRED
             return "task finished";
@@ -281,8 +325,8 @@ public class Activity_Main extends AppCompatActivity {
         protected void onPreExecute() {
             super.onPreExecute();
             Random rand = new Random();
-            int svalue = rand.nextInt(16);
-            int cvalue = rand.nextInt(13);
+            int svalue = rand.nextInt(25);
+            int cvalue = rand.nextInt(25);
 
             Activity_Main activity = activityReference.get();
             String [] sq =activity.getResources().getStringArray(R.array.stock_quotes);
@@ -321,7 +365,7 @@ public class Activity_Main extends AppCompatActivity {
                     activity.getChosenCryptoInfo();
                     activity.getStockTwitsData();
                     activity.get_coinmarketcap_exchange_listing();
-                    Service_Chosen_Aequity shoe = new Service_Chosen_Aequity(Activity_Main.this);
+                    Service_Chosen_Equity shoe = new Service_Chosen_Equity(Activity_Main.this);
 
                     shoe.main();
                     do_graph_change();
@@ -330,7 +374,7 @@ public class Activity_Main extends AppCompatActivity {
 
                     activity.get_current_stock_info();
                     activity.getStockTwitsData();
-                    Service_Chosen_Aequity shoe = new Service_Chosen_Aequity(Activity_Main.this);
+                    Service_Chosen_Equity shoe = new Service_Chosen_Equity(Activity_Main.this);
 
                     System.out.println("ASYNC S HAS BEEN CALLED PREVIOUSLY");
                     shoe.main();
@@ -344,7 +388,7 @@ public class Activity_Main extends AppCompatActivity {
                     activity.getChosenCryptoInfo();
                     activity.getStockTwitsData();
                     activity.get_coinmarketcap_exchange_listing();
-                    Service_Chosen_Aequity shoe = new Service_Chosen_Aequity(Activity_Main.this);
+                    Service_Chosen_Equity shoe = new Service_Chosen_Equity(Activity_Main.this);
 
                     shoe.main();
                     System.out.println("ASYNC* HAS NOT BEEN CALLED PREVIOUSLY");
@@ -353,7 +397,7 @@ public class Activity_Main extends AppCompatActivity {
 
                     activity.get_current_stock_info();
                     activity.getStockTwitsData();
-                    Service_Chosen_Aequity shoe = new Service_Chosen_Aequity(Activity_Main.this);
+                    Service_Chosen_Equity shoe = new Service_Chosen_Equity(Activity_Main.this);
                     System.out.println("ASYNC* HAS NOT BEEN CALLED PREVIOUSLY");
                     shoe.main();
                     do_graph_change();
@@ -370,6 +414,7 @@ public class Activity_Main extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
+            fullScreen="go";
             // get a reference to the activity if it is still there
             Activity_Main activity = activityReference.get();
 
@@ -429,23 +474,23 @@ public class Activity_Main extends AppCompatActivity {
         tabs.getTabAt(1).setIcon(ICONS[1]);
         if (check_saved.getName().isEmpty()){
             tabs.getTabAt(2).setIcon(ICONS[2]);
-            tabs.getTabAt(3).setIcon(ICONS[3]);;
+            tabs.getTabAt(3).setIcon(ICONS[3]);
+            tabs.getTabAt(4).setIcon(ICONS[4]);
         }else{
             tabs.getTabAt(2).setIcon(android.R.drawable.btn_star_big_on);
             tabs.getTabAt(3).setIcon(ICONS[2]);
-            tabs.getTabAt(4).setIcon(ICONS[3]);}
+            tabs.getTabAt(4).setIcon(ICONS[3]);
+            tabs.getTabAt(5).setIcon(ICONS[4]);
+
+            }
 
 
         recyclerView = findViewById(R.id.item_list);
         l =new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(l);
-        adapter = new Adapter_Main_Markets();
+        adapter = new Adapter_Main_Markets(Activity_Main.this);
         recyclerView.setAdapter(adapter);
         autoScroll();
-
-
-
-
               }
 
     public void autoScroll(){
@@ -468,13 +513,17 @@ public class Activity_Main extends AppCompatActivity {
     }
 
     private void setupMainViewPager(ViewPager viewPager) {
+        System.out.println("There are "+check_saved.getName().size()+" saved items at setupviewpager");
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFrag(new Fragment_Winners(), getString(R.string.leaders));
         adapter.addFrag(new Fragment_Losers(), getString(R.string.losers));
-        if (check_saved.getName().isEmpty()){}else{
-            adapter.addFrag(new Fragment_Saved(), getString(R.string.saved));}
+        if (check_saved.getName().size()>0){
+            adapter.addFrag(new Fragment_Saved(), getString(R.string.saved));
+        }
         adapter.addFrag(new Fragment_App_News(), getString(R.string.news));
         adapter.addFrag(new Fragment_Market_Kings(), getString(R.string.market_kings));
+        adapter.addFrag(new Fragment_Masternodes(),getString(R.string.masternodes));
+
         //adapter.addFrag(new Fragment_stockVScrypto(),getString(R.string.compare));
         viewPager.setAdapter(adapter);
     }
@@ -568,7 +617,7 @@ public class Activity_Main extends AppCompatActivity {
 
             }
         });
-    }//Get's updated data from Firebase about new aequities
+    }
 
     public void getCrypto_Kings() {
         long startTime = System.nanoTime();
@@ -850,71 +899,95 @@ public class Activity_Main extends AppCompatActivity {
     }
 
     public void getSaved_stock_points(){
-
+        ArrayList aaa = co.getName();
         ArrayList a = co.getSymbol();
         ArrayList aa = co.getType();
         ArrayList b = co.getstockSymbol();
-        String apikey ="XBA42BUC2B6U6G5C";
+        //String apikey ="XBA42BUC2B6U6G5C";
+        for(int c=0;c<b.size();c++) {
+            Document cap = null;
+            if (aa.get(c).equals("Stock")) {
+                try {
+                    cap = Jsoup.connect("https://finance.yahoo.com/quote/"+b.get(c)).get();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                Element test = cap.select("div[data-reactid='34']").first().select("span").get(1);
+                String foofoo =test.text().toString().replace("(","").replace(")","");
+                String[] foo = foofoo.split(" ");
+                String f =foo[1];
+                current_percentage_change.add(f);
+            }
 
-        for(int i=0;i<a.size();i++){
-            System.out.println("Sym"+a+" Type"+aa+" St"+b);
-
-            if(aa.get(i).equals("Stock")) {
-                String url ="https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol="+b+"&apikey="+apikey;
-
-                RequestQueue requestQueue = Volley.newRequestQueue(this);
-                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
-
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            JSONObject jsonObject = new JSONObject(String.valueOf(response));
-                            // get Time
-                            JSONObject time = jsonObject.getJSONObject("Global Quote");
-                            //Iterator<String> iterator = time.keys();
-
-                            //String price = time.getString("05. price");
-                            String change= time.getString("10. change percent");
-                            temp.add(change);
-                            ap_info.setCurrent_Aequity_Price_Change(change);
-
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
+                else{ ArrayList d = co.getcryptoName();
+                for(int i=0;i<d.size();i++) {
+                    Document caps = null;
+                    String g = String.valueOf(d.get(i));
+                    if (g.contains(" ")) {
+                        g = g.replace(" ", "-");
                     }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        System.out.println("An Error occured while making the ST request");
+                    try {
+                        caps = Jsoup.connect("https://coinmarketcap.com/currencies/" + g).timeout(10 * 10000).get();
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
-                });
-                requestQueue.add(jsonObjectRequest);
+                    Elements as = caps.select("div>span");
+                    String f = as.get(4).text();
+                    f = f.replaceAll("\\(", "").replaceAll("\\)", "");
+                    current_percentage_change.add(f);
 
-           }
-            cav.setCpr(temp);
+                }}
+
+        }
+
+
+co.close();
+    }
+
+    public void getAdded_stock_point(){
+        ArrayList aaa = co.getName();
+        ArrayList a = co.getSymbol();
+        ArrayList aa = co.getType();
+        ArrayList b = co.getstockSymbol();
+        //String apikey ="XBA42BUC2B6U6G5C";
+if (aa.size()>0) {
+    Document cap = null;
+    if (aa.get(aa.size() - 1).equals("Stock")) {
+        try {
+            cap = Jsoup.connect("https://finance.yahoo.com/quote/" + b.get(b.size() - 1)).get();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Element test = cap.select("div[data-reactid='34']").first().select("span").get(1);
+        String foofoo = test.text().toString().replace("(", "").replace(")", "");
+        String[] foo = foofoo.split(" ");
+        String f = foo[1];
+        current_percentage_change.add(f);
+    } else {
+        ArrayList d = co.getcryptoName();
+
+        Document caps = null;
+        String g = String.valueOf(d.get(d.size() - 1));
+        if (g.contains(" ")) {
+            g = g.replace(" ", "-");
+        }
+        try {
+            caps = Jsoup.connect("https://coinmarketcap.com/currencies/" + g).timeout(10 * 10000).get();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Elements as = caps.select("div>span");
+        String f = as.get(4).text();
+        f = f.replaceAll("\\(", "").replaceAll("\\)", "");
+        current_percentage_change.add(f);
 
     }
 
-        ArrayList d = co.getcryptoName();
-        for(int i=0;i<d.size();i++) {
-            Document cap = null;
-            String g = String.valueOf(d.get(i));
-            if (g.contains(" ")) {
-                g = g.replace(" ", "-");
-            }
-            try {
-                cap = Jsoup.connect("https://coinmarketcap.com/currencies/" + g).timeout(10 * 10000).get();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            Elements as = cap.select("div>span");
-            String f = as.get(4).text();
-            f = f.replaceAll("\\(", "").replaceAll("\\)", "");
-            temp.add(f);
-        }
-        }
+
+}
+
+        co.close();
+    }
 
     public static void get_coinmarketcap_exchange_listing() {
         Document doc = null;
@@ -1033,11 +1106,8 @@ public class Activity_Main extends AppCompatActivity {
     }
 
     public static void do_graph_change() {
-        //System.out.println("G HIGH B "+graph_high.size());
-        Double a = 0.00;
         for (int i = 0; i < graph_high.size(); i++) {
-                   a= new Double(graph_high.get(i).toString().replace(",",""));
-            //System.out.println("G HIGH B "+graph_high.size()+"="+a);
+                   Double a= new Double(graph_high.get(i).toString().replace(",",""));
 
             if (i > 0) {
                 int z = i - 1;
@@ -1046,14 +1116,10 @@ public class Activity_Main extends AppCompatActivity {
                 DecimalFormat numberFormat = new DecimalFormat("#0.00");
                 String add =numberFormat.format(c).replace("-","");
                 graph_change.add(add);
-                //System.out.println("GRAPH IN AEQUITY "+graph_change.get(z));
 
             }
         }
-        //System.out.println("CHANGE IN AEQUITY "+graph_change.size());
 
-        // 106 - 107 = 2/106 x 100
-        //  53.31-53.71= -.40/53.31x100=.
 
     }
 

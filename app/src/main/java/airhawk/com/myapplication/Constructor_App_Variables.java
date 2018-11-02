@@ -1,6 +1,7 @@
 package airhawk.com.myapplication;
 
 import android.graphics.Typeface;
+import android.support.v7.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +22,6 @@ public class Constructor_App_Variables {
     static ArrayList stock_exchange_url =new ArrayList<>();
     static ArrayList stock_exchange_name =new ArrayList<>();
     static ArrayList aequity_exchanges =new ArrayList();
-
     static ArrayList exchange_text=new ArrayList<>();
     static ArrayList crypto_exchange_image=new ArrayList<>();
     static ArrayList stock_exchange_image=new ArrayList<>();
@@ -35,6 +35,7 @@ public class Constructor_App_Variables {
     static ArrayList Suser_name=new ArrayList<>();
     static ArrayList Smessage=new ArrayList<>();
     static ArrayList Simg_url=new ArrayList<>();
+    public static ArrayList current_percentage_change = new ArrayList<>();
     public static ArrayList graph_date_today = new ArrayList<>();
     public static ArrayList graph_high_today = new ArrayList<>();
     public static ArrayList graph_volume_today = new ArrayList<>();
@@ -61,6 +62,7 @@ public class Constructor_App_Variables {
     public static String alt_market_cap_amount;
     public static String btc_market_cap_amount;
     public static String btc_market_cap_change;
+
     protected static ArrayList<Constructor_News_Feed> feedItems = new ArrayList<>();
     protected static ArrayList<Constructor_Stock_Twits> stocktwits_feedItems = new ArrayList<>();
     protected static ArrayList<Constructor_News_Feed> all_feedItems = new ArrayList<>();
@@ -82,12 +84,7 @@ public class Constructor_App_Variables {
     public Constructor_App_Variables(){}
 
 
-    public ArrayList getCpr() {
-        return cpr;
-    }
-    public void setCpr(ArrayList cpr){
-        this.cpr=cpr;
-    }
+
 
     public String getMarketName(){
         return this.market_name;
