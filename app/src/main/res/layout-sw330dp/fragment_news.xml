@@ -3,7 +3,6 @@
     android:id="@+id/news_feed"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginBottom="3dp"
     android:background="@color/colorPrimary">
 
 </android.support.v7.widget.RecyclerView>

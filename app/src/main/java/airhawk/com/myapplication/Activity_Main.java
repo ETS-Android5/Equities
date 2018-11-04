@@ -80,8 +80,8 @@ public class Activity_Main extends AppCompatActivity {
             R.drawable.direction_up,
             R.drawable.direction_down,
             R.drawable.direction_kings,
-            R.drawable.direction_news,
-            R.drawable.direction_masternode
+            R.drawable.direction_news
+            //, R.drawable.direction_masternode
             };
     static Element price = null;
     protected ArrayAdapter<String> ad;
@@ -212,7 +212,7 @@ public class Activity_Main extends AppCompatActivity {
             TextView txt2 =activity.findViewById(R.id.output2);
             txt2.setText(q);
             RelativeLayout progLayout =activity.findViewById(R.id.progLayout);
-            progLayout.setVisibility(View.VISIBLE);
+            progLayout.setVisibility(View.GONE);
             ProgressBar mainbar = activity.findViewById(R.id.mainbar);
             mainbar.setIndeterminate(true);
             ViewPager mp = activity.findViewById(R.id.market_pager);
@@ -475,12 +475,12 @@ public class Activity_Main extends AppCompatActivity {
         if (check_saved.getName().isEmpty()){
             tabs.getTabAt(2).setIcon(ICONS[2]);
             tabs.getTabAt(3).setIcon(ICONS[3]);
-            tabs.getTabAt(4).setIcon(ICONS[4]);
+            //tabs.getTabAt(4).setIcon(ICONS[4]);
         }else{
             tabs.getTabAt(2).setIcon(android.R.drawable.btn_star_big_on);
             tabs.getTabAt(3).setIcon(ICONS[2]);
             tabs.getTabAt(4).setIcon(ICONS[3]);
-            tabs.getTabAt(5).setIcon(ICONS[4]);
+           //tabs.getTabAt(5).setIcon(ICONS[4]);
 
             }
 
@@ -522,7 +522,7 @@ public class Activity_Main extends AppCompatActivity {
         }
         adapter.addFrag(new Fragment_App_News(), getString(R.string.news));
         adapter.addFrag(new Fragment_Market_Kings(), getString(R.string.market_kings));
-        adapter.addFrag(new Fragment_Masternodes(),getString(R.string.masternodes));
+      //  adapter.addFrag(new Fragment_Masternodes(),getString(R.string.masternodes));
 
         //adapter.addFrag(new Fragment_stockVScrypto(),getString(R.string.compare));
         viewPager.setAdapter(adapter);

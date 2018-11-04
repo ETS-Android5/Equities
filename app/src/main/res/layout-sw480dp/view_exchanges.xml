@@ -1,27 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical">
 
     <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dp">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp">
 
         <ImageView
-            android:id="@+id/exchange_image"
-            android:layout_width="125dp"
-            android:layout_height="125dp" />
+
+                android:id="@+id/exchange_image"
+                android:layout_width="100dp"
+                android:layout_height="100dp" />
 
         <TextView
-            android:id="@+id/exchange_text"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="left|center"
-            android:hint="@string/title_buy"
-            android:textColor="#ffffff"
-            android:textSize="40sp" />
+                android:id="@+id/exchange_text"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="left|center"
+                android:hint="@string/title_buy"
+                android:textColor="#ffffff"
+                android:textSize="36sp" />
 
 
     </TableRow>

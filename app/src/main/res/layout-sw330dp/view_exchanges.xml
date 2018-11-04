@@ -10,7 +10,8 @@
         android:layout_margin="5dp">
 
         <ImageView
-            android:id="@+id/exchange_image"
+
+                android:id="@+id/exchange_image"
             android:layout_width="100dp"
             android:layout_height="100dp" />
 
