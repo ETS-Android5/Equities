@@ -42,6 +42,7 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
 
+import com.twitter.sdk.android.core.TwitterSession;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -164,6 +165,8 @@ public class Activity_Main extends AppCompatActivity {
     public void onBackPressed() {
         if (fullScreen.equalsIgnoreCase("go")) {
             // Sample AdMob app ID: ca-app-pub-3940256099942544~3347511713
+
+
             MobileAds.initialize(this, "ca-app-pub-6566728316210720/4471280326");
 
             if (mInterstitialAd.isLoaded()) {
@@ -189,8 +192,6 @@ public class Activity_Main extends AppCompatActivity {
 
 
     }
-
-
 
     public class setSavedAsyncDataMain extends AsyncTask<Integer, Integer, String> {
 
@@ -485,6 +486,7 @@ public class Activity_Main extends AppCompatActivity {
             }
 
 
+
         recyclerView = findViewById(R.id.item_list);
         l =new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(l);
@@ -592,6 +594,7 @@ public class Activity_Main extends AppCompatActivity {
         AutoCompleteTextView chosen_searchView_item = v.findViewById(R.id.searchtool);
         chosen_searchView_item.setAdapter(ad);
 
+
         chosen_searchView_item.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -657,12 +660,13 @@ public class Activity_Main extends AppCompatActivity {
                             p =df.format(d);
                             int l =p.length();
                             long t = 1000000000000L;
-                            if (l<=12){p= String.valueOf(d/1000000);
-                                crypto_kings_marketcaplist.add(p.substring(0,5)+" M");}
+                            if (l<=12){
+                                p= String.valueOf(d/1000000);
+                                crypto_kings_marketcaplist.add(p.substring(0,3)+" M");}
                             if (l>12){p= String.valueOf(d/1000000000);
-                                crypto_kings_marketcaplist.add(p.substring(0,5)+" B");}
+                                crypto_kings_marketcaplist.add(p.substring(0,3)+" B");}
                             if (l>15){p= String.valueOf(d/t);
-                                crypto_kings_marketcaplist.add(p.substring(0,5)+" T");}
+                                crypto_kings_marketcaplist.add(p.substring(0,3)+" T");}
                             String mc =jzO.getString("percent_change_24h");
                             crypto_kings_changelist.add(mc);
                         }
@@ -847,11 +851,12 @@ public class Activity_Main extends AppCompatActivity {
                         String message_time = (String) responseJSONArray.getJSONObject(i).get("created_at");
                         String message = (String) responseJSONArray.getJSONObject(i).get("body");
                         Iterator x = user_info.keys();
-                        Constructor_App_Variables.Smessage_time.add(message_time);
-                        Constructor_App_Variables.Suser_name.add("" + user_info.get("username"));
+                        Constructor_Stock_Twits item = new Constructor_Stock_Twits();
+                        item.setMessage_time(message_time);
+                        item.setUser_name("" + user_info.get("username"));
                         String url = user_info.get("avatar_url_ssl").toString();
-                        Constructor_App_Variables.Simg_url.add(url);
-                        Constructor_App_Variables.Smessage.add(message);
+                        item.setUser_image_url(url);
+                        item.setMessage(message);
 
                         String[] words = message.split("\\s+");
 
@@ -865,7 +870,7 @@ public class Activity_Main extends AppCompatActivity {
                                 {
                                     word = "http://" + word;
                                 }
-                                Smessage_link.add(word);
+                                item.setMessage_link(word);
 
                             }
                         }
@@ -878,7 +883,7 @@ public class Activity_Main extends AppCompatActivity {
                         }
 
 
-
+                    stocktwits_feedItems.add(item);
 
                     }
 
@@ -1122,5 +1127,7 @@ if (aa.size()>0) {
 
 
     }
+
+
 
 }

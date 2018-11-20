@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="Favorites"
-        android:textColor="@color/colorBlack"
+        android:textColor="@color/colorPrimary"
         android:textSize="24sp" />
     <android.support.v7.widget.RecyclerView
         android:id="@+id/saved_feed"

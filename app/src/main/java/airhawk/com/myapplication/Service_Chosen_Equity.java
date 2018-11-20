@@ -167,10 +167,10 @@ public class Service_Chosen_Equity
 
     public static void get_stock_points() {
         System.out.println("Get stock points called");
-        String marname = "aapl";
+        String marname = ap_info.getMarketSymbol();
         Document d = null;
         try {
-            d = Jsoup.connect("https://finance.yahoo.com/quote/"+marname+"/history?period1=863668800&period2=1538452800&interval=1d&filter=history&frequency=1d").timeout(10 * 10000).get();
+            d = Jsoup.connect("https://finance.yahoo.com/quote/"+marname+"/history?p="+marname).timeout(10 * 10000).get();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -349,7 +349,6 @@ public class Service_Chosen_Equity
                                 it.setThumbnailUrl(m.group(1));
                             }
                             it.setDescription(sd);
-
                         } else if (curent.getNodeName().equalsIgnoreCase("pubDate")) {
                             sp = Html.fromHtml(curent.getTextContent()).toString();
                             sp = sp.replaceAll("@20", " ");
@@ -359,10 +358,8 @@ public class Service_Chosen_Equity
                             sl = sl.replaceAll("@20", " ");
                             it.setLink(sl);
                         } else if (curent.getNodeName().equalsIgnoreCase("img src")) {
-
                         }
                     }
-
                     feedItems.add(it);
 
 

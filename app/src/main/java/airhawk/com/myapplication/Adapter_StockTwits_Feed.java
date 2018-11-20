@@ -22,18 +22,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Adapter_StockTwits_Feed extends RecyclerView.Adapter<Adapter_StockTwits_Feed.MyViewHolder> {
+    private List<Constructor_Stock_Twits> stocktwits_feedItems;
 
    private static Context context;
-    private ArrayList<String> timeList=Smessage_time;
-    private ArrayList<String> linkList=Smessage_link;
-    public ArrayList<String> nameList=Suser_name;
-    public ArrayList<String> messsageList=Smessage;
     public ArrayList<String> imagelist=Simg_url;
 
 
     public Adapter_StockTwits_Feed(Context context, List<Constructor_Stock_Twits> items){
-     this.context=context;  
-   }
+     this.context=context;
+        this.stocktwits_feedItems = items;
+    }
 
 
     @Override
@@ -56,18 +54,20 @@ public class Adapter_StockTwits_Feed extends RecyclerView.Adapter<Adapter_StockT
    
    @Override  
    public void onBindViewHolder(MyViewHolder holder, int position) {
-     holder.tv_message_time.setText(""+Smessage_time.get(position));
-     holder.tv_user_name.setText(""+Suser_name.get(position));
-     holder.tv_message.setText(""+Smessage.get(position));
+       Constructor_Stock_Twits item = stocktwits_feedItems.get(position);
+
+     holder.tv_message_time.setText(item.getMessage_time());
+     holder.tv_user_name.setText(item.getUser_name());
+     holder.tv_message.setText(item.getMessage());
      if(imagelist !=null){
-     Picasso.with(context).load(imagelist.get(position)).memoryPolicy(MemoryPolicy.NO_CACHE).fit().centerInside().noFade().into(holder.tv_image);}
+     Picasso.with(context).load(item.getUser_image_url()).memoryPolicy(MemoryPolicy.NO_CACHE).fit().centerInside().noFade().into(holder.tv_image);}
      else{Picasso.with(context).load(R.drawable.direction_socialmedia).memoryPolicy(MemoryPolicy.NO_CACHE).noFade().into(holder.tv_image);}
-     holder.textlink= String.valueOf(Smessage.get(position));
+     holder.textlink= String.valueOf(item.getMessage());
    }
    
    @Override  
-   public int getItemCount() {  
-     return Smessage.size();
+   public int getItemCount() {
+       return stocktwits_feedItems==null?0:stocktwits_feedItems.size();
    }  
    
    public static class MyViewHolder extends RecyclerView.ViewHolder{

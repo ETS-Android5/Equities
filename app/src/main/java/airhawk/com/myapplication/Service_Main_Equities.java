@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -41,23 +42,9 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import static airhawk.com.myapplication.Activity_Main.aequity_name_arraylist;
 import static airhawk.com.myapplication.Activity_Main.aequity_symbol_arraylist;
-import static airhawk.com.myapplication.Constructor_App_Variables.all_market_cap_amount;
-import static airhawk.com.myapplication.Constructor_App_Variables.alt_market_cap_amount;
-import static airhawk.com.myapplication.Constructor_App_Variables.btc_market_cap_amount;
-import static airhawk.com.myapplication.Constructor_App_Variables.btc_market_cap_change;
-import static airhawk.com.myapplication.Constructor_App_Variables.dow_amount;
-import static airhawk.com.myapplication.Constructor_App_Variables.dow_change;
-import static airhawk.com.myapplication.Constructor_App_Variables.dow_flow;
-import static airhawk.com.myapplication.Constructor_App_Variables.dow_name;
-import static airhawk.com.myapplication.Constructor_App_Variables.all_feedItems;
-import static airhawk.com.myapplication.Constructor_App_Variables.nas_amount;
-import static airhawk.com.myapplication.Constructor_App_Variables.nas_change;
-import static airhawk.com.myapplication.Constructor_App_Variables.nas_name;
-import static airhawk.com.myapplication.Constructor_App_Variables.nd_flow;
-import static airhawk.com.myapplication.Constructor_App_Variables.sp_amount;
-import static airhawk.com.myapplication.Constructor_App_Variables.sp_change;
-import static airhawk.com.myapplication.Constructor_App_Variables.sp_flow;
-import static airhawk.com.myapplication.Constructor_App_Variables.sp_name;
+import static airhawk.com.myapplication.Activity_Main.ap_info;
+import static airhawk.com.myapplication.Constructor_App_Variables.*;
+import static airhawk.com.myapplication.Constructor_App_Variables.graph_high;
 
 //The original version of the core code was found on StackOverflow.com from user flup
 //https://stackoverflow.com/users/1973271/flup
@@ -66,11 +53,14 @@ import static airhawk.com.myapplication.Constructor_App_Variables.sp_name;
 
 public class Service_Main_Equities {
     public static Context myContext;
-    public Service_Main_Equities(Context context)
-    {
+
+    public Service_Main_Equities(Context context) {
         myContext = context;
     }
-    public Service_Main_Equities(){}
+
+    public Service_Main_Equities() {
+    }
+
     static Document sss = null;
     static Document sv = null;
     static Document z = null;
@@ -79,6 +69,7 @@ public class Service_Main_Equities {
     static Document crypto_data;
     static ArrayList stock_kings_symbollist = new ArrayList();
     static ArrayList stock_kings_namelist = new ArrayList();
+    static ArrayList stock_kings_ipdown = new ArrayList();
     static ArrayList stock_kings_changelist = new ArrayList();
     static ArrayList stock_win_symbollist = new ArrayList();
     static ArrayList stock_win_namelist = new ArrayList();
@@ -97,7 +88,7 @@ public class Service_Main_Equities {
     static ArrayList crypto_kings_symbolist = new ArrayList();
     static ArrayList crypto_kings_namelist = new ArrayList();
     static ArrayList crypto_kings_marketcaplist = new ArrayList();
-    static ArrayList crypto_kings_changelist =new ArrayList();
+    static ArrayList crypto_kings_changelist = new ArrayList();
 
     public static void main() {
         ExecutorService service = Executors.newCachedThreadPool();
@@ -119,7 +110,6 @@ public class Service_Main_Equities {
         });
 
 
-
         callables.add(new Callable<String>() {
             @Override
             public String call() throws Exception {
@@ -133,9 +123,6 @@ public class Service_Main_Equities {
                 return null;
             }
         });
-
-
-
 
 
         callables.add(new Callable<String>() {
@@ -157,6 +144,7 @@ public class Service_Main_Equities {
             public String call() throws Exception {
                 long startTime = System.nanoTime();
                 getStock_Kings();
+                get_stock_kings_points();
                 long endTime = System.nanoTime();
                 long duration = (endTime - startTime);
                 //wifi 1 seconds
@@ -179,11 +167,6 @@ public class Service_Main_Equities {
                 return null;
             }
         });
-
-
-
-
-
 
 
         try {
@@ -324,6 +307,7 @@ public class Service_Main_Equities {
 
 
     }
+
     //16
     //15
     public static void getStocks_Market_Caps() {
@@ -338,24 +322,25 @@ public class Service_Main_Equities {
         dow_name = as.get(2).text();
         nas_name = as.get(4).text();
         Elements as1 = z.select("h3>span");
-        sp_amount =as1.get(0).text();
-        dow_amount=as1.get(1).text();
-        nas_amount=as1.get(2).text();
-        Elements as2 =z.select("span>span");
-        sp_change =as2.get(2).text();
-        dow_change=as2.get(3).text();
-        nas_change=as2.get(4).text();
-        if (sp_change.contains("-")){
-            sp_flow=true;
+        sp_amount = as1.get(0).text();
+        dow_amount = as1.get(1).text();
+        nas_amount = as1.get(2).text();
+        Elements as2 = z.select("span>span");
+        sp_change = as2.get(2).text();
+        dow_change = as2.get(3).text();
+        nas_change = as2.get(4).text();
+        if (sp_change.contains("-")) {
+            sp_flow = true;
         }
-        if (dow_change.contains("-")){
-            dow_flow=true;
+        if (dow_change.contains("-")) {
+            dow_flow = true;
         }
-        if (nas_change.contains("-")){
-            nd_flow=true;
+        if (nas_change.contains("-")) {
+            nd_flow = true;
         }
 
     }
+
     //7
     public static void getCrypto_Winners_Losers() {
         try {
@@ -401,21 +386,18 @@ public class Service_Main_Equities {
     }
 
 
-
     public void getSaved_Crypto_Price() {
 
         Database_Local_Aequities db = new Database_Local_Aequities(myContext);
         db.getName();
         for (int i = 0; i <= db.getName().size(); i++) {
             try {
-                bb = Jsoup.connect("https://coinmarketcap.com/currencies/" +db.getName().get(i)).timeout(10 * 10000).get();
+                bb = Jsoup.connect("https://coinmarketcap.com/currencies/" + db.getName().get(i)).timeout(10 * 10000).get();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
     }
-
-    public void Connect_Stocktwits(){}
 
 
     public static void getStock_Kings() {
@@ -428,19 +410,53 @@ public class Service_Main_Equities {
         Elements table_body = sv.select("tr td:eq(1)");
         Elements table_body2 = sv.select("tr td:eq(2)");
         Elements table_body3 = sv.select("tr td:eq(3)");
-        for(int i=1; i<=10;i++)
-        {
+        for (int i = 1; i <= 10; i++) {
             stock_kings_namelist.add(table_body.get(i).text());
             stock_kings_symbollist.add(table_body2.get(i).text());
             Double add = Double.parseDouble(table_body3.get(i).text());
-            String added =null;
-            if (add >1000){
-                added =table_body3.get(i).text()+" T";
-            }else{
-                added =table_body3.get(i).text()+" B";
+            String a = String.format("%.0f", add);
+            String added = null;
+            if (add > 1000) {
+                added = a + " T";
+            } else {
+                added = a + " B";
             }
             stock_kings_changelist.add(added);
+
         }
 
     }
-}
+
+    public static void get_stock_kings_points() {
+        for (int i = 0; i < stock_kings_symbollist.size(); i++) {
+
+
+            String marname = String.valueOf(stock_kings_symbollist.get(i));
+            if (marname.contains(".")){
+                marname=marname.replace(".","-");}
+
+            Document cap =null;
+            try{
+                cap =Jsoup.connect("https://finance.yahoo.com/quote/"+marname+"?p="+marname).timeout(10 *10000).get();
+            } catch (IOException e){
+                e.printStackTrace();
+            }
+           // Elements ez =cap.select("td[data-test]");
+            //stock_kings_changelist.add(ez.get(8).text());
+
+            Element test = cap.select("div[data-reactid='34']").first().select("span").get(1);
+            String foofoo =test.text().toString().replace("(","").replace(")","");
+            String[] foo = foofoo.split(" ");
+            String f =foo[1];
+            stock_kings_ipdown.add(f);
+            System.out.println("FU "+stock_kings_ipdown);
+
+            }
+        }
+
+
+
+
+    }
+
+

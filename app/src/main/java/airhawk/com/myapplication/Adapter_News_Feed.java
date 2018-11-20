@@ -2,7 +2,11 @@ package airhawk.com.myapplication;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,13 +16,14 @@ import android.widget.TextView;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 public class Adapter_News_Feed extends RecyclerView.Adapter<Adapter_News_Feed.MyViewHolder> {
 
    private List<Constructor_News_Feed> feedItems;
    private static Context context;
-
+   private Bitmap bitmap;
    public Adapter_News_Feed(Context context, List<Constructor_News_Feed> items){
      this.context=context;  
      this.feedItems = items;  
@@ -47,6 +52,8 @@ public class Adapter_News_Feed extends RecyclerView.Adapter<Adapter_News_Feed.My
      Constructor_News_Feed item = feedItems.get(position);
      holder.tv_pubdate.setText(item.getPubDate());  
      holder.tv_title.setText(item.getTitle());
+
+
      if(item.getThumbnailUrl() !=null){
      Picasso.with(context).load(item.getThumbnailUrl()).memoryPolicy(MemoryPolicy.NO_CACHE).noFade().into(holder.tv_image);}
      else{Picasso.with(context).load(R.drawable.direction_news).memoryPolicy(MemoryPolicy.NO_CACHE).noFade().into(holder.tv_image);}
@@ -92,6 +99,6 @@ public class Adapter_News_Feed extends RecyclerView.Adapter<Adapter_News_Feed.My
        void gotoWebView(String textlink);
 
      }  
-   }  
-   
+   }
+
  }

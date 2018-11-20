@@ -29,10 +29,10 @@ public class Test_Methods {
     static String cryptopia_list;
 
     public static void main(String[] args) {
-getStocks_Market_Caps();
+//getStocks_Market_Caps();
 
         //get_crypto_points();
-//get_stock_points();
+get_stock_points2();
     }
 
 
@@ -95,7 +95,7 @@ getStocks_Market_Caps();
         String marname = "aapl";
         Document d = null;
         try {
-            d = Jsoup.connect("https://finance.yahoo.com/quote/"+marname+"/history?period1=863668800&period2=1538452800&interval=1d&filter=history&frequency=1d").timeout(10 * 10000).get();
+            d = Jsoup.connect("https://finance.yahoo.com/quote/"+marname+"/history?period1=345456000&period2=1542441600&interval=1d&filter=history&frequency=1d").timeout(10 * 10000).get();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -112,6 +112,8 @@ getStocks_Market_Caps();
                 graph_high.add(close);
                 String volume =x.get(z).select("td").get(6).text();
                 graph_volume.add(volume);
+
+                System.out.println(date+" "+close+" "+volume);
                 List<String> numbers = graph_high;
                 //Collections.reverse(numbers);
                 _AllDays = numbers;}}

@@ -44,7 +44,8 @@
         android:id="@+id/circle"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        app:srcCompat="@drawable/holder_green_circle" />
+        app:srcCompat="@drawable/holder_green_circle"
+        android:scaleType="fitCenter"/>
 
     <TextView
         android:id="@+id/symbol"

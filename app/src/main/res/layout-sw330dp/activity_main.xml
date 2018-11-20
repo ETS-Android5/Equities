@@ -67,11 +67,12 @@
                         android:id="@+id/tabs"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:tabIndicatorHeight="0dp"
+                        app:tabIndicatorHeight="1dp"
+                        app:tabIndicatorColor="@color/colorPrimary"
                         app:tabMode="scrollable"
                         app:tabSelectedTextColor="#ffffff"
                         app:tabTextAppearance="@style/TextAppearance.AppCompat.Small"
-                        app:tabTextColor="@color/colorPrimary" />
+                        app:tabTextColor="#D3D3D3" />
                 </LinearLayout>
             </TableRow>
 

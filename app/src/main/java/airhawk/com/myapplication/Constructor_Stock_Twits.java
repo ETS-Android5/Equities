@@ -6,6 +6,7 @@ public class Constructor_Stock_Twits {
    String message_time;
    String message;
    String user_image_url;
+   String message_link;
    public String getUser_name() {
      return user_name;
    }  
@@ -24,4 +25,11 @@ public class Constructor_Stock_Twits {
    public String getUser_image_url(){return user_image_url;}
    public void setUser_image_url(String user_image_url){this.user_image_url =user_image_url;}
 
- }
+    public void setMessage_link(String message_link) {
+        this.message_link = message_link;
+    }
+
+    public String getMessage_link() {
+        return message_link;
+    }
+}

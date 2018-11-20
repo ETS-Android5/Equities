@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<AutoCompleteTextView xmlns:android="http://schemas.android.com/apk/res/android"
+                      android:id="@+id/searchtool"
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:ems="10"
+                      android:hint="Search for Equities"
+                      android:imeOptions="actionDone"
+                      android:textAppearance="?android:attr/textAppearanceSmall"
+                      android:textColor="#ffffff"
+                      android:textColorHint="#d3d3d3" android:textSize="24sp"></AutoCompleteTextView>
