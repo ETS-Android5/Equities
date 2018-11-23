@@ -31,8 +31,28 @@
     <string name="crypto_volume_leaders">Cryptocurrency Kings</string>
     <string name="stock_market_gainers">Stock Market Leaders</string>
     <string name="crypto_gainers">Cryptocurrency Leaders</string>
+    <string name="cryptogainers">Crypto Leaders</string>
     <string name="stock_market_losers">Stock Market Losers</string>
     <string name="crypto_losers">Cryptocurrency Losers</string>
+    <string name="cryptolosers">Crypto Losers</string>
+    <string name="cryptokings">Crypto Kings</string>
+    <string name="crypto_proof_of_work">Proof of Work</string>
+    <string name="crypto_proof_of_stake">Proof of Stake</string>
+    <string name="crypto_news">Crypto News</string>
+    <string name="stock_losers">Stock Losers</string>
+    <string name="stock_gainers">Stock Leaders</string>
+    <string name="stock_kings">Stock Kings</string>
+    <string name="stock_news">Stock News</string>
+    <string name="whattype">Select what you are interested in?</string>
+    <string name="thanks">Thank you for installing Equities</string>
+    <string name="commodities">Commodities</string>
+    <string name="forex">Forex</string>
+    <string name="bonds">Bonds</string>
+    <string name="etf">ETF</string>
+    <string name="start">Start Application</string>
+    <string name="crypto_wisdom">Crypto Wisdom</string>
+    <string name="stock_wisdom">Stock Wisdom</string> <string name="select_all">Select All</string>
+    <string name="change_methods">You can change this anytime in the app by touching the search button then settings</string>
     <string name="name">Name</string>
     <string name="date">Date</string>
     <string name="price">Price</string>
@@ -231,7 +251,6 @@
 
 
     </string-array>
-
 
 
 </resources>

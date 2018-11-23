@@ -1,11 +1,13 @@
 package airhawk.com.myapplication;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -20,15 +22,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
+import android.widget.*;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -72,7 +66,23 @@ import static airhawk.com.myapplication.Service_Main_Equities.crypto_kings_namel
 import static airhawk.com.myapplication.Service_Main_Equities.crypto_kings_symbolist;
 
 public class Activity_Main extends AppCompatActivity {
+    final String PREFS_NAME = "TheSteelersalwayscheat";
+    final String PREF_VERSION_CODE_KEY = "version_code";
+    final int DOESNT_EXIST = -1;
+    int savedVersionCode;
+    public static final String Data_Preferences = "MyPrefs" ;
+    public static final String Masternode = "masternodes";
+    public static final String ProofofWork = "proofofwork";
+    public static final String ProofofStake = "proofofstake";
+    public static final String Icos ="icos";
+    public static final String CryptoWisdom="cryptowisdom";
+    public static final String Commodities="commodities";
+    public static final String Bonds="bonds";
+    public static final String Etfs="etfs";
+    public static final String Ipos="ipos";
+    public static final String StockWisdom ="stockwisdom";
 
+    SharedPreferences sharedpreferences;
     Database_Local_Aequities check_saved = new Database_Local_Aequities(Activity_Main.this);
     RequestQueue requestQueue;
     Database_Local_Aequities co =new Database_Local_Aequities(this);
@@ -81,8 +91,8 @@ public class Activity_Main extends AppCompatActivity {
             R.drawable.direction_up,
             R.drawable.direction_down,
             R.drawable.direction_kings,
-            R.drawable.direction_news
-            //, R.drawable.direction_masternode
+            R.drawable.direction_news,
+            R.drawable.direction_masternode
             };
     static Element price = null;
     protected ArrayAdapter<String> ad;
@@ -138,9 +148,8 @@ public class Activity_Main extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void starterup(){
+
         MobileAds.initialize(this, "ca-app-pub-6566728316210720/4471280326");
         mInterstitialAd = new InterstitialAd(this);
         mInterstitialAd.setAdUnitId("ca-app-pub-6566728316210720/4471280326");
@@ -159,37 +168,30 @@ public class Activity_Main extends AppCompatActivity {
         txt = (TextView) findViewById(R.id.output);
 
         new setAsyncDataMain(this).execute();
+    }
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        check_if_first_download();
 
     }
 
     public void onBackPressed() {
-        if (fullScreen.equalsIgnoreCase("go")) {
-            // Sample AdMob app ID: ca-app-pub-3940256099942544~3347511713
-
-
-            MobileAds.initialize(this, "ca-app-pub-6566728316210720/4471280326");
-
-            if (mInterstitialAd.isLoaded()) {
-                mInterstitialAd.show();
-
-            }
-            mInterstitialAd.setAdListener(new AdListener() {
-                @Override
-                public void onAdClosed() {
-
-                }
-            });
+        System.out.println("CODE "+savedVersionCode+" "+DOESNT_EXIST);
+        if (savedVersionCode == DOESNT_EXIST) {
+            check_if_first_download();
+        }else {
+            check_to_show_ad();
+            graph_change.clear();
+            exchange_list.clear();
+            aequity_exchanges.clear();
+            stocktwits_feedItems.clear();
+            graph_date.clear();
+            graph_high.clear();
+            graph_volume.clear();
+            new setAsyncChosenData(this).cancel(true);
+            new setSavedAsyncDataMain(this).execute();
         }
-        graph_change.clear();
-        exchange_list.clear();
-        aequity_exchanges.clear();
-        stocktwits_feedItems.clear();
-        graph_date.clear();
-        graph_high.clear();
-        graph_volume.clear();
-        new setAsyncChosenData(this).cancel(true);
-        new setSavedAsyncDataMain(this).execute();
-
 
     }
 
@@ -499,7 +501,7 @@ public class Activity_Main extends AppCompatActivity {
         final int speedScroll = 0;
         final Handler handler = new Handler();
         final Runnable runnable = new Runnable() {
-            int count = -1;
+            int count = -2;
             @Override
             public void run() {
                 if(count == adapter.getItemCount())
@@ -515,7 +517,21 @@ public class Activity_Main extends AppCompatActivity {
     }
 
     private void setupMainViewPager(ViewPager viewPager) {
-        System.out.println("There are "+check_saved.getName().size()+" saved items at setupviewpager");
+        SharedPreferences sp = this.getSharedPreferences(Data_Preferences, Context.MODE_PRIVATE);
+        String masternodes = sp.getString(Masternode, "");
+        String proofofwork = sp.getString(ProofofWork, "");
+        String proofofstake = sp.getString(ProofofStake, "");
+        String icos = sp.getString(Icos, "");
+        String cryptowisdom = sp.getString(CryptoWisdom, "");
+        String commodities = sp.getString(Commodities, "");
+        String bonds = sp.getString(Bonds, "");
+        String etfs = sp.getString(Etfs, "");
+        String ipos = sp.getString(Ipos, "");
+        String stockwisdom = sp.getString(StockWisdom, "");
+
+
+
+        System.out.println("There are "+check_saved.getName().size()+" saved items at setupviewpager "+ masternodes);
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFrag(new Fragment_Winners(), getString(R.string.leaders));
         adapter.addFrag(new Fragment_Losers(), getString(R.string.losers));
@@ -524,7 +540,26 @@ public class Activity_Main extends AppCompatActivity {
         }
         adapter.addFrag(new Fragment_App_News(), getString(R.string.news));
         adapter.addFrag(new Fragment_Market_Kings(), getString(R.string.market_kings));
-      //  adapter.addFrag(new Fragment_Masternodes(),getString(R.string.masternodes));
+        if(masternodes.equals("yes")){
+            adapter.addFrag(new Fragment_Masternodes(),getString(R.string.masternodes));}
+        if(proofofwork.equals("yes")){
+            adapter.addFrag(new Fragment_Proof_Of_Work(),getString(R.string.crypto_proof_of_work));}
+        if(proofofstake.equals("yes")){
+            adapter.addFrag(new Fragment_Proof_Of_Stake(),getString(R.string.crypto_proof_of_stake));}
+        if(icos.equals("yes")){
+            adapter.addFrag(new Fragment_Icos(),getString(R.string.ico));}
+        if(cryptowisdom.equals("yes")){
+            adapter.addFrag(new Fragment_Crypto_Wisdom(),getString(R.string.crypto_wisdom));}
+        if(commodities.equals("yes")){
+            adapter.addFrag(new Fragment_Commodities(),getString(R.string.commodities));}
+        if(bonds.equals("yes")){
+            adapter.addFrag(new Fragment_Bonds(),getString(R.string.bonds));}
+        if(etfs.equals("yes")){
+            adapter.addFrag(new Fragment_Etfs(),getString(R.string.etf));}
+        if(ipos.equals("yes")){
+            adapter.addFrag(new Fragment_Ipos(),getString(R.string.ipo));}
+        if(stockwisdom.equals("yes")){
+            adapter.addFrag(new Fragment_Stock_Wisdom(),getString(R.string.stock_wisdom));}
 
         //adapter.addFrag(new Fragment_stockVScrypto(),getString(R.string.compare));
         viewPager.setAdapter(adapter);
@@ -1111,6 +1146,7 @@ if (aa.size()>0) {
     }
 
     public static void do_graph_change() {
+        System.out.println("BANANAS"+graph_high);
         for (int i = 0; i < graph_high.size(); i++) {
                    Double a= new Double(graph_high.get(i).toString().replace(",",""));
 
@@ -1129,5 +1165,119 @@ if (aa.size()>0) {
     }
 
 
+    private void check_if_first_download() {
 
+
+        int currentVersionCode = BuildConfig.VERSION_CODE;
+        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        savedVersionCode = prefs.getInt(PREF_VERSION_CODE_KEY, DOESNT_EXIST);
+        if (currentVersionCode == savedVersionCode) {
+            starterup();
+            return;
+
+        } else if (savedVersionCode == DOESNT_EXIST) {
+         setContentView(R.layout.activity_equity_choice);
+         Button start =(Button)findViewById(R.id.start_app);
+         CheckBox masternodes =(CheckBox)findViewById(R.id.crypto_masternodes);
+            CheckBox proofofwork =(CheckBox)findViewById(R.id.crypto_proof_of_work);
+            CheckBox proofofstake =(CheckBox)findViewById(R.id.crypto_proof_of_stake);
+            CheckBox icos =(CheckBox)findViewById(R.id.ico);
+            CheckBox cryptowisdom=(CheckBox)findViewById(R.id.crypto_wisdom);
+            CheckBox commodities =(CheckBox)findViewById(R.id.commodities);
+            CheckBox bonds =(CheckBox)findViewById(R.id.bonds);
+            CheckBox etfs =(CheckBox)findViewById(R.id.etf);
+            CheckBox ipos =(CheckBox)findViewById(R.id.ipo);
+            CheckBox stockwisdom =(CheckBox)findViewById(R.id.stock_wisdom);
+         start.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View view) {
+                 sharedpreferences = getSharedPreferences(Data_Preferences, Context.MODE_PRIVATE);
+                 if (masternodes.isChecked()) {
+                     SharedPreferences.Editor editor = sharedpreferences.edit();
+                     editor.putString(Masternode, "yes");
+                     editor.commit();
+                     System.out.println("THIS IS MASTERNODE VALUE "+Masternode);
+                 }
+                 if (proofofwork.isChecked()) {
+                     SharedPreferences.Editor editor = sharedpreferences.edit();
+                     editor.putString("proofofwork", "yes");
+                     editor.commit();
+                 }
+                 if (proofofstake.isChecked()) {
+                     SharedPreferences.Editor editor = sharedpreferences.edit();
+                     editor.putString("proofofstake", "yes");
+                     editor.commit();
+                 }
+                 if (icos.isChecked()) {
+                     SharedPreferences.Editor editor = sharedpreferences.edit();
+                     editor.putString("icos", "yes");
+                     editor.commit();
+                 }
+                 if (cryptowisdom.isChecked()) {
+                     SharedPreferences.Editor editor = sharedpreferences.edit();
+                     editor.putString("cryptowisdom", "yes");
+                     editor.commit();
+                 }
+                 if (commodities.isChecked()) {
+                     SharedPreferences.Editor editor = sharedpreferences.edit();
+                     editor.putString("commodities", "yes");
+                     editor.commit();
+                 }
+                 if (bonds.isChecked()) {
+                     SharedPreferences.Editor editor = sharedpreferences.edit();
+                     editor.putString("bonds", "yes");
+                     editor.commit();
+                 }
+                 if (etfs.isChecked()) {
+                     SharedPreferences.Editor editor = sharedpreferences.edit();
+                     editor.putString("etfs", "yes");
+                     editor.commit();
+                 }
+                 if (ipos.isChecked()) {
+                     SharedPreferences.Editor editor = sharedpreferences.edit();
+                     editor.putString("ipos", "yes");
+                     editor.commit();
+                 }
+                 if (stockwisdom.isChecked()) {
+                     SharedPreferences.Editor editor = sharedpreferences.edit();
+                     editor.putString("stockwisdom", "yes");
+                     editor.commit();
+                 }
+
+                 starterup();
+                 return;
+             }});
+
+
+
+
+        } else if (currentVersionCode > savedVersionCode) {
+            starterup();
+            return;
+        }
+        prefs.edit().putInt(PREF_VERSION_CODE_KEY, currentVersionCode).apply();
+    }
+
+
+
+    private void check_to_show_ad(){
+        if (fullScreen.equalsIgnoreCase("go")) {
+            // Sample AdMob app ID: ca-app-pub-3940256099942544~3347511713
+
+
+            MobileAds.initialize(this, "ca-app-pub-6566728316210720/4471280326");
+
+            if (mInterstitialAd.isLoaded()) {
+                mInterstitialAd.show();
+
+            }
+            mInterstitialAd.setAdListener(new AdListener() {
+                @Override
+                public void onAdClosed() {
+
+                }
+            });
+        }
+
+    }
 }

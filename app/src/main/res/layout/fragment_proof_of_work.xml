@@ -35,17 +35,17 @@
 
                 <android.support.v7.widget.AppCompatTextView
 
-                    android:id="@+id/crypto"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight=".5"
-                    android:background="#00000000"
-                    android:gravity="center"
+                        android:id="@+id/crypto"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight=".5"
+                        android:background="#00000000"
+                        android:gravity="center"
 
-                    android:text="@string/masternodes"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="26sp" />
+                        android:text="@string/crypto_proof_of_work"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="26sp"/>
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -103,7 +103,7 @@
             </TableRow>
 
             <android.support.v7.widget.RecyclerView
-                android:id="@+id/masternode_items"
+                android:id="@+id/crypto_items"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="3dp"

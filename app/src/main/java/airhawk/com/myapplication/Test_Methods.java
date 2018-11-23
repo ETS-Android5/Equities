@@ -29,10 +29,11 @@ public class Test_Methods {
     static String cryptopia_list;
 
     public static void main(String[] args) {
+        get_masternodes();
 //getStocks_Market_Caps();
 
         //get_crypto_points();
-get_stock_points2();
+//get_stock_points2();
     }
 
 
@@ -89,7 +90,6 @@ get_stock_points2();
 
     }
 
-
     public static void get_stock_points2() {
         System.out.println("Get stock points called");
         String marname = "aapl";
@@ -119,8 +119,6 @@ get_stock_points2();
                 _AllDays = numbers;}}
         System.out.println(graph_high.size());
         }
-        //System.out.println(u);
-
 
     public static void getStock_Kings() {
         int x;
@@ -445,6 +443,41 @@ get_stock_points2();
             }
             Element change = d.getElementById("qwidget_percent");
             System.out.println("PERCENT CHANGE" + change);
+        }
+
+    }
+
+
+    public static void get_masternodes(){
+    Document m =null;
+        try {
+            m = Jsoup.connect("https://masternodes.online").userAgent("Mozilla").timeout(10 * 100000).get();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Element c = m.getElementById("coins");
+        Elements tb = c.select("tbody");
+        Elements tr =tb.select("tr");
+        for(int i=0;i<10;i++){
+            Element poo= tr.get(i);
+            Elements r =poo.select("td");
+            String[] splited = r.get(2).text().split(" ");
+            masternode_name=splited[0];
+            masternode_symbol=splited[1].replace("(","").replace(")","");
+            masternode_percent_change=r.get(4).text().replace("%","");
+            String temp=r.get(5).text().replace("$","").replace(",","");
+            Double add = Double.parseDouble(temp);
+            String a = String.format("%.0f", add);
+            String added = null;
+            if (add > 1000) {
+                added = a.substring(0,3) + " M";
+            } else {
+                added = a.substring(0,3) + " TH";
+            }
+            masternode_marketcap=added;
+            masternode_node_count=r.get(8).text().replace(",","");
+            masternode_purchase_value=r.get(10).text().replace("$","");
+            System.out.println(masternode_name+" "+masternode_symbol+" "+masternode_percent_change+" "+masternode_marketcap+" "+masternode_node_count+" "+masternode_purchase_value);
         }
 
     }

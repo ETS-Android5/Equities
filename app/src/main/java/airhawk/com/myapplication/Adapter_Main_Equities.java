@@ -31,11 +31,12 @@ public class Adapter_Main_Equities extends RecyclerView.Adapter<Adapter_Main_Equ
 
         }
         public class MyViewHolder extends RecyclerView.ViewHolder{
-            public TextView number, symbol, name, value, types;
+            public TextView number, symbol, name, value, types,changes;
             public ImageView circle;
 
             public MyViewHolder(View itemView) {
                 super(itemView);
+                changes =itemView.findViewById(R.id.changes);
                 number=itemView.findViewById(R.id.number);
                 circle =itemView.findViewById(R.id.circle);
                 symbol=itemView.findViewById(R.id.symbol);
@@ -75,8 +76,9 @@ public class Adapter_Main_Equities extends RecyclerView.Adapter<Adapter_Main_Equ
                 holder.symbol.setText(""+stock_win_symbollist.get(position));
                 holder.circle.setImageResource(R.drawable.holder_green_circle);
                 holder.name.setText(""+stock_win_namelist.get(position));
-                holder.value.setText(""+stock_kings_changelist.get(position));
+                holder.value.setText(""+stock_win_changelist.get(position));
                 holder.value.setTextColor(Color.parseColor("#00cc00"));
+                holder.changes.setVisibility(View.GONE);
                 holder.types.setText("Stock");
             }
             if ("Stock_Loser".equals(type_and_case)){
@@ -87,11 +89,12 @@ public class Adapter_Main_Equities extends RecyclerView.Adapter<Adapter_Main_Equ
                 holder.value.setText(""+stock_losers_changelist.get(position));
                 holder.value.setTextColor(Color.parseColor("#ff0000"));
                 holder.types.setText("Stock");
+                holder.changes.setVisibility(View.GONE);
             }
             if ("Stock_Kings".equals(type_and_case)){
                 holder.number.setText((1+position)+".");
                 holder.symbol.setText(""+stock_kings_symbollist.get(position));
-                holder.name.setText(""+stock_kings_namelist.get(position)+" "+stock_kings_changelist.get(position));
+                holder.name.setText(""+stock_kings_namelist.get(position));
                 holder.value.setText(""+stock_kings_ipdown.get(position));
                 String poo= String.valueOf(stock_kings_ipdown.get(position));
             if(poo.contains("-")){
@@ -102,6 +105,7 @@ public class Adapter_Main_Equities extends RecyclerView.Adapter<Adapter_Main_Equ
                 holder.circle.setImageResource(R.drawable.holder_green_circle);
             }
                              holder.types.setText("Stock");
+                holder.changes.setText(""+stock_kings_changelist.get(position));
             }
 
             if ("Crypto_Winner".equals(type_and_case)){
@@ -111,7 +115,8 @@ public class Adapter_Main_Equities extends RecyclerView.Adapter<Adapter_Main_Equ
                 holder.circle.setImageResource(R.drawable.holder_green_circle);
                 holder.value.setText("+"+crypto_winners_changelist.get(position));
                 holder.value.setTextColor(Color.parseColor("#00cc00"));
-                holder.types.setText("Cryptocurrency");}
+                holder.types.setText("Cryptocurrency");
+                holder.changes.setVisibility(View.GONE);}
             if ("Crypto_Loser".equals(type_and_case)){
                 holder.number.setText((1+position)+".");
                 holder.symbol.setText(""+crypto_losers_symbollist.get(position));
@@ -119,11 +124,12 @@ public class Adapter_Main_Equities extends RecyclerView.Adapter<Adapter_Main_Equ
                 holder.circle.setImageResource(R.drawable.holder_red_circle);
                 holder.value.setText(""+crypto_losers_changelist.get(position));
                 holder.value.setTextColor(Color.parseColor("#ff0000"));
-                holder.types.setText("Cryptocurrency");}
+                holder.types.setText("Cryptocurrency");
+                holder.changes.setVisibility(View.GONE);}
             if (("Crypto_Kings".equals(type_and_case))){
                 holder.number.setText((1+position)+".");
                 holder.symbol.setText(""+crypto_kings_symbolist.get(position));
-                holder.name.setText(""+crypto_kings_namelist.get(position)+" "+crypto_kings_marketcaplist.get(position));
+                holder.name.setText(""+crypto_kings_namelist.get(position));
 
                 String poo= String.valueOf(crypto_kings_changelist.get(position));
                 if(poo.contains("-")){
@@ -134,7 +140,7 @@ public class Adapter_Main_Equities extends RecyclerView.Adapter<Adapter_Main_Equ
                     holder.circle.setImageResource(R.drawable.holder_green_circle);
                 }
                 holder.value.setText(""+crypto_kings_changelist.get(position)+"%");
-
+                holder.changes.setText(""+crypto_kings_marketcaplist.get(position));
                 //if (crypto_kings_changelist.get(position)>0){
                 //    holder.circle.setImageResource(R.drawable.holder_green_circle);
                 //holder.value.setTextColor(Color.parseColor("#00ff00"));

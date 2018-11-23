@@ -12,6 +12,14 @@ import java.util.Set;
  */
 
 public class Constructor_App_Variables {
+    public static String masternode_name;
+    public static String masternode_symbol;
+    public static String masternode_percent_change;
+    public static String masternode_marketcap;
+    public static String masternode_node_count;
+    public static String masternode_purchase_value;
+
+
     static Set<String> kracken_list;
 
     static ArrayList binance_list=new ArrayList<>();

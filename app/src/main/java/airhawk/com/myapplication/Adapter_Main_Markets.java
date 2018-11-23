@@ -123,7 +123,7 @@ public class Adapter_Main_Markets extends RecyclerView.Adapter<Adapter_Main_Mark
 
         holder.mIdView.setText("" + market_list[position]);
         holder.mPriceView.setText("$ " + int_list[position]);
-        if (change_list[position].contains("-")||change_list!=null) {
+        if (change_list[position].contains("-")){
             holder.mIdView.setTextColor(Color.parseColor("#FFFFFF"));
             holder.mPriceView.setTextColor(Color.parseColor("#FFFFFF"));
             holder.mChangeView.setTextColor(Color.parseColor("#FF0000"));

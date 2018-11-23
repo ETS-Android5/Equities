@@ -1,18 +1,7 @@
 package airhawk.com.myapplication;
 
-import android.app.Service;
 import android.content.Context;
 import android.text.Html;
-
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -20,31 +9,24 @@ import org.jsoup.select.Elements;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
-import static airhawk.com.myapplication.Activity_Main.aequity_name_arraylist;
-import static airhawk.com.myapplication.Activity_Main.aequity_symbol_arraylist;
-import static airhawk.com.myapplication.Activity_Main.ap_info;
 import static airhawk.com.myapplication.Constructor_App_Variables.*;
-import static airhawk.com.myapplication.Constructor_App_Variables.graph_high;
 
 //The original version of the core code was found on StackOverflow.com from user flup
 //https://stackoverflow.com/users/1973271/flup
@@ -168,6 +150,19 @@ public class Service_Main_Equities {
             }
         });
 
+        callables.add(new Callable<String>() {
+            @Override
+            public String call() throws Exception {
+                long startTime = System.nanoTime();
+     get_masternodes();
+                long endTime = System.nanoTime();
+                long duration = (endTime - startTime);
+                //wifi 1 second
+                //Boost Mobile 5 seconds
+                System.out.println("getMasternode TIME IS " + duration / 1000000000 + " seconds");
+                return null;
+            }
+        });
 
         try {
             List<Future<String>> futures = service.invokeAll(callables);
@@ -455,7 +450,39 @@ public class Service_Main_Equities {
         }
 
 
+    public static void get_masternodes(){
+        Document m =null;
+        try {
+            m = Jsoup.connect("https://masternodes.online").userAgent("Mozilla").timeout(10 * 100000).get();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Element c = m.getElementById("coins");
+        Elements tb = c.select("tbody");
+        Elements tr =tb.select("tr");
+        for(int i=0;i<10;i++){
+            Element poo= tr.get(i);
+            Elements r =poo.select("td");
+            String[] splited = r.get(2).text().split(" ");
+            masternode_name=splited[0];
+            masternode_symbol=splited[1].replace("(","").replace(")","");
+            masternode_percent_change=r.get(4).text().replace("%","");
+            String temp=r.get(5).text().replace("$","").replace(",","");
+            Double add = Double.parseDouble(temp);
+            String a = String.format("%.0f", add);
+            String added = null;
+            if (add > 1000) {
+                added = a.substring(0,3) + " M";
+            } else {
+                added = a.substring(0,3) + " TH";
+            }
+            masternode_marketcap=added;
+            masternode_node_count=r.get(8).text().replace(",","");
+            masternode_purchase_value=r.get(10).text().replace("$","");
+            System.out.println(masternode_name+" "+masternode_symbol+" "+masternode_percent_change+" "+masternode_marketcap+" "+masternode_node_count+" "+masternode_purchase_value);
+        }
 
+    }
 
     }
 
