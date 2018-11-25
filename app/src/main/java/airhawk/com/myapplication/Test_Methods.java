@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -29,14 +30,11 @@ public class Test_Methods {
     static String cryptopia_list;
 
     public static void main(String[] args) {
-        get_masternodes();
-//getStocks_Market_Caps();
+        //get_masternodes();
+        get_icos();
+        get_items_test();
 
-        //get_crypto_points();
-//get_stock_points2();
     }
-
-
     public static void getStocks_Market_Caps() {
         Document z =null;
         try {
@@ -447,7 +445,6 @@ public class Test_Methods {
 
     }
 
-
     public static void get_masternodes(){
     Document m =null;
         try {
@@ -482,7 +479,36 @@ public class Test_Methods {
 
     }
 
+    public static void get_icos(){
+        Document e =null;
+        Constructor_Icos it =new Constructor_Icos();
+        try {
+            e = Jsoup.connect("https://topicolist.com/ongoing-icos/").userAgent("Mozilla").timeout(10 * 100000).get();
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
 
+        Elements tb =e.select("tbody");
+        Elements ref =tb.select("tr");
+        for(int i =0;i<ref.size();i++){
+        String w = ref.get(i).select("a").attr("title");
+        String x =ref.get(i).select("td").get(2).text();
+        String y =ref.get(i).select("td").get(3).text();
+        String z =ref.get(i).select("td").get(4).text();
 
+        System.out.println(w+" "+x+" "+y+" "+z);
+    it.setIco_name(w);
+    it.setIco_message(x);
+    it.setIco_startDate(y);
+    it.setIco_endDate(z);
 
+        ico_feedItems.add(it);
+    }}
+
+public static void get_items_test() {
+
+    for (Constructor_Icos line : ico_feedItems) {
+        System.out.println("SIZE "+ico_feedItems.size()+" "+line.toString());
+    }
+}
 }

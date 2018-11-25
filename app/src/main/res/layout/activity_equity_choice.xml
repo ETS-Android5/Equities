@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+                                             android:layout_height="match_parent"
+                                             android:orientation="vertical">
+
+    <TextView
+            android:text="@string/thanks"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorBlack"
+            android:textSize="20dp"
+            android:gravity="center"/>
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorBlack"
+            android:textSize="16dp"
+            android:text="@string/whattype"
+            android:gravity="center"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorBlack"/>
+    <android.support.v7.widget.AppCompatCheckBox
+            android:id="@+id/selectall"
+            android:layout_width="wrap_content"
+            android:textSize="14dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textColor="@color/colorBlack"
+            android:text="@string/select_all"/>
+    <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_weight="1">
+            <android.support.v7.widget.AppCompatCheckBox
+                    android:id="@+id/crypto_gainers"
+                    android:textSize="14dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:enabled="false"
+                    android:textColor="@color/colorBlack"
+
+                    android:text="@string/cryptogainers" android:checked="true"/>
+
+            <android.support.v7.widget.AppCompatCheckBox
+                    android:id="@+id/crypto_losers"
+                    android:layout_width="match_parent"
+                    android:textSize="14dp"
+                    android:layout_height="wrap_content"
+                    android:enabled="false"
+                    android:textColor="@color/colorBlack"
+                    android:text="@string/cryptolosers" android:checked="true"/>
+
+            <android.support.v7.widget.AppCompatCheckBox
+                    android:id="@+id/crypto_kings"
+                    android:layout_width="match_parent"
+                    android:textSize="14dp"
+                    android:layout_height="wrap_content"
+                    android:enabled="false"
+                    android:textColor="@color/colorBlack"
+                    android:text="@string/cryptokings" android:checked="true"/>
+
+            <android.support.v7.widget.AppCompatCheckBox
+                    android:id="@+id/crypto_news"
+                    android:textSize="14dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:enabled="false"
+                    android:textColor="@color/colorBlack"
+                    android:text="@string/crypto_news" android:checked="true"/>
+            <android.support.v7.widget.AppCompatCheckBox
+                    android:id="@+id/crypto_masternodes"
+                    android:layout_width="match_parent"
+                    android:textSize="14dp"
+                    android:layout_height="wrap_content"
+                    android:textColor="#ff0000"
+                    android:text="@string/masternodes"/>
+
+            <android.support.v7.widget.AppCompatCheckBox
+                    android:id="@+id/crypto_proof_of_work"
+                    android:layout_width="match_parent"
+                    android:textSize="14dp"
+                    android:layout_height="wrap_content"
+                    android:textColor="#ff0000"
+                    android:text="@string/crypto_proof_of_work"/>
+
+            <android.support.v7.widget.AppCompatCheckBox
+                    android:id="@+id/crypto_proof_of_stake"
+                    android:layout_width="match_parent"
+                    android:textSize="14dp"
+                    android:layout_height="wrap_content"
+                    android:textColor="#ff0000"
+                    android:text="@string/crypto_proof_of_stake"/>
+
+            <android.support.v7.widget.AppCompatCheckBox
+                    android:id="@+id/ico"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="14dp"
+                    android:textColor="#ff0000"
+                    android:text="@string/ico"/>
+            <android.support.v7.widget.AppCompatCheckBox
+                    android:id="@+id/crypto_wisdom"
+                    android:layout_width="match_parent"
+                    android:textSize="14dp"
+                    android:layout_height="wrap_content"
+                    android:textColor="#ff0000"
+                    android:text="@string/crypto_wisdom"/>
+        </LinearLayout>
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_weight="1">
+            <android.support.v7.widget.AppCompatCheckBox
+                    android:id="@+id/stock_gainers"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:enabled="false"
+                    android:textSize="14dp"
+                    android:textColor="@color/colorBlack"
+                    android:text="@string/stock_gainers" android:checked="true"/>
+
+            <android.support.v7.widget.AppCompatCheckBox
+                    android:id="@+id/stock_losers"
+                    android:enabled="false"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14dp"
+                    android:text="@string/stock_losers" android:checked="true"/>
+
+            <android.support.v7.widget.AppCompatCheckBox
+                    android:id="@+id/stock_kings"
+                    android:layout_width="match_parent"
+                    android:enabled="false"
+                    android:textSize="14dp"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorBlack"
+                    android:text="@string/stock_kings" android:checked="true"/>
+
+            <android.support.v7.widget.AppCompatCheckBox
+                    android:id="@+id/stock_news"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:enabled="false"
+                    android:textSize="14dp"
+                    android:textColor="@color/colorBlack"
+                    android:text="@string/stock_news" android:checked="true" tools:clickable="false"/>
+            <android.support.v7.widget.AppCompatCheckBox
+                    android:id="@+id/commodities"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="14dp"
+                    android:textColor="#ff0000"
+                    android:text="@string/commodities"/>
+            <android.support.v7.widget.AppCompatCheckBox
+                    android:id="@+id/bonds"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="#ff0000"
+                    android:textSize="14dp"
+
+                    android:text="@string/bonds"/>
+            <android.support.v7.widget.AppCompatCheckBox
+                    android:id="@+id/etf"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="#ff0000"
+                    android:textSize="14dp"
+
+                    android:text="@string/etf"/>
+            <android.support.v7.widget.AppCompatCheckBox
+                    android:id="@+id/ipo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="#ff0000"
+                    android:textSize="14dp"
+
+                    android:text="@string/ipo"/>
+            <android.support.v7.widget.AppCompatCheckBox
+                    android:id="@+id/stock_wisdom"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="#ff0000"
+                    android:textSize="14dp"
+                    android:text="@string/stock_wisdom"/>
+        </LinearLayout>
+    </TableRow>
+    <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/start"
+            android:id="@+id/start_app"/>
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textSize="14dp"
+    android:text="@string/change_methods"/>
+</LinearLayout>

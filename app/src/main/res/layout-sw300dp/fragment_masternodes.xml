@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -62,44 +62,81 @@
                 android:layout_marginRight="3dp">
 
                 <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1.1"
-                    android:gravity="left|center"
-                    android:singleLine="true"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="14sp" />
+                        android:id="@+id/number"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1.1"
+                        android:gravity="left|center"
+                        android:singleLine="true"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="12sp" />
+
+                <ImageView
+                        android:id="@+id/circle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        app:srcCompat="@drawable/holder_green_circle"
+                        android:scaleType="fitCenter"/>
 
                 <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="left|center"
-                    android:singleLine="true"
-                    android:text="Symbol"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="14sp" />
+                        android:id="@+id/symbol"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="left|center"
+                        android:text="Sym"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="12sp"/>
+                <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/scpro"
+                        android:gravity="center"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="12sp"
+                        android:text="%"/>
+                <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight=".8"
+                        android:gravity="left|center"
+                        android:singleLine="true"
+                        android:text="Name"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="12sp"/>
 
                 <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight=".6"
-                    android:gravity="left|center"
-                    android:singleLine="true"
-                    android:text="Name"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="14sp" />
+
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="left|center"
+                        android:singleLine="true"
+                        android:text="Nodes"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="12sp"/>
 
                 <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="end"
-                    android:layout_weight="1"
-                    android:singleLine="true"
-                    android:text="Amount"
-                    android:textAlignment="textEnd"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="14sp" />
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:singleLine="true"
+                        android:text="Cost"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="12sp"/>
+                <TextView
+                        android:id="@+id/cap"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/scpro"
+                        android:gravity="center|right"
+                        android:text="3.3 B"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="12sp"
+                        android:textStyle="bold"/>
             </TableRow>
 
             <android.support.v7.widget.RecyclerView

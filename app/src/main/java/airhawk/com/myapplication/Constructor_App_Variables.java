@@ -71,8 +71,11 @@ public class Constructor_App_Variables {
     public static String btc_market_cap_amount;
     public static String btc_market_cap_change;
 
+    protected static ArrayList<Constructor_Icos> ico_feedItems =new ArrayList<>();
     protected static ArrayList<Constructor_News_Feed> feedItems = new ArrayList<>();
     protected static ArrayList<Constructor_Stock_Twits> stocktwits_feedItems = new ArrayList<>();
+
+    protected static ArrayList<Constructor_Masternodes> masternode_feedItems = new ArrayList<>();
     protected static ArrayList<Constructor_News_Feed> all_feedItems = new ArrayList<>();
     public static List<String> _AllDays =new ArrayList();
     public static String market_symbol;

@@ -52,54 +52,15 @@
 
                     android:src="@drawable/direction_down" />
             </TableRow>
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="3dp"
-                android:layout_marginRight="3dp"
-                android:background="#00000000">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1.1"
-                    android:gravity="left|center"
-                    android:singleLine="true"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="14sp" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="left|center"
-                    android:singleLine="true"
-                    android:text="Symbol"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="14sp" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight=".6"
-                    android:gravity="left|center"
-                    android:singleLine="true"
-                    android:text="Name"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="14sp" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="end"
-                    android:layout_weight="1"
-                    android:singleLine="true"
-                    android:text="Amount"
-                    android:textAlignment="textEnd"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="14sp" />
-            </TableRow>
-
+            <TextView android:id="@+id/stock_loser_data_provider"
+                      android:layout_height="wrap_content"
+                      android:layout_width="match_parent"
+                      android:textColor="@color/colorPrimary"
+                      android:gravity="center"
+                      android:autoLink="web"
+                      android:textColorLink="@color/darkTextColor"
+                      android:text="@string/stock_loser_winner_data_provider" android:textSize="12sp"
+          />
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
@@ -157,54 +118,15 @@
                     android:src="@drawable/direction_down" />
             </TableRow>
 
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="3dp"
-                android:layout_marginRight="3dp"
-                android:background="#00000000">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1.1"
-                    android:gravity="left|center"
-                    android:singleLine="true"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="14sp" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="left|center"
-                    android:singleLine="true"
-                    android:text="Symbol"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="14sp" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight=".6"
-                    android:gravity="left|center"
-                    android:singleLine="true"
-                    android:text="Name"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="14sp" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="end"
-                    android:layout_weight="1"
-                    android:singleLine="true"
-                    android:text="Amount"
-                    android:textAlignment="textEnd"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="14sp" />
-            </TableRow>
-
+            <TextView android:id="@+id/crypto_loser_data_provider"
+                      android:layout_height="wrap_content"
+                      android:layout_width="match_parent"
+                      android:gravity="center"
+                      android:textColor="@color/colorPrimary"
+                      android:autoLink="web"
+                      android:textColorLink="@color/darkTextColor"
+                      android:text="@string/crypto_loser_winner_data_provider" android:textSize="12sp"
+            />
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"

@@ -64,7 +64,7 @@ public class Adapter_Main_Equities extends RecyclerView.Adapter<Adapter_Main_Equ
         public Adapter_Main_Equities.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             
             View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.aequity_view, parent, false);
+                    .inflate(R.layout.recyclerview_aequity_view, parent, false);
             return new Adapter_Main_Equities.MyViewHolder(view);
         }
 

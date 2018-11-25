@@ -11,15 +11,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
+import org.w3c.dom.Text;
 
 import java.util.List;
 
-public class Adapter_Masternodes extends RecyclerView.Adapter<Adapter_Masternodes.MyViewHolder> {
+import static airhawk.com.myapplication.Constructor_App_Variables.*;
+
+public class Adapter_Masternodes_Feed extends RecyclerView.Adapter<Adapter_Masternodes_Feed.MyViewHolder> {
 
    private List<Constructor_Masternodes> masternode_feedItems;
    private static Context context;
    private Bitmap bitmap;
-   public Adapter_Masternodes(Context context, List<Constructor_Masternodes> items){
+   public Adapter_Masternodes_Feed(Context context, List<Constructor_Masternodes> items){
      this.context=context;  
      this.masternode_feedItems = items;
    }  
@@ -27,7 +30,7 @@ public class Adapter_Masternodes extends RecyclerView.Adapter<Adapter_Masternode
    @Override  
    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
      LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-     final View view = inflater.inflate(R.layout.recyclerview_news, parent, false);
+     final View view = inflater.inflate(R.layout.recyclerview_masternodes, parent, false);
 
      MyViewHolder mvh = new MyViewHolder(view, new MyViewHolder.myClickWebView() {  
        @Override  
@@ -45,13 +48,12 @@ public class Adapter_Masternodes extends RecyclerView.Adapter<Adapter_Masternode
    @Override  
    public void onBindViewHolder(MyViewHolder holder, int position) {  
      Constructor_Masternodes item = masternode_feedItems.get(position);
-     holder.tv_pubdate.setText(item.getPubDate());  
-     holder.tv_title.setText(item.getTitle());
-
-
-     if(item.getThumbnailUrl() !=null){
-     Picasso.with(context).load(item.getThumbnailUrl()).memoryPolicy(MemoryPolicy.NO_CACHE).noFade().into(holder.tv_image);}
-     else{Picasso.with(context).load(R.drawable.direction_news).memoryPolicy(MemoryPolicy.NO_CACHE).noFade().into(holder.tv_image);}
+     holder.symbol.setText(masternode_symbol);
+     holder.changes.setText(masternode_percent_change);
+     holder.name.setText(masternode_name);
+     holder.count.setText(masternode_node_count);
+     holder.cost_to_own.setText(masternode_purchase_value);
+     holder.cap.setText(masternode_marketcap);
      holder.textlink=item.getLink();
    }  
    
@@ -62,19 +64,27 @@ public class Adapter_Masternodes extends RecyclerView.Adapter<Adapter_Masternode
    
    public static class MyViewHolder extends RecyclerView.ViewHolder{
    
-       TextView tv_title;
-       TextView tv_pubdate;
-       ImageView tv_image;
+       TextView symbol;
+       TextView changes;
+       TextView name;
+       TextView count;
+       TextView cost_to_own;
+       TextView cap;
        String textlink;
        myClickWebView myClickWebView;
    
      public MyViewHolder(View itemView, final myClickWebView myClickWebView) {  
        super(itemView);
 
-       tv_title=itemView.findViewById(R.id.news_title);
-       tv_pubdate=itemView.findViewById(R.id.news_pubdate);
-       tv_image=itemView.findViewById(R.id.news_image);
-       this.myClickWebView=myClickWebView;  
+       symbol=itemView.findViewById(R.id.symbol);
+       changes=itemView.findViewById(R.id.changes);
+       name=itemView.findViewById(R.id.name);
+       count=itemView.findViewById(R.id.count);
+       cost_to_own=itemView.findViewById(R.id.cost_to_own);
+       cap=itemView.findViewById(R.id.cap);
+
+
+         this.myClickWebView=myClickWebView;
    
        itemView.setOnClickListener(new View.OnClickListener() {  
          @Override  
