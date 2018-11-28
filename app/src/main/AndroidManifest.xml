@@ -2,6 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="airhawk.com.myapplication">
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-feature android:name="android.hardware.telephony" android:required="true" />
     <application
         android:name=".ApplicationContextProvider"
@@ -17,7 +21,7 @@
         <!-- Real App Id: ca-app-pub-6566728316210720~7103498314 -->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="[ca-app-pub-3940256099942544~3347511713]"/>
+            android:value="ca-app-pub-3940256099942544~3347511713"/>
         <activity
             android:name=".Activity_Main"
             android:theme="@style/AppTheme.NoActionBar"
@@ -30,6 +34,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".Activity_Web_View"/>
+        <activity android:name="com.amazon.device.ads.AdActivity" android:configChanges="keyboardHidden|orientation|screenSize"/>
+
     </application>
 
 </manifest>

@@ -149,7 +149,6 @@ public class Activity_Main extends AppCompatActivity {
     }
 
     public void starterup(){
-
         MobileAds.initialize(this, "ca-app-pub-6566728316210720/4471280326");
         mInterstitialAd = new InterstitialAd(this);
         mInterstitialAd.setAdUnitId("ca-app-pub-6566728316210720/4471280326");
@@ -178,9 +177,9 @@ public class Activity_Main extends AppCompatActivity {
 
     public void onBackPressed() {
         System.out.println("CODE "+savedVersionCode+" "+DOESNT_EXIST);
-        if (savedVersionCode == DOESNT_EXIST) {
-            check_if_first_download();
-        }else {
+        //if (savedVersionCode == DOESNT_EXIST) {
+          //  check_if_first_download();
+        //}else {
             check_to_show_ad();
             graph_change.clear();
             exchange_list.clear();
@@ -191,7 +190,7 @@ public class Activity_Main extends AppCompatActivity {
             graph_volume.clear();
             new setAsyncChosenData(this).cancel(true);
             new setSavedAsyncDataMain(this).execute();
-        }
+        //}
 
     }
 
@@ -1164,18 +1163,19 @@ if (aa.size()>0) {
 
     }
 
-
     private void check_if_first_download() {
 
 
         int currentVersionCode = BuildConfig.VERSION_CODE;
-        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        savedVersionCode = prefs.getInt(PREF_VERSION_CODE_KEY, DOESNT_EXIST);
-        if (currentVersionCode == savedVersionCode) {
+        //SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        //savedVersionCode = prefs.getInt(PREF_VERSION_CODE_KEY, DOESNT_EXIST);
+       // if (currentVersionCode == savedVersionCode) {
             starterup();
+      /*
             return;
 
         } else if (savedVersionCode == DOESNT_EXIST) {
+
          setContentView(R.layout.activity_equity_choice);
          Button start =(Button)findViewById(R.id.start_app);
          CheckBox masternodes =(CheckBox)findViewById(R.id.crypto_masternodes);
@@ -1255,7 +1255,10 @@ if (aa.size()>0) {
             starterup();
             return;
         }
+
         prefs.edit().putInt(PREF_VERSION_CODE_KEY, currentVersionCode).apply();
+     */
+
     }
 
 
