@@ -136,7 +136,7 @@ public class Adapter_Main_Equities extends RecyclerView.Adapter<Adapter_Main_Equ
                     holder.circle.setImageResource(R.drawable.holder_red_circle);
                     holder.value.setTextColor(Color.parseColor("#ff0000"));
                 }else{
-                    holder.value.setTextColor(Color.parseColor("#00ff00"));
+                    holder.value.setTextColor(Color.parseColor("#00cc00"));
                     holder.circle.setImageResource(R.drawable.holder_green_circle);
                 }
                 holder.value.setText(""+crypto_kings_changelist.get(position)+"%");
