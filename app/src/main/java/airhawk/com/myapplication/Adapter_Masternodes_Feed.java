@@ -52,7 +52,7 @@ public class Adapter_Masternodes_Feed extends RecyclerView.Adapter<Adapter_Maste
      if (masternode_percent_change.get(position).toString().contains("-")){
          holder.changes.setTextColor(Color.parseColor("#ff0000"));
      }else{
-         holder.changes.setTextColor(Color.parseColor("#00ff00"));
+         holder.changes.setTextColor(Color.parseColor("#00cc00"));
      }
      holder.changes.setText(""+masternode_percent_change.get(position)+"%");
      holder.count.setText(""+masternode_node_count.get(position));
