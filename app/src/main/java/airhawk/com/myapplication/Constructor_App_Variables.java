@@ -12,19 +12,27 @@ import java.util.Set;
  */
 
 public class Constructor_App_Variables {
-    public static String masternode_name;
-    public static String masternode_symbol;
-    public static String masternode_percent_change;
-    public static String masternode_marketcap;
-    public static String masternode_node_count;
-    public static String masternode_purchase_value;
-
-
+    static ArrayList masternode_name=new ArrayList<>();
+    static ArrayList masternode_symbol=new ArrayList<>();
+    static ArrayList masternode_percent_change=new ArrayList<>();
+    static ArrayList masternode_marketcap=new ArrayList<>();
+    static ArrayList masternode_node_count=new ArrayList<>();
+    static ArrayList masternode_purchase_value=new ArrayList<>();
     static Set<String> kracken_list;
 
     static ArrayList binance_list=new ArrayList<>();
     static ArrayList exchange_list=new ArrayList<>();
-    //static ArrayList binance_list=new ArrayList<>();
+    static ArrayList ico_name=new ArrayList<>();
+    static ArrayList ico_message=new ArrayList<>();
+    static ArrayList ico_startdate=new ArrayList<>();
+    static ArrayList ico_enddate=new ArrayList<>();
+
+    static ArrayList ipo_name=new ArrayList();
+    static ArrayList ipo_range=new ArrayList();
+    static ArrayList ipo_date =new ArrayList();
+    static ArrayList ipo_volume =new ArrayList();
+
+
     static ArrayList crypto_exchange_url =new ArrayList<>();
     static ArrayList crypto_exchange_name =new ArrayList<>();
     static ArrayList stock_exchange_url =new ArrayList<>();
@@ -71,7 +79,7 @@ public class Constructor_App_Variables {
     public static String btc_market_cap_amount;
     public static String btc_market_cap_change;
 
-    protected static ArrayList<Constructor_Icos> ico_feedItems =new ArrayList<>();
+    protected static ArrayList ico_feedItems =new ArrayList<>();
     protected static ArrayList<Constructor_News_Feed> feedItems = new ArrayList<>();
     protected static ArrayList<Constructor_Stock_Twits> stocktwits_feedItems = new ArrayList<>();
 

@@ -1,5 +1,7 @@
 package airhawk.com.myapplication;
 
+import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -27,13 +29,13 @@ public class Fragment_Masternodes extends Fragment {
         masternode_items= rootView.findViewById(R.id.masternode_items);
         masternode_items.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         masternode_items.setAdapter(new Adapter_Masternodes_Feed(getActivity(),masternode_feedItems));
-
-        //Typeface custom_font = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Oregon.ttf");
+        TextView crypto= (TextView)rootView.findViewById(R.id.crypto);
+        Typeface custom_font = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Oregon.ttf");
 
         //stock.setTypeface(custom_font);
-        //crypto.setTypeface(custom_font);
+        crypto.setTypeface(custom_font);
         //stock.setPaintFlags(stock.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
-        //crypto.setPaintFlags(stock.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
+        crypto.setPaintFlags(crypto.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
 
         return rootView;
 

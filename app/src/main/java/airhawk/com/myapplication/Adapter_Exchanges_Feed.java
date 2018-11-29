@@ -3,6 +3,7 @@ package airhawk.com.myapplication;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -124,7 +125,7 @@ public class Adapter_Exchanges_Feed extends RecyclerView.Adapter<Adapter_Exchang
                              textlink=""+ stock_exchange_url.get(i);}
                          System.out.println(textlink);
                  }}
-                 myClickWebView.gotoWebView(textlink);
+                 goToWebPage(textlink);
 
              }
          });
@@ -132,14 +133,19 @@ public class Adapter_Exchanges_Feed extends RecyclerView.Adapter<Adapter_Exchang
 
 
    
-     }  
+     }
    
      //interface to handle onclick event and send some extras to another activity  
      public interface myClickWebView{
 
        void gotoWebView(String textlink);
 
-     }  
-   }  
-   
+     }
+   }
+    public static void goToWebPage(String yourUrl)
+    {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse(yourUrl));
+        context.startActivity(intent);
+    }
  }

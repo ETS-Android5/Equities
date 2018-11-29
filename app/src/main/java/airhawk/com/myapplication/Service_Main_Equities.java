@@ -460,29 +460,27 @@ public class Service_Main_Equities {
         Element c = m.getElementById("coins");
         Elements tb = c.select("tbody");
         Elements tr =tb.select("tr");
-        for(int i=0;i<10;i++){
-            Element poo= tr.get(i);
-            Elements r =poo.select("td");
+        for(int i=0;i<20;i++) {
+            Element poo = tr.get(i);
+            Elements r = poo.select("td");
             String[] splited = r.get(2).text().split(" ");
-            masternode_name=splited[0];
-            masternode_symbol=splited[1].replace("(","").replace(")","");
-            masternode_percent_change=r.get(4).text().replace("%","");
-            String temp=r.get(5).text().replace("$","").replace(",","");
+            masternode_name.add(splited[0]);
+            masternode_symbol.add(splited[1].replace("(", "").replace(")", ""));
+            masternode_percent_change.add(r.get(4).text().replace("%", ""));
+            String temp = r.get(5).text().replace("$", "").replace(",", "");
             Double add = Double.parseDouble(temp);
             String a = String.format("%.0f", add);
             String added = null;
             if (add > 1000) {
-                added = a.substring(0,3) + " M";
+                added = a.substring(0, 3) + " M";
             } else {
-                added = a.substring(0,3) + " TH";
+                added = a.substring(0, 3) + " TH";
             }
-            masternode_marketcap=added;
-            masternode_node_count=r.get(8).text().replace(",","");
-            masternode_purchase_value=r.get(10).text().replace("$","");
-            System.out.println(masternode_name+" "+masternode_symbol+" "+masternode_percent_change+" "+masternode_marketcap+" "+masternode_node_count+" "+masternode_purchase_value);
-        }
-
-    }
+            masternode_marketcap.add(added);
+            masternode_node_count.add(r.get(8).text().replace(",", ""));
+            masternode_purchase_value.add(r.get(10).text().replace("$", ""));
+            System.out.println(masternode_name.get(i) + " " + masternode_symbol.get(i) + " " + masternode_percent_change.get(i) + " " + masternode_marketcap.get(i) + " " + masternode_node_count.get(i) + " " + masternode_purchase_value.get(i));
+        }        }
 
     }
 

@@ -477,12 +477,12 @@ public class Activity_Main extends AppCompatActivity {
         if (check_saved.getName().isEmpty()){
             tabs.getTabAt(2).setIcon(ICONS[2]);
             tabs.getTabAt(3).setIcon(ICONS[3]);
-            //tabs.getTabAt(4).setIcon(ICONS[4]);
+            tabs.getTabAt(4).setIcon(ICONS[4]);
         }else{
             tabs.getTabAt(2).setIcon(android.R.drawable.btn_star_big_on);
             tabs.getTabAt(3).setIcon(ICONS[2]);
             tabs.getTabAt(4).setIcon(ICONS[3]);
-           //tabs.getTabAt(5).setIcon(ICONS[4]);
+           tabs.getTabAt(5).setIcon(ICONS[4]);
 
             }
 
@@ -539,27 +539,9 @@ public class Activity_Main extends AppCompatActivity {
         }
         adapter.addFrag(new Fragment_App_News(), getString(R.string.news));
         adapter.addFrag(new Fragment_Market_Kings(), getString(R.string.market_kings));
-        if(masternodes.equals("yes")){
-            adapter.addFrag(new Fragment_Masternodes(),getString(R.string.masternodes));}
-        if(proofofwork.equals("yes")){
-            adapter.addFrag(new Fragment_Proof_Of_Work(),getString(R.string.crypto_proof_of_work));}
-        if(proofofstake.equals("yes")){
-            adapter.addFrag(new Fragment_Proof_Of_Stake(),getString(R.string.crypto_proof_of_stake));}
-        if(icos.equals("yes")){
-            adapter.addFrag(new Fragment_Icos(),getString(R.string.ico));}
-        if(cryptowisdom.equals("yes")){
-            adapter.addFrag(new Fragment_Crypto_Wisdom(),getString(R.string.crypto_wisdom));}
-        if(commodities.equals("yes")){
-            adapter.addFrag(new Fragment_Commodities(),getString(R.string.commodities));}
-        if(bonds.equals("yes")){
-            adapter.addFrag(new Fragment_Bonds(),getString(R.string.bonds));}
-        if(etfs.equals("yes")){
-            adapter.addFrag(new Fragment_Etfs(),getString(R.string.etf));}
-        if(ipos.equals("yes")){
-            adapter.addFrag(new Fragment_Ipos(),getString(R.string.ipo));}
-        if(stockwisdom.equals("yes")){
-            adapter.addFrag(new Fragment_Stock_Wisdom(),getString(R.string.stock_wisdom));}
-
+        adapter.addFrag(new Fragment_Masternodes(),getString(R.string.masternodes));
+        adapter.addFrag(new Fragment_Icos(),getString(R.string.ico));
+        adapter.addFrag(new Fragment_Ipos(),getString(R.string.ipo));
         //adapter.addFrag(new Fragment_stockVScrypto(),getString(R.string.compare));
         viewPager.setAdapter(adapter);
     }

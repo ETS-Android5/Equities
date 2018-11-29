@@ -3,6 +3,7 @@ package airhawk.com.myapplication;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,19 +48,23 @@ public class Adapter_Masternodes_Feed extends RecyclerView.Adapter<Adapter_Maste
    
    @Override  
    public void onBindViewHolder(MyViewHolder holder, int position) {  
-     Constructor_Masternodes item = masternode_feedItems.get(position);
-     holder.symbol.setText(masternode_symbol);
-     holder.changes.setText(masternode_percent_change);
-     holder.name.setText(masternode_name);
-     holder.count.setText(masternode_node_count);
-     holder.cost_to_own.setText(masternode_purchase_value);
-     holder.cap.setText(masternode_marketcap);
-     holder.textlink=item.getLink();
+     holder.symbol.setText(""+masternode_symbol.get(position));
+     if (masternode_percent_change.get(position).toString().contains("-")){
+         holder.changes.setTextColor(Color.parseColor("#ff0000"));
+     }else{
+         holder.changes.setTextColor(Color.parseColor("#00ff00"));
+     }
+     holder.changes.setText(""+masternode_percent_change.get(position)+"%");
+     holder.count.setText(""+masternode_node_count.get(position));
+     holder.cost_to_own.setText("$ "+masternode_purchase_value.get(position));
+     holder.cap.setText(""+masternode_marketcap.get(position));
+     holder.name.setText(""+masternode_name.get(position));
+     //holder.textlink=item.getLink();
    }  
    
    @Override  
    public int getItemCount() {  
-     return masternode_feedItems==null?0:masternode_feedItems.size();
+     return masternode_name.size();
    }  
    
    public static class MyViewHolder extends RecyclerView.ViewHolder{

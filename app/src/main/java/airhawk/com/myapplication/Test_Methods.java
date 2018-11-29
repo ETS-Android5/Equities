@@ -10,11 +10,13 @@ import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import static airhawk.com.myapplication.Activity_Main.aequity_name_arraylist;
 import static airhawk.com.myapplication.Activity_Main.aequity_symbol_arraylist;
@@ -30,9 +32,9 @@ public class Test_Methods {
     static String cryptopia_list;
 
     public static void main(String[] args) {
-        //get_masternodes();
+        get_masternodes();
         get_icos();
-        get_items_test();
+        get_ipos();
 
     }
     public static void getStocks_Market_Caps() {
@@ -459,9 +461,9 @@ public class Test_Methods {
             Element poo= tr.get(i);
             Elements r =poo.select("td");
             String[] splited = r.get(2).text().split(" ");
-            masternode_name=splited[0];
-            masternode_symbol=splited[1].replace("(","").replace(")","");
-            masternode_percent_change=r.get(4).text().replace("%","");
+            masternode_name.add(splited[0]);
+            masternode_symbol.add(splited[1].replace("(","").replace(")",""));
+            masternode_percent_change.add(r.get(4).text().replace("%",""));
             String temp=r.get(5).text().replace("$","").replace(",","");
             Double add = Double.parseDouble(temp);
             String a = String.format("%.0f", add);
@@ -471,10 +473,10 @@ public class Test_Methods {
             } else {
                 added = a.substring(0,3) + " TH";
             }
-            masternode_marketcap=added;
-            masternode_node_count=r.get(8).text().replace(",","");
-            masternode_purchase_value=r.get(10).text().replace("$","");
-            System.out.println(masternode_name+" "+masternode_symbol+" "+masternode_percent_change+" "+masternode_marketcap+" "+masternode_node_count+" "+masternode_purchase_value);
+            masternode_marketcap.add(added);
+            masternode_node_count.add(r.get(8).text().replace(",",""));
+            masternode_purchase_value.add(r.get(10).text().replace("$",""));
+            System.out.println(masternode_name.get(i)+" "+masternode_symbol.get(i)+" "+masternode_percent_change.get(i)+" "+masternode_marketcap.get(i)+" "+masternode_node_count.get(i)+" "+masternode_purchase_value.get(i));
         }
 
     }
@@ -490,25 +492,58 @@ public class Test_Methods {
 
         Elements tb =e.select("tbody");
         Elements ref =tb.select("tr");
-        for(int i =0;i<ref.size();i++){
-        String w = ref.get(i).select("a").attr("title");
-        String x =ref.get(i).select("td").get(2).text();
-        String y =ref.get(i).select("td").get(3).text();
-        String z =ref.get(i).select("td").get(4).text();
+        for(int i =0;i<ref.size();i++) {
+            String w = ref.get(i).select("a").attr("title");
+            String x = ref.get(i).select("td").get(2).text();
+            String y = ref.get(i).select("td").get(3).text();
+            String z = ref.get(i).select("td").get(4).text();
+            DateFormat f = new SimpleDateFormat("MMMM dd, yyyy");
+            Date formatted = null;
+            Date formatted2 = null;
+            try {
+                formatted = f.parse(y);
+            } catch (ParseException e1) {
+                e1.printStackTrace();
+            }
+            try {
+                formatted2 = f.parse(z);
+            } catch (ParseException e1) {
+                formatted2 = formatted;
+                e1.printStackTrace();
+            }
 
-        System.out.println(w+" "+x+" "+y+" "+z);
-    it.setIco_name(w);
-    it.setIco_message(x);
-    it.setIco_startDate(y);
-    it.setIco_endDate(z);
-
-        ico_feedItems.add(it);
-    }}
-
-public static void get_items_test() {
-
-    for (Constructor_Icos line : ico_feedItems) {
-        System.out.println("SIZE "+ico_feedItems.size()+" "+line.toString());
+            ico_name.add(w);
+            ico_message.add(x);
+            String out = formatted.toString().substring(4, 10);
+            String put = formatted.toString().substring(24,28);
+            String out2 = formatted2.toString().substring(4, 10);
+            String put2 = formatted2.toString().substring(24,28);
+            String output=out+" "+put;
+            String output2=out2+" "+put2;
+            ico_startdate.add(output);
+            ico_enddate.add(output2);
+        }
+        for (int i=0;i<ico_name.size();i++) {
+            System.out.println("SIZE "+ico_name.get(i)+" "+ico_message.get(i)+" "+ico_startdate.get(i)+" "+ico_enddate.get(i));
+        }
     }
-}
+
+    public static void get_ipos(){
+        Document d =null;
+        try {
+            d= Jsoup.connect("https://www.marketbeat.com/IPOs").userAgent("Mozilla").timeout(10 * 100000).get();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Elements z=d.getElementsByClass("container");
+        Elements tr = z.select("tr");
+        for(int i=0;i<tr.size();i++){
+            Elements t = z.select("td");
+            ipo_date.add(t.get(0).text());
+            ipo_name.add(t.get(1).text());
+            ipo_range.add(t.get(2).text());
+            ipo_volume.add(t.get(4).text());
+
+            System.out.println(t.get(i).text());}
+    }
 }
