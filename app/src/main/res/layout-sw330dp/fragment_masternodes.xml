@@ -43,7 +43,7 @@
 
                     android:text="@string/masternodes"
                     android:textColor="@color/colorPrimary"
-                    android:textSize="24sp" />
+                    android:textSize="26sp" />
 
                 <ImageView
                         android:layout_width="wrap_content"

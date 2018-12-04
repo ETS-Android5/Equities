@@ -15,7 +15,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -160,6 +164,34 @@ public class Service_Main_Equities {
                 //wifi 1 second
                 //Boost Mobile 5 seconds
                 System.out.println("getMasternode TIME IS " + duration / 1000000000 + " seconds");
+                return null;
+            }
+        });
+
+        callables.add(new Callable<String>() {
+            @Override
+            public String call() throws Exception {
+                long startTime = System.nanoTime();
+                get_icos();
+                long endTime = System.nanoTime();
+                long duration = (endTime - startTime);
+                //2 seconds wifi
+                //2 seconds Boost Mobile
+                System.out.println("getIcos TIME IS " + duration / 1000000000 + " seconds");
+                return null;
+            }
+        });
+
+        callables.add(new Callable<String>() {
+            @Override
+            public String call() throws Exception {
+                long startTime = System.nanoTime();
+                get_ipos();
+                long endTime = System.nanoTime();
+                long duration = (endTime - startTime);
+                //2 seconds wifi
+                //2 seconds Boost Mobile
+                System.out.println("getIpos TIME IS " + duration / 1000000000 + " seconds");
                 return null;
             }
         });
@@ -482,6 +514,72 @@ public class Service_Main_Equities {
             System.out.println(masternode_name.get(i) + " " + masternode_symbol.get(i) + " " + masternode_percent_change.get(i) + " " + masternode_marketcap.get(i) + " " + masternode_node_count.get(i) + " " + masternode_purchase_value.get(i));
         }        }
 
+    public static void get_icos(){
+        Document e =null;
+        Constructor_Icos it =new Constructor_Icos();
+        try {
+            e = Jsoup.connect("https://topicolist.com/ongoing-icos/").userAgent("Mozilla").timeout(10 * 100000).get();
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+
+        Elements tb =e.select("tbody");
+        Elements ref =tb.select("tr");
+        for(int i =0;i<ref.size();i++) {
+            String w = ref.get(i).select("a").attr("title");
+            String x = ref.get(i).select("td").get(2).text();
+            String y = ref.get(i).select("td").get(3).text();
+            String z = ref.get(i).select("td").get(4).text();
+            DateFormat f = new SimpleDateFormat("MMMM dd, yyyy");
+            Date formatted = null;
+            Date formatted2 = null;
+            try {
+                formatted = f.parse(y);
+            } catch (ParseException e1) {
+                e1.printStackTrace();
+            }
+            try {
+                formatted2 = f.parse(z);
+            } catch (ParseException e1) {
+                formatted2 = formatted;
+                e1.printStackTrace();
+            }
+
+            ico_name.add(w);
+            ico_message.add(x);
+            String out = formatted.toString().substring(4, 10);
+            String put = formatted.toString().substring(24,28);
+            String out2 = formatted2.toString().substring(4, 10);
+            String put2 = formatted2.toString().substring(24,28);
+            String output=out+" "+put;
+            String output2=out2+" "+put2;
+            ico_startdate.add(output);
+            ico_enddate.add(output2);
+        }
+        for (int i=0;i<ico_name.size();i++) {
+            System.out.println("SIZE "+ico_name.get(i)+" "+ico_message.get(i)+" "+ico_startdate.get(i)+" "+ico_enddate.get(i));
+        }
+    }
+
+    public static void get_ipos(){
+        Document d =null;
+        try {
+            d= Jsoup.connect("https://www.marketbeat.com/IPOs").userAgent("Mozilla").timeout(10 * 100000).get();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Elements z=d.getElementsByClass("container");
+        Elements tr = z.select("tr");
+        for(int i=0;i<tr.size();i++){
+            Elements t = z.select("td");
+            for(int p=0;i<t.size();i++){
+            ipo_date.add(t.get(0).text());
+            ipo_name.add(t.get(1).text());
+            ipo_range.add(t.get(2).text());
+            ipo_volume.add(t.get(4).text());}
+
+            System.out.println("HEY "+t.get(i).text());}
+    }
     }
 
 

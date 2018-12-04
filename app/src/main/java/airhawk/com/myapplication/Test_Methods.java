@@ -1,6 +1,7 @@
 package airhawk.com.myapplication;
 
 import android.content.Context;
+import android.util.Log;
 
 
 import org.jsoup.Jsoup;
@@ -9,6 +10,8 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -24,6 +27,7 @@ import static airhawk.com.myapplication.Constructor_App_Variables.*;
 import static airhawk.com.myapplication.Service_Main_Equities.stock_kings_changelist;
 import static airhawk.com.myapplication.Service_Main_Equities.stock_kings_namelist;
 import static airhawk.com.myapplication.Service_Main_Equities.stock_kings_symbollist;
+import static com.android.volley.VolleyLog.TAG;
 
 public class Test_Methods {
     static ArrayList exchange_url = new ArrayList<>();
@@ -35,7 +39,7 @@ public class Test_Methods {
         get_masternodes();
         get_icos();
         get_ipos();
-
+        find_urls();
     }
     public static void getStocks_Market_Caps() {
         Document z =null;
@@ -536,14 +540,46 @@ public class Test_Methods {
             e.printStackTrace();
         }
         Elements z=d.getElementsByClass("container");
-        Elements tr = z.select("tr");
-        for(int i=0;i<tr.size();i++){
-            Elements t = z.select("td");
-            ipo_date.add(t.get(0).text());
-            ipo_name.add(t.get(1).text());
-            ipo_range.add(t.get(2).text());
-            ipo_volume.add(t.get(4).text());
+        for(int i=0;i<z.size();i++) {
+            Elements tr = z.select("tr");
+            for (int b = 0; b < tr.size(); b++) {
+                Elements t = z.select("td");
+                ipo_date.add(t.get(0).text());
+                ipo_name.add(t.get(1).text());
+                ipo_range.add(t.get(2).text());
+                ipo_volume.add(t.get(4).text());
 
-            System.out.println(t.get(i).text());}
+            }
+            System.out.println(ipo_name.get(i));
+        }
+
+}
+
+    public static void find_urls(){
+        String name="https://www.yahoo";
+        final String comURL = name+".com";
+        final String ioURL = name+".io";
+        final String techURL = name+".tech";
+        ArrayList URLs = new ArrayList();
+        URLs.add(comURL);
+        URLs.add(ioURL);
+        URLs.add(techURL);
+        for(int i =0;i<URLs.size();i++) {
+            try {
+                URL url = new URL((String) URLs.get(i));
+                HttpURLConnection con = (HttpURLConnection) url.openConnection();
+                con.setRequestMethod("HEAD");
+                con.connect();
+                System.out.println("con.getResponseCode() IS : " + con.getResponseCode());
+                if (con.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                    System.out.println("Sucess");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.out.println("fail");
+            }
+        }
+
+
     }
 }

@@ -92,7 +92,9 @@ public class Activity_Main extends AppCompatActivity {
             R.drawable.direction_down,
             R.drawable.direction_kings,
             R.drawable.direction_news,
-            R.drawable.direction_masternode
+            R.drawable.direction_masternode,
+            R.drawable.direction_icos,
+            R.drawable.direction_ipos
             };
     static Element price = null;
     protected ArrayAdapter<String> ad;
@@ -247,11 +249,20 @@ public class Activity_Main extends AppCompatActivity {
             tabs.getTabAt(1).setIcon(ICONS[1]);
             if (check_saved.getName().isEmpty()){
                 tabs.getTabAt(2).setIcon(ICONS[2]);
-                tabs.getTabAt(3).setIcon(ICONS[3]);;
+                tabs.getTabAt(3).setIcon(ICONS[3]);
+                tabs.getTabAt(4).setIcon(ICONS[4]);
+                tabs.getTabAt(5).setIcon(ICONS[5]);
+                tabs.getTabAt(6).setIcon(ICONS[6]);
+
+
             }else{
                 tabs.getTabAt(2).setIcon(android.R.drawable.btn_star_big_on);
                 tabs.getTabAt(3).setIcon(ICONS[2]);
-                tabs.getTabAt(4).setIcon(ICONS[3]);}
+                tabs.getTabAt(4).setIcon(ICONS[3]);
+                tabs.getTabAt(5).setIcon(ICONS[4]);
+                tabs.getTabAt(6).setIcon(ICONS[5]);
+                tabs.getTabAt(7).setIcon(ICONS[6]);
+            }
             recyclerView = findViewById(R.id.item_list);
             l =new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false);
             recyclerView.setLayoutManager(l);
@@ -478,13 +489,19 @@ public class Activity_Main extends AppCompatActivity {
             tabs.getTabAt(2).setIcon(ICONS[2]);
             tabs.getTabAt(3).setIcon(ICONS[3]);
             tabs.getTabAt(4).setIcon(ICONS[4]);
+            tabs.getTabAt(5).setIcon(ICONS[5]);
+            tabs.getTabAt(6).setIcon(ICONS[6]);
         }else{
             tabs.getTabAt(2).setIcon(android.R.drawable.btn_star_big_on);
             tabs.getTabAt(3).setIcon(ICONS[2]);
             tabs.getTabAt(4).setIcon(ICONS[3]);
-           tabs.getTabAt(5).setIcon(ICONS[4]);
+            tabs.getTabAt(5).setIcon(ICONS[4]);
+            tabs.getTabAt(6).setIcon(ICONS[5]);
+            tabs.getTabAt(7).setIcon(ICONS[6]);
 
-            }
+
+
+        }
 
 
 
@@ -537,8 +554,8 @@ public class Activity_Main extends AppCompatActivity {
         if (check_saved.getName().size()>0){
             adapter.addFrag(new Fragment_Saved(), getString(R.string.saved));
         }
-        adapter.addFrag(new Fragment_App_News(), getString(R.string.news));
         adapter.addFrag(new Fragment_Market_Kings(), getString(R.string.market_kings));
+        adapter.addFrag(new Fragment_App_News(), getString(R.string.news));
         adapter.addFrag(new Fragment_Masternodes(),getString(R.string.masternodes));
         adapter.addFrag(new Fragment_Icos(),getString(R.string.ico));
         adapter.addFrag(new Fragment_Ipos(),getString(R.string.ipo));

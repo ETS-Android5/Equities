@@ -253,9 +253,10 @@
     </string-array>
 
 <string name="layout_330dp_standard_text">14sp</string>
-    <string name="stock_loser_winner_data_provider">Data provided by money.cnn.com</string>
-    <string name="crypto_loser_winner_data_provider">Data provided by coinmarketcap.com</string>
-    <string name="stock_kings_data_provider">Data provided by iweblists.com and finance.yahoo.com</string>
-    <string name="crypto_kings_data_provider">Data provided by coinmarketcap.com</string>
-    <string name="masternode_data_provider">Data provided by masternodes.online</string>
-</resources>
+    <string name="stock_loser_winner_data_provider">Data provided by <b>money.cnn.com</b></string>
+    <string name="crypto_loser_winner_data_provider">Data provided by <b>coinmarketcap.com</b></string>
+    <string name="stock_kings_data_provider">Data provided by <b>iweblists.com</b> and <b>finance.yahoo.com</b></string>
+    <string name="crypto_kings_data_provider">Data provided by <b>coinmarketcap.com</b></string>
+    <string name="masternode_data_provider">Data provided by <b>masternodes.online</b></string>
+    <string name="icos_data_provider">Data provided by <b>topicolist.com</b></string>
+<string name="ipos_data_provider">Data provided by <b>marketbeat.com</b></string></resources>

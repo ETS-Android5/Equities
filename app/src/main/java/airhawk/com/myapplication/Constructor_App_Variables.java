@@ -78,8 +78,9 @@ public class Constructor_App_Variables {
     public static String alt_market_cap_amount;
     public static String btc_market_cap_amount;
     public static String btc_market_cap_change;
+    protected static ArrayList<Constructor_Ipos> ipo_feedItems =new ArrayList<>();
 
-    protected static ArrayList ico_feedItems =new ArrayList<>();
+    protected static ArrayList<Constructor_Icos> ico_feedItems =new ArrayList<>();
     protected static ArrayList<Constructor_News_Feed> feedItems = new ArrayList<>();
     protected static ArrayList<Constructor_Stock_Twits> stocktwits_feedItems = new ArrayList<>();
 

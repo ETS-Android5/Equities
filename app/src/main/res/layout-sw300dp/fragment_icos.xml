@@ -42,7 +42,7 @@
 
                     android:text="@string/ico"
                     android:textColor="@color/colorPrimary"
-                    android:textSize="26sp" />
+                    android:textSize="24sp" />
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -61,7 +61,7 @@
                 android:text="@string/icos_data_provider"
                 android:textColor="@color/colorPrimary"
                 android:textColorLink="@color/darkTextColor"
-                android:textSize="14sp" />
+                android:textSize="12sp" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/ico_items"
@@ -73,11 +73,4 @@
 
     </LinearLayout>
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end|bottom"
-        android:layout_margin="16dp"
-        android:src="@drawable/direction_up" />
 </LinearLayout>
