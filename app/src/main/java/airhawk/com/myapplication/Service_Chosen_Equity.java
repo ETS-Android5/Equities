@@ -338,7 +338,7 @@ public class Service_Chosen_Equity
                         if (curent.getNodeName().equalsIgnoreCase("title")) {
                             st = Html.fromHtml(curent.getTextContent()).toString();
                             it.setTitle(st);
-                        } else if (curent.getNodeName().equalsIgnoreCase("description")) {
+                        } else if (curent.getNodeName().equalsIgnoreCase("source")) {
                             sd = Html.fromHtml(curent.getTextContent()).toString();
                             String d = curent.getTextContent().toString();
                             String pattern1 = "<img src=\"";
@@ -348,7 +348,7 @@ public class Service_Chosen_Equity
                             while (m.find()) {
                                 it.setThumbnailUrl(m.group(1));
                             }
-                            it.setDescription(sd);
+                            it.setSource(sd);
                         } else if (curent.getNodeName().equalsIgnoreCase("pubDate")) {
                             sp = Html.fromHtml(curent.getTextContent()).toString();
                             sp = sp.replaceAll("@20", " ");

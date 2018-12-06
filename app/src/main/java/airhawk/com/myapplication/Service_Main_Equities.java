@@ -278,8 +278,9 @@ public class Service_Main_Equities {
                         if (curent.getNodeName().equalsIgnoreCase("title")) {
                             st = Html.fromHtml(curent.getTextContent()).toString();
                             it.setTitle(st);
-                        } else if (curent.getNodeName().equalsIgnoreCase("description")) {
+                        } else if (curent.getNodeName().equalsIgnoreCase("source")) {
                             sd = Html.fromHtml(curent.getTextContent()).toString();
+
                             String d = curent.getTextContent().toString();
                             String pattern1 = "<img src=\"";
                             String pattern2 = "\"";
@@ -287,8 +288,9 @@ public class Service_Main_Equities {
                             Matcher m = p.matcher(d);
                             while (m.find()) {
                                 it.setThumbnailUrl(m.group(1));
+                                //System.out.println("HERE IS YOUR IMAGE DUDE! "+m.group(1));
                             }
-                            it.setDescription(sd);
+                            it.setSource(sd);
 
                         } else if (curent.getNodeName().equalsIgnoreCase("pubDate")) {
                             sp = Html.fromHtml(curent.getTextContent()).toString();
@@ -298,8 +300,9 @@ public class Service_Main_Equities {
                             sl = Html.fromHtml(curent.getTextContent()).toString();
                             sl = sl.replaceAll("@20", " ");
                             it.setLink(sl);
-                        } else if (curent.getNodeName().equalsIgnoreCase("img src")) {
-
+                        } else if (curent.getNodeName().equalsIgnoreCase("media:content")) {
+                            String d = String.valueOf(Html.fromHtml(curent.getTextContent().toString()));
+                            //it.setThumbnailUrl(d);
                         }
                     }
 
@@ -568,17 +571,17 @@ public class Service_Main_Equities {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Elements z=d.getElementsByClass("container");
+        Elements z=d.select("tbody");
         Elements tr = z.select("tr");
-        for(int i=0;i<tr.size();i++){
-            Elements t = z.select("td");
-            for(int p=0;i<t.size();i++){
-            ipo_date.add(t.get(0).text());
-            ipo_name.add(t.get(1).text());
-            ipo_range.add(t.get(2).text());
-            ipo_volume.add(t.get(4).text());}
+        for (int i = 1; i < tr.size(); i++) {
+            Element row = tr.get(i);
+            Elements cols = row.select("td");
+            ipo_date.add(cols.get(0).text());
+            ipo_name.add(cols.get(1).text());
+            ipo_range.add(cols.get(2).text());
+            ipo_volume.add(cols.get(3).text());
+        }
 
-            System.out.println("HEY "+t.get(i).text());}
     }
     }
 

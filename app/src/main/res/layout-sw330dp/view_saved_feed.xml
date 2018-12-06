@@ -3,9 +3,7 @@
 <TableRow xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="3dp"
-    android:layout_weight="1">
+    android:layout_height="wrap_content">
 
     <ImageView
         android:id="@+id/circle"
@@ -22,7 +20,7 @@
         android:singleLine="true"
         android:visibility="gone"
         android:text="BTC"
-        android:textColor="@color/darkTextColor"
+        android:textColor="@color/colorBlack"
         android:textSize="16sp" />
 
     <TextView
@@ -33,7 +31,7 @@
         android:gravity="left|center"
         android:singleLine="true"
         android:text="BITCOIN"
-        android:textColor="@color/darkTextColor"
+        android:textColor="@color/colorBlack"
         android:textSize="16sp" />
 
     <TextView
@@ -45,7 +43,7 @@
         android:singleLine="true"
         android:text="8.3%"
         android:textAlignment="textEnd"
-        android:textColor="@color/darkTextColor"
+        android:textColor="@color/colorBlack"
         android:textSize="16sp"
         android:textStyle="bold" />
 
@@ -58,7 +56,7 @@
         android:singleLine="true"
         android:text="Symbol"
         android:textAlignment="textEnd"
-        android:textColor="@color/darkTextColor"
+        android:textColor="@color/colorBlack"
         android:textSize="16sp"
         android:textStyle="bold" />
 </TableRow>

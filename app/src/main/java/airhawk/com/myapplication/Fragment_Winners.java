@@ -42,10 +42,10 @@ public class Fragment_Winners extends Fragment {
         cryptoitems.setAdapter(new Adapter_Main_Equities(getActivity(), "Crypto_Winner",crypto_winners_symbollist,crypto_winners_namelist,crypto_winners_changelist));
         Typeface custom_font = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Oregon.ttf");
 
-        //stock.setTypeface(custom_font);
-        //crypto.setTypeface(custom_font);
-        //stock.setPaintFlags(stock.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
-        //crypto.setPaintFlags(stock.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
+        stock.setTypeface(custom_font);
+        crypto.setTypeface(custom_font);
+        stock.setPaintFlags(stock.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
+        crypto.setPaintFlags(stock.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
 
         return rootView;
 

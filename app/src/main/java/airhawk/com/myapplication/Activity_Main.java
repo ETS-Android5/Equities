@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -174,7 +175,7 @@ public class Activity_Main extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         check_if_first_download();
-
+        MobileAds.initialize(this, "ca-app-pub-6566728316210720/4471280326");
     }
 
     public void onBackPressed() {
@@ -182,8 +183,26 @@ public class Activity_Main extends AppCompatActivity {
         //if (savedVersionCode == DOESNT_EXIST) {
           //  check_if_first_download();
         //}else {
-            check_to_show_ad();
-            graph_change.clear();
+        if (mInterstitialAd.isLoaded()) {
+            mInterstitialAd.show();
+
+        }else{
+
+            System.err.println("Ad is not loaded");
+        }
+        mInterstitialAd.setAdListener(new AdListener() {
+            public void onAdLoaded() {
+                System.out.println("Ad is showing");
+                mInterstitialAd.show();
+            }
+            @Override
+            public void onAdClosed() {
+                mInterstitialAd.setAdUnitId("ca-app-pub-6566728316210720/4471280326");
+                AdRequest adRequest = new AdRequest.Builder().build();
+                mInterstitialAd.loadAd(adRequest);
+                System.err.println("Ad loaded");
+            }
+        });            graph_change.clear();
             exchange_list.clear();
             aequity_exchanges.clear();
             stocktwits_feedItems.clear();
@@ -302,7 +321,7 @@ public class Activity_Main extends AppCompatActivity {
 
 
             getCrypto_Kings();
-            getSaved_stock_points();
+            getAdded_stock_point();
             //get_main_graph();
 
             Service_Main_Equities cst = new Service_Main_Equities();
@@ -357,6 +376,14 @@ public class Activity_Main extends AppCompatActivity {
             progLayout.setVisibility(View.VISIBLE);
             ProgressBar mainbar = activity.findViewById(R.id.mainbar);
             mainbar.setIndeterminate(true);
+            Snackbar sb = Snackbar.make(progLayout,"Loading Page", Snackbar.LENGTH_LONG);
+            //sb.setActionTextColor(context.getResources().getColor(R.color.darkTextColor2));
+            View sbView = sb.getView();
+            sbView.setBackgroundColor(activity.getResources().getColor(R.color.colorTrans));
+            TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+            textView.setTextColor(activity.getResources().getColor(R.color.darkTextColor2));
+            textView.setMaxLines(10);
+            sb.show();
             pager = activity.findViewById(R.id.viewpager);
             pager.setVisibility(View.GONE);
         }
@@ -634,6 +661,8 @@ public class Activity_Main extends AppCompatActivity {
 
                 InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 inputMethodManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                ViewPager mp = findViewById(R.id.market_pager);
+                mp.setVisibility(View.GONE);
                 graph_change.clear();
                 exchange_list.clear();
                 aequity_exchanges.clear();
@@ -941,6 +970,7 @@ public class Activity_Main extends AppCompatActivity {
         ArrayList a = co.getSymbol();
         ArrayList aa = co.getType();
         ArrayList b = co.getstockSymbol();
+
         //String apikey ="XBA42BUC2B6U6G5C";
         for(int c=0;c<b.size();c++) {
             Document cap = null;
@@ -956,8 +986,9 @@ public class Activity_Main extends AppCompatActivity {
                 String f =foo[1];
                 current_percentage_change.add(f);
             }
-
-                else{ ArrayList d = co.getcryptoName();
+            if (aa.get(c).equals("Crypto")||aa.get(c).equals("Cryptocurrency"))
+                {
+                ArrayList d = co.getcryptoName();
                 for(int i=0;i<d.size();i++) {
                     Document caps = null;
                     String g = String.valueOf(d.get(i));
@@ -974,7 +1005,10 @@ public class Activity_Main extends AppCompatActivity {
                     f = f.replaceAll("\\(", "").replaceAll("\\)", "");
                     current_percentage_change.add(f);
 
-                }}
+                }
+                    for(int z=0;z<current_percentage_change.size();z++){
+
+                        System.out.println("HERE IS THE INSANE MEMBRANE"+aaa.get(z)+" "+a.get(z)+" "+aa.get(z)+" "+current_percentage_change.get(z));}}
 
         }
 
@@ -1003,26 +1037,28 @@ if (aa.size()>0) {
         current_percentage_change.add(f);
     } else {
         ArrayList d = co.getcryptoName();
-
+        System.out.println("THIS IS CRYTPO NAME"+d);
         Document caps = null;
-        String g = String.valueOf(d.get(d.size() - 1));
-        if (g.contains(" ")) {
-            g = g.replace(" ", "-");
+        if (d.size()>0) {
+            String g = String.valueOf(d.get(d.size() - 1));
+            if (g.contains(" ")) {
+                g = g.replace(" ", "-");
+            }
+            try {
+                caps = Jsoup.connect("https://coinmarketcap.com/currencies/" + g).timeout(10 * 10000).get();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            Elements as = caps.select("div>span");
+            String f = as.get(4).text();
+            f = f.replaceAll("\\(", "").replaceAll("\\)", "");
+            current_percentage_change.add(f);
         }
-        try {
-            caps = Jsoup.connect("https://coinmarketcap.com/currencies/" + g).timeout(10 * 10000).get();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        Elements as = caps.select("div>span");
-        String f = as.get(4).text();
-        f = f.replaceAll("\\(", "").replaceAll("\\)", "");
-        current_percentage_change.add(f);
-
     }
 
 
-}
+}else{
+    System.out.println("BuLLSHIT IS NULL "+aa.size());}
 
         co.close();
     }
@@ -1145,9 +1181,13 @@ if (aa.size()>0) {
 
     public static void do_graph_change() {
         System.out.println("BANANAS"+graph_high);
+        Double a=0.00;
         for (int i = 0; i < graph_high.size(); i++) {
-                   Double a= new Double(graph_high.get(i).toString().replace(",",""));
-
+            if(graph_high.get(i)!=null) {
+                a = new Double(graph_high.get(i).toString().replace(",", ""));
+            }else{
+                a=0.00;
+            }
             if (i > 0) {
                 int z = i - 1;
                 double b = new Double(graph_high.get(z).toString().replace(",",""));
@@ -1276,7 +1316,9 @@ if (aa.size()>0) {
             mInterstitialAd.setAdListener(new AdListener() {
                 @Override
                 public void onAdClosed() {
-
+                    mInterstitialAd.setAdUnitId("ca-app-pub-6566728316210720/4471280326");
+                    AdRequest adRequest = new AdRequest.Builder().build();
+                    mInterstitialAd.loadAd(adRequest);
                 }
             });
         }

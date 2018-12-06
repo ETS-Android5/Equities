@@ -71,7 +71,7 @@
                             app:tabIndicatorColor="@color/colorPrimary"
                             app:tabMode="scrollable"
                             app:tabSelectedTextColor="#ffffff"
-                            app:tabTextAppearance="@style/TextAppearance.AppCompat.Small"
+                            app:tabTextAppearance="@style/TextAppearance.AppCompat.Large"
                             app:tabTextColor="#D3D3D3" />
                 </LinearLayout>
             </TableRow>
@@ -82,7 +82,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@color/colorPrimary"
+                android:background="@color/colorTrans"
                 android:visibility="gone">
 
 
@@ -113,14 +113,14 @@
                 android:layout_width="fill_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@color/colorPrimary" />
+                android:background="@color/colorTrans" />
 
             <android.support.v4.view.ViewPager
                 android:id="@+id/market_pager"
                 android:layout_width="fill_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@color/colorPrimary"
+                android:background="@color/colorTrans"
                 android:visibility="gone" />
         </LinearLayout>
 

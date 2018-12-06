@@ -92,19 +92,22 @@ public class Adapter_Icos_Feed extends RecyclerView.Adapter<Adapter_Icos_Feed.My
 
 
          myClickWebView=myClickWebView;
-   
-       itemView.setOnClickListener(new View.OnClickListener() {  
-         @Override  
-         public void onClick(View view) {
-             Snackbar.make(view, "Searching for "+name.getText().toString()+" website...", Snackbar.LENGTH_LONG)
-                     .setAction("Action", null)
-                     .show();
-             z=textlink.replace("ICO","").replace(" ","");
-             new getURLS(view).execute();
-        }
-       });
+         message.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View view) {
 
-
+                 Snackbar sb = Snackbar.make(view, "Searching for "+name.getText().toString()+" website...", Snackbar.LENGTH_LONG);
+                 //sb.setActionTextColor(context.getResources().getColor(R.color.darkTextColor2));
+                 View sbView = sb.getView();
+                 sbView.setBackgroundColor(context.getResources().getColor(R.color.colorBlack));
+                 TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+                 textView.setTextColor(context.getResources().getColor(R.color.darkTextColor2));
+                 textView.setMaxLines(10);
+                 sb.show();
+                 z=textlink.replace("ICO","").replace(" ","");
+                 new getURLS(view).execute();
+             }
+         });
 
    
      }  
@@ -167,10 +170,14 @@ public class Adapter_Icos_Feed extends RecyclerView.Adapter<Adapter_Icos_Feed.My
                         new getURLS(rootView).cancel(true);
                         URLs.clear();
                     }else{
-                    Snackbar.make(rootView, "Still trying...", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null)
-                            .show();}
-                    System.out.println("fail "+URLs.get(i));
+                        Snackbar sb = Snackbar.make(rootView,"Still searching for "+ URLs.get(i)+" website...", Snackbar.LENGTH_LONG);
+                        //sb.setActionTextColor(context.getResources().getColor(R.color.darkTextColor2));
+                        View sbView = sb.getView();
+                        sbView.setBackgroundColor(context.getResources().getColor(R.color.colorBlack));
+                        TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+                        textView.setTextColor(context.getResources().getColor(R.color.darkTextColor2));
+                        textView.setMaxLines(10);
+                        sb.show();}System.out.println("fail "+URLs.get(i));
                 }}
             return "task finished";
         }

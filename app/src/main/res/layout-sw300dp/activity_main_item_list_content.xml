@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@color/colorBlack"
+    android:background="#00000000"
     android:orientation="vertical">
 
     <LinearLayout
@@ -22,7 +22,7 @@
             android:text="ffofo"
             android:textAppearance="?attr/textAppearanceListItem"
             android:textColor="@color/colorBlack"
-            android:textSize="16sp"
+            android:textSize="18sp"
             android:textStyle="bold" />
 
         <TextView
@@ -34,7 +34,7 @@
             android:fontFamily="@font/scpro"
             android:textAppearance="?attr/textAppearanceListItem"
             android:textColor="@color/colorBlack"
-            android:textSize="12sp" />
+            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/change"
@@ -44,8 +44,8 @@
             android:layout_margin="@dimen/text_margin"
             android:fontFamily="@font/scpro"
             android:textAppearance="?attr/textAppearanceListItem"
-            android:textColor="@color/colorBlack"
-            android:textSize="16sp"
+            android:textColor="@color/colorPrimary"
+            android:textSize="18sp"
             android:textStyle="bold" />
     </LinearLayout>
 </LinearLayout>

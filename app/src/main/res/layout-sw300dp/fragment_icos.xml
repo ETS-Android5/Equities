@@ -42,7 +42,7 @@
 
                     android:text="@string/ico"
                     android:textColor="@color/colorPrimary"
-                    android:textSize="24sp" />
+                    android:textSize="20sp" />
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -61,7 +61,7 @@
                 android:text="@string/icos_data_provider"
                 android:textColor="@color/colorPrimary"
                 android:textColorLink="@color/darkTextColor"
-                android:textSize="12sp" />
+                android:textSize="10sp" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/ico_items"

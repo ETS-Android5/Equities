@@ -118,7 +118,7 @@ public class Database_Local_Aequities extends SQLiteOpenHelper {
         ArrayList<String> symbol = new ArrayList<>();
         String sto ="stock";
         try {
-            String query = "SELECT DISTINCT * FROM " + TABLE_AEQUITY_INFO + " WHERE "+KEY_AEQUITY_TYPE+" LIKE '%Cryptocurrency%'";
+            String query = "SELECT DISTINCT * FROM " + TABLE_AEQUITY_INFO + " WHERE "+KEY_AEQUITY_TYPE+" LIKE '%Crypto%'";
             SQLiteDatabase db = this.getWritableDatabase();
             Cursor cursor = db.rawQuery(query, null);
             if (cursor.moveToFirst()) {

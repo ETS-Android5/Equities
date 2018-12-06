@@ -9,7 +9,17 @@ public class Constructor_News_Feed {
    String description;  
    String pubDate;
    String thumbnailUrl;
-   public String getTitle() {
+   String source;
+
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
+    }
+
+    public String getTitle() {
      return title;  
    }  
    public void setTitle(String title) {  

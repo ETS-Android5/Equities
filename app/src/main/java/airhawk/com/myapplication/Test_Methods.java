@@ -1,6 +1,7 @@
 package airhawk.com.myapplication;
 
 import android.content.Context;
+import android.text.Html;
 import android.util.Log;
 
 
@@ -8,8 +9,11 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.DateFormat;
@@ -20,6 +24,11 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 
 import static airhawk.com.myapplication.Activity_Main.aequity_name_arraylist;
 import static airhawk.com.myapplication.Activity_Main.aequity_symbol_arraylist;
@@ -36,10 +45,13 @@ public class Test_Methods {
     static String cryptopia_list;
 
     public static void main(String[] args) {
-        get_masternodes();
-        get_icos();
-        get_ipos();
-        find_urls();
+       // get_masternodes();
+       // get_icos();
+       // get_ipos();
+       // find_urls();
+       // get_ipos();
+        ProcessXml(GoogleRSFeed());
+
     }
     public static void getStocks_Market_Caps() {
         Document z =null;
@@ -539,21 +551,17 @@ public class Test_Methods {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Elements z=d.getElementsByClass("container");
-        for(int i=0;i<z.size();i++) {
-            Elements tr = z.select("tr");
-            for (int b = 0; b < tr.size(); b++) {
-                Elements t = z.select("td");
-                ipo_date.add(t.get(0).text());
-                ipo_name.add(t.get(1).text());
-                ipo_range.add(t.get(2).text());
-                ipo_volume.add(t.get(4).text());
-
-            }
-            System.out.println(ipo_name.get(i));
+        Elements z=d.select("tbody");
+        Elements tr = z.select("tr");
+        for (int i = 1; i < tr.size(); i++) {
+            Element row = tr.get(i);
+            Elements cols = row.select("td");
+            ipo_date.add(cols.get(0).text());
+            ipo_name.add(cols.get(1).text());
+            ipo_range.add(cols.get(2).text());
+            ipo_volume.add(cols.get(3).text());
         }
-
-}
+        }
 
     public static void find_urls(){
         String name="https://www.yahoo";
@@ -582,4 +590,83 @@ public class Test_Methods {
 
 
     }
+
+
+    private static void ProcessXml(org.w3c.dom.Document data) {
+        if (data != null) {
+            String st, sd, sp, sl;
+            org.w3c.dom.Element root = data.getDocumentElement();
+            Node channel = root.getChildNodes().item(0);
+            NodeList items = channel.getChildNodes();
+
+            for (int i = 0; i < items.getLength(); i++) {
+                Constructor_News_Feed it = new Constructor_News_Feed();
+                Node curentchild = items.item(i);
+                if (curentchild.getNodeName().equalsIgnoreCase("item")) {
+                    NodeList itemchilds = curentchild.getChildNodes();
+                    for (int j = 0; j < itemchilds.getLength(); j++) {
+                        Node curent = itemchilds.item(j);
+                        if (curent.getNodeName().equalsIgnoreCase("title")) {
+                            st = Html.fromHtml(curent.getTextContent()).toString();
+                            it.setTitle(st);
+                        } else if (curent.getNodeName().equalsIgnoreCase("media:content")) {
+                            sd = Html.fromHtml(curent.getTextContent()).toString();
+                            System.out.println("HERE IS YOUR IMAGE DUDE! "+sd);
+
+                            String d = curent.getTextContent().toString();
+                            String pattern1 = "<img src=\"";
+                            String pattern2 = "\"";
+                            Pattern p = Pattern.compile(Pattern.quote(pattern1) + "(.*?)" + Pattern.quote(pattern2));
+                            Matcher m = p.matcher(d);
+                            while (m.find()) {
+                                it.setThumbnailUrl(m.group(1));
+                                //System.out.println("HERE IS YOUR IMAGE DUDE! "+m.group(1));
+                            }
+                            it.setDescription(sd);
+
+                        } else if (curent.getNodeName().equalsIgnoreCase("pubDate")) {
+                            sp = Html.fromHtml(curent.getTextContent()).toString();
+                            sp = sp.replaceAll("@20", " ");
+                            it.setPubDate(sp);
+                        } else if (curent.getNodeName().equalsIgnoreCase("link")) {
+                            sl = Html.fromHtml(curent.getTextContent()).toString();
+                            sl = sl.replaceAll("@20", " ");
+                            it.setLink(sl);
+                        } else if (curent.getNodeName().equalsIgnoreCase("img src")) {
+
+                        }
+                    }
+
+                    all_feedItems.add(it);
+
+
+                }
+            }
+        }
+    }
+
+    public static org.w3c.dom.Document GoogleRSFeed() {
+        try {
+            URL url;
+            Context context;
+            String repo = "Stock%20Cryptocurrency";
+            String address = "https://news.google.com/news/rss/search/section/q/" + repo + "?ned=us&gl=US&hl=en";
+
+
+            url = new URL(address);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+            InputStream inputStream = connection.getInputStream();
+            DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = builderFactory.newDocumentBuilder();
+            org.w3c.dom.Document xmlDoc = builder.parse(inputStream);
+            return xmlDoc;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+
+    }
+
 }

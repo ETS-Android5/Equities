@@ -41,20 +41,38 @@
 
 
         </TableRow>
-
-        <TextView
-            android:id="@+id/message"
+        <TableRow
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
-            android:gravity="left"
-            android:inputType="textMultiLine"
-            android:maxLines="5"
-            android:singleLine="true"
-            android:text="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
-            android:textColor="@color/colorBlack"
-            android:textSize="24sp" />
+            android:gravity="center">
 
+            <TextView
+                android:id="@+id/message"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="30dp"
+
+                android:layout_weight="1"
+                android:gravity="left"
+                android:inputType="textMultiLine"
+                android:maxLines="5"
+                android:singleLine="true"
+                android:text="$1.00 - $2.00"
+                android:textColor="@color/colorBlack"
+                android:textSize="24sp" />
+
+            <TextView
+                android:id="@+id/start"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="top|left"
+                android:singleLine="true"
+                android:text="start"
+                android:textColor="@color/colorBlack"
+                android:textSize="24sp" />
+
+        </TableRow>
     </LinearLayout>
 
     <LinearLayout
@@ -64,32 +82,12 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/start"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="3dp"
-            android:gravity="bottom|center"
-            android:singleLine="true"
-            android:text="start"
-            android:textColor="@color/colorBlack"
-            android:textSize="24sp" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:singleLine="true"
-            android:text="thru"
-            android:textColor="@color/colorBlack"
-            android:textSize="24sp" />
-
-        <TextView
 
             android:id="@+id/end"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:fontFamily="@font/scpro"
-            android:gravity="top|center"
+            android:gravity="top|right|center"
             android:shadowColor="#ffffff"
             android:shadowDx="0"
             android:shadowDy="0"

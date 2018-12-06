@@ -11,8 +11,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +30,6 @@ import static airhawk.com.myapplication.Constructor_App_Variables.ipo_volume;
 public class Adapter_Ipos_Feed extends RecyclerView.Adapter<Adapter_Ipos_Feed.MyViewHolder> {
     static String z;
     static ArrayList URLs = new ArrayList();
-    static MyViewHolder.myClickWebView myClickWebView;
     List<Constructor_Ipos> ipo_feedItems;
    static Context context;
    public Adapter_Ipos_Feed(Context context, List<Constructor_Ipos> items){
@@ -58,7 +59,7 @@ public class Adapter_Ipos_Feed extends RecyclerView.Adapter<Adapter_Ipos_Feed.My
    public void onBindViewHolder(MyViewHolder holder, int position) {  
      holder.name.setText(""+ipo_name.get(position));
      holder.message.setText(""+ipo_range.get(position));
-     holder.start.setText(""+ipo_volume.get(position));
+     holder.start.setText("Volume: "+ipo_volume.get(position));
      holder.end.setText(""+ipo_date.get(position));
      holder.textlink = String.valueOf(ipo_name.get(position));
    }
@@ -86,13 +87,18 @@ public class Adapter_Ipos_Feed extends RecyclerView.Adapter<Adapter_Ipos_Feed.My
 
          myClickWebView=myClickWebView;
    
-       itemView.setOnClickListener(new View.OnClickListener() {  
+       message.setOnClickListener(new View.OnClickListener() {
          @Override  
          public void onClick(View view) {
 
-             Snackbar.make(view, "Searching for "+name.getText().toString()+" website...", Snackbar.LENGTH_LONG)
-                     .setAction("Action", null)
-                     .show();
+             Snackbar sb = Snackbar.make(view, "Searching for "+name.getText().toString()+" website...", Snackbar.LENGTH_LONG);
+             //sb.setActionTextColor(context.getResources().getColor(R.color.darkTextColor2));
+             View sbView = sb.getView();
+             sbView.setBackgroundColor(context.getResources().getColor(R.color.colorBlack));
+             TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+             textView.setTextColor(context.getResources().getColor(R.color.darkTextColor2));
+             textView.setMaxLines(10);
+             sb.show();
              z=textlink.replace("ICO","").replace(" ","");
              new getURLS(view).execute();
          }
@@ -160,10 +166,24 @@ public class Adapter_Ipos_Feed extends RecyclerView.Adapter<Adapter_Ipos_Feed.My
                         new getURLS(rootView).cancel(true);
                         URLs.clear();
                     }else{
-                        Snackbar.make(rootView, "Still trying...", Snackbar.LENGTH_LONG)
-                                .setAction("Action", null)
-                                .show();}
-                    System.out.println("fail "+URLs.get(i));
+                        String s =z+" IPO";
+                        String Search= null;
+                        try {
+                            Search= URLEncoder.encode(s, "UTF-8");
+                        } catch (UnsupportedEncodingException z) {
+                            z.printStackTrace();
+                        }
+                        Uri uri = Uri.parse("http://www.google.com/#q=" + Search);
+                        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                        context.startActivity(intent);
+                        Snackbar sb = Snackbar.make(rootView,"Still searching for "+ URLs.get(i)+" website...", Snackbar.LENGTH_LONG);
+                        //sb.setActionTextColor(context.getResources().getColor(R.color.darkTextColor2));
+                        View sbView = sb.getView();
+                        sbView.setBackgroundColor(context.getResources().getColor(R.color.colorBlack));
+                        TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+                        textView.setTextColor(context.getResources().getColor(R.color.darkTextColor2));
+                        textView.setMaxLines(10);
+                        sb.show();}System.out.println("fail "+URLs.get(i));
                 }}
             return "task finished";
         }

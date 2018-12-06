@@ -32,17 +32,17 @@
 
                 <android.support.v7.widget.AppCompatTextView
 
-                        android:id="@+id/crypto"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_weight=".5"
-                        android:background="#00000000"
-                        android:gravity="center"
+                    android:id="@+id/crypto"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight=".5"
+                    android:background="#00000000"
+                    android:gravity="center"
 
-                        android:text="@string/ipo"
-                        android:textColor="@color/colorPrimary"
-                        android:textSize="30sp"/>
+                    android:text="@string/ipo"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="36sp" />
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -52,48 +52,22 @@
                     android:src="@drawable/direction_ipos" />
             </TableRow>
 
-            <TableRow
+
+            <TextView
+                android:id="@+id/ipos_data_provider"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="left|center"
-                    android:singleLine="true"
-                    android:text="Symbol"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="18sp" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight=".6"
-                    android:gravity="center"
-                    android:singleLine="true"
-                    android:text="Name"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="18sp" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="end"
-                    android:layout_weight="1"
-                    android:singleLine="true"
-                    android:text="Amount"
-                    android:textAlignment="textEnd"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="18sp" />
-            </TableRow>
+                android:layout_height="wrap_content"
+                android:autoLink="web"
+                android:gravity="center"
+                android:text="@string/ipos_data_provider"
+                android:textColor="@color/colorPrimary"
+                android:textColorLink="@color/darkTextColor"
+                android:textSize="20sp" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/crypto_items"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="3dp"
-                android:layout_marginRight="3dp"
                 android:layout_weight="1"
                 android:background="#ffffff" />
         </LinearLayout>

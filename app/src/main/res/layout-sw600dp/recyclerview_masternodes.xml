@@ -23,7 +23,7 @@
             android:singleLine="true"
             android:text="DASH"
             android:textColor="@color/colorBlack"
-            android:textSize="18sp"/>
+            android:textSize="24sp"/>
 
     <TextView
         android:id="@+id/changes"
@@ -39,7 +39,7 @@
         android:singleLine="true"
         android:text="-3.3%"
         android:textColor="@color/colorBlack"
-        android:textSize="18sp"
+        android:textSize="24sp"
         android:textStyle="bold" />
 
     <TextView
@@ -51,7 +51,7 @@
         android:singleLine="true"
         android:text="DASH"
         android:textColor="@color/colorBlack"
-        android:textSize="18sp" />
+        android:textSize="24sp" />
 
     <TextView
         android:id="@+id/count"
@@ -62,7 +62,7 @@
         android:singleLine="true"
         android:text="23160"
         android:textColor="@color/colorBlack"
-        android:textSize="18sp"
+        android:textSize="24sp"
         android:visibility="gone" />
 
     <TextView
@@ -74,7 +74,7 @@
         android:singleLine="true"
         android:text="$270K"
         android:textColor="@color/colorBlack"
-        android:textSize="18sp" />
+        android:textSize="24sp" />
 
 
     <TextView
@@ -91,6 +91,6 @@
             android:singleLine="true"
             android:text="3.3 B"
             android:textColor="@color/colorBlack"
-            android:textSize="18sp"
+            android:textSize="24sp"
             android:textStyle="bold"/>
 </TableRow>

@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import static airhawk.com.myapplication.Activity_Main.ap_info;
 import static airhawk.com.myapplication.Activity_Main.db_exist;
 import static airhawk.com.myapplication.Constructor_App_Variables.current_percentage_change;
+import static airhawk.com.myapplication.Constructor_App_Variables.ipo_date;
 
 public class Adapter_Saved_Feed extends RecyclerView.Adapter<Adapter_Saved_Feed.MyViewHolder> {
 
@@ -60,8 +61,9 @@ public class Adapter_Saved_Feed extends RecyclerView.Adapter<Adapter_Saved_Feed.
     @Override
     public void onBindViewHolder(Adapter_Saved_Feed.MyViewHolder holder, int position) {
        Database_Local_Aequities ld =new Database_Local_Aequities(context);
-       System.out.println("ALL SAVED "+current_percentage_change.get(position));
-        ld.deleteDuplicates();
+        for(int z=0;z<ld.getName().size();z++){
+
+            ld.deleteDuplicates();
        holder.symbol.setText(""+ ld.getSymbol().get(position));
        holder.name.setText(""+ld.getName().get(position));
        holder.currentchange.setText(""+current_percentage_change.get(position));
@@ -79,9 +81,10 @@ public class Adapter_Saved_Feed extends RecyclerView.Adapter<Adapter_Saved_Feed.
         String l =ld.getType(holder.name.getText().toString());
        if(l.equals("Cryptocurrency")||equals("Crypto")){
            holder.type.setText("Crypto");
-       }else{
-       holder.type.setText("Stock");
-       ld.close();
+       }else {
+           holder.type.setText("Stock");
+           ld.close();
+       }
     }
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -100,9 +103,7 @@ public class Adapter_Saved_Feed extends RecyclerView.Adapter<Adapter_Saved_Feed.
 
     @Override
     public int getItemCount() {
-       Database_Local_Aequities ld =new Database_Local_Aequities(context);
-
-       return ld.getName().size();
+       return current_percentage_change.size();
     }
 
 

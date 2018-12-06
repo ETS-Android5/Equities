@@ -42,7 +42,7 @@
 
                     android:text="@string/ico"
                     android:textColor="@color/colorPrimary"
-                    android:textSize="30sp" />
+                    android:textSize="36sp" />
 
                 <ImageView
                     android:layout_width="wrap_content"

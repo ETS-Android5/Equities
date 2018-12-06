@@ -1,61 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:orientation="vertical"
-              android:visibility="visible">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:visibility="visible">
 
     <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="2dp"
-    >
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="2dp">
 
         <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-        >
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
 
             <ImageView
-                    android:id="@+id/user_image"
-                    android:layout_width="75dp"
-                    android:layout_height="75dp"
-                    android:layout_gravity="top"
-                    android:layout_weight="1"
-                    android:scaleType="fitCenter"/>
+                android:id="@+id/user_image"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:layout_gravity="top"
+                android:layout_weight="1"
+                android:scaleType="fitCenter" />
         </LinearLayout>
 
         <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight=".3"
+            android:orientation="vertical">
+
+
+            <TextView
+                android:id="@+id/user_name"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight=".3"
-                android:orientation="vertical">
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/scpro"
+                android:textColor="@color/colorPrimary"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/message_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/scpro"
+                android:textColor="@color/colorPrimary"
+                android:textSize="24sp" />
 
 
             <TextView
-                    android:id="@+id/user_name"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/scpro"
-                    android:textColor="@color/colorPrimary"
-                    android:textStyle="bold" android:textSize="24sp"/>
-
-            <TextView
-                    android:id="@+id/message_time"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/scpro"
-                    android:textColor="@color/colorPrimary" android:textSize="24sp"/>
-
-
-            <TextView
-                    android:id="@+id/message"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColorLink="@color/green_color_text"
-                    android:autoLink="all"
-                    android:textColor="@color/colorPrimary" android:textSize="24sp"/>
+                android:id="@+id/message"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autoLink="all"
+                android:textColor="@color/colorPrimary"
+                android:textColorLink="@color/green_color_text"
+                android:textSize="24sp" />
         </LinearLayout>
     </TableRow>
 

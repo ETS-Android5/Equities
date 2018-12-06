@@ -51,9 +51,7 @@ public class Fragment_Saved extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_saved, container, false);
-        progressBar2 =rootView.findViewById(R.id.progressBar2);
         saved_feed=rootView.findViewById(R.id.saved_feed);
-        progressBar2.setVisibility(View.GONE);
         saved_feed.setVisibility(View.VISIBLE);
         Constructor_App_Variables cav =new Constructor_App_Variables();
         Database_Local_Aequities ld =new Database_Local_Aequities(getActivity());
@@ -61,11 +59,11 @@ public class Fragment_Saved extends Fragment {
         //The only way to fix this is to create a constructor with arraylist so you can clear arraylist when backpress is entered
         if (saved_feed!=null){
             System.out.println("SAVED FEED IS NOT NULL!!!");
-            saved_feed.setAdapter(null);
-            saved_feed.setLayoutManager(null);
-            saved_feed.setLayoutManager(new WrapContentLinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+            //saved_feed.setAdapter(null);
+           // saved_feed.setLayoutManager(null);
+            saved_feed.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
             saved_feed.setAdapter(new Adapter_Saved_Feed(getActivity(),Database_Local_Aequities.KEY_AEQUITY_SYMBOL,Database_Local_Aequities.KEY_AEQUITY_NAME,current_percentage_change,Database_Local_Aequities.KEY_AEQUITY_TYPE));
-            System.out.println(Arrays.asList("X "+ld.getName()));
+            System.out.println(Arrays.asList("X "+ld.getName()+" "+ld.getType()));
 
         }else {
             adapter_saved_feed=new Adapter_Saved_Feed(getActivity(),Database_Local_Aequities.KEY_AEQUITY_SYMBOL,Database_Local_Aequities.KEY_AEQUITY_NAME,current_percentage_change,Database_Local_Aequities.KEY_AEQUITY_TYPE);

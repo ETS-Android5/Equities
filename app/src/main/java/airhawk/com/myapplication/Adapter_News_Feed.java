@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.support.v7.widget.RecyclerView;
 import android.util.Base64;
 import android.view.LayoutInflater;
@@ -16,7 +17,10 @@ import android.widget.TextView;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 
+import org.w3c.dom.Text;
+
 import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
 import java.util.List;
 
 public class Adapter_News_Feed extends RecyclerView.Adapter<Adapter_News_Feed.MyViewHolder> {
@@ -52,6 +56,9 @@ public class Adapter_News_Feed extends RecyclerView.Adapter<Adapter_News_Feed.My
      Constructor_News_Feed item = feedItems.get(position);
      holder.tv_pubdate.setText(item.getPubDate());  
      holder.tv_title.setText(item.getTitle());
+     holder.tv_link.setPaintFlags(holder.tv_link.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
+     holder.tv_link.setText(item.getLink());
+     holder.tv_source.setText(item.getSource());
 
 
      if(item.getThumbnailUrl() !=null){
@@ -70,6 +77,8 @@ public class Adapter_News_Feed extends RecyclerView.Adapter<Adapter_News_Feed.My
        TextView tv_title;
        TextView tv_pubdate;
        ImageView tv_image;
+       TextView tv_link;
+       TextView tv_source;
        String textlink;
        myClickWebView myClickWebView;
    
@@ -79,6 +88,8 @@ public class Adapter_News_Feed extends RecyclerView.Adapter<Adapter_News_Feed.My
        tv_title=itemView.findViewById(R.id.news_title);
        tv_pubdate=itemView.findViewById(R.id.news_pubdate);
        tv_image=itemView.findViewById(R.id.news_image);
+       tv_link=itemView.findViewById(R.id.news_link);
+         tv_source=itemView.findViewById(R.id.news_source);
        this.myClickWebView=myClickWebView;  
    
        itemView.setOnClickListener(new View.OnClickListener() {  

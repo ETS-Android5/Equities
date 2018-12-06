@@ -6,5 +6,6 @@
     <color name="green_color_text">#00CC00</color>
     <color name="red_color_text">#FF0000</color>
     <color name="colorBlack">#0000ff</color>
+    <color name="colorTrans">#00000000</color>
 
 </resources>
