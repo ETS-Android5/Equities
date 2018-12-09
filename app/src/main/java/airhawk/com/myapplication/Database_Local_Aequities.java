@@ -28,10 +28,6 @@ public class Database_Local_Aequities extends SQLiteOpenHelper {
     private Context context;
 
     public static Database_Local_Aequities getInstance(Context context) {
-
-        // Use the application context, which will ensure that you
-        // don't accidentally leak an Activity's context.
-        // See this article for more information: http://bit.ly/6LRzfx
         if (mInstance == null) {
             mInstance = new Database_Local_Aequities(context);
         }
@@ -49,7 +45,7 @@ public class Database_Local_Aequities extends SQLiteOpenHelper {
                 + KEY_ID + " INTEGER PRIMARY KEY,"
                 + KEY_AEQUITY_SYMBOL + " TEXT,"
                 + KEY_AEQUITY_NAME + " TEXT,"
-                + KEY_AEQUITY_TYPE + " TEXT" + ")";
+                + KEY_AEQUITY_TYPE + " TEXT"+ ")";
         db.execSQL(CREATE_TABLE_EQUITY_INFO );
     }
 
@@ -59,13 +55,12 @@ public class Database_Local_Aequities extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public long add_equity_info(String symbol,String name,String type) {
+    public long add_equity_info(String symbol,String name,String type,String price) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(KEY_AEQUITY_SYMBOL, symbol);
         values.put(KEY_AEQUITY_NAME, name);
         values.put(KEY_AEQUITY_TYPE, type);
-        //db.insert(TABLE_AEQUITY_INFO, null, values);
         long id = db.insert(TABLE_AEQUITY_INFO, null, values);
         db.close();
         return id;
@@ -91,6 +86,8 @@ public class Database_Local_Aequities extends SQLiteOpenHelper {
 
         return symbol;
     }
+
+
 
     public ArrayList getstockSymbol() {
         ArrayList<String> symbol = new ArrayList<>();

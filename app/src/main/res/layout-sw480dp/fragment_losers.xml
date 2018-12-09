@@ -61,10 +61,6 @@
                       android:textColorLink="@color/darkTextColor"
                       android:text="@string/stock_loser_winner_data_provider" android:textSize="12sp"
           />
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/colorBlack"></View>
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/stock_items"
@@ -127,10 +123,6 @@
                       android:textColorLink="@color/darkTextColor"
                       android:text="@string/crypto_loser_winner_data_provider" android:textSize="12sp"
             />
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/colorBlack"></View>
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/crypto_items"

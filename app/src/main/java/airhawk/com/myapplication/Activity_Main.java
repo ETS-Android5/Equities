@@ -124,7 +124,6 @@ public class Activity_Main extends AppCompatActivity {
     static RecyclerView.LayoutManager l;
     private static InterstitialAd mInterstitialAd;
 
-
     public static String AssetJSONFile(String filename, Context context) throws IOException {
         AssetManager manager = context.getAssets();
         InputStream file = manager.open(filename);
@@ -179,16 +178,19 @@ public class Activity_Main extends AppCompatActivity {
     }
 
     public void onBackPressed() {
-        System.out.println("CODE "+savedVersionCode+" "+DOESNT_EXIST);
-        //if (savedVersionCode == DOESNT_EXIST) {
-          //  check_if_first_download();
-        //}else {
+        ViewPager pager = findViewById(R.id.viewpager);
+      if (pager.getVisibility()==View.VISIBLE){
+           finish();}else{
+
+
         if (mInterstitialAd.isLoaded()) {
             mInterstitialAd.show();
 
         }else{
-
-            System.err.println("Ad is not loaded");
+            //mInterstitialAd.setAdUnitId("ca-app-pub-6566728316210720/4471280326");
+            AdRequest adRequest = new AdRequest.Builder().build();
+            mInterstitialAd.loadAd(adRequest);
+            mInterstitialAd.show();
         }
         mInterstitialAd.setAdListener(new AdListener() {
             public void onAdLoaded() {
@@ -202,16 +204,19 @@ public class Activity_Main extends AppCompatActivity {
                 mInterstitialAd.loadAd(adRequest);
                 System.err.println("Ad loaded");
             }
-        });            graph_change.clear();
+        });
+            graph_change.clear();
             exchange_list.clear();
             aequity_exchanges.clear();
             stocktwits_feedItems.clear();
             graph_date.clear();
             graph_high.clear();
             graph_volume.clear();
+            current_percentage_change.clear();
             new setAsyncChosenData(this).cancel(true);
+            new setAsyncDataMain(this).cancel(true);
             new setSavedAsyncDataMain(this).execute();
-        //}
+        }
 
     }
 
@@ -1006,9 +1011,7 @@ public class Activity_Main extends AppCompatActivity {
                     current_percentage_change.add(f);
 
                 }
-                    for(int z=0;z<current_percentage_change.size();z++){
-
-                        System.out.println("HERE IS THE INSANE MEMBRANE"+aaa.get(z)+" "+a.get(z)+" "+aa.get(z)+" "+current_percentage_change.get(z));}}
+                 }
 
         }
 
@@ -1020,13 +1023,13 @@ co.close();
         ArrayList aaa = co.getName();
         ArrayList a = co.getSymbol();
         ArrayList aa = co.getType();
-        ArrayList b = co.getstockSymbol();
-        //String apikey ="XBA42BUC2B6U6G5C";
-if (aa.size()>0) {
+        if(aa.size()>0){
+    for( int x=0;x<aa.size();x++) {
     Document cap = null;
-    if (aa.get(aa.size() - 1).equals("Stock")) {
+    if (aa.get(x).equals("Stock")) {
+        ArrayList b = co.getSymbol();
         try {
-            cap = Jsoup.connect("https://finance.yahoo.com/quote/" + b.get(b.size() - 1)).get();
+            cap = Jsoup.connect("https://finance.yahoo.com/quote/" + b.get(x)).get();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -1036,11 +1039,10 @@ if (aa.size()>0) {
         String f = foo[1];
         current_percentage_change.add(f);
     } else {
-        ArrayList d = co.getcryptoName();
-        System.out.println("THIS IS CRYTPO NAME"+d);
+        ArrayList d = co.getName();
         Document caps = null;
         if (d.size()>0) {
-            String g = String.valueOf(d.get(d.size() - 1));
+            String g = String.valueOf(d.get(x));
             if (g.contains(" ")) {
                 g = g.replace(" ", "-");
             }
@@ -1057,10 +1059,7 @@ if (aa.size()>0) {
     }
 
 
-}else{
-    System.out.println("BuLLSHIT IS NULL "+aa.size());}
-
-        co.close();
+}}co.close();
     }
 
     public static void get_coinmarketcap_exchange_listing() {

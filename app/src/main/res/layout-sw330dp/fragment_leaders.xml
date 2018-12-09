@@ -66,8 +66,6 @@
                 android:id="@+id/stock_items"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="3dp"
-                android:layout_marginRight="3dp"
                 android:layout_weight="1"
                 android:background="#ffffff" />
         </LinearLayout>
@@ -128,8 +126,6 @@
                 android:id="@+id/crypto_items"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="3dp"
-                android:layout_marginRight="3dp"
                 android:layout_weight="1"
                 android:background="#ffffff" />
         </LinearLayout>

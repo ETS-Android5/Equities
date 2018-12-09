@@ -61,9 +61,11 @@ public class Adapter_Saved_Feed extends RecyclerView.Adapter<Adapter_Saved_Feed.
     @Override
     public void onBindViewHolder(Adapter_Saved_Feed.MyViewHolder holder, int position) {
        Database_Local_Aequities ld =new Database_Local_Aequities(context);
-        for(int z=0;z<ld.getName().size();z++){
 
-            ld.deleteDuplicates();
+        System.out.println("SYMBOL  = "+ld.getSymbol().get(position));
+        System.out.println("NAME  = "+ld.getName().get(position));
+        System.out.println("CHANGE  = "+current_percentage_change.get(position));
+
        holder.symbol.setText(""+ ld.getSymbol().get(position));
        holder.name.setText(""+ld.getName().get(position));
        holder.currentchange.setText(""+current_percentage_change.get(position));
@@ -79,13 +81,13 @@ public class Adapter_Saved_Feed extends RecyclerView.Adapter<Adapter_Saved_Feed.
             holder.circle.setImageResource(R.drawable.holder_green_circle);
         }
         String l =ld.getType(holder.name.getText().toString());
-       if(l.equals("Cryptocurrency")||equals("Crypto")){
-           holder.type.setText("Crypto");
-       }else {
-           holder.type.setText("Stock");
+if (l.equalsIgnoreCase("Cryptocurrency")){
+    holder.type.setText("Crypto");
+}else{
+           holder.type.setText(l);}
            ld.close();
-       }
-    }
+
+
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,7 +105,9 @@ public class Adapter_Saved_Feed extends RecyclerView.Adapter<Adapter_Saved_Feed.
 
     @Override
     public int getItemCount() {
-       return current_percentage_change.size();
+        Database_Local_Aequities ld =new Database_Local_Aequities(context);
+
+        return ld.getSymbol().size();
     }
 
 

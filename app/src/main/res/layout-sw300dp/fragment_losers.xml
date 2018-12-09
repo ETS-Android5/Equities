@@ -63,19 +63,15 @@
                 android:textColor="@color/colorPrimary"
                 android:textColorLink="@color/darkTextColor"
                 android:textSize="10sp" />
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/colorBlack"></View>
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/stock_items"
                 android:layout_width="match_parent"
-                android:layout_height="0dip"
+                android:layout_height="match_parent"
                 android:layout_marginLeft="3dp"
                 android:layout_marginRight="3dp"
                 android:layout_weight="1"
-                android:background="@color/colorPrimary" />
+                android:background="#ffffff" />
 
         </LinearLayout>
 
@@ -130,19 +126,15 @@
                 android:textColor="@color/colorPrimary"
                 android:textColorLink="@color/darkTextColor"
                 android:textSize="10sp" />
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/colorBlack"></View>
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/crypto_items"
                 android:layout_width="match_parent"
-                android:layout_height="0dip"
+                android:layout_height="match_parent"
                 android:layout_marginLeft="3dp"
                 android:layout_marginRight="3dp"
                 android:layout_weight="1"
-                android:background="@color/colorPrimary" />
+                android:background="#ffffff" />
         </LinearLayout>
     </LinearLayout>
 

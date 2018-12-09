@@ -63,10 +63,6 @@
                 android:textColor="@color/colorPrimary"
                 android:textColorLink="@color/darkTextColor"
                 android:textSize="20sp" />
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/colorBlack"></View>
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/stock_items"
@@ -130,10 +126,6 @@
                 android:textColor="@color/colorPrimary"
                 android:textColorLink="@color/darkTextColor"
                 android:textSize="20sp" />
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/colorBlack"></View>
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/crypto_items"

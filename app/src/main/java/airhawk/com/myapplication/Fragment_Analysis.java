@@ -125,12 +125,9 @@ public class Fragment_Analysis extends Fragment {
                                 Handler handler = new Handler();
                                 handler.postDelayed(new Runnable() {
                                     public void run() {
-                                        System.out.println("There were "+db.getName().size()+" saved items");
-                                        db.add_equity_info(app_info.getMarketSymbol(), ap_info.getMarketName(), app_info.getMarketType());
-                                        System.out.println("THIS IS INFO "+app_info.getMarketType()+" "+app_info.getMarketSymbol()+" "+ap_info.getMarketName());
-                                        System.out.println("There are now "+db.getName().size()+" saved items");
-                                        //Toast.makeText(getActivity(), app_info.getMarketName()+" is saved", Toast.LENGTH_SHORT).show();
-                                        //((Activity_Main)getActivity()).setSavedMarketPage();
+
+                                        db.add_equity_info(app_info.getMarketSymbol(), ap_info.getMarketName(), app_info.getMarketType(),ap_info.getCurrent_Aequity_Price_Change());
+
                                     }
                                 }, 2000);
                             }

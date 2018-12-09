@@ -15,15 +15,15 @@
         android:scaleType="fitCenter"/>
 
     <TextView
-            android:id="@+id/symbol"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="left|center"
-            android:singleLine="true"
-            android:text="DASH"
-            android:textColor="@color/colorBlack"
-            android:textSize="14sp"/>
+        android:id="@+id/symbol"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="left|center"
+        android:singleLine="true"
+        android:text="DASH"
+        android:textColor="@color/colorBlack"
+        android:textSize="14sp" />
 
     <TextView
         android:id="@+id/changes"

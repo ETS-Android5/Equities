@@ -110,8 +110,8 @@ public class Adapter_Graph_Points extends RecyclerView.Adapter<Adapter_Graph_Poi
                     holder.aequity_volume.setTextColor(Color.parseColor("#ff0000"));
                 }
             }
-
-
+            //DO NOT DELETE THIS SYSTEM MESSAGE>ANDROID GLITCH
+            System.out.println("GDSIZE "+graph_date.size());
             holder.aequity_date.setText(""+graph_date.get(position));}
  catch (IndexOutOfBoundsException e){}}
 
