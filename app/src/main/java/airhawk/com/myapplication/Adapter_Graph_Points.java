@@ -66,8 +66,11 @@ public class Adapter_Graph_Points extends RecyclerView.Adapter<Adapter_Graph_Poi
         holder.aequity_change.setText(graph_change.get(position)+" %");
 
             holder.aequity_amount.setText("$ "+graph_high.get(position));
-            as = Double.parseDouble(String.valueOf(graph_high.get(position)).replace(",",""));
-
+            if(graph_high.get(position)!=null) {
+                as = Double.parseDouble(String.valueOf(graph_high.get(position)).replace(",", ""));
+            }else{
+               as=0.00;
+            }
 
                 as1 = Double.parseDouble(String.valueOf(graph_high.get(position + 1)).replace(",",""));
 

@@ -9,7 +9,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.twitter.sdk.android.core.models.Tweet;
+
 import java.util.ArrayList;
+import java.util.List;
 
 import static airhawk.com.myapplication.Activity_Main.ap_info;
 import static airhawk.com.myapplication.Service_Main_Equities.*;

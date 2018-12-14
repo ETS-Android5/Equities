@@ -3,11 +3,8 @@ package airhawk.com.myapplication;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.support.v7.widget.RecyclerView;
-import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,18 +14,14 @@ import android.widget.TextView;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 
-import org.w3c.dom.Text;
-
-import java.io.UnsupportedEncodingException;
-import java.util.Arrays;
 import java.util.List;
 
-public class Adapter_News_Feed extends RecyclerView.Adapter<Adapter_News_Feed.MyViewHolder> {
+public class Adapter_App_News_Feed extends RecyclerView.Adapter<Adapter_App_News_Feed.MyViewHolder> {
 
    private List<Constructor_News_Feed> feedItems;
    private static Context context;
    private Bitmap bitmap;
-   public Adapter_News_Feed(Context context, List<Constructor_News_Feed> items){
+   public Adapter_App_News_Feed(Context context, List<Constructor_News_Feed> items){
      this.context=context;  
      this.feedItems = items;  
    }  
@@ -36,7 +29,7 @@ public class Adapter_News_Feed extends RecyclerView.Adapter<Adapter_News_Feed.My
    @Override  
    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
      LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-     final View view = inflater.inflate(R.layout.recyclerview_news, parent, false);
+     final View view = inflater.inflate(R.layout.recyclerview_app_news, parent, false);
 
      MyViewHolder mvh = new MyViewHolder(view, new MyViewHolder.myClickWebView() {  
        @Override  

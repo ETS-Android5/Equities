@@ -73,6 +73,13 @@
                 android:textSize="14sp" />
 
         </TableRow>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:alpha=".1"
+            android:background="@color/colorBlack">
+
+        </View>
     </LinearLayout>
 
     <LinearLayout
@@ -96,5 +103,12 @@
             android:text="end"
             android:textColor="@color/colorBlack"
             android:textSize="14sp" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:alpha=".1"
+            android:background="@color/colorBlack">
+
+        </View>
     </LinearLayout>
 </TableRow>

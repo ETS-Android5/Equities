@@ -1,8 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/news_feed"
-    android:layout_width="match_parent"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
     android:layout_height="match_parent"
-    android:layout_marginBottom="3dp">
+    android:layout_width="match_parent">
 
-</android.support.v7.widget.RecyclerView>
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="3dp"
+        android:paddingRight="3dp">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:src="@drawable/direction_news" />
+
+        <TextView
+            android:id="@+id/news"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="News"
+            android:layout_weight="1"
+
+            android:textColor="@color/colorPrimary"
+            android:textSize="36sp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+
+            android:src="@drawable/direction_news" />
+
+    </TableRow>
+
+    <TextView
+        android:id="@+id/stock_leaders_data_provider"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:autoLink="web"
+        android:gravity="center"
+        android:text="@string/news_data_provider"
+        android:textColor="@color/colorPrimary"
+        android:textColorLink="@color/darkTextColor"
+        android:textSize="16sp" />
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/all_news_feed"
+        android:background="#ffffff"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+
+</LinearLayout>

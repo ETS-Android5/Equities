@@ -5,24 +5,31 @@
     android:layout_width="match_parent">
 
     <TextView
+        android:id="@+id/fav"
+
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="Favorites"
         android:textColor="@color/colorPrimary"
         android:textSize="26sp" />
+
+    <TextView
+        android:id="@+id/stock_leaders_data_provider"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:autoLink="web"
+        android:gravity="center"
+        android:text="@string/stock_loser_winner_data_provider"
+        android:textColor="@color/colorPrimary"
+        android:textColorLink="@color/darkTextColor"
+        android:textSize="12sp"
+        android:visibility="invisible" />
     <android.support.v7.widget.RecyclerView
         android:id="@+id/saved_feed"
+        android:background="#ffffff"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="3dp"
-        android:visibility="gone" />
+        android:layout_height="match_parent" />
 
-    <ProgressBar
-        android:id="@+id/progressBar2"
-        style="?android:attr/progressBarStyle"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:indeterminate="true" />
 
 </LinearLayout>

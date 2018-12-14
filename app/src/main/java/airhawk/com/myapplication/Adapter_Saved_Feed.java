@@ -64,10 +64,13 @@ public class Adapter_Saved_Feed extends RecyclerView.Adapter<Adapter_Saved_Feed.
 
         System.out.println("SYMBOL  = "+ld.getSymbol().get(position));
         System.out.println("NAME  = "+ld.getName().get(position));
-        System.out.println("CHANGE  = "+current_percentage_change.get(position));
+        //System.out.println("CHANGE  = "+current_percentage_change.get(position));
 
        holder.symbol.setText(""+ ld.getSymbol().get(position));
        holder.name.setText(""+ld.getName().get(position));
+       if(current_percentage_change.size()==0){
+           current_percentage_change.add("Reload");
+       }
        holder.currentchange.setText(""+current_percentage_change.get(position));
         String cc = String.valueOf(current_percentage_change.get(position));
         if(cc.contains("-")){

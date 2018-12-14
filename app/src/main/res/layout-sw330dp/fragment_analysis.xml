@@ -234,11 +234,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"></android.support.v7.widget.RecyclerView>
+
     <com.jjoe64.graphview.GraphView
         android:id="@+id/graph_view"
-        android:background="@drawable/background_gradient"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
+        android:background="#00000000"
         android:visibility="gone"></com.jjoe64.graphview.GraphView>
 </LinearLayout>

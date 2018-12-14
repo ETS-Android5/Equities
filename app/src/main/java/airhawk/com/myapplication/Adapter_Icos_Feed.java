@@ -92,7 +92,7 @@ public class Adapter_Icos_Feed extends RecyclerView.Adapter<Adapter_Icos_Feed.My
 
 
          myClickWebView=myClickWebView;
-         message.setOnClickListener(new View.OnClickListener() {
+         name.setOnClickListener(new View.OnClickListener() {
              @Override
              public void onClick(View view) {
 

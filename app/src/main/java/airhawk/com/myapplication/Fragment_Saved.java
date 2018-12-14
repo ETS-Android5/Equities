@@ -1,5 +1,7 @@
 package airhawk.com.myapplication;
 
+import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -10,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -21,6 +24,7 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -41,6 +45,7 @@ public class Fragment_Saved extends Fragment {
     public static RecyclerView saved_feed;
     public ProgressBar progressBar2;
     public Adapter_Saved_Feed adapter_saved_feed;
+    TextView fav;
 
     public Fragment_Saved() {
     }
@@ -51,6 +56,12 @@ public class Fragment_Saved extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_saved, container, false);
+        fav= rootView.findViewById(R.id.fav);
+        Typeface custom_font = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Oregon.ttf");
+
+        fav.setTypeface(custom_font);
+
+        fav.setPaintFlags(fav.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
         saved_feed=rootView.findViewById(R.id.saved_feed);
         saved_feed.setVisibility(View.VISIBLE);
         Constructor_App_Variables cav =new Constructor_App_Variables();

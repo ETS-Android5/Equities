@@ -31,7 +31,7 @@ public class Constructor_App_Variables {
     static ArrayList ipo_range=new ArrayList();
     static ArrayList ipo_date =new ArrayList();
     static ArrayList ipo_volume =new ArrayList();
-
+    static int saved_helper;
 
     static ArrayList crypto_exchange_url =new ArrayList<>();
     static ArrayList crypto_exchange_name =new ArrayList<>();

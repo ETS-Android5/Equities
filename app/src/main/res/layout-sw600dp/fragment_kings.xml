@@ -61,7 +61,7 @@
                 android:text="@string/stock_kings_data_provider"
                 android:textColor="@color/colorPrimary"
                 android:textColorLink="@color/darkTextColor"
-                android:textSize="20sp" />
+                android:textSize="16sp" />
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/stock_items"
                 android:layout_width="match_parent"
@@ -122,7 +122,7 @@
                 android:text="@string/crypto_kings_data_provider"
                 android:textColor="@color/colorPrimary"
                 android:textColorLink="@color/darkTextColor"
-                android:textSize="20sp" />
+                android:textSize="16sp" />
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/crypto_items"
                 android:layout_width="match_parent"

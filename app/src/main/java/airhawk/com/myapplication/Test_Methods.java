@@ -607,11 +607,12 @@ public class Test_Methods {
                     for (int j = 0; j < itemchilds.getLength(); j++) {
                         Node curent = itemchilds.item(j);
                         if (curent.getNodeName().equalsIgnoreCase("title")) {
-                            st = Html.fromHtml(curent.getTextContent()).toString();
+                            st = curent.getTextContent().toString();
                             it.setTitle(st);
+                            System.out.println(st);
                         } else if (curent.getNodeName().equalsIgnoreCase("media:content")) {
-                            sd = Html.fromHtml(curent.getTextContent()).toString();
-                            System.out.println("HERE IS YOUR IMAGE DUDE! "+sd);
+                            sd = curent.getTextContent().toString();
+                            System.out.println(sd);
 
                             String d = curent.getTextContent().toString();
                             String pattern1 = "<img src=\"";
@@ -623,15 +624,16 @@ public class Test_Methods {
                                 //System.out.println("HERE IS YOUR IMAGE DUDE! "+m.group(1));
                             }
                             it.setDescription(sd);
-
                         } else if (curent.getNodeName().equalsIgnoreCase("pubDate")) {
-                            sp = Html.fromHtml(curent.getTextContent()).toString();
+                            sp = curent.getTextContent().toString();
                             sp = sp.replaceAll("@20", " ");
                             it.setPubDate(sp);
+                            System.out.println(sp);
                         } else if (curent.getNodeName().equalsIgnoreCase("link")) {
-                            sl = Html.fromHtml(curent.getTextContent()).toString();
+                            sl = curent.getTextContent().toString();
                             sl = sl.replaceAll("@20", " ");
                             it.setLink(sl);
+                            System.out.println(sl);
                         } else if (curent.getNodeName().equalsIgnoreCase("img src")) {
 
                         }

@@ -48,8 +48,9 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import static airhawk.com.myapplication.Activity_Main.ap_info;
 import static airhawk.com.myapplication.Constructor_App_Variables._AllDays;
 import static airhawk.com.myapplication.Constructor_App_Variables.aequity_exchanges;
+import static airhawk.com.myapplication.Constructor_App_Variables.all_feedItems;
 import static airhawk.com.myapplication.Constructor_App_Variables.feedItems;
-import static airhawk.com.myapplication.Constructor_App_Variables.graph_change;
+import static airhawk.com.myapplication.Constructor_App_Variables.saved_helper;
 import static airhawk.com.myapplication.Constructor_App_Variables.graph_date;
 import static airhawk.com.myapplication.Constructor_App_Variables.graph_high;
 import static airhawk.com.myapplication.Constructor_App_Variables.graph_low;
@@ -64,6 +65,7 @@ import static airhawk.com.myapplication.Constructor_App_Variables.graph_volume;
 public class Service_Chosen_Equity
 {
     private static Context context;
+
     public Service_Chosen_Equity(Context context){
         this.context=context;
     }
@@ -119,11 +121,11 @@ public class Service_Chosen_Equity
             @Override
             public String call() throws Exception
             {long startTime = System.nanoTime();
-                ProcessXml(GoogleRSFeed());
+                //ProcessXml(GoogleRSFeed());
                 long endTime = System.nanoTime();
                 long duration = (endTime - startTime);
                 //4 seconds Boost Mobile
-                System.out.println("GET NEWS TIME IS "+duration/1000000000+" seconds");
+                //System.out.println("GET NEWS TIME IS "+duration/1000000000+" seconds");
                 return null;
             }
         });
@@ -135,6 +137,7 @@ public class Service_Chosen_Equity
             {long startTime = System.nanoTime();
                 Constructor_App_Variables ax = new Constructor_App_Variables();
                 String a = ax.getMarketType();
+                saved_helper=1;
                 if (a.equals("Cryptocurrency") || a.equals("Crypto")){
                 get_crypto_points();}
                 else{
@@ -321,84 +324,6 @@ public class Service_Chosen_Equity
 
 
     }
-    private static void ProcessXml(org.w3c.dom.Document data) {
-        if (data != null) {
-            String st, sd, sp, sl;
-            org.w3c.dom.Element root = data.getDocumentElement();
-            Node channel = root.getChildNodes().item(0);
-            NodeList items = channel.getChildNodes();
 
-            for (int i = 0; i < items.getLength(); i++) {
-                Constructor_News_Feed it = new Constructor_News_Feed();
-                Node curentchild = items.item(i);
-                if (curentchild.getNodeName().equalsIgnoreCase("item")) {
-                    NodeList itemchilds = curentchild.getChildNodes();
-                    for (int j = 0; j < itemchilds.getLength(); j++) {
-                        Node curent = itemchilds.item(j);
-                        if (curent.getNodeName().equalsIgnoreCase("title")) {
-                            st = Html.fromHtml(curent.getTextContent()).toString();
-                            it.setTitle(st);
-                        } else if (curent.getNodeName().equalsIgnoreCase("source")) {
-                            sd = Html.fromHtml(curent.getTextContent()).toString();
-                            String d = curent.getTextContent().toString();
-                            String pattern1 = "<img src=\"";
-                            String pattern2 = "\"";
-                            Pattern p = Pattern.compile(Pattern.quote(pattern1) + "(.*?)" + Pattern.quote(pattern2));
-                            Matcher m = p.matcher(d);
-                            while (m.find()) {
-                                it.setThumbnailUrl(m.group(1));
-                            }
-                            it.setSource(sd);
-                        } else if (curent.getNodeName().equalsIgnoreCase("pubDate")) {
-                            sp = Html.fromHtml(curent.getTextContent()).toString();
-                            sp = sp.replaceAll("@20", " ");
-                            it.setPubDate(sp);
-                        } else if (curent.getNodeName().equalsIgnoreCase("link")) {
-                            sl = Html.fromHtml(curent.getTextContent()).toString();
-                            sl = sl.replaceAll("@20", " ");
-                            it.setLink(sl);
-                        } else if (curent.getNodeName().equalsIgnoreCase("img src")) {
-                        }
-                    }
-                    feedItems.add(it);
-
-
-                }
-            }
-        }
-    }
-    public static org.w3c.dom.Document GoogleRSFeed() {
-        try {
-            URL url;
-            Context context;
-            String address;
-            String type =ap_info.getMarketType();
-            String repo = ap_info.getMarketName();
-            if (repo.contains(" "))
-            {
-                repo =repo.replaceAll(" ","%20");
-            }
-            String repo_type = repo+"%20"+type;
-            if (type.equals("Cryptocurrency")){
-                address = "https://news.google.com/news/rss/search/section/q/" + repo_type + "?ned=us&gl=US&hl=en";
-
-            }else {
-                address = "https://news.google.com/news/rss/search/section/q/" + repo + "?ned=us&gl=US&hl=en";
-            }
-            url = new URL(address);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("GET");
-            InputStream inputStream = connection.getInputStream();
-            DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder builder = builderFactory.newDocumentBuilder();
-            org.w3c.dom.Document xmlDoc = builder.parse(inputStream);
-            return xmlDoc;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-
-
-    }
 
 }

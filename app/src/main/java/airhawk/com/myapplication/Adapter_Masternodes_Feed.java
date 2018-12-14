@@ -48,7 +48,7 @@ public class Adapter_Masternodes_Feed extends RecyclerView.Adapter<Adapter_Maste
            cap=itemView.findViewById(R.id.cap);
 
 
-            itemView.setOnClickListener(new View.OnClickListener() {
+            symbol.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     ap_info.setMarketSymbol(symbol.getText().toString());

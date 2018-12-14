@@ -56,13 +56,14 @@
 
 
             <TextView
-                    android:id="@+id/aequity_symbol"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:textColor="@color/darkTextColor2"
-                    android:textSize="36sp"
-                    android:textStyle="bold" android:text="test"/>
+                android:id="@+id/aequity_symbol"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="test"
+                android:textColor="@color/darkTextColor2"
+                android:textSize="36sp"
+                android:textStyle="bold" />
 
             <TextView
                     android:id="@+id/aequity_type"
@@ -170,6 +171,7 @@
         android:id="@+id/tabs"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         app:tabGravity="fill"
         app:tabIndicatorColor="@color/green_color_text"
         app:tabMode="fixed"

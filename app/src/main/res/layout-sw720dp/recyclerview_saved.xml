@@ -1,30 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<TableRow xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
           xmlns:app="http://schemas.android.com/apk/res-auto"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:layout_weight="1">
+    android:orientation="vertical">
 
-    <ImageView
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
             android:id="@+id/circle"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            app:srcCompat="@drawable/holder_green_circle"/>
+            app:srcCompat="@drawable/holder_green_circle" />
 
-    <TextView
+        <TextView
             android:id="@+id/symbol"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight=".65"
             android:gravity="left|center"
             android:singleLine="true"
-            android:visibility="gone"
             android:text="BTC"
             android:textColor="@color/darkTextColor"
-            android:textSize="36sp"/>
+            android:textSize="36sp"
+            android:visibility="gone" />
 
-    <TextView
+        <TextView
             android:id="@+id/name"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -33,9 +37,9 @@
             android:singleLine="true"
             android:text="BITCOIN"
             android:textColor="@color/darkTextColor"
-            android:textSize="36sp"/>
+            android:textSize="36sp" />
 
-    <TextView
+        <TextView
             android:id="@+id/current_change"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -46,9 +50,9 @@
             android:textAlignment="textEnd"
             android:textColor="@color/darkTextColor"
             android:textSize="36sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
 
-    <TextView
+        <TextView
             android:id="@+id/type"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -59,5 +63,14 @@
             android:textAlignment="textEnd"
             android:textColor="@color/darkTextColor"
             android:textSize="36sp"
-            android:textStyle="bold"/>
-</TableRow>
+            android:textStyle="bold" />
+    </TableRow>
+
+<View
+android:layout_width="match_parent"
+android:layout_height="1dp"
+android:alpha=".1"
+android:background="@color/colorBlack">
+
+</View>
+</LinearLayout>

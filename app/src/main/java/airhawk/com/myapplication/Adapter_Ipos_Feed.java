@@ -87,7 +87,7 @@ public class Adapter_Ipos_Feed extends RecyclerView.Adapter<Adapter_Ipos_Feed.My
 
          myClickWebView=myClickWebView;
    
-       message.setOnClickListener(new View.OnClickListener() {
+       name.setOnClickListener(new View.OnClickListener() {
          @Override  
          public void onClick(View view) {
 

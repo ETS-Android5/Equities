@@ -3,13 +3,14 @@ package airhawk.com.myapplication;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
+import android.graphics.Rect;
 import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -37,7 +38,6 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
 
-import com.twitter.sdk.android.core.TwitterSession;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -46,10 +46,14 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -57,20 +61,18 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
 import static airhawk.com.myapplication.Constructor_App_Variables.*;
-import static airhawk.com.myapplication.Service_Main_Equities.crypto_kings_changelist;
-import static airhawk.com.myapplication.Service_Main_Equities.crypto_kings_marketcaplist;
-import static airhawk.com.myapplication.Service_Main_Equities.crypto_kings_namelist;
-import static airhawk.com.myapplication.Service_Main_Equities.crypto_kings_symbolist;
+import static airhawk.com.myapplication.Service_Main_Equities.GoogleRSFeed;
 
 public class Activity_Main extends AppCompatActivity {
-    final String PREFS_NAME = "TheSteelersalwayscheat";
-    final String PREF_VERSION_CODE_KEY = "version_code";
-    final int DOESNT_EXIST = -1;
-    int savedVersionCode;
+
     public static final String Data_Preferences = "MyPrefs" ;
     public static final String Masternode = "masternodes";
     public static final String ProofofWork = "proofofwork";
@@ -83,10 +85,8 @@ public class Activity_Main extends AppCompatActivity {
     public static final String Ipos="ipos";
     public static final String StockWisdom ="stockwisdom";
 
-    SharedPreferences sharedpreferences;
     Database_Local_Aequities check_saved = new Database_Local_Aequities(Activity_Main.this);
     RequestQueue requestQueue;
-    Database_Local_Aequities co =new Database_Local_Aequities(this);
     TextView txt;
     final int[] ICONS = new int[]{
             R.drawable.direction_up,
@@ -101,6 +101,7 @@ public class Activity_Main extends AppCompatActivity {
     protected ArrayAdapter<String> ad;
     private Toolbar toolbar;
     ProgressBar mainbar,progress;
+    ImageView refresh;
     public static ArrayList<String> searchview_arraylist = new ArrayList<>();
     public static ArrayList<String> aequity_symbol_arraylist = new ArrayList<>();
     public static ArrayList<String> aequity_name_arraylist = new ArrayList<>();
@@ -112,11 +113,12 @@ public class Activity_Main extends AppCompatActivity {
     static Constructor_App_Variables ap_info = new Constructor_App_Variables();
     ImageView search_button,imageView;
     LinearLayout lin_lay;
-    RelativeLayout progresslayout;
+    RelativeLayout progLayout;
     FrameLayout fu,frameLayout;
     static RecyclerView recyclerView;
     Animation centerLinear;
     boolean forward;
+    static String repo;
     static Boolean async_analysis_page = false;
     public static boolean db_exist =false;
     Context context =this;
@@ -132,9 +134,6 @@ public class Activity_Main extends AppCompatActivity {
         file.close();
         return new String(formArray);
     }
-
-
-
 
     private boolean checkInternetConnection() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -170,6 +169,7 @@ public class Activity_Main extends AppCompatActivity {
 
         new setAsyncDataMain(this).execute();
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -199,9 +199,9 @@ public class Activity_Main extends AppCompatActivity {
             }
             @Override
             public void onAdClosed() {
-                mInterstitialAd.setAdUnitId("ca-app-pub-6566728316210720/4471280326");
-                AdRequest adRequest = new AdRequest.Builder().build();
-                mInterstitialAd.loadAd(adRequest);
+//                mInterstitialAd.setAdUnitId("ca-app-pub-6566728316210720/4471280326");
+                //AdRequest adRequest = new AdRequest.Builder().build();
+                //mInterstitialAd.loadAd(adRequest);
                 System.err.println("Ad loaded");
             }
         });
@@ -212,92 +212,36 @@ public class Activity_Main extends AppCompatActivity {
             graph_date.clear();
             graph_high.clear();
             graph_volume.clear();
-            current_percentage_change.clear();
             new setAsyncChosenData(this).cancel(true);
-            new setAsyncDataMain(this).cancel(true);
-            new setSavedAsyncDataMain(this).execute();
-        }
+            //new setAsyncDataMain(this).execute();
 
-    }
-
-    public class setSavedAsyncDataMain extends AsyncTask<Integer, Integer, String> {
-
-        private WeakReference<Activity_Main> activityReference;
-        setSavedAsyncDataMain(Activity_Main context) {
-            activityReference = new WeakReference<>(context);
-        }
-        long startTime;
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            Activity_Main activity = activityReference.get();
-            startTime = System.nanoTime();
-            Random rand = new Random();
-            int value = rand.nextInt(50);
-            String [] qu =getResources().getStringArray(R.array.all_quotes);
-            String q = qu[value];
-            TextView txt2 =activity.findViewById(R.id.output2);
-            txt2.setText(q);
-            RelativeLayout progLayout =activity.findViewById(R.id.progLayout);
-            progLayout.setVisibility(View.GONE);
-            ProgressBar mainbar = activity.findViewById(R.id.mainbar);
-            mainbar.setIndeterminate(true);
-            ViewPager mp = activity.findViewById(R.id.market_pager);
-            mp.setVisibility(View.GONE);
-        }
-
-        @Override
-        protected String doInBackground(Integer... params) {
-            getAdded_stock_point();
-            return "task finished";
-        }
-        @Override
-        protected void onPostExecute(String result) {
-            Activity_Main activity = activityReference.get();
-            if (activity == null || activity.isFinishing()) return;
-            setSupportActionBar(toolbar);
-            getSupportActionBar().setDisplayShowTitleEnabled(false);
-            ViewPager pager = findViewById(R.id.viewpager);
-            if (pager.getVisibility() == View.VISIBLE) {
-                activity.finishAffinity();
-            }
-            pager.setVisibility(View.VISIBLE);
-            ViewPager market_pager = findViewById(R.id.market_pager);
-            market_pager.setVisibility(View.GONE);
-            TabLayout tabs = findViewById(R.id.tabs);
-
-            setupMainViewPager(pager);
-            tabs.setupWithViewPager(pager);
-            tabs.getTabAt(0).setIcon(ICONS[0]);
-            tabs.getTabAt(1).setIcon(ICONS[1]);
-            if (check_saved.getName().isEmpty()){
-                tabs.getTabAt(2).setIcon(ICONS[2]);
-                tabs.getTabAt(3).setIcon(ICONS[3]);
-                tabs.getTabAt(4).setIcon(ICONS[4]);
-                tabs.getTabAt(5).setIcon(ICONS[5]);
-                tabs.getTabAt(6).setIcon(ICONS[6]);
+          pager.setVisibility(View.VISIBLE);
+          ViewPager market_pager = findViewById(R.id.market_pager);
+          market_pager.setVisibility(View.GONE);
+          TabLayout tabs = findViewById(R.id.tabs);
+          setupMainViewPager(pager);
+          tabs.setupWithViewPager(pager);
+          tabs.getTabAt(0).setIcon(ICONS[0]);
+          tabs.getTabAt(1).setIcon(ICONS[1]);
+          if (check_saved.getName().isEmpty()){
+              tabs.getTabAt(2).setIcon(ICONS[2]);
+              tabs.getTabAt(3).setIcon(ICONS[3]);
+              tabs.getTabAt(4).setIcon(ICONS[4]);
+              tabs.getTabAt(5).setIcon(ICONS[5]);
+              tabs.getTabAt(6).setIcon(ICONS[6]);
+          }else{
+              tabs.getTabAt(2).setIcon(android.R.drawable.btn_star_big_on);
+              tabs.getTabAt(3).setIcon(ICONS[2]);
+              tabs.getTabAt(4).setIcon(ICONS[3]);
+              tabs.getTabAt(5).setIcon(ICONS[4]);
+              tabs.getTabAt(6).setIcon(ICONS[5]);
+              tabs.getTabAt(7).setIcon(ICONS[6]);
 
 
-            }else{
-                tabs.getTabAt(2).setIcon(android.R.drawable.btn_star_big_on);
-                tabs.getTabAt(3).setIcon(ICONS[2]);
-                tabs.getTabAt(4).setIcon(ICONS[3]);
-                tabs.getTabAt(5).setIcon(ICONS[4]);
-                tabs.getTabAt(6).setIcon(ICONS[5]);
-                tabs.getTabAt(7).setIcon(ICONS[6]);
-            }
-            recyclerView = findViewById(R.id.item_list);
-            l =new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false);
-            recyclerView.setLayoutManager(l);
-            adapter = new Adapter_Main_Markets(Activity_Main.this);
-            recyclerView.setAdapter(adapter);
-            autoScroll();
-            long endTime = System.nanoTime();
-            long duration = (endTime - startTime);
-            System.out.println("SERVICE MAIN TIME IS " + duration / 1000000000 + " seconds");
 
-        }
+          }
+
+      }
 
     }
 
@@ -319,14 +263,15 @@ public class Activity_Main extends AppCompatActivity {
             String [] qu =getResources().getStringArray(R.array.all_quotes);
             String q = qu[value];
             txt.setText(q);
+
         }
 
         @Override
         protected String doInBackground(Integer... params) {
 
 
-            getCrypto_Kings();
-            getAdded_stock_point();
+
+
             //get_main_graph();
 
             Service_Main_Equities cst = new Service_Main_Equities();
@@ -343,6 +288,7 @@ public class Activity_Main extends AppCompatActivity {
             Activity_Main activity = activityReference.get();
             if (activity == null || activity.isFinishing()) return;
             setMainPage();
+
             long endTime = System.nanoTime();
             long duration = (endTime - startTime);
             System.out.println("SERVICE MAIN TIME IS " + duration / 1000000000 + " seconds");
@@ -391,6 +337,7 @@ public class Activity_Main extends AppCompatActivity {
             sb.show();
             pager = activity.findViewById(R.id.viewpager);
             pager.setVisibility(View.GONE);
+
         }
 
         @Override
@@ -409,6 +356,8 @@ public class Activity_Main extends AppCompatActivity {
                 if (ap_info.getMarketType().equals("Crypto")||(ap_info.getMarketType().equals("Cryptocurrency"))) {
                     activity.getChosenCryptoInfo();
                     activity.getStockTwitsData();
+
+
                     activity.get_coinmarketcap_exchange_listing();
                     Service_Chosen_Equity shoe = new Service_Chosen_Equity(Activity_Main.this);
 
@@ -447,6 +396,7 @@ public class Activity_Main extends AppCompatActivity {
                     shoe.main();
                     do_graph_change();
                 }
+                activity.ProcessXmlx(GoogleRSFeedx());
 
                 async_analysis_page = true;
 
@@ -499,11 +449,20 @@ public class Activity_Main extends AppCompatActivity {
         fu=findViewById(R.id.frameLayout);
         fu.setVisibility(View.VISIBLE);
         search_button=findViewById(R.id.search_button);
+        progLayout=findViewById(R.id.progLayout);
         search_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 openSearchView();
+            }
+        });
+
+        refresh=findViewById(R.id.refresh);
+        refresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                starterup();
             }
         });
         setSupportActionBar(toolbar);
@@ -543,6 +502,13 @@ public class Activity_Main extends AppCompatActivity {
         adapter = new Adapter_Main_Markets(Activity_Main.this);
         recyclerView.setAdapter(adapter);
         autoScroll();
+        if(pager.getVisibility()==View.VISIBLE){
+            progLayout.setVisibility(View.GONE);
+        }else{
+            progLayout.setVisibility(View.VISIBLE);
+
+
+        }
               }
 
     public void autoScroll(){
@@ -567,15 +533,6 @@ public class Activity_Main extends AppCompatActivity {
     private void setupMainViewPager(ViewPager viewPager) {
         SharedPreferences sp = this.getSharedPreferences(Data_Preferences, Context.MODE_PRIVATE);
         String masternodes = sp.getString(Masternode, "");
-        String proofofwork = sp.getString(ProofofWork, "");
-        String proofofstake = sp.getString(ProofofStake, "");
-        String icos = sp.getString(Icos, "");
-        String cryptowisdom = sp.getString(CryptoWisdom, "");
-        String commodities = sp.getString(Commodities, "");
-        String bonds = sp.getString(Bonds, "");
-        String etfs = sp.getString(Etfs, "");
-        String ipos = sp.getString(Ipos, "");
-        String stockwisdom = sp.getString(StockWisdom, "");
 
 
 
@@ -598,7 +555,7 @@ public class Activity_Main extends AppCompatActivity {
     private void setupChosenViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFrag(new Fragment_Analysis(), getString(R.string.action_analysis));
-        adapter.addFrag(new Fragment_News(), getString(R.string.title_news));
+        adapter.addFrag(new Fragment_News_Chosen(), getString(R.string.title_news));
         adapter.addFrag(new Fragment_Video(), getString(R.string.title_video));
         adapter.addFrag(new Fragment_Exchanges(), getString(R.string.title_exchanges));
         adapter.addFrag(new Fragment_StockTwits(),getString(R.string.stocktwits));
@@ -689,77 +646,6 @@ public class Activity_Main extends AppCompatActivity {
         });
     }
 
-    public void getCrypto_Kings() {
-        long startTime = System.nanoTime();
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        final String url = "https://api.coinmarketcap.com/v2/ticker/?sort=rank";
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
-
-
-            @Override
-            public void onResponse(JSONObject response) {
-                try {
-                    JSONObject obj = response.getJSONObject("data");
-                    JSONArray keys = obj.names ();
-                    String market_cap = null;
-                    for (int i = 0; i < keys.length (); ++i) {
-                        String key = keys.getString (i); // Here's your key
-                        String value = obj.getString (key);// Here's your value
-                        JSONObject jsonObject = new JSONObject(value);
-                        String name = jsonObject.getString("name");
-                        if (name.equalsIgnoreCase("XRP")){
-                        crypto_kings_namelist.add("Ripple");}else{
-                            crypto_kings_namelist.add(name);
-                        }
-                        String symbol = jsonObject.getString("symbol");
-                        crypto_kings_symbolist.add(symbol);
-                        JSONObject quotes =jsonObject.getJSONObject("quotes");
-                        JSONArray ke = quotes.names ();
-                        for(int a =0; a < ke.length(); ++a){
-                            String keyz = ke.getString (a); // Here's your key
-                            String valuez = quotes.getString (keyz);
-                            JSONObject jzO = new JSONObject(valuez);
-                            market_cap= jzO.getString("market_cap");
-                            DecimalFormat df = new DecimalFormat("0.00");
-                            df.setMaximumFractionDigits(2);
-                            String p =market_cap;
-                            double d = Double.parseDouble(p);
-                            p =df.format(d);
-                            int l =p.length();
-                            long t = 1000000000000L;
-                            if (l<=12){
-                                p= String.valueOf(d/1000000);
-                                crypto_kings_marketcaplist.add(p.substring(0,3)+" M");}
-                            if (l>12){p= String.valueOf(d/1000000000);
-                                crypto_kings_marketcaplist.add(p.substring(0,3)+" B");}
-                            if (l>15){p= String.valueOf(d/t);
-                                crypto_kings_marketcaplist.add(p.substring(0,3)+" T");}
-                            String mc =jzO.getString("percent_change_24h");
-                            crypto_kings_changelist.add(mc);
-                        }
-
-
-
-
-                    }
-                    btc_market_cap_amount =(String) crypto_kings_marketcaplist.get(0);
-                    btc_market_cap_change =crypto_kings_changelist.get(0)+"%";
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                System.out.println("An Error occured while making the request");
-            }
-        });
-        requestQueue.add(jsonObjectRequest);
-
-
-    }
-
     public void getChosenCryptoInfo(){
 
         long startTime = System.nanoTime();
@@ -797,7 +683,7 @@ public class Activity_Main extends AppCompatActivity {
                             }
                             if (z <= 12) {
                                 y = String.valueOf(dd / 1000000);
-                                ap_info.setMarketSupply(y.substring(0, 5) + "M");
+                                ap_info.setMarketSupply(y.substring(0, 4) + "M");
                             }
                             if (z > 12) {
                                 y = String.valueOf(dd / 1000000000);
@@ -957,109 +843,24 @@ public class Activity_Main extends AppCompatActivity {
 
                 } catch (JSONException e) {
                     e.printStackTrace();
+
                 }
 //                findViewById(R.id.progressBar).setVisibility(View.GONE);
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                Constructor_Stock_Twits item = new Constructor_Stock_Twits();
+                item.setMessage_time("No Social data for "+ap_info.getMarketSymbol());
+                item.setUser_name("");
+                item.setUser_image_url(" - ");
+                item.setMessage("");
+                stocktwits_feedItems.add(item);
                 System.out.println("An Error occured while making the request");
             }
         });
         requestQueue.add(jsonObjectRequest);
 
-    }
-
-    public void getSaved_stock_points(){
-        ArrayList aaa = co.getName();
-        ArrayList a = co.getSymbol();
-        ArrayList aa = co.getType();
-        ArrayList b = co.getstockSymbol();
-
-        //String apikey ="XBA42BUC2B6U6G5C";
-        for(int c=0;c<b.size();c++) {
-            Document cap = null;
-            if (aa.get(c).equals("Stock")) {
-                try {
-                    cap = Jsoup.connect("https://finance.yahoo.com/quote/"+b.get(c)).get();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                Element test = cap.select("div[data-reactid='34']").first().select("span").get(1);
-                String foofoo =test.text().toString().replace("(","").replace(")","");
-                String[] foo = foofoo.split(" ");
-                String f =foo[1];
-                current_percentage_change.add(f);
-            }
-            if (aa.get(c).equals("Crypto")||aa.get(c).equals("Cryptocurrency"))
-                {
-                ArrayList d = co.getcryptoName();
-                for(int i=0;i<d.size();i++) {
-                    Document caps = null;
-                    String g = String.valueOf(d.get(i));
-                    if (g.contains(" ")) {
-                        g = g.replace(" ", "-");
-                    }
-                    try {
-                        caps = Jsoup.connect("https://coinmarketcap.com/currencies/" + g).timeout(10 * 10000).get();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    Elements as = caps.select("div>span");
-                    String f = as.get(4).text();
-                    f = f.replaceAll("\\(", "").replaceAll("\\)", "");
-                    current_percentage_change.add(f);
-
-                }
-                 }
-
-        }
-
-
-co.close();
-    }
-
-    public void getAdded_stock_point(){
-        ArrayList aaa = co.getName();
-        ArrayList a = co.getSymbol();
-        ArrayList aa = co.getType();
-        if(aa.size()>0){
-    for( int x=0;x<aa.size();x++) {
-    Document cap = null;
-    if (aa.get(x).equals("Stock")) {
-        ArrayList b = co.getSymbol();
-        try {
-            cap = Jsoup.connect("https://finance.yahoo.com/quote/" + b.get(x)).get();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        Element test = cap.select("div[data-reactid='34']").first().select("span").get(1);
-        String foofoo = test.text().toString().replace("(", "").replace(")", "");
-        String[] foo = foofoo.split(" ");
-        String f = foo[1];
-        current_percentage_change.add(f);
-    } else {
-        ArrayList d = co.getName();
-        Document caps = null;
-        if (d.size()>0) {
-            String g = String.valueOf(d.get(x));
-            if (g.contains(" ")) {
-                g = g.replace(" ", "-");
-            }
-            try {
-                caps = Jsoup.connect("https://coinmarketcap.com/currencies/" + g).timeout(10 * 10000).get();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            Elements as = caps.select("div>span");
-            String f = as.get(4).text();
-            f = f.replaceAll("\\(", "").replaceAll("\\)", "");
-            current_percentage_change.add(f);
-        }
-    }
-
-
-}}co.close();
     }
 
     public static void get_coinmarketcap_exchange_listing() {
@@ -1073,31 +874,26 @@ co.close();
         try {
             doc = Jsoup.connect("https://coinmarketcap.com/currencies/"+name+"/#markets").timeout(10 * 1000).get();
             Element tb = doc.getElementById("markets-table");
-            Elements rows = tb.select("tr");
-
-            for(int i =0; i<rows.size();i++){
-                Element row = rows.get(i);
-                Elements cols = row.select("td");
-                for(int z =0; z<cols.size();z++) {
-                    String line = cols.get(1).text();
-                    if(!exchange_list.contains(line))
-                        exchange_list.add(line);
+            Elements rows = null;
+            if(tb!=null) {
+                rows = tb.select("tr");
+                for(int i =0; i<rows.size();i++){
+                    Element row = rows.get(i);
+                    Elements cols = row.select("td");
+                    for(int z =0; z<cols.size();z++) {
+                        String line = cols.get(1).text();
+                        if(!exchange_list.contains(line))
+                            exchange_list.add(line);
+                    }
                 }
+            }else{
+                getWorldCoinIndex();
             }
+
             System.out.println("EXCHANGE LIST"+exchange_list);
         } catch (HttpStatusException x){
             System.out.println("There is no information about "+name +", so now we try world coinindex");
-            try {
-                doc = Jsoup.connect("https://www.worldcoinindex.com/coin/"+name).timeout(10 * 1000).get();
-                String s = doc.getElementsByClass("mob-exchange exchange").text();
-                List<String> myList = new ArrayList<String>(Arrays.asList(s.split(" ")));
-                for(int i=0; i<myList.size();i++){
-                    exchange_list.add(myList.get(i));
-                    //System.out.println(i+" "+exchange_list.get(i));
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            getWorldCoinIndex();
         } catch (IOException e) {
 
             e.printStackTrace(); }
@@ -1122,6 +918,21 @@ co.close();
 
     }
 
+    public static void getWorldCoinIndex(){
+        Document doc = null;
+        String name = ap_info.getMarketName();
+        try {
+            doc = Jsoup.connect("https://www.worldcoinindex.com/coin/"+name).timeout(10 * 1000).get();
+            String s = doc.getElementsByClass("mob-exchange exchange").text();
+            List<String> myList = new ArrayList<String>(Arrays.asList(s.split(" ")));
+            for(int i=0; i<myList.size();i++){
+                exchange_list.add(myList.get(i));
+                //System.out.println(i+" "+exchange_list.get(i));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     public static void get_crypto_exchange_info() {
 
         crypto_exchange_name.add("Binance");
@@ -1182,13 +993,18 @@ co.close();
         System.out.println("BANANAS"+graph_high);
         Double a=0.00;
         for (int i = 0; i < graph_high.size(); i++) {
+
             if(graph_high.get(i)!=null) {
+                   if(graph_high.get(i)=="null"){
+                       graph_high.get(i).toString().replace("null","0.00");
+                   }
                 a = new Double(graph_high.get(i).toString().replace(",", ""));
             }else{
                 a=0.00;
             }
-            if (i > 0) {
+            if (i > 1) {
                 int z = i - 1;
+                System.out.println("BANANAS2 "+graph_high.get(z));
                 double b = new Double(graph_high.get(z).toString().replace(",",""));
                 double c = ((a - b) / a) * 100;
                 DecimalFormat numberFormat = new DecimalFormat("#0.00");
@@ -1299,8 +1115,6 @@ co.close();
 
     }
 
-
-
     private void check_to_show_ad(){
         if (fullScreen.equalsIgnoreCase("go")) {
             // Sample AdMob app ID: ca-app-pub-3940256099942544~3347511713
@@ -1321,6 +1135,90 @@ co.close();
                 }
             });
         }
+
+    }
+
+    private static void ProcessXmlx(org.w3c.dom.Document data) {
+        all_feedItems.clear();
+        if (data != null) {
+            String st, sd, sp, sl,si;
+            org.w3c.dom.Element root = data.getDocumentElement();
+            Node channel = root.getChildNodes().item(0);
+            NodeList items = channel.getChildNodes();
+
+            for (int i = 0; i < items.getLength(); i++) {
+                Constructor_News_Feed it = new Constructor_News_Feed();
+                Node curentchild = items.item(i);
+                if (curentchild.getNodeName().equalsIgnoreCase("item")) {
+                    NodeList itemchilds = curentchild.getChildNodes();
+                    for (int j = 0; j < itemchilds.getLength(); j++) {
+                        Node curent = itemchilds.item(j);
+                        if (curent.getNodeName().equalsIgnoreCase("title")) {
+                            st = curent.getTextContent().toString();
+                            st= st.substring(0,st.indexOf(" - ")+" - ".length());
+                            st= st.replace("-","");
+                            it.setTitle(st);
+                            System.out.println(st);
+                        } else if (curent.getNodeName().equalsIgnoreCase("media:content")) {
+                            sd = curent.getTextContent().toString();
+                            System.out.println(sd);
+
+                            String d = curent.getTextContent().toString();
+                            String pattern1 = "<img src=\"";
+                            String pattern2 = "\"";
+                            Pattern p = Pattern.compile(Pattern.quote(pattern1) + "(.*?)" + Pattern.quote(pattern2));
+                            Matcher m = p.matcher(d);
+                            while (m.find()) {
+                                it.setThumbnailUrl(m.group(1));
+                                //System.out.println("HERE IS YOUR IMAGE DUDE! "+m.group(1));
+                            }
+                            it.setDescription(sd);
+                        } else if (curent.getNodeName().equalsIgnoreCase("pubDate")) {
+                            sp = curent.getTextContent().toString();
+                            sp = sp.replaceAll("@20", " ");
+                            it.setPubDate(sp);
+                            System.out.println(sp);
+                        } else if (curent.getNodeName().equalsIgnoreCase("link")) {
+                            sl = curent.getTextContent().toString();
+                            sl = sl.replaceAll("@20", " ");
+                            it.setLink(sl);
+                            System.out.println(sl);
+                        } else if (curent.getNodeName().equalsIgnoreCase("source")) {
+                            si = curent.getTextContent().toString();
+                            it.setSource(si);
+                        }
+                    }
+
+                    all_feedItems.add(it);
+
+
+                }
+            }
+        }
+    }
+
+    public static org.w3c.dom.Document GoogleRSFeedx() {
+        try {
+            URL url;
+            Context context;
+            repo = "Stock%20Cryptocurrency";
+            String address = "https://news.google.com/news/rss/search/section/q/" + repo + "?ned=us&gl=US&hl=en";
+
+
+            url = new URL(address);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+            InputStream inputStream = connection.getInputStream();
+            DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = builderFactory.newDocumentBuilder();
+            org.w3c.dom.Document xmlDoc = builder.parse(inputStream);
+
+            return xmlDoc;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
 
     }
 }

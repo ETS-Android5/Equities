@@ -1,7 +1,20 @@
 package airhawk.com.myapplication;
 
 import android.content.Context;
+import android.support.v4.view.ViewPager;
 import android.text.Html;
+import android.view.View;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -16,6 +29,7 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -46,6 +60,7 @@ public class Service_Main_Equities {
 
     public Service_Main_Equities() {
     }
+    static Database_Local_Aequities co =new Database_Local_Aequities(ApplicationContextProvider.getContext());
 
     static Document sss = null;
     static Document sv = null;
@@ -76,16 +91,47 @@ public class Service_Main_Equities {
     static ArrayList crypto_kings_marketcaplist = new ArrayList();
     static ArrayList crypto_kings_changelist = new ArrayList();
 
+    static String repo;
     public static void main() {
         ExecutorService service = Executors.newCachedThreadPool();
         Set<Callable<String>> callables = new HashSet<Callable<String>>();
-
 
         callables.add(new Callable<String>() {
             @Override
             public String call() throws Exception {
                 long startTime = System.nanoTime();
-                getStocks_Market_Caps();
+                if(saved_helper == 1){}else{
+                    getCrypto_Kings();}
+                long endTime = System.nanoTime();
+                long duration = (endTime - startTime);
+                //2 seconds wifi
+                //21 seconds Boost Mobile
+                System.out.println("getCrypto_Kings TIME IS " + duration / 1000000000 + " seconds");
+                return null;
+            }
+        });
+        callables.add(new Callable<String>() {
+            @Override
+            public String call() throws Exception {
+                long startTime = System.nanoTime();
+                if (co.getName().isEmpty()){}
+                else{
+                getSavedEquities();}
+                long endTime = System.nanoTime();
+                long duration = (endTime - startTime);
+                //17 seconds no wifi Boost Mobile RIDICULOUS!
+                //2 Seconds on wifi
+                System.out.println("savedEquities TIME IS " + duration / 1000000000 + " seconds");
+                return null;
+            }
+        });
+
+        callables.add(new Callable<String>() {
+            @Override
+            public String call() throws Exception {
+                long startTime = System.nanoTime();
+                if(saved_helper == 1){}else{
+                getStocks_Market_Caps();}
                 long endTime = System.nanoTime();
                 long duration = (endTime - startTime);
                 //17 seconds no wifi Boost Mobile RIDICULOUS!
@@ -100,7 +146,8 @@ public class Service_Main_Equities {
             @Override
             public String call() throws Exception {
                 long startTime = System.nanoTime();
-                getCrypto_Winners_Losers();
+                if(saved_helper == 1){}else{
+                getCrypto_Winners_Losers();}
                 long endTime = System.nanoTime();
                 long duration = (endTime - startTime);
                 //2 seconds wifi
@@ -115,7 +162,8 @@ public class Service_Main_Equities {
             @Override
             public String call() throws Exception {
                 long startTime = System.nanoTime();
-                getStock_Winners_Losers();
+                if(saved_helper == 1){}else{
+                getStock_Winners_Losers();}
                 long endTime = System.nanoTime();
                 long duration = (endTime - startTime);
                 //2 seconds wifi
@@ -129,7 +177,8 @@ public class Service_Main_Equities {
             @Override
             public String call() throws Exception {
                 long startTime = System.nanoTime();
-                getStock_Kings();
+                if(saved_helper == 1){}else{
+                getStock_Kings();}
                 get_stock_kings_points();
                 long endTime = System.nanoTime();
                 long duration = (endTime - startTime);
@@ -144,7 +193,8 @@ public class Service_Main_Equities {
             @Override
             public String call() throws Exception {
                 long startTime = System.nanoTime();
-                ProcessXml(GoogleRSFeed());
+                if(saved_helper == 1){}else{
+                ProcessXml(GoogleRSFeed());}
                 long endTime = System.nanoTime();
                 long duration = (endTime - startTime);
                 //wifi 1 second
@@ -158,7 +208,8 @@ public class Service_Main_Equities {
             @Override
             public String call() throws Exception {
                 long startTime = System.nanoTime();
-     get_masternodes();
+                if(saved_helper == 1){}else{
+     get_masternodes();}
                 long endTime = System.nanoTime();
                 long duration = (endTime - startTime);
                 //wifi 1 second
@@ -172,7 +223,8 @@ public class Service_Main_Equities {
             @Override
             public String call() throws Exception {
                 long startTime = System.nanoTime();
-                get_icos();
+                if(saved_helper == 1){}else{
+                get_icos();}
                 long endTime = System.nanoTime();
                 long duration = (endTime - startTime);
                 //2 seconds wifi
@@ -186,7 +238,8 @@ public class Service_Main_Equities {
             @Override
             public String call() throws Exception {
                 long startTime = System.nanoTime();
-                get_ipos();
+                if(saved_helper == 1){}else{
+                get_ipos();}
                 long endTime = System.nanoTime();
                 long duration = (endTime - startTime);
                 //2 seconds wifi
@@ -205,6 +258,77 @@ public class Service_Main_Equities {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    public static void getCrypto_Kings() {
+        long startTime = System.nanoTime();
+        RequestQueue requestQueue = Volley.newRequestQueue(ApplicationContextProvider.getContext());
+        final String url = "https://api.coinmarketcap.com/v2/ticker/?sort=rank";
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+
+
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    JSONObject obj = response.getJSONObject("data");
+                    JSONArray keys = obj.names ();
+                    String market_cap = null;
+                    for (int i = 0; i < keys.length (); ++i) {
+                        String key = keys.getString (i); // Here's your key
+                        String value = obj.getString (key);// Here's your value
+                        JSONObject jsonObject = new JSONObject(value);
+                        String name = jsonObject.getString("name");
+                        if (name.equalsIgnoreCase("XRP")){
+                            crypto_kings_namelist.add("Ripple");}else{
+                            crypto_kings_namelist.add(name);
+                        }
+                        String symbol = jsonObject.getString("symbol");
+                        crypto_kings_symbolist.add(symbol);
+                        JSONObject quotes =jsonObject.getJSONObject("quotes");
+                        JSONArray ke = quotes.names ();
+                        for(int a =0; a < ke.length(); ++a){
+                            String keyz = ke.getString (a); // Here's your key
+                            String valuez = quotes.getString (keyz);
+                            JSONObject jzO = new JSONObject(valuez);
+                            market_cap= jzO.getString("market_cap");
+                            DecimalFormat df = new DecimalFormat("0.00");
+                            df.setMaximumFractionDigits(2);
+                            String p =market_cap;
+                            double d = Double.parseDouble(p);
+                            p =df.format(d);
+                            int l =p.length();
+                            long t = 1000000000000L;
+                            if (l<=12){
+                                p= String.valueOf(d/1000000);
+                                crypto_kings_marketcaplist.add(p.substring(0,3)+" M");}
+                            if (l>12){p= String.valueOf(d/1000000000);
+                                crypto_kings_marketcaplist.add(p.substring(0,3)+" B");}
+                            if (l>15){p= String.valueOf(d/t);
+                                crypto_kings_marketcaplist.add(p.substring(0,3)+" T");}
+                            String mc =jzO.getString("percent_change_24h");
+                            crypto_kings_changelist.add(mc);
+                        }
+
+
+
+
+                    }
+                    btc_market_cap_amount =(String) crypto_kings_marketcaplist.get(0);
+                    btc_market_cap_change =crypto_kings_changelist.get(0)+"%";
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                System.out.println("An Error occured while making the request");
+            }
+        });
+        requestQueue.add(jsonObjectRequest);
+
+
     }
 
     public static void getStock_Winners_Losers() {
@@ -263,7 +387,7 @@ public class Service_Main_Equities {
 
     private static void ProcessXml(org.w3c.dom.Document data) {
         if (data != null) {
-            String st, sd, sp, sl;
+            String st, sd, sp, sl,si;
             org.w3c.dom.Element root = data.getDocumentElement();
             Node channel = root.getChildNodes().item(0);
             NodeList items = channel.getChildNodes();
@@ -276,10 +400,14 @@ public class Service_Main_Equities {
                     for (int j = 0; j < itemchilds.getLength(); j++) {
                         Node curent = itemchilds.item(j);
                         if (curent.getNodeName().equalsIgnoreCase("title")) {
-                            st = Html.fromHtml(curent.getTextContent()).toString();
+                            st = curent.getTextContent().toString();
+                            st= st.substring(0,st.indexOf(" - ")+" - ".length());
+                            st= st.replace("-","");
                             it.setTitle(st);
-                        } else if (curent.getNodeName().equalsIgnoreCase("source")) {
-                            sd = Html.fromHtml(curent.getTextContent()).toString();
+                            System.out.println(st);
+                        } else if (curent.getNodeName().equalsIgnoreCase("media:content")) {
+                            sd = curent.getTextContent().toString();
+                            System.out.println(sd);
 
                             String d = curent.getTextContent().toString();
                             String pattern1 = "<img src=\"";
@@ -290,19 +418,20 @@ public class Service_Main_Equities {
                                 it.setThumbnailUrl(m.group(1));
                                 //System.out.println("HERE IS YOUR IMAGE DUDE! "+m.group(1));
                             }
-                            it.setSource(sd);
-
+                            it.setDescription(sd);
                         } else if (curent.getNodeName().equalsIgnoreCase("pubDate")) {
-                            sp = Html.fromHtml(curent.getTextContent()).toString();
+                            sp = curent.getTextContent().toString();
                             sp = sp.replaceAll("@20", " ");
                             it.setPubDate(sp);
+                            System.out.println(sp);
                         } else if (curent.getNodeName().equalsIgnoreCase("link")) {
-                            sl = Html.fromHtml(curent.getTextContent()).toString();
+                            sl = curent.getTextContent().toString();
                             sl = sl.replaceAll("@20", " ");
                             it.setLink(sl);
-                        } else if (curent.getNodeName().equalsIgnoreCase("media:content")) {
-                            String d = String.valueOf(Html.fromHtml(curent.getTextContent().toString()));
-                            //it.setThumbnailUrl(d);
+                            System.out.println(sl);
+                        } else if (curent.getNodeName().equalsIgnoreCase("source")) {
+                            si = curent.getTextContent().toString();
+                            it.setSource(si);
                         }
                     }
 
@@ -318,7 +447,7 @@ public class Service_Main_Equities {
         try {
             URL url;
             Context context;
-            String repo = "Stock%20Cryptocurrency";
+            repo = "Stock%20Cryptocurrency";
             String address = "https://news.google.com/news/rss/search/section/q/" + repo + "?ned=us&gl=US&hl=en";
 
 
@@ -329,6 +458,7 @@ public class Service_Main_Equities {
             DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = builderFactory.newDocumentBuilder();
             org.w3c.dom.Document xmlDoc = builder.parse(inputStream);
+
             return xmlDoc;
         } catch (Exception e) {
             e.printStackTrace();
@@ -338,8 +468,6 @@ public class Service_Main_Equities {
 
     }
 
-    //16
-    //15
     public static void getStocks_Market_Caps() {
         try {
             z = Jsoup.connect("https://finance.yahoo.com").timeout(10 * 10000).get();
@@ -582,6 +710,49 @@ public class Service_Main_Equities {
             ipo_volume.add(cols.get(3).text());
         }
 
+    }
+
+    public static void getSavedEquities(){
+        ArrayList aaa = co.getName();
+        ArrayList a = co.getSymbol();
+        ArrayList aa = co.getType();
+        if(aa.size()>0){
+            for( int x=0;x<aa.size();x++) {
+                Document cap = null;
+                if (aa.get(x).equals("Stock")) {
+                    ArrayList b = co.getSymbol();
+                    try {
+                        cap = Jsoup.connect("https://finance.yahoo.com/quote/" + b.get(x)).get();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    Element test = cap.select("div[data-reactid='34']").first().select("span").get(1);
+                    String foofoo = test.text().toString().replace("(", "").replace(")", "");
+                    String[] foo = foofoo.split(" ");
+                    String f = foo[1];
+                    current_percentage_change.add(f);
+                } else {
+                    ArrayList d = co.getName();
+                    Document caps = null;
+                    if (d.size()>0) {
+                        String g = String.valueOf(d.get(x));
+                        if (g.contains(" ")) {
+                            g = g.replace(" ", "-");
+                        }
+                        try {
+                            caps = Jsoup.connect("https://coinmarketcap.com/currencies/" + g).timeout(10 * 10000).get();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        Elements as = caps.select("div>span");
+                        String f = as.get(4).text();
+                        f = f.replaceAll("\\(", "").replaceAll("\\)", "");
+                        current_percentage_change.add(f);
+                    }
+                }
+                System.out.println("GOT SAVED INFO "+ current_percentage_change.size());
+
+            }}co.close();
     }
     }
 

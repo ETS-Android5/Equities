@@ -62,12 +62,14 @@ public class Adapter_Main_Markets extends RecyclerView.Adapter<Adapter_Main_Mark
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+
+                    ap_info.getCurrent_Aequity_Price();
                     String temp = mIdView.getText().toString();
                     Activity_Main activity = new Activity_Main();
                     switch (getAdapterPosition()) {
                         case 0:
                             temp = "Dow Jones";
-                            ap_info.setMarketName(mIdView.getText().toString());
+                            ap_info.setMarketName(temp);
                             ap_info.setMarketSymbol("%5EDJI");
                             ap_info.setMarketType("Stock");
                             activity.new setAsyncChosenData((Activity_Main) context)
