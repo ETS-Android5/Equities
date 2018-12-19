@@ -27,7 +27,7 @@
         android:id="@+id/name"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight=".6"
+        android:layout_weight=".3"
         android:gravity="left|center"
         android:singleLine="true"
         android:text="BITCOIN"
@@ -43,7 +43,6 @@
         android:singleLine="true"
         android:text="8.3%"
         android:textAlignment="textEnd"
-        android:textColor="@color/colorBlack"
         android:textSize="16sp"
         android:textStyle="bold" />
 

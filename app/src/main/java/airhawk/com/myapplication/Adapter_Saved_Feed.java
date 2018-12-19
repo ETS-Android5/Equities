@@ -61,8 +61,7 @@ public class Adapter_Saved_Feed extends RecyclerView.Adapter<Adapter_Saved_Feed.
     @Override
     public void onBindViewHolder(Adapter_Saved_Feed.MyViewHolder holder, int position) {
        Database_Local_Aequities ld =new Database_Local_Aequities(context);
-       //for(int i=0;i<ld.getName().size();i++){
-       ////("SIZES "+ld.getSymbol().get(i)+" "+ld.getName().get(i)+" "+current_percentage_change.get(i));}
+
        holder.symbol.setText(""+ ld.getSymbol().get(position));
        holder.name.setText(""+ld.getName().get(position));
        if(current_percentage_change.size()==0) {
@@ -76,9 +75,9 @@ public class Adapter_Saved_Feed extends RecyclerView.Adapter<Adapter_Saved_Feed.
             holder.currentchange.setTextColor(Color.parseColor("#ff0000"));
 
         }
-        if(cc.contains("+")){
+        else{
             cc.replace("+","").replace("(","").replace(")","");
-            holder.currentchange.setTextColor(Color.parseColor("#00ff00"));
+            holder.currentchange.setTextColor(Color.parseColor("#00CC00"));
 
         }
         holder.circle.setScaleType(ImageView.ScaleType.FIT_CENTER);

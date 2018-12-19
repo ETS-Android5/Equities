@@ -173,7 +173,9 @@ public class Activity_Main extends AppCompatActivity {
         ViewPager pager = findViewById(R.id.viewpager);
         if (pager.getVisibility()==View.VISIBLE){
             finish();}else{
-
+        if(current_percentage_change.size()>0){
+        //current_percentage_change.clear();
+        }
         new setAsyncChosenData(this).cancel(true);
         new setAsyncForBackPressedSavedData(this).execute();}
 
@@ -241,23 +243,12 @@ public class Activity_Main extends AppCompatActivity {
 
         @Override
         protected String doInBackground(Integer... params) {
-
-
-
-
-            //get_main_graph();
-
             Service_Main_Equities cst = new Service_Main_Equities();
             cst.main();
-
-            //Service_Saved_Equity csa =new Service_Saved_Equity(context);
-            //csa.main();
-            //SAVED METHOD SLOWS DOWN APP BY 6 SECONDS. DONT FORGET TO UNHIDE CODE OM FRAGMENT_SAVED WHEN THIS IS REPAIRED
             return "task finished";
         }
         @Override
         protected void onPostExecute(String result) {
-            // get a reference to the activity if it is still there
             Activity_Main activity = activityReference.get();
             if (activity == null || activity.isFinishing()) return;
             setMainPage();
@@ -1327,6 +1318,47 @@ public class Activity_Main extends AppCompatActivity {
     }
 
 
+    public void get_saved_stock_price_change(String taco){
+        //String symbol =ap_info.getMarketSymbol();
+        String apikey ="XBA42BUC2B6U6G5C";
+        String url ="https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol="+taco+"&apikey="+apikey;
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(String.valueOf(response));
+                    JSONObject time = jsonObject.getJSONObject("Global Quote");
+                    Iterator<String> iterator = time.keys();
+                    String change= time.getString("10. change percent");
+                    change=change.replace("%","");
+                    DecimalFormat numberFormat = new DecimalFormat("#.00");
+                    double d =Double.parseDouble(change);
+                    String fclose=numberFormat.format(d);
+                    fclose=fclose+"%";
+                    current_percentage_change.add(fclose);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                //("An Error occured while making the ST request");
+            }
+        });
+        requestQueue.add(jsonObjectRequest);
+
+
+
+
+    }
+
+
+
     public void getSavedEquities(){
         ArrayList b = check_saved.getSymbol();
         ArrayList c = check_saved.getType();
@@ -1338,16 +1370,7 @@ public class Activity_Main extends AppCompatActivity {
             Document cap = null;
             if (c.get(x).equals("Stock")) {
 
-                try {
-                    cap = Jsoup.connect("https://finance.yahoo.com/quote/" + b.get(x)).get();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                Element test = cap.select("div[data-reactid='34']").first().select("span").get(1);
-                String foofoo = test.text().toString().replace("(", "").replace(")", "");
-                String[] foo = foofoo.split(" ");
-                String f = foo[0];
-                current_percentage_change.add(f);
+                get_saved_stock_price_change(""+check_saved.getSymbol().get(x));
             } else {
                 ArrayList d = check_saved.getName();
                 Document caps = null;

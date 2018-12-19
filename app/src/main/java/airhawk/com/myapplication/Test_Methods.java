@@ -51,7 +51,8 @@ public class Test_Methods {
        // find_urls();
        // get_ipos();
        // getWorldMarkets();
-get_stock_points();
+//get_stock_points();
+        getSavedEquities();
     }
     public static void getWorldMarkets(){
         Document euro=null;
@@ -141,23 +142,36 @@ get_stock_points();
         System.out.println(as6.text());
     }
 
-    public static void get_stock_points() {
-        Document cap = null;
+    public static void getSavedEquities(){
 
+        ArrayList b =new ArrayList();
+        b.add("GSAT");
+        b.add("DPW");
+        b.add("APPL");
+        ArrayList c =new ArrayList();
+        c.add("Stock");
+        c.add("Stock");
+        c.add("Stock");
+                for( int x=0;x<b.size();x++) {
+            Document cap = null;
+            if (c.get(x).equals("Stock")) {
 
-            try {
-                cap = Jsoup.connect("https://finance.yahoo.com/quote/gsat").get();
-            } catch (IOException e) {
-                e.printStackTrace();
+                try {
+                    cap = Jsoup.connect("https://finance.yahoo.com/quote/" + b.get(x)).get();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                Element test = cap.select("div[data-reactid='34']").first().select("span").get(1);
+                String foofoo = test.text().toString().replace("(", "").replace(")", "");
+                String[] foo = foofoo.split(" ");
+                String f = foo[1];
+                System.out.println("MAYBE? "+cap.getElementsByClass("D(ib) Mend(20px)").text());
+                System.out.println("THIS IS F? "+ f);
+                current_percentage_change.add(f);
+                System.out.println("getSavedEquities "+ current_percentage_change.get(x));
             }
-              Element test = cap.select("div[data-reactid='34']").first().select("span").get(1);
-              String foofoo =test.text().toString().replace("(","").replace(")","");
-              String[] foo = foofoo.split(" ");
-              String f =foo[1];
-            System.out.print("It's a stock " + f);
 
-
-
+        }
     }
 
     public static void get_stock_points2() {
