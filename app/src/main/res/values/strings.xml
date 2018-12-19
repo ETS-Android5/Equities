@@ -5,6 +5,7 @@
     <string name="title_main">Main</string>
     <string name="title_search">Search</string>
     <string name="title_markets">Markets</string>
+    <string name="markets">World Markets</string>
     <string name="title_analysis">Analysis</string>
     <string name="title_news">News</string>
     <string name="title_video">Video</string>
@@ -259,5 +260,5 @@
     <string name="crypto_kings_data_provider">Data provided by <b>coinmarketcap.com</b></string>
     <string name="masternode_data_provider">Data provided by <b>masternodes.online</b></string>
     <string name="icos_data_provider">Data provided by <b>topicolist.com</b></string>
-    <string name="news_data_provider">Data provided by <b>https://news.google.com</b></string>
+    <string name="news_data_provider">Data provided by <b>news.google.com</b></string>
 <string name="ipos_data_provider">Data provided by <b>marketbeat.com</b></string></resources>

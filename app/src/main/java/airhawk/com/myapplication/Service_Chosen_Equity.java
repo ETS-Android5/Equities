@@ -93,7 +93,7 @@ public class Service_Chosen_Equity
                     long endTime = System.nanoTime();
                     long duration = (endTime - startTime);
                     //29 seconds Boost Mobile
-                    System.out.println("GET get_stock_points TIME IS "+duration/1000000000+" seconds");
+                    //("GET get_stock_points TIME IS "+duration/1000000000+" seconds");
                     }
 
 
@@ -111,7 +111,7 @@ public class Service_Chosen_Equity
                 long endTime = System.nanoTime();
                 long duration = (endTime - startTime);
                 //1 second Boost Mobile
-                System.out.println("GET VIDEOS TIME IS "+duration/1000000000+" seconds");
+                //("GET VIDEOS TIME IS "+duration/1000000000+" seconds");
                 return null;
             }
         });
@@ -121,11 +121,11 @@ public class Service_Chosen_Equity
             @Override
             public String call() throws Exception
             {long startTime = System.nanoTime();
-                //ProcessXml(GoogleRSFeed());
+                ProcessXml(GoogleRSFeed());
                 long endTime = System.nanoTime();
                 long duration = (endTime - startTime);
                 //4 seconds Boost Mobile
-                //System.out.println("GET NEWS TIME IS "+duration/1000000000+" seconds");
+                ////("GET NEWS TIME IS "+duration/1000000000+" seconds");
                 return null;
             }
         });
@@ -146,7 +146,7 @@ public class Service_Chosen_Equity
                 long endTime = System.nanoTime();
                 long duration = (endTime - startTime);
                 //4 seconds Boost Mobile
-                System.out.println("GET points IS "+duration/1000000000+" seconds");
+                //("GET points IS "+duration/1000000000+" seconds");
                 return null;
             }
         });
@@ -157,7 +157,7 @@ public class Service_Chosen_Equity
             List<Future<String>> futures = service.invokeAll(callables);
             for (Future<String> future : futures)
             {
-                //System.out.println (future.get());
+                //// (future.get());
                 //Where to check all variables
             }
         }
@@ -169,7 +169,7 @@ public class Service_Chosen_Equity
     }
 
     public static void get_stock_points() {
-        System.out.println("Get stock points called");
+        //("Get stock points called");
         String marname = ap_info.getMarketSymbol();
         Document d = null;
         try {
@@ -193,9 +193,8 @@ public class Service_Chosen_Equity
                 List<String> numbers = graph_high;
                 //Collections.reverse(numbers);
                 _AllDays = numbers;}}
-        System.out.println(graph_high.size());
+        //(graph_high.size());
     }
-    //System.out.println(u);
 
     public static void get_crypto_points() {
         long startTime = System.nanoTime();
@@ -211,7 +210,7 @@ public class Service_Chosen_Equity
         }
 
         graph_high.add(ap_info.getCurrent_Aequity_Price());
-        System.out.println("NAMD!!! "+f);
+        //("NAMD!!! "+f);
         if (f.contains(" ")){
             f= f.replaceAll(" ","-");}
             Document d= null;
@@ -252,7 +251,7 @@ public class Service_Chosen_Equity
                                     }
                                 }
                             }
-                            //System.out.println("THIs Is graph high "+ Arrays.asList(graph_high));
+                            ////("THIs Is graph high "+ Arrays.asList(graph_high));
                             _AllDays = graph_high;
 
 
@@ -260,7 +259,7 @@ public class Service_Chosen_Equity
 
         long endTime = System.nanoTime();
         long duration = (endTime - startTime);
-        System.out.println("CRYPTO POINTS TIME IS " + duration / 1000000000 + " seconds");
+        //("CRYPTO POINTS TIME IS " + duration / 1000000000 + " seconds");
 
 
 
@@ -281,6 +280,7 @@ public class Service_Chosen_Equity
         Element p =c.get(5);
         ap_info.setMarketSupply(p.text());
     }
+
     public static void get_stock_cap(){
         String marname = ap_info.getMarketSymbol();
         Document cap =null;
@@ -293,6 +293,7 @@ public class Service_Chosen_Equity
         ap_info.setMarketCap(ez.get(8).text());
 
     }
+
     public static void getVideoInfo() {
 
 
@@ -325,5 +326,88 @@ public class Service_Chosen_Equity
 
     }
 
+    private static void ProcessXml(org.w3c.dom.Document data) {
+        //all_feedItems.clear();
+        if (data != null) {
+            String st, sd, sp, sl,si;
+            org.w3c.dom.Element root = data.getDocumentElement();
+            Node channel = root.getChildNodes().item(0);
+            NodeList items = channel.getChildNodes();
 
+            for (int i = 0; i < items.getLength(); i++) {
+                Constructor_News_Feed it = new Constructor_News_Feed();
+                Node curentchild = items.item(i);
+                if (curentchild.getNodeName().equalsIgnoreCase("item")) {
+                    NodeList itemchilds = curentchild.getChildNodes();
+                    for (int j = 0; j < itemchilds.getLength(); j++) {
+                        Node curent = itemchilds.item(j);
+                        if (curent.getNodeName().equalsIgnoreCase("title")) {
+                            st = curent.getTextContent().toString();
+                            st= st.substring(0,st.indexOf(" - ")+" - ".length());
+                            st= st.replace("-","");
+                            it.setTitle(st);
+                            //(st);
+                        } else if (curent.getNodeName().equalsIgnoreCase("media:content")) {
+                            sd = curent.getTextContent().toString();
+                            //(sd);
+
+                            String d = curent.getTextContent().toString();
+                            String pattern1 = "<img src=\"";
+                            String pattern2 = "\"";
+                            Pattern p = Pattern.compile(Pattern.quote(pattern1) + "(.*?)" + Pattern.quote(pattern2));
+                            Matcher m = p.matcher(d);
+                            while (m.find()) {
+                                it.setThumbnailUrl(sd);
+                                ////("HERE IS YOUR IMAGE DUDE! "+m.group(1));
+                            }
+                            it.setDescription(sd);
+                        } else if (curent.getNodeName().equalsIgnoreCase("pubDate")) {
+                            sp = curent.getTextContent().toString();
+                            sp = sp.replaceAll("@20", " ");
+                            it.setPubDate(sp);
+                            //(sp);
+                        } else if (curent.getNodeName().equalsIgnoreCase("link")) {
+                            sl = curent.getTextContent().toString();
+                            sl = sl.replaceAll("@20", " ");
+                            it.setLink(sl);
+                            //(sl);
+                        } else if (curent.getNodeName().equalsIgnoreCase("source")) {
+                            si = curent.getTextContent().toString();
+                            it.setSource(si);
+                        }
+                    }
+
+                    feedItems.add(it);
+
+
+                }
+            }
+        }
+    }
+
+    public static org.w3c.dom.Document GoogleRSFeed() {
+        try {
+            URL url;
+            Context context;
+            String f = ap_info.getMarketName();
+            String g =ap_info.getMarketType();
+            String address = "https://news.google.com/news/rss/search/section/q/" + f +"%"+g+ "?ned=us&gl=US&hl=en";
+
+
+            url = new URL(address);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+            InputStream inputStream = connection.getInputStream();
+            DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = builderFactory.newDocumentBuilder();
+            org.w3c.dom.Document xmlDoc = builder.parse(inputStream);
+
+            return xmlDoc;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+
+    }
 }

@@ -20,7 +20,6 @@ public class Adapter_App_News_Feed extends RecyclerView.Adapter<Adapter_App_News
 
    private List<Constructor_News_Feed> feedItems;
    private static Context context;
-   private Bitmap bitmap;
    public Adapter_App_News_Feed(Context context, List<Constructor_News_Feed> items){
      this.context=context;  
      this.feedItems = items;  
@@ -36,8 +35,7 @@ public class Adapter_App_News_Feed extends RecyclerView.Adapter<Adapter_App_News
        public void gotoWebView(String textlink) {  
          Intent intent=new Intent(view.getContext(),Activity_Web_View.class);
          intent.putExtra("url",textlink);
-
-           System.out.println("NEWS "+textlink);
+           //("NEWS "+textlink);
            view.getContext().startActivity(intent);
        }  
      });  
@@ -87,8 +85,12 @@ public class Adapter_App_News_Feed extends RecyclerView.Adapter<Adapter_App_News
    
        itemView.setOnClickListener(new View.OnClickListener() {  
          @Override  
-         public void onClick(View view) {  
-           myClickWebView.gotoWebView(textlink);  
+         public void onClick(View view) {
+             Intent intent=new Intent(view.getContext(),Activity_Web_View.class);
+             intent.putExtra("url",textlink);
+
+
+             view.getContext().startActivity(intent);
          }  
        });
 

@@ -3,7 +3,7 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">#ffffff</item>
+        <item name="colorPrimary">#1464f4</item>
         <item name="colorPrimaryDark">@color/colorBlack</item>
         <item name="colorAccent">#00000000</item>
         <item name="android:windowFullscreen">false</item>
@@ -31,9 +31,10 @@
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
-        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textColor">@color/colorBlack</item>
     </style>
     <style name="MyToolbarStyle" parent="ThemeOverlay.AppCompat.ActionBar">
+        <item name="android:textColor">@color/colorBlack</item>
         <item name="android:textColorSecondary">#ff0000</item>
     </style>
 

@@ -2,6 +2,7 @@ package airhawk.com.myapplication;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 
 import com.twitter.sdk.android.core.models.Tweet;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +26,10 @@ public class Adapter_Main_Equities extends RecyclerView.Adapter<Adapter_Main_Equ
         ArrayList stock_losers_change_list;
         String type_and_case;
         Context context;
-
+    private WeakReference<Activity_Main> activityReference;
+    Adapter_Main_Equities(Activity_Main context) {
+        activityReference = new WeakReference<>(context);
+    }
         public Adapter_Main_Equities(Context context, String type_and_case, ArrayList stock_losers_symbollist, ArrayList stock_losers_namelist, ArrayList stock_losers_changelist){
             this.context=context;
             this.stock_losers_symbol_list = stock_losers_symbollist;

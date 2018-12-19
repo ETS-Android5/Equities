@@ -48,7 +48,7 @@ public class Adapter_Ipos_Feed extends RecyclerView.Adapter<Adapter_Ipos_Feed.My
          Intent intent=new Intent(view.getContext(),Activity_Web_View.class);
          intent.putExtra("url",textlink);
 
-           System.out.println("NEWS "+textlink);
+           //("NEWS "+textlink);
            view.getContext().startActivity(intent);
        }  
      });  
@@ -152,9 +152,9 @@ public class Adapter_Ipos_Feed extends RecyclerView.Adapter<Adapter_Ipos_Feed.My
                     HttpURLConnection con = (HttpURLConnection) url.openConnection();
                     con.setRequestMethod("HEAD");
                     con.connect();
-                    //System.out.println("con.getResponseCode() IS : " + con.getResponseCode());
+                    ////("con.getResponseCode() IS : " + con.getResponseCode());
                     if (con.getResponseCode() == HttpURLConnection.HTTP_OK) {
-                        System.out.println("Success "+URLs.get(i));
+                        //("Success "+URLs.get(i));
                         Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(String.valueOf(url)));
                         context.startActivity(browserIntent);
                         URLs.clear();
@@ -183,7 +183,7 @@ public class Adapter_Ipos_Feed extends RecyclerView.Adapter<Adapter_Ipos_Feed.My
                         TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
                         textView.setTextColor(context.getResources().getColor(R.color.darkTextColor2));
                         textView.setMaxLines(10);
-                        sb.show();}System.out.println("fail "+URLs.get(i));
+                        sb.show();}//("fail "+URLs.get(i));
                 }}
             return "task finished";
         }

@@ -42,7 +42,7 @@ public class Fragment_Analysis extends Fragment {
     TextView a_price,a_price_change,a_name,a_symbol,a_type,a_supply,a_cap,sup,saved,savedd;
     ImageView save;
     LineGraphSeries<DataPoint> series = new LineGraphSeries<>();
-    double xx= 0;
+    int xx= 0;
     Constructor_App_Variables ap_info =new Constructor_App_Variables();
     private Database_Local_Aequities db;
     TabLayout tabchoice;
@@ -78,7 +78,7 @@ public class Fragment_Analysis extends Fragment {
             }
         }catch(IndexOutOfBoundsException e){
 
-            //System.out.println("Had to start over ");
+            ////("Had to start over ");
         }
         String test=a_price.getText().toString();
 
@@ -131,8 +131,12 @@ public class Fragment_Analysis extends Fragment {
                                 handler.postDelayed(new Runnable() {
                                     public void run() {
 
-                                        db.add_equity_info(app_info.getMarketSymbol(), ap_info.getMarketName(), app_info.getMarketType(),ap_info.getCurrent_Aequity_Price_Change());
-
+                                        String mS=a_symbol.getText().toString();
+                                        String mN=a_name.getText().toString();
+                                        String mT=a_type.getText().toString();
+                                        System.out.println("THIS IS THE SAVED DATA "+mS+" "+mN+" "+mT);
+                                        db.add_equity_info(mS,mN,mT);
+                                          db.close();
                                     }
                                 }, 2000);
                             }
@@ -218,11 +222,12 @@ public class Fragment_Analysis extends Fragment {
 
                         for (int i= 0; i < integer[0];i++){
                             try {
-                                xx = Double.parseDouble(String.valueOf(graph_high.get(integer[0]-i)));
+                                String s= String.valueOf(graph_high.get(integer[0]-i).toString().replace(",",""));
+                                xx = (int) Double.parseDouble(s.trim());
                                 DataPoint point = new DataPoint(i,xx);
                                 series.appendData(point,true,integer[0]);
                             } catch (IndexOutOfBoundsException e) {
-                                System.out.println("Invalid date");
+                                //("Invalid date");
                             }
                             continue;
                         }
@@ -230,13 +235,13 @@ public class Fragment_Analysis extends Fragment {
                         graph_view.getGridLabelRenderer().setHorizontalLabelsColor(Color.WHITE);
                         graph_view.getGridLabelRenderer().setVerticalLabelsColor(Color.WHITE);
 
-                        graph_view.getViewport().setMinX(1);
-                        graph_view.getViewport().setMaxX(integer[0]);
-                        graph_view.getViewport().setMinY(0);
-                        graph_view.getViewport().setMaxY(Double.parseDouble((String) graph_high.get(integer[0])));
+                        //graph_view.getViewport().setMinX(1);
+                        //graph_view.getViewport().setMaxX(integer[0]);
+                        //graph_view.getViewport().setMinY(0);
+                        //graph_view.getViewport().setMaxY(Double.parseDouble((String) graph_high.get(integer[0])));
 
-                        graph_view.getViewport().setYAxisBoundsManual(true);
-                        graph_view.getViewport().setXAxisBoundsManual(true);
+                        //graph_view.getViewport().setYAxisBoundsManual(true);
+                        //graph_view.getViewport().setXAxisBoundsManual(true);
 
                         series.setColor(Color.GREEN);
                         graph_view.addSeries(series);
@@ -252,11 +257,12 @@ public class Fragment_Analysis extends Fragment {
                         series = new LineGraphSeries<>();
                         for (int i= 0; i < integer[0];i++){
                             try {
-                                xx = Double.parseDouble(String.valueOf(graph_high.get(integer[0]-i)));
+                                String s= String.valueOf(graph_high.get(integer[0]-i).toString().replace(",",""));
+                                xx = (int) Double.parseDouble(s.trim());
                                 DataPoint point = new DataPoint(i,xx);
                                 series.appendData(point,true,integer[0]);
-                            } catch (IndexOutOfBoundsException e) {
-                                System.out.println("Invalid date");
+                            } catch (NumberFormatException numberFormatException) {
+                                //("Invalid date");
                             }
                             continue;
                         }
@@ -274,11 +280,12 @@ public class Fragment_Analysis extends Fragment {
                         series = new LineGraphSeries<>();
                         for (int i= 0; i < integer[0];i++){
                             try {
-                                xx = Double.parseDouble(String.valueOf(graph_high.get(integer[0]-i)));
+                                String s= String.valueOf(graph_high.get(integer[0]-i).toString().replace(",",""));
+                                xx = (int) Double.parseDouble(s.trim());
                                 DataPoint point = new DataPoint(i,xx);
                                 series.appendData(point,true,integer[0]);
                             } catch (IndexOutOfBoundsException e) {
-                                System.out.println("Invalid date");
+                                //("Invalid date");
                             }
                             continue;
                         }
@@ -302,11 +309,12 @@ public class Fragment_Analysis extends Fragment {
                         series = new LineGraphSeries<>();
                         for (int i= 0; i < integer[0];i++){
                             try {
-                                xx = Double.parseDouble(String.valueOf(graph_high.get(integer[0]-i)));
+                                String s= String.valueOf(graph_high.get(integer[0]-i).toString().replace(",",""));
+                                xx = (int) Double.parseDouble(s.trim());
                                 DataPoint point = new DataPoint(i,xx);
                                 series.appendData(point,true,integer[0]);
                             } catch (IndexOutOfBoundsException e) {
-                                System.out.println("Invalid date");
+                                //("Invalid date");
                             }
                             continue;
                         }
@@ -327,11 +335,12 @@ public class Fragment_Analysis extends Fragment {
                         series = new LineGraphSeries<>();
                         for (int i= 0; i < integer[0];i++){
                             try {
-                                xx = Double.parseDouble(String.valueOf(graph_high.get(integer[0]-i)));
+                                String s= String.valueOf(graph_high.get(integer[0]-i).toString().replace(",",""));
+                                xx = (int) Double.parseDouble(s.trim());
                                 DataPoint point = new DataPoint(i,xx);
                                 series.appendData(point,true,integer[0]);
                             } catch (IndexOutOfBoundsException e) {
-                                System.out.println("Invalid date");
+                                //("Invalid date");
                             }
                             continue;
                         }
@@ -348,13 +357,13 @@ public class Fragment_Analysis extends Fragment {
                     case 5:
                         graph_view.removeAllSeries();
                         ab[0].notifyDataSetChanged();
-                        System.out.println(_AllDays.size());
+                        //(_AllDays.size());
                         integer[0] =_AllDays.size();
                         series = new LineGraphSeries<>();
                         for (int i= 0; i < integer[0];i++){
                             try {
-                                xx = Double.parseDouble(String.valueOf(graph_high.get(integer[0]-i)));
-
+                                String s= String.valueOf(graph_high.get(integer[0]-i).toString().replace(",",""));
+                                xx = (int) Double.parseDouble(s.trim());
                                 DataPoint point = new DataPoint(i,xx);
                                 series.appendData(point,true,integer[0]);
                             } catch (IndexOutOfBoundsException e) {
@@ -362,8 +371,8 @@ public class Fragment_Analysis extends Fragment {
                             }
 
                         }
-                        System.out.println("SIZE of iteration"+integer[0]);
-                        System.out.println("SIZE OF ALL DAYS "+_AllDays.size());
+                        //("SIZE of iteration"+integer[0]);
+                        //("SIZE OF ALL DAYS "+_AllDays.size());
                         graph_view.getGridLabelRenderer().setGridColor(Color.TRANSPARENT);
                         graph_view.getGridLabelRenderer().setHorizontalLabelsColor(Color.WHITE);
                         graph_view.getGridLabelRenderer().setVerticalLabelsColor(Color.WHITE);

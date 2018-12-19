@@ -48,7 +48,7 @@ public class Constructor_News_Feed {
            img = img.substring(0, indexOf);
            setThumbnailUrl(img);
            this.description = this.description.replace(cleanUp, "");
-           //System.out.println("FINAL IMAGE URL IS "+this.description);
+           ////("FINAL IMAGE URL IS "+this.description);
        }
    }  
    public String getPubDate() {  

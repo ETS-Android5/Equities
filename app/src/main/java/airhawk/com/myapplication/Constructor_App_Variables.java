@@ -74,8 +74,34 @@ public class Constructor_App_Variables {
     public static String nas_name;
     public static String nas_amount;
     public static String nas_change;
-    public static String all_market_cap_amount;
-    public static String alt_market_cap_amount;
+
+    public static String shse_name;
+    public static String shse_amount;
+    public static String shse_change;
+
+    public static String hang_name;
+    public static String hang_amount;
+    public static String hang_change;
+
+    public static String nikk_name;
+    public static String nikk_amount;
+    public static String nikk_change;
+
+    public static String ftse_name;
+    public static String ftse_amount;
+    public static String ftse_change;
+
+    public static String cac_name;
+    public static String cac_amount;
+    public static String cac_change;
+
+    public static String dax_name;
+    public static String dax_amount;
+    public static String dax_change;
+
+
+
+
     public static String btc_market_cap_amount;
     public static String btc_market_cap_change;
     protected static ArrayList<Constructor_Ipos> ipo_feedItems =new ArrayList<>();

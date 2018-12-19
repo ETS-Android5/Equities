@@ -114,7 +114,7 @@ public class Adapter_Graph_Points extends RecyclerView.Adapter<Adapter_Graph_Poi
                 }
             }
             //DO NOT DELETE THIS SYSTEM MESSAGE>ANDROID GLITCH
-            System.out.println("GDSIZE "+graph_date.size());
+            //("GDSIZE "+graph_date.size());
             holder.aequity_date.setText(""+graph_date.get(position));}
  catch (IndexOutOfBoundsException e){}}
 

@@ -73,14 +73,14 @@ public class Do_Not_Delete_Methods {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                System.out.println("An Error occured while making the ST request");
+                //("An Error occured while making the ST request");
             }
         });
         requestQueue.add(jsonObjectRequest);
 
-        ///System.out.println("GRAPH HIGH LIST "+graph_high);
-        //System.out.println("GRAPH VOLUUMR LIST "+graph_volume);
-        // System.out.println("GRAPH DATE LIST "+graph_date);
+        /////("GRAPH HIGH LIST "+graph_high);
+        ////("GRAPH VOLUUMR LIST "+graph_volume);
+        // //("GRAPH DATE LIST "+graph_date);
 
         List<String> numbers = graph_high;
         Collections.reverse(numbers);
@@ -160,7 +160,7 @@ public class Do_Not_Delete_Methods {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                System.out.println("An Error occured while making the ST request");
+                //("An Error occured while making the ST request");
             }
         });
         requestQueue.add(jsonObjectRequest);

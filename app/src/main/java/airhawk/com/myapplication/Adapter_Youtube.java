@@ -98,7 +98,7 @@ public class Adapter_Youtube extends RecyclerView.Adapter<Adapter_Youtube.VideoI
             Intent intent = YouTubeStandalonePlayer.createVideoIntent((Activity) ctx, DEVELOPER_KEY, String.valueOf(video_url.get(getLayoutPosition())));
             ctx.startActivity(intent);
             fullScreen ="go";
-            System.out.println("FULLSCREEN IS ON! "+fullScreen);
+            //("FULLSCREEN IS ON! "+fullScreen);
         }
     }
 }

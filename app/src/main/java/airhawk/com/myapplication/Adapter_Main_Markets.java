@@ -5,10 +5,12 @@ import android.graphics.Color;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 
@@ -32,14 +34,16 @@ import static airhawk.com.myapplication.Constructor_App_Variables.sp_name;
 
 public class Adapter_Main_Markets extends RecyclerView.Adapter<Adapter_Main_Markets.MyViewHolder> {
 
-    String[] market_list = new String[]{dow_name, sp_name, nas_name, "Bitcoin"};
-    String[] int_list = new String[]{dow_amount,sp_amount,nas_amount,btc_market_cap_amount};
-    String[] change_list = new String[]{dow_change,sp_change, nas_change, btc_market_cap_change};
+    String[] market_list;
+    String[] int_list;
+    String[] change_list;
     Constructor_App_Variables ap_info = new Constructor_App_Variables();
-    Context context; //global
-    public Adapter_Main_Markets(Context context)
+    Context context;
+    public Adapter_Main_Markets(Context context, String [] ml,String[] il,String [] cl)
     {
-
+        this.market_list = ml;
+        this.int_list =il;
+        this.change_list =cl;
         this.context = context;
     }
 
@@ -49,15 +53,16 @@ public class Adapter_Main_Markets extends RecyclerView.Adapter<Adapter_Main_Mark
         TextView mIdView;
         TextView mPriceView;
         TextView mChangeView;
+        ImageView circle;
+
 
         public MyViewHolder(View itemView) {
             super(itemView);
+            mIdView = itemView.findViewById(R.id.symbol);
+            mPriceView = itemView.findViewById(R.id.name);
+            mChangeView = itemView.findViewById(R.id.changes);
+            circle=itemView.findViewById(R.id.circle);
 
-                //l.scrollToPosition(0);
-                //itemView.startAnimation(AnimationUtils.loadAnimation(itemView.getContext(), R.anim.linear));
-            mIdView = itemView.findViewById(R.id.id_text);
-            mPriceView = itemView.findViewById(R.id.price);
-            mChangeView = itemView.findViewById(R.id.change);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -99,7 +104,55 @@ public class Adapter_Main_Markets extends RecyclerView.Adapter<Adapter_Main_Mark
                             activity.new setAsyncChosenData((Activity_Main) context)
                                     .execute();
                             break;
+                        case 4:
+                            temp = "FTSE 100";
+                            ap_info.setMarketName(temp);
+                            ap_info.setMarketSymbol("%5EFTSE");
+                            ap_info.setMarketType("Index");
+                            activity.new setAsyncChosenData((Activity_Main) context)
+                                    .execute();
+                            break;
+                        case 5:
+                            temp = "CAC 40";
+                            ap_info.setMarketName(temp);
+                            ap_info.setMarketSymbol("%5EFCHI");
+                            ap_info.setMarketType("Index");
+                            activity.new setAsyncChosenData((Activity_Main) context)
+                                    .execute();
+                            break;
 
+                        case 6:
+                            temp = "DAX";
+                            ap_info.setMarketName(temp);
+                            ap_info.setMarketSymbol("%5EGDAXI");
+                            ap_info.setMarketType("Index");
+                            activity.new setAsyncChosenData((Activity_Main) context)
+                                    .execute();
+                            break;
+                        case 7:
+                            temp = "SHANGHAI SE";
+                            ap_info.setMarketName(temp);
+                            ap_info.setMarketSymbol("000001.ss");
+                            ap_info.setMarketType("Index");
+                            activity.new setAsyncChosenData((Activity_Main) context)
+                                    .execute();
+                            break;
+                        case 8:
+                            temp = "HANG SENG";
+                            ap_info.setMarketName(temp);
+                            ap_info.setMarketSymbol("%5EHSI");
+                            ap_info.setMarketType("Index");
+                            activity.new setAsyncChosenData((Activity_Main) context)
+                                    .execute();
+                            break;
+                        case 9:
+                            temp = "NIKKEI 225";
+                            ap_info.setMarketName(temp);
+                            ap_info.setMarketSymbol("%5EN225");
+                            ap_info.setMarketType("Index");
+                            activity.new setAsyncChosenData((Activity_Main) context)
+                                    .execute();
+                            break;
                         default:
                             break;
 
@@ -113,7 +166,7 @@ public class Adapter_Main_Markets extends RecyclerView.Adapter<Adapter_Main_Mark
     @NonNull
     @Override
     public Adapter_Main_Markets.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_main_item_list_content, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_world_view, parent, false);
 
 
 
@@ -125,22 +178,21 @@ public class Adapter_Main_Markets extends RecyclerView.Adapter<Adapter_Main_Mark
 
         holder.mIdView.setText("" + market_list[position]);
         holder.mPriceView.setText("$ " + int_list[position]);
+        holder.mChangeView.setText(change_list[position]);
         if (change_list[position] !=null && change_list[position].contains("-")){
-            holder.mIdView.setTextColor(Color.parseColor("#FFFFFF"));
-            holder.mPriceView.setTextColor(Color.parseColor("#FFFFFF"));
+            holder.circle.setImageResource(R.drawable.direction_down);
             holder.mChangeView.setTextColor(Color.parseColor("#FF0000"));
         } else {
+            holder.circle.setImageResource(R.drawable.direction_up);
+            holder.mChangeView.setTextColor(Color.parseColor("#00cc00"));
 
-        holder.mIdView.setTextColor(Color.parseColor("#FFFFFF"));
-        holder.mPriceView.setTextColor(Color.parseColor("#FFFFFF"));
-        holder.mChangeView.setTextColor(Color.parseColor("#00CC00"));
-       }
-        holder.mChangeView.setText(change_list[position]);
+        }
+
 
     }
     @Override
     public int getItemCount() {
-        return 4;
+        return market_list.length;
     }
 
 

@@ -15,6 +15,7 @@ import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 import static airhawk.com.myapplication.Activity_Main.ap_info;
@@ -63,7 +64,7 @@ public class Adapter_Exchanges_Feed extends RecyclerView.Adapter<Adapter_Exchang
 
        Constructor_App_Variables ax = new Constructor_App_Variables();
        String a = ax.getMarketType();
-
+       aequity_exchanges = new ArrayList<String>(new LinkedHashSet<String>(aequity_exchanges));
        if (a.equals("Cryptocurrency") || a.equals("Crypto"))
        {
 
@@ -75,9 +76,16 @@ public class Adapter_Exchanges_Feed extends RecyclerView.Adapter<Adapter_Exchang
                    Picasso.with(context).load(productImageId).memoryPolicy(MemoryPolicy.NO_CACHE).fit().centerInside().noFade().into(holder.ex_image);
 
        }
-       if (a.equalsIgnoreCase("Stock")){
+       if (a.equalsIgnoreCase("Stock")
+               ||a.equalsIgnoreCase("Nasdaq")
+               ||a.equalsIgnoreCase("Nyse")
+               ||a.equalsIgnoreCase("ETF")
+               ||a.equalsIgnoreCase("OTC")
+               ||a.equalsIgnoreCase("Amex")
+               ||a.equalsIgnoreCase("SPDR S&P 500")){
+
            holder.ex_text.setText(""+ aequity_exchanges.get(position));
-             System.out.println("Image is good "+s_image.get(position));
+             //("Image is good "+s_image.get(position));
                int productImageId = context.getResources().getIdentifier(
                       s_image.get(position), "drawable", context.getPackageName());
                Picasso.with(context).load(productImageId).memoryPolicy(MemoryPolicy.NO_CACHE).fit().centerInside().noFade().into(holder.ex_image);
@@ -117,13 +125,13 @@ public class Adapter_Exchanges_Feed extends RecyclerView.Adapter<Adapter_Exchang
                  for (int i = 0; i< crypto_exchange_name.size(); i++){
                      if (crypto_exchange_name.get(i).equals(ex_text.getText().toString())){
                          textlink=""+ crypto_exchange_url.get(i);
-                         System.out.println(textlink);
+                         //(textlink);
                      }
                  }}else{
                      for (int i = 0; i< stock_exchange_name.size(); i++){
                          if (stock_exchange_name.get(i).equals(ex_text.getText().toString())){
                              textlink=""+ stock_exchange_url.get(i);}
-                         System.out.println(textlink);
+                         //(textlink);
                  }}
                  goToWebPage(textlink);
 

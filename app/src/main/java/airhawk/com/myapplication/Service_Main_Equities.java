@@ -99,29 +99,16 @@ public class Service_Main_Equities {
         callables.add(new Callable<String>() {
             @Override
             public String call() throws Exception {
-                long startTime = System.nanoTime();
+                if(saved_helper == 1){}else{
+                    getWorldMarkets();}
+                return null;
+            }
+        });
+        callables.add(new Callable<String>() {
+            @Override
+            public String call() throws Exception {
                 if(saved_helper == 1){}else{
                     getCrypto_Kings();}
-                long endTime = System.nanoTime();
-                long duration = (endTime - startTime);
-                //2 seconds wifi
-                //21 seconds Boost Mobile
-                System.out.println("getCrypto_Kings TIME IS " + duration / 1000000000 + " seconds");
-                return null;
-            }
-        });
-        callables.add(new Callable<String>() {
-            @Override
-            public String call() throws Exception {
-                long startTime = System.nanoTime();
-                if (co.getName().isEmpty()){}
-                else{
-                getSavedEquities();}
-                long endTime = System.nanoTime();
-                long duration = (endTime - startTime);
-                //17 seconds no wifi Boost Mobile RIDICULOUS!
-                //2 Seconds on wifi
-                System.out.println("savedEquities TIME IS " + duration / 1000000000 + " seconds");
                 return null;
             }
         });
@@ -129,14 +116,8 @@ public class Service_Main_Equities {
         callables.add(new Callable<String>() {
             @Override
             public String call() throws Exception {
-                long startTime = System.nanoTime();
                 if(saved_helper == 1){}else{
                 getStocks_Market_Caps();}
-                long endTime = System.nanoTime();
-                long duration = (endTime - startTime);
-                //17 seconds no wifi Boost Mobile RIDICULOUS!
-                //2 Seconds on wifi
-                System.out.println("getStocks_Market_Caps TIME IS " + duration / 1000000000 + " seconds");
                 return null;
             }
         });
@@ -145,14 +126,8 @@ public class Service_Main_Equities {
         callables.add(new Callable<String>() {
             @Override
             public String call() throws Exception {
-                long startTime = System.nanoTime();
                 if(saved_helper == 1){}else{
                 getCrypto_Winners_Losers();}
-                long endTime = System.nanoTime();
-                long duration = (endTime - startTime);
-                //2 seconds wifi
-                //21 seconds Boost Mobile
-                System.out.println("getCrypto_Winners_Losers TIME IS " + duration / 1000000000 + " seconds");
                 return null;
             }
         });
@@ -161,14 +136,8 @@ public class Service_Main_Equities {
         callables.add(new Callable<String>() {
             @Override
             public String call() throws Exception {
-                long startTime = System.nanoTime();
                 if(saved_helper == 1){}else{
                 getStock_Winners_Losers();}
-                long endTime = System.nanoTime();
-                long duration = (endTime - startTime);
-                //2 seconds wifi
-                //2 seconds Boost Mobile
-                System.out.println("getStock_Winners_Losers TIME IS " + duration / 1000000000 + " seconds");
                 return null;
             }
         });
@@ -176,15 +145,9 @@ public class Service_Main_Equities {
         callables.add(new Callable<String>() {
             @Override
             public String call() throws Exception {
-                long startTime = System.nanoTime();
                 if(saved_helper == 1){}else{
                 getStock_Kings();}
                 get_stock_kings_points();
-                long endTime = System.nanoTime();
-                long duration = (endTime - startTime);
-                //wifi 1 seconds
-                //4 seconds Boost Mobile
-                System.out.println("getStock_Winners_Losers TIME IS " + duration / 1000000000 + " seconds");
                 return null;
             }
         });
@@ -192,14 +155,8 @@ public class Service_Main_Equities {
         callables.add(new Callable<String>() {
             @Override
             public String call() throws Exception {
-                long startTime = System.nanoTime();
                 if(saved_helper == 1){}else{
                 ProcessXml(GoogleRSFeed());}
-                long endTime = System.nanoTime();
-                long duration = (endTime - startTime);
-                //wifi 1 second
-                //Boost Mobile 5 seconds
-                System.out.println("getStock_News TIME IS " + duration / 1000000000 + " seconds");
                 return null;
             }
         });
@@ -207,14 +164,10 @@ public class Service_Main_Equities {
         callables.add(new Callable<String>() {
             @Override
             public String call() throws Exception {
-                long startTime = System.nanoTime();
+
                 if(saved_helper == 1){}else{
-     get_masternodes();}
-                long endTime = System.nanoTime();
-                long duration = (endTime - startTime);
-                //wifi 1 second
-                //Boost Mobile 5 seconds
-                System.out.println("getMasternode TIME IS " + duration / 1000000000 + " seconds");
+                get_masternodes();}
+
                 return null;
             }
         });
@@ -222,14 +175,8 @@ public class Service_Main_Equities {
         callables.add(new Callable<String>() {
             @Override
             public String call() throws Exception {
-                long startTime = System.nanoTime();
                 if(saved_helper == 1){}else{
                 get_icos();}
-                long endTime = System.nanoTime();
-                long duration = (endTime - startTime);
-                //2 seconds wifi
-                //2 seconds Boost Mobile
-                System.out.println("getIcos TIME IS " + duration / 1000000000 + " seconds");
                 return null;
             }
         });
@@ -237,14 +184,8 @@ public class Service_Main_Equities {
         callables.add(new Callable<String>() {
             @Override
             public String call() throws Exception {
-                long startTime = System.nanoTime();
                 if(saved_helper == 1){}else{
                 get_ipos();}
-                long endTime = System.nanoTime();
-                long duration = (endTime - startTime);
-                //2 seconds wifi
-                //2 seconds Boost Mobile
-                System.out.println("getIpos TIME IS " + duration / 1000000000 + " seconds");
                 return null;
             }
         });
@@ -252,7 +193,7 @@ public class Service_Main_Equities {
         try {
             List<Future<String>> futures = service.invokeAll(callables);
             for (Future<String> future : futures) {
-//                System.out.println(future.get());
+//                //(future.get());
                 //Where to check all variables
             }
         } catch (InterruptedException e) {
@@ -261,7 +202,6 @@ public class Service_Main_Equities {
     }
 
     public static void getCrypto_Kings() {
-        long startTime = System.nanoTime();
         RequestQueue requestQueue = Volley.newRequestQueue(ApplicationContextProvider.getContext());
         final String url = "https://api.coinmarketcap.com/v2/ticker/?sort=rank";
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
@@ -314,6 +254,7 @@ public class Service_Main_Equities {
 
                     }
                     btc_market_cap_amount =(String) crypto_kings_marketcaplist.get(0);
+                    btc_market_cap_amount =btc_market_cap_amount.replace(" ","");
                     btc_market_cap_change =crypto_kings_changelist.get(0)+"%";
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -323,7 +264,7 @@ public class Service_Main_Equities {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                System.out.println("An Error occured while making the request");
+                //("An Error occured while making the request");
             }
         });
         requestQueue.add(jsonObjectRequest);
@@ -404,10 +345,10 @@ public class Service_Main_Equities {
                             st= st.substring(0,st.indexOf(" - ")+" - ".length());
                             st= st.replace("-","");
                             it.setTitle(st);
-                            System.out.println(st);
+                            //(st);
                         } else if (curent.getNodeName().equalsIgnoreCase("media:content")) {
                             sd = curent.getTextContent().toString();
-                            System.out.println(sd);
+                            //(sd);
 
                             String d = curent.getTextContent().toString();
                             String pattern1 = "<img src=\"";
@@ -416,19 +357,19 @@ public class Service_Main_Equities {
                             Matcher m = p.matcher(d);
                             while (m.find()) {
                                 it.setThumbnailUrl(m.group(1));
-                                //System.out.println("HERE IS YOUR IMAGE DUDE! "+m.group(1));
+                                ////("HERE IS YOUR IMAGE DUDE! "+m.group(1));
                             }
                             it.setDescription(sd);
                         } else if (curent.getNodeName().equalsIgnoreCase("pubDate")) {
                             sp = curent.getTextContent().toString();
                             sp = sp.replaceAll("@20", " ");
                             it.setPubDate(sp);
-                            System.out.println(sp);
+                            //(sp);
                         } else if (curent.getNodeName().equalsIgnoreCase("link")) {
                             sl = curent.getTextContent().toString();
                             sl = sl.replaceAll("@20", " ");
                             it.setLink(sl);
-                            System.out.println(sl);
+                            //(sl);
                         } else if (curent.getNodeName().equalsIgnoreCase("source")) {
                             si = curent.getTextContent().toString();
                             it.setSource(si);
@@ -607,7 +548,7 @@ public class Service_Main_Equities {
             String[] foo = foofoo.split(" ");
             String f =foo[1];
             stock_kings_ipdown.add(f);
-            System.out.println("FU "+stock_kings_ipdown);
+            //("FU "+stock_kings_ipdown);
 
             }
         }
@@ -642,7 +583,7 @@ public class Service_Main_Equities {
             masternode_marketcap.add(added);
             masternode_node_count.add(r.get(8).text().replace(",", ""));
             masternode_purchase_value.add(r.get(10).text().replace("$", ""));
-            System.out.println(masternode_name.get(i) + " " + masternode_symbol.get(i) + " " + masternode_percent_change.get(i) + " " + masternode_marketcap.get(i) + " " + masternode_node_count.get(i) + " " + masternode_purchase_value.get(i));
+            //(masternode_name.get(i) + " " + masternode_symbol.get(i) + " " + masternode_percent_change.get(i) + " " + masternode_marketcap.get(i) + " " + masternode_node_count.get(i) + " " + masternode_purchase_value.get(i));
         }        }
 
     public static void get_icos(){
@@ -688,7 +629,7 @@ public class Service_Main_Equities {
             ico_enddate.add(output2);
         }
         for (int i=0;i<ico_name.size();i++) {
-            System.out.println("SIZE "+ico_name.get(i)+" "+ico_message.get(i)+" "+ico_startdate.get(i)+" "+ico_enddate.get(i));
+            //("SIZE "+ico_name.get(i)+" "+ico_message.get(i)+" "+ico_startdate.get(i)+" "+ico_enddate.get(i));
         }
     }
 
@@ -712,47 +653,52 @@ public class Service_Main_Equities {
 
     }
 
-    public static void getSavedEquities(){
-        ArrayList aaa = co.getName();
-        ArrayList a = co.getSymbol();
-        ArrayList aa = co.getType();
-        if(aa.size()>0){
-            for( int x=0;x<aa.size();x++) {
-                Document cap = null;
-                if (aa.get(x).equals("Stock")) {
-                    ArrayList b = co.getSymbol();
-                    try {
-                        cap = Jsoup.connect("https://finance.yahoo.com/quote/" + b.get(x)).get();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    Element test = cap.select("div[data-reactid='34']").first().select("span").get(1);
-                    String foofoo = test.text().toString().replace("(", "").replace(")", "");
-                    String[] foo = foofoo.split(" ");
-                    String f = foo[1];
-                    current_percentage_change.add(f);
-                } else {
-                    ArrayList d = co.getName();
-                    Document caps = null;
-                    if (d.size()>0) {
-                        String g = String.valueOf(d.get(x));
-                        if (g.contains(" ")) {
-                            g = g.replace(" ", "-");
-                        }
-                        try {
-                            caps = Jsoup.connect("https://coinmarketcap.com/currencies/" + g).timeout(10 * 10000).get();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                        Elements as = caps.select("div>span");
-                        String f = as.get(4).text();
-                        f = f.replaceAll("\\(", "").replaceAll("\\)", "");
-                        current_percentage_change.add(f);
-                    }
-                }
-                System.out.println("GOT SAVED INFO "+ current_percentage_change.size());
 
-            }}co.close();
+
+    public static void getWorldMarkets(){
+        Document euro=null;
+        try{
+            euro =Jsoup.connect("https://money.cnn.com/data/world_markets/europe/").timeout(10 *10000).get();
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+        Element etable = euro.getElementById("wsod_indexDataTableGrid");
+        Elements et =etable.select("tr");
+        Elements edt = et.select("td");
+        ftse_name=edt.select("td").get(1).text();
+        ftse_change=edt.select("td").get(4).text();
+        ftse_amount=edt.select("td").get(5).text();
+
+        cac_name=edt.select("td").get(15).text();
+        cac_change=edt.select("td").get(18).text();
+        cac_amount=edt.select("td").get(19).text();
+
+        dax_name=edt.select("td").get(22).text();
+        dax_change=edt.select("td").get(25).text();
+        dax_amount=edt.select("td").get(26).text();
+
+
+        Document asia=null;
+        try{
+            asia =Jsoup.connect("https://money.cnn.com/data/world_markets/asia/").timeout(10 *10000).get();
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+        Element table = asia.getElementById("wsod_indexDataTableGrid");
+        Elements t =table.select("tr");
+        Elements dt = t.select("td");
+        shse_name=dt.select("td").get(8).text();
+        shse_change=dt.select("td").get(11).text();
+        shse_amount=dt.select("td").get(12).text();
+
+        hang_name=dt.select("td").get(15).text();
+        hang_change=dt.select("td").get(18).text();
+        hang_amount=dt.select("td").get(19).text();
+
+        nikk_name=dt.select("td").get(29).text();
+        nikk_change=dt.select("td").get(32).text();
+        nikk_amount=dt.select("td").get(33).text();
+
     }
     }
 

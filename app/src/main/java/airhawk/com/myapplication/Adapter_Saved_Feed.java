@@ -61,28 +61,29 @@ public class Adapter_Saved_Feed extends RecyclerView.Adapter<Adapter_Saved_Feed.
     @Override
     public void onBindViewHolder(Adapter_Saved_Feed.MyViewHolder holder, int position) {
        Database_Local_Aequities ld =new Database_Local_Aequities(context);
-
-        System.out.println("SYMBOL  = "+ld.getSymbol().get(position));
-        System.out.println("NAME  = "+ld.getName().get(position));
-        //System.out.println("CHANGE  = "+current_percentage_change.get(position));
-
+       //for(int i=0;i<ld.getName().size();i++){
+       ////("SIZES "+ld.getSymbol().get(i)+" "+ld.getName().get(i)+" "+current_percentage_change.get(i));}
        holder.symbol.setText(""+ ld.getSymbol().get(position));
        holder.name.setText(""+ld.getName().get(position));
-       if(current_percentage_change.size()==0){
+       if(current_percentage_change.size()==0) {
            current_percentage_change.add("Reload");
        }
-       holder.currentchange.setText(""+current_percentage_change.get(position));
+        ////("SIZES "+ld.getSymbol().get(i)+" "+ld.getName().get(i)+" "+current_percentage_change.get(i));}
+        holder.currentchange.setText(""+current_percentage_change.get(position));
         String cc = String.valueOf(current_percentage_change.get(position));
         if(cc.contains("-")){
             cc.replace("-","");
             holder.currentchange.setTextColor(Color.parseColor("#ff0000"));
-            holder.circle.setImageResource(R.drawable.holder_red_circle);
+
         }
         if(cc.contains("+")){
             cc.replace("+","").replace("(","").replace(")","");
             holder.currentchange.setTextColor(Color.parseColor("#00ff00"));
-            holder.circle.setImageResource(R.drawable.holder_green_circle);
+
         }
+        holder.circle.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        holder.circle.setImageResource(android.R.drawable.btn_star_big_on);
+
         String l =ld.getType(holder.name.getText().toString());
 if (l.equalsIgnoreCase("Cryptocurrency")){
     holder.type.setText("Crypto");
@@ -98,7 +99,7 @@ if (l.equalsIgnoreCase("Cryptocurrency")){
                 ap_info.setMarketName(holder.name.getText().toString());
                 ap_info.setMarketSymbol(holder.symbol.getText().toString());
                 ap_info.setMarketType(holder.type.getText().toString());
-                System.out.println("THIS SI I INFO "+ap_info.getMarketName()+" "+ap_info.getMarketSymbol()+" "+ap_info.getMarketType());
+                //("THIS SI I INFO "+ap_info.getMarketName()+" "+ap_info.getMarketSymbol()+" "+ap_info.getMarketType());
                 db_exist=true;
                 ((Activity_Main)context).new setAsyncChosenData((Activity_Main)context).execute();
 
@@ -110,7 +111,7 @@ if (l.equalsIgnoreCase("Cryptocurrency")){
     public int getItemCount() {
         Database_Local_Aequities ld =new Database_Local_Aequities(context);
 
-        return ld.getSymbol().size();
+        return ld.getName().size();
     }
 
 

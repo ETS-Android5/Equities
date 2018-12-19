@@ -55,7 +55,7 @@ public class Database_Local_Aequities extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public long add_equity_info(String symbol,String name,String type,String price) {
+    public long add_equity_info(String symbol,String name,String type) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(KEY_AEQUITY_SYMBOL, symbol);

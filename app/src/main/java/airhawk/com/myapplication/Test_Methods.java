@@ -50,9 +50,61 @@ public class Test_Methods {
        // get_ipos();
        // find_urls();
        // get_ipos();
-        ProcessXml(GoogleRSFeed());
+       // getWorldMarkets();
+get_stock_points();
+    }
+    public static void getWorldMarkets(){
+        Document euro=null;
+        try{
+            euro =Jsoup.connect("https://money.cnn.com/data/world_markets/europe/").timeout(10 *10000).get();
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+        Element etable = euro.getElementById("wsod_indexDataTableGrid");
+        Elements et =etable.select("tr");
+        Elements edt = et.select("td");
+        ftse_name=edt.select("td").get(1).text();
+        ftse_change=edt.select("td").get(4).text();
+        ftse_amount=edt.select("td").get(5).text();
+
+        cac_name=edt.select("td").get(15).text();
+        cac_change=edt.select("td").get(18).text();
+        cac_amount=edt.select("td").get(19).text();
+
+        dax_name=edt.select("td").get(22).text();
+        dax_change=edt.select("td").get(25).text();
+        dax_amount=edt.select("td").get(26).text();
+
+
+        Document asia=null;
+        try{
+            asia =Jsoup.connect("https://money.cnn.com/data/world_markets/asia/").timeout(10 *10000).get();
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+        Element table = asia.getElementById("wsod_indexDataTableGrid");
+        Elements t =table.select("tr");
+        Elements dt = t.select("td");
+        shse_name=dt.select("td").get(8).text();
+        shse_change=dt.select("td").get(11).text();
+        shse_amount=dt.select("td").get(12).text();
+
+        hang_name=dt.select("td").get(15).text();
+        hang_change=dt.select("td").get(18).text();
+        hang_amount=dt.select("td").get(19).text();
+
+        nikk_name=dt.select("td").get(29).text();
+        nikk_change=dt.select("td").get(32).text();
+        nikk_amount=dt.select("td").get(33).text();
 
     }
+
+
+
+
+
+
+
     public static void getStocks_Market_Caps() {
         Document z =null;
         try {
@@ -62,6 +114,7 @@ public class Test_Methods {
         }
         Element table = z.getElementById("Lead-2-FinanceHeader-Proxy");
         Elements as = table.select("a[title]");
+        Elements as6 = table.select("li");
         sp_name = as.get(0).text().replace("&", "");
         dow_name = as.get(2).text();
         nas_name = as.get(4).text();
@@ -85,6 +138,7 @@ public class Test_Methods {
         System.out.println(sp_name+" "+sp_amount+" "+sp_change);
         System.out.println(dow_name+" "+dow_amount+" "+dow_change);
         System.out.println(nas_name+" "+nas_amount+" "+nas_change);
+        System.out.println(as6.text());
     }
 
     public static void get_stock_points() {
@@ -100,14 +154,14 @@ public class Test_Methods {
               String foofoo =test.text().toString().replace("(","").replace(")","");
               String[] foo = foofoo.split(" ");
               String f =foo[1];
-            System.out.println("It's a stock " + f);
+            System.out.print("It's a stock " + f);
 
 
 
     }
 
     public static void get_stock_points2() {
-        System.out.println("Get stock points called");
+        //("Get stock points called");
         String marname = "aapl";
         Document d = null;
         try {
@@ -129,11 +183,11 @@ public class Test_Methods {
                 String volume =x.get(z).select("td").get(6).text();
                 graph_volume.add(volume);
 
-                System.out.println(date+" "+close+" "+volume);
+                //(date+" "+close+" "+volume);
                 List<String> numbers = graph_high;
                 //Collections.reverse(numbers);
                 _AllDays = numbers;}}
-        System.out.println(graph_high.size());
+        //(graph_high.size());
         }
 
     public static void getStock_Kings() {
@@ -151,12 +205,12 @@ public class Test_Methods {
             Elements z = e.select("span");
             for (x = 1; x < e.size(); x = x + 3) {
                 stock_kings_namelist.add(z.get(x).text());
-                System.out.println(z.get(x).text());
+                //(z.get(x).text());
                 t = z.get(x).text();
                 for (int s = 0; s < aequity_name_arraylist.size(); s++) {
                     if (aequity_name_arraylist.contains(t)) {
                         stock_kings_symbollist.add(aequity_symbol_arraylist.get(s));
-                        System.out.println("Yo " + aequity_symbol_arraylist.get(s));
+                        //("Yo " + aequity_symbol_arraylist.get(s));
                     }
                 }
                 //    aequity_name_arraylist;
@@ -166,7 +220,7 @@ public class Test_Methods {
 
 
             for (int n = 2; n < e.size(); n = n + 3) {
-                //System.out.println(z.get(n).text().substring(1, 5).replace(",", ".") + " B");
+                ////(z.get(n).text().substring(1, 5).replace(",", ".") + " B");
                 stock_kings_changelist.add(z.get(n).text().substring(1, 5).replace(",", ".") + " B");
             }
         }
@@ -386,7 +440,7 @@ public class Test_Methods {
         DateFormat sdf = new SimpleDateFormat("yyyyMMdd");
         Date begindate = new Date();
         String f = "bitcoin";
-        System.out.println("NAMD!!! "+f);
+        //("NAMD!!! "+f);
         if (f.contains(" ")){
             f= f.replaceAll(" ","-");}
         Document d= null;
@@ -409,7 +463,7 @@ public class Test_Methods {
                 String[] splited = g.split("\\s+");
                 if (v != null && !g.isEmpty()) {
                     graph_high.add(splited[3]);
-                    System.out.println("PRICE "+graph_high);
+                    //("PRICE "+graph_high);
                     graph_low.add(splited[2]);
                 }
                 Elements pn = ss.select("td[data-format-market-cap]");
@@ -428,7 +482,7 @@ public class Test_Methods {
                 }
             }
         }
-        //System.out.println("THIs Is graph high "+ Arrays.asList(graph_high));
+        ////("THIs Is graph high "+ Arrays.asList(graph_high));
         _AllDays = graph_high;
 
 
@@ -436,7 +490,7 @@ public class Test_Methods {
 
         long endTime = System.nanoTime();
         long duration = (endTime - startTime);
-        System.out.println("CRYPTO POINTS TIME IS " + duration / 1000000000 + " seconds");
+        //("CRYPTO POINTS TIME IS " + duration / 1000000000 + " seconds");
 
 
 
@@ -458,7 +512,7 @@ public class Test_Methods {
                 e.printStackTrace();
             }
             Element change = d.getElementById("qwidget_percent");
-            System.out.println("PERCENT CHANGE" + change);
+            //("PERCENT CHANGE" + change);
         }
 
     }
@@ -492,7 +546,7 @@ public class Test_Methods {
             masternode_marketcap.add(added);
             masternode_node_count.add(r.get(8).text().replace(",",""));
             masternode_purchase_value.add(r.get(10).text().replace("$",""));
-            System.out.println(masternode_name.get(i)+" "+masternode_symbol.get(i)+" "+masternode_percent_change.get(i)+" "+masternode_marketcap.get(i)+" "+masternode_node_count.get(i)+" "+masternode_purchase_value.get(i));
+            //(masternode_name.get(i)+" "+masternode_symbol.get(i)+" "+masternode_percent_change.get(i)+" "+masternode_marketcap.get(i)+" "+masternode_node_count.get(i)+" "+masternode_purchase_value.get(i));
         }
 
     }
@@ -540,7 +594,7 @@ public class Test_Methods {
             ico_enddate.add(output2);
         }
         for (int i=0;i<ico_name.size();i++) {
-            System.out.println("SIZE "+ico_name.get(i)+" "+ico_message.get(i)+" "+ico_startdate.get(i)+" "+ico_enddate.get(i));
+            //("SIZE "+ico_name.get(i)+" "+ico_message.get(i)+" "+ico_startdate.get(i)+" "+ico_enddate.get(i));
         }
     }
 
@@ -578,13 +632,13 @@ public class Test_Methods {
                 HttpURLConnection con = (HttpURLConnection) url.openConnection();
                 con.setRequestMethod("HEAD");
                 con.connect();
-                System.out.println("con.getResponseCode() IS : " + con.getResponseCode());
+                //("con.getResponseCode() IS : " + con.getResponseCode());
                 if (con.getResponseCode() == HttpURLConnection.HTTP_OK) {
-                    System.out.println("Sucess");
+                    //("Sucess");
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                System.out.println("fail");
+                //("fail");
             }
         }
 
@@ -609,10 +663,10 @@ public class Test_Methods {
                         if (curent.getNodeName().equalsIgnoreCase("title")) {
                             st = curent.getTextContent().toString();
                             it.setTitle(st);
-                            System.out.println(st);
+                            //(st);
                         } else if (curent.getNodeName().equalsIgnoreCase("media:content")) {
                             sd = curent.getTextContent().toString();
-                            System.out.println(sd);
+                            //(sd);
 
                             String d = curent.getTextContent().toString();
                             String pattern1 = "<img src=\"";
@@ -621,19 +675,19 @@ public class Test_Methods {
                             Matcher m = p.matcher(d);
                             while (m.find()) {
                                 it.setThumbnailUrl(m.group(1));
-                                //System.out.println("HERE IS YOUR IMAGE DUDE! "+m.group(1));
+                                ////("HERE IS YOUR IMAGE DUDE! "+m.group(1));
                             }
                             it.setDescription(sd);
                         } else if (curent.getNodeName().equalsIgnoreCase("pubDate")) {
                             sp = curent.getTextContent().toString();
                             sp = sp.replaceAll("@20", " ");
                             it.setPubDate(sp);
-                            System.out.println(sp);
+                            //(sp);
                         } else if (curent.getNodeName().equalsIgnoreCase("link")) {
                             sl = curent.getTextContent().toString();
                             sl = sl.replaceAll("@20", " ");
                             it.setLink(sl);
-                            System.out.println(sl);
+                            //(sl);
                         } else if (curent.getNodeName().equalsIgnoreCase("img src")) {
 
                         }

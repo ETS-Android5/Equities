@@ -66,19 +66,19 @@ public class Fragment_Saved extends Fragment {
         saved_feed.setVisibility(View.VISIBLE);
         Constructor_App_Variables cav =new Constructor_App_Variables();
         Database_Local_Aequities ld =new Database_Local_Aequities(getActivity());
-        System.out.println(Arrays.asList(ld.getName()));
+        //(Arrays.asList(ld.getName()));
         //The only way to fix this is to create a constructor with arraylist so you can clear arraylist when backpress is entered
         if (saved_feed!=null){
-            System.out.println("SAVED FEED IS NOT NULL!!!");
+            //("SAVED FEED IS NOT NULL!!!");
             //saved_feed.setAdapter(null);
            // saved_feed.setLayoutManager(null);
             saved_feed.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
             saved_feed.setAdapter(new Adapter_Saved_Feed(getActivity(),Database_Local_Aequities.KEY_AEQUITY_SYMBOL,Database_Local_Aequities.KEY_AEQUITY_NAME,current_percentage_change,Database_Local_Aequities.KEY_AEQUITY_TYPE));
-            System.out.println(Arrays.asList("X "+ld.getName()+" "+ld.getType()));
+            //(Arrays.asList("X "+ld.getName()+" "+ld.getType()));
 
         }else {
             adapter_saved_feed=new Adapter_Saved_Feed(getActivity(),Database_Local_Aequities.KEY_AEQUITY_SYMBOL,Database_Local_Aequities.KEY_AEQUITY_NAME,current_percentage_change,Database_Local_Aequities.KEY_AEQUITY_TYPE);
-            System.out.println("SAVED FEED IS NULL!!!");
+            //("SAVED FEED IS NULL!!!");
             saved_feed.setAdapter(adapter_saved_feed);
 
         }

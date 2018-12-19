@@ -21,6 +21,7 @@ import static airhawk.com.myapplication.Constructor_App_Variables.feedItems;
 public class Fragment_News_Chosen extends Fragment {
     private RecyclerView news_feed;
     TextView news;
+
     public Fragment_News_Chosen() {
     }
     @Override
