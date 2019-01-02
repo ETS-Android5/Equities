@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.net.ConnectivityManager;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
@@ -15,6 +16,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.Patterns;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.Animation;
@@ -68,14 +70,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import static airhawk.com.myapplication.Constructor_App_Variables.*;
 
 public class Activity_Main extends AppCompatActivity {
-
-
-    public static final String Data_Preferences = "MyPrefs" ;
-    public static final String Masternode = "masternodes";
-    public static final String Commodities="commodities";
-    public static final String Bonds="bonds";
-    public static final String Etfs="etfs";
-
     Database_Local_Aequities check_saved = new Database_Local_Aequities(Activity_Main.this);
     RequestQueue requestQueue;
     TextView txt;
@@ -202,18 +196,21 @@ public class Activity_Main extends AppCompatActivity {
                 String q = qu[value];
                 TextView txt2 =activity.findViewById(R.id.output2);
                 txt2.setText(q);
-                RelativeLayout progLayout =activity.findViewById(R.id.progLayout);
+                RelativeLayout progLayout =activity.findViewById(R.id.frameLayout);
                 progLayout.setVisibility(View.VISIBLE);
                 ProgressBar mainbar = activity.findViewById(R.id.mainbar);
                 mainbar.setIndeterminate(true);
-                Snackbar sb = Snackbar.make(progLayout,"Loading Page", Snackbar.LENGTH_LONG);
-                //sb.setActionTextColor(context.getResources().getColor(R.color.darkTextColor2));
+                Snackbar sb = Snackbar.make(progLayout,"Loading Equities...", Snackbar.LENGTH_LONG);
                 View sbView = sb.getView();
                 sbView.setBackgroundColor(activity.getResources().getColor(R.color.colorTrans));
                 TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
                 textView.setTextColor(activity.getResources().getColor(R.color.darkTextColor2));
-                textView.setMaxLines(10);
                 textView.setTextSize(30);
+                textView.setGravity(Gravity.CENTER_HORIZONTAL);
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                    textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                }
                 textView.setAnimation(AnimationUtils.loadAnimation(ApplicationContextProvider.getContext(), R.anim.flash));
                 sb.show();
                 pager = activity.findViewById(R.id.viewpager);
@@ -227,14 +224,17 @@ public class Activity_Main extends AppCompatActivity {
                 String q = qu[value];
                 TextView txt2 =activity.findViewById(R.id.output);
                 txt2.setText(q);
-                Snackbar sb = Snackbar.make(progressLayout,"Loading Page", Snackbar.LENGTH_LONG);
-                //sb.setActionTextColor(context.getResources().getColor(R.color.darkTextColor2));
+                Snackbar sb = Snackbar.make(progressLayout,"Loading Equities...", Snackbar.LENGTH_LONG);
                 View sbView = sb.getView();
                 sbView.setBackgroundColor(activity.getResources().getColor(R.color.colorTrans));
                 TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
                 textView.setTextColor(activity.getResources().getColor(R.color.darkTextColor2));
-                textView.setMaxLines(10);
                 textView.setTextSize(30);
+                textView.setGravity(Gravity.CENTER_HORIZONTAL);
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                    textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                }
                 textView.setAnimation(AnimationUtils.loadAnimation(context, R.anim.flash));
                 sb.show();
             }
@@ -352,6 +352,7 @@ public class Activity_Main extends AppCompatActivity {
         }
 
     }
+
     public class setAsyncCreateSavedData extends AsyncTask<Integer, Integer, String> {
 
         private WeakReference<Activity_Main> activityReference;
@@ -374,7 +375,6 @@ public class Activity_Main extends AppCompatActivity {
         }
 
     }
-
 
     public class setAsyncChosenData extends AsyncTask<Void, Void, String> {
 
@@ -417,17 +417,19 @@ public class Activity_Main extends AppCompatActivity {
             progLayout.setVisibility(View.VISIBLE);
             ProgressBar mainbar = activity.findViewById(R.id.mainbar);
             mainbar.setIndeterminate(true);
-            Snackbar sb = Snackbar.make(progLayout,"Loading Page", Snackbar.LENGTH_LONG);
-            //sb.setActionTextColor(context.getResources().getColor(R.color.darkTextColor2));
+            Snackbar sb = Snackbar.make(progLayout,"Loading data for "+ap_info.getMarketName(), Snackbar.LENGTH_LONG);
             View sbView = sb.getView();
             sbView.setBackgroundColor(activity.getResources().getColor(R.color.colorTrans));
             TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
             textView.setTextColor(activity.getResources().getColor(R.color.darkTextColor2));
             textView.setMaxLines(10);
             textView.setTextSize(30);
+            textView.setGravity(Gravity.CENTER_HORIZONTAL);
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+            }
             textView.setAnimation(AnimationUtils.loadAnimation(ApplicationContextProvider.getContext(), R.anim.flash));
-
-
             sb.show();
             pager = activity.findViewById(R.id.viewpager);
             pager.setVisibility(View.GONE);
@@ -629,12 +631,6 @@ public class Activity_Main extends AppCompatActivity {
               }
 
     private void setupMainViewPager(ViewPager viewPager) {
-        SharedPreferences sp = this.getSharedPreferences(Data_Preferences, Context.MODE_PRIVATE);
-        String masternodes = sp.getString(Masternode, "");
-
-
-
-        //("There are "+check_saved.getName().size()+" saved items at setupviewpager "+ masternodes);
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFrag(new Fragment_Markets(), getString(R.string.title_markets));
         adapter.addFrag(new Fragment_Winners(), getString(R.string.leaders));
@@ -647,7 +643,6 @@ public class Activity_Main extends AppCompatActivity {
         adapter.addFrag(new Fragment_Masternodes(),getString(R.string.masternodes));
         adapter.addFrag(new Fragment_Icos(),getString(R.string.ico));
         adapter.addFrag(new Fragment_Ipos(),getString(R.string.ipo));
-        //adapter.addFrag(new Fragment_stockVScrypto(),getString(R.string.compare));
         viewPager.setAdapter(adapter);
     }
 
@@ -670,8 +665,6 @@ public class Activity_Main extends AppCompatActivity {
     }
 
     public void setJSON_INFO() {
-//General Method for reading JSON file in Assets
-
         try {
             String jsonLocation = AssetJSONFile("rd.json", Activity_Main.this);
             JSONObject obj = new JSONObject(jsonLocation);
@@ -1210,29 +1203,6 @@ public class Activity_Main extends AppCompatActivity {
 
     }
 
-    private void check_to_show_ad(){
-        if (fullScreen.equalsIgnoreCase("go")) {
-            // Sample AdMob app ID: ca-app-pub-3940256099942544~3347511713
-
-
-            MobileAds.initialize(this, "ca-app-pub-6566728316210720/4471280326");
-
-            if (mInterstitialAd.isLoaded()) {
-                mInterstitialAd.show();
-
-            }
-            mInterstitialAd.setAdListener(new AdListener() {
-                @Override
-                public void onAdClosed() {
-                    mInterstitialAd.setAdUnitId("ca-app-pub-6566728316210720/4471280326");
-                    AdRequest adRequest = new AdRequest.Builder().build();
-                    mInterstitialAd.loadAd(adRequest);
-                }
-            });
-        }
-
-    }
-
     private static void ProcessXmlx(org.w3c.dom.Document data) {
         all_feedItems.clear();
         if (data != null) {
@@ -1317,7 +1287,6 @@ public class Activity_Main extends AppCompatActivity {
 
     }
 
-
     public void get_saved_stock_price_change(String taco){
         //String symbol =ap_info.getMarketSymbol();
         String apikey ="XBA42BUC2B6U6G5C";
@@ -1356,8 +1325,6 @@ public class Activity_Main extends AppCompatActivity {
 
 
     }
-
-
 
     public void getSavedEquities(){
         ArrayList b = check_saved.getSymbol();

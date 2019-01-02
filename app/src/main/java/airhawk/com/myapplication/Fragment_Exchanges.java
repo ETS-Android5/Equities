@@ -12,6 +12,9 @@ import android.view.ViewGroup;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+
 import static airhawk.com.myapplication.Activity_Main.ap_info;
 import static airhawk.com.myapplication.Constructor_App_Variables.aequity_exchanges;
 import static airhawk.com.myapplication.Constructor_App_Variables.exchanges_feedItems;
@@ -28,6 +31,8 @@ public class Fragment_Exchanges extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
 
                              Bundle savedInstanceState) {
+        aequity_exchanges = new ArrayList<String>(new LinkedHashSet<String>(aequity_exchanges));
+
         View rootView = inflater.inflate(R.layout.fragment_exchanges, container, false);
         TextView t = rootView.findViewById(R.id.greeting);
         yes =rootView.findViewById(R.id.yes);

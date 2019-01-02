@@ -28,7 +28,6 @@ import static airhawk.com.myapplication.Constructor_App_Variables.stock_exchange
 import static airhawk.com.myapplication.Constructor_App_Variables.stock_exchange_url;
 
 public class Adapter_Exchanges_Feed extends RecyclerView.Adapter<Adapter_Exchanges_Feed.MyViewHolder> {
-    int[] basic_crypto_array = new int[] { R.drawable.exchange_crypto_binance, R.drawable.exchange_crypto_coinbase};
     private static Context context;
     private List<Constructor_Exchanges> feedItems;
     public ArrayList<String> e_text=aequity_exchanges;
@@ -64,31 +63,17 @@ public class Adapter_Exchanges_Feed extends RecyclerView.Adapter<Adapter_Exchang
 
        Constructor_App_Variables ax = new Constructor_App_Variables();
        String a = ax.getMarketType();
-       aequity_exchanges = new ArrayList<String>(new LinkedHashSet<String>(aequity_exchanges));
        if (a.equals("Cryptocurrency") || a.equals("Crypto"))
        {
-
-           holder.ex_text.setText(""+ aequity_exchanges.get(position));
-                   String g = (String) "exchange_crypto_"+aequity_exchanges.get(position).toString().toLowerCase();
-           int productImageId = context.getResources().getIdentifier(
-                   g, "drawable", context.getPackageName());
-
-                   Picasso.with(context).load(productImageId).memoryPolicy(MemoryPolicy.NO_CACHE).fit().centerInside().noFade().into(holder.ex_image);
-
+           holder.ex_text.setText(aequity_exchanges.get(position).toString());
+           String g = (String) "exchange_crypto_"+aequity_exchanges.get(position).toString().toLowerCase();
+           int productImageId = context.getResources().getIdentifier(g, "drawable", context.getPackageName());
+           Picasso.with(context).load(productImageId).memoryPolicy(MemoryPolicy.NO_CACHE).fit().centerInside().noFade().into(holder.ex_image);
        }
-       if (a.equalsIgnoreCase("Stock")
-               ||a.equalsIgnoreCase("Nasdaq")
-               ||a.equalsIgnoreCase("Nyse")
-               ||a.equalsIgnoreCase("ETF")
-               ||a.equalsIgnoreCase("OTC")
-               ||a.equalsIgnoreCase("Amex")
-               ||a.equalsIgnoreCase("SPDR S&P 500")){
-
-           holder.ex_text.setText(""+ aequity_exchanges.get(position));
-             //("Image is good "+s_image.get(position));
-               int productImageId = context.getResources().getIdentifier(
-                      s_image.get(position), "drawable", context.getPackageName());
-               Picasso.with(context).load(productImageId).memoryPolicy(MemoryPolicy.NO_CACHE).fit().centerInside().noFade().into(holder.ex_image);
+       else{
+           holder.ex_text.setText(""+ aequity_exchanges.get(position).toString());
+           int productImageId = context.getResources().getIdentifier(s_image.get(position), "drawable", context.getPackageName());
+           Picasso.with(context).load(productImageId).memoryPolicy(MemoryPolicy.NO_CACHE).fit().centerInside().noFade().into(holder.ex_image);
           }
 
 

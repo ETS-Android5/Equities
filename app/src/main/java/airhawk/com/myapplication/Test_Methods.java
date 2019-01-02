@@ -49,10 +49,10 @@ public class Test_Methods {
        // get_icos();
        // get_ipos();
        // find_urls();
-       // get_ipos();
+       get_ipos();
        // getWorldMarkets();
 //get_stock_points();
-        getSavedEquities();
+        //getSavedEquities();
     }
     public static void getWorldMarkets(){
         Document euro=null;
@@ -620,14 +620,16 @@ public class Test_Methods {
             e.printStackTrace();
         }
         Elements z=d.select("tbody");
+
         Elements tr = z.select("tr");
-        for (int i = 1; i < tr.size(); i++) {
+        for (int i = 0; i < tr.size(); i++) {
             Element row = tr.get(i);
             Elements cols = row.select("td");
             ipo_date.add(cols.get(0).text());
             ipo_name.add(cols.get(1).text());
             ipo_range.add(cols.get(2).text());
             ipo_volume.add(cols.get(3).text());
+            System.out.println(ipo_date+" "+ipo_name+" "+ipo_range+" "+ipo_volume);
         }
         }
 

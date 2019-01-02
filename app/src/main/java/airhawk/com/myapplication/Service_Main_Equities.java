@@ -642,7 +642,7 @@ public class Service_Main_Equities {
         }
         Elements z=d.select("tbody");
         Elements tr = z.select("tr");
-        for (int i = 1; i < tr.size(); i++) {
+        for (int i = 0; i < tr.size(); i++) {
             Element row = tr.get(i);
             Elements cols = row.select("td");
             ipo_date.add(cols.get(0).text());
