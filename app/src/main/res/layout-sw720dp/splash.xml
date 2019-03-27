@@ -10,7 +10,7 @@
     android:orientation="vertical"
     android:background="@drawable/background_gradient"
     android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-    tools:context="airhawk.com.myapplication.Activity_Main">
+    tools:context="equities.com.myapplication.Activity_Main">
 
 
     <LinearLayout

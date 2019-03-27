@@ -7,7 +7,7 @@
     android:background="@drawable/background_gradient"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
-    tools:context="airhawk.com.myapplication.Activity_Main">
+    tools:context="equities.com.myapplication.Activity_Main">
     <FrameLayout
         android:id="@+id/frameLayout"
         android:layout_width="match_parent"
