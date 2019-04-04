@@ -1,6 +1,7 @@
 package equities.com.myapplication;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -527,29 +528,20 @@ public class Service_Main_Equities {
         for(int y= 0; y<stock_kings_namelist.size();y++){
         System.out.println("YO DUDE "+stock_kings_symbollist.get(y));}
         for (int i = 0; i < stock_kings_symbollist.size(); i++) {
-
-
             String marname = String.valueOf(stock_kings_symbollist.get(i));
             if (marname.contains(".")){
                 marname=marname.replace(".","-");}
-
             Document cap =null;
             try{
                 cap =Jsoup.connect("https://finance.yahoo.com/quote/"+marname+"?p="+marname).timeout(10 *10000).get();
             } catch (IOException e){
                 e.printStackTrace();
             }
-           // Elements ez =cap.select("td[data-test]");
-            //stock_kings_changelist.add(ez.get(8).text());
-
-            Element test = cap.select("div[data-reactid='34']").first().select("span").get(1);
+            Element test = cap.select("div[data-reactid='33']").first().select("span").get(1);
             String foofoo =test.text().toString().replace("(","").replace(")","");
-            //String[] foo = foofoo.split(" ");
-            //String f =foo[1];
-            //System.out.println("THIS IS f "+f);
-            stock_kings_ipdown.add(foofoo);
-            //("FU "+stock_kings_ipdown);
-
+            String[] foo = foofoo.split(" ");
+            String f =foo[1];
+            stock_kings_ipdown.add(f);
             }
         }
 
@@ -572,16 +564,14 @@ public class Service_Main_Equities {
                 masternode_name.add(split[0]);
                 masternode_symbol.add(split[1].replace("(","").replace(")",""));
                 masternode_percent_change.add(split[3]);
-                Double add = Double.parseDouble(split[5]);
+                Float add = Float.parseFloat(split[6]);
                 String a = String.format("%.0f", add);
                 String added = null;
-                if (add >=10000 ) {
+                if (split[6].length() >9 ) {
                     added = a.substring(0, 3) + " B";
                 }
-                if (add > 1000) {
+                if (split[6].length() <= 9) {
                     added = a.substring(0, 3) + " M";
-                } else {
-                    added = a.substring(0, 3) + " TH";
                 }
                 masternode_marketcap.add(added);
                 masternode_node_count.add(split[8]);
@@ -593,18 +583,16 @@ public class Service_Main_Equities {
                 Double add = Double.parseDouble(split[6]);
                 String a = String.format("%.0f", add);
                 String added = null;
-                if (add >=10000 ) {
+                if (split[6].length() >9 ) {
                     added = a.substring(0, 3) + " B";
                 }
-                if (add > 1000) {
+                if (split[6].length() <= 9) {
                     added = a.substring(0, 3) + " M";
-                } else {
-                    added = a.substring(0, 3) + " TH";
                 }
                 masternode_marketcap.add(added);
                 masternode_node_count.add(split[9]);
                 masternode_purchase_value.add(split[11]);}
-            System.out.println("THIS IS "+x+" "+masternode_name.get(x)+" "+masternode_symbol.get(x)+" "+masternode_percent_change.get(x)+" "+masternode_marketcap.get(x)+" "+masternode_node_count.get(x)+" "+masternode_purchase_value.get(x));
+            System.out.println("THIS IS "+x+" "+split[6].length()+" "+masternode_name.get(x)+" "+masternode_symbol.get(x)+" "+masternode_percent_change.get(x)+" "+masternode_marketcap.get(x)+" "+masternode_node_count.get(x)+" "+masternode_purchase_value.get(x));
 
         }
     }
@@ -675,8 +663,6 @@ public class Service_Main_Equities {
         }
 
     }
-
-
 
     public static void getWorldMarkets(){
         Document euro=null;

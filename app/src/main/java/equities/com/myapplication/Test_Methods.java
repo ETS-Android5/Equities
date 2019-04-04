@@ -41,7 +41,7 @@ public class Test_Methods {
 
     public static void main(String[] args) {
        // get_stock_kings_points();
-        get_masternodes();
+       get_masternodes();
        // get_icos();
        // get_ipos();
        // find_urls();
@@ -49,29 +49,18 @@ public class Test_Methods {
        // getWorldMarkets();
 //get_stock_points();
         //getSavedEquities();
+        //get_stock_kings_points();
     }
 
     public static void get_stock_kings_points() {
-
-
-
-
-
             Document cap =null;
-            try{
-                cap =Jsoup.connect("https://finance.yahoo.com/quote/DPW?p=DPW").timeout(10 *10000).get();
-            } catch (IOException e){
-                e.printStackTrace();
-            }
-
-            Element test = cap.select("div[data-reactid='34']").first().select("span").get(1);
-            String foofoo =test.text().toString().replace("(","").replace(")","");
+            try{ cap =Jsoup.connect("https://finance.yahoo.com/quote/DPW?p=DPW").timeout(10 *10000).get();
+            } catch (IOException e){ e.printStackTrace(); }
+            Element test = cap.select("div[data-reactid='33']").first().select("span").get(1);
+            String foofoo =test.text().toString().replace("(","").replace(")","").replace("%","");
             String[] foo = foofoo.split(" ");
-//            String f =foo[1];
-            System.out.println("Here is updown "+foofoo);
-            //("FU "+stock_kings_ipdown);
-
-
+            String f =foo[1];
+            System.out.println("Here is updown "+f);
     }
 
     public static void getWorldMarkets(){
@@ -563,7 +552,7 @@ public class Test_Methods {
                     masternode_name.add(split[0]);
                     masternode_symbol.add(split[1].replace("(","").replace(")",""));
                     masternode_percent_change.add(split[3]);
-                    Double add = Double.parseDouble(split[5]);
+                    Double add = Double.parseDouble(split[6]);
                     String a = String.format("%.0f", add);
                     String added = null;
                     if (add >=10000 ) {

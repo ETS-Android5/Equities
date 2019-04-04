@@ -1,5 +1,6 @@
 package equities.com.myapplication;
 
+import android.app.ActionBar;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.net.ConnectivityManager;
@@ -195,7 +196,7 @@ public class Activity_Main extends AppCompatActivity {
                 String q = qu[value];
                 TextView txt2 =activity.findViewById(R.id.output2);
                 txt2.setText(q);
-                RelativeLayout progLayout =activity.findViewById(R.id.frameLayout);
+                FrameLayout progLayout =activity.findViewById(R.id.frameLayout);
                 progLayout.setVisibility(View.VISIBLE);
                 ProgressBar mainbar = activity.findViewById(R.id.mainbar);
                 mainbar.setIndeterminate(true);
@@ -582,7 +583,7 @@ public class Activity_Main extends AppCompatActivity {
             public void onClick(View v) {
 
                 if (pager.getVisibility()==View.VISIBLE){
-                    new setAsyncDataMain(Activity_Main.this).execute();
+                    starterup();
                 }
                 if (market_pager.getVisibility()==View.VISIBLE){
                     new setAsyncChosenData(Activity_Main.this).execute();
@@ -701,7 +702,8 @@ public class Activity_Main extends AppCompatActivity {
 
     public void openSearchView() {
         LayoutInflater i = (LayoutInflater) Activity_Main.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        final View v = i.inflate(R.layout.searchbar, null);
+        View v = i.inflate(R.layout.searchbar, null);
+        v.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
         toolbar = findViewById(R.id.toolbar);
         toolbar.addView(v);
         ad = new ArrayAdapter(Activity_Main.this, android.R.layout.simple_dropdown_item_1line, searchview_arraylist);
