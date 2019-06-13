@@ -50,7 +50,7 @@ public class Adapter_Masternodes_Feed extends RecyclerView.Adapter<Adapter_Maste
                     ap_info.setMarketType("Crypto");
                     ap_info.setMarketChange(changes.getText().toString());
                     Activity_Main activity_main = new Activity_Main();
-                    activity_main.new setAsyncChosenData((Activity_Main) context)
+                    new AsyncChosenData((Activity_Main) context)
                             .execute();}
             });
         }

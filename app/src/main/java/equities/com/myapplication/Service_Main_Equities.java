@@ -1,7 +1,6 @@
 package equities.com.myapplication;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -144,11 +143,13 @@ public class Service_Main_Equities {
             @Override
             public String call() throws Exception {
                 if(saved_helper == 1){}else{
-                getStock_Kings();}
-                get_stock_kings_points();
+                getStock_Kings();
+           }
                 return null;
             }
         });
+
+
 
         callables.add(new Callable<String>() {
             @Override
@@ -417,22 +418,22 @@ public class Service_Main_Equities {
         Elements as = table.select("a[title]");
         sp_name = as.get(0).text().replace("&", "");
         dow_name = as.get(2).text();
-        nas_name = as.get(4).text();
+        bov_name = as.get(4).text();
         Elements as1 = z.select("h3>span");
         sp_amount = as1.get(0).text();
         dow_amount = as1.get(1).text();
-        nas_amount = as1.get(2).text();
+        bov_amount = as1.get(2).text();
         Elements as2 = z.select("span>span");
         sp_change = as2.get(2).text();
         dow_change = as2.get(3).text();
-        nas_change = as2.get(4).text();
+        bov_change = as2.get(4).text();
         if (sp_change.contains("-")) {
             sp_flow = true;
         }
         if (dow_change.contains("-")) {
             dow_flow = true;
         }
-        if (nas_change.contains("-")) {
+        if (bov_change.contains("-")) {
             nd_flow = true;
         }
 
@@ -500,50 +501,38 @@ public class Service_Main_Equities {
     public static void getStock_Kings() {
         Document sv = null;
         try {
-            sv = Jsoup.connect("http://www.iweblists.com/us/commerce/MarketCapitalization.html").get();
+            sv = Jsoup.connect("http://www.dogsofthedow.com/largest-companies-by-market-cap.htm").userAgent("Opera").timeout(10 * 10000).get();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Elements table_body = sv.select("tr td:eq(1)");
-        Elements table_body2 = sv.select("tr td:eq(2)");
-        Elements table_body3 = sv.select("tr td:eq(3)");
-        for (int i = 1; i <= 10; i++) {
-            stock_kings_namelist.add(table_body.get(i).text());
-            stock_kings_symbollist.add(table_body2.get(i).text());
-            Double add = Double.parseDouble(table_body3.get(i).text());
-            String a = String.format("%.0f", add);
-            String added = null;
+        Elements tbody =sv.select("tbody");
+        Elements tbody2 =tbody.select("tbody");
+        Elements tr =tbody2.select("tr");
+        for (int i = 15; i <= 24; i++) {
+            Element td0 = tr.get(i).select("td").get(0);
+            Element td1 = tr.get(i).select("td").get(1);
+            Element td2 = tr.get(i).select("td").get(3);
+            Element td3 = tr.get(i).select("td").get(4);
+            String remove =td2.text().replace(",","");
+            double add = Double.parseDouble(remove);
+            int value = (int)Math.round(add);
+            String added = String.valueOf(value);
             if (add > 1000) {
-                added = a + " T";
-            } else {
-                added = a + " B";
+                added = added + " T";
+            } else
+            {
+                added = added + " B";
             }
+            stock_kings_namelist.add(td1.text());
+            stock_kings_symbollist.add(td0.text());
             stock_kings_changelist.add(added);
+            stock_kings_ipdown.add(td3.text());
 
+            //System.out.println(i-14+" "+td0.text()+" "+td1.text()+" "+added);
         }
 
     }
 
-    public static void get_stock_kings_points() {
-        for(int y= 0; y<stock_kings_namelist.size();y++){
-        System.out.println("YO DUDE "+stock_kings_symbollist.get(y));}
-        for (int i = 0; i < stock_kings_symbollist.size(); i++) {
-            String marname = String.valueOf(stock_kings_symbollist.get(i));
-            if (marname.contains(".")){
-                marname=marname.replace(".","-");}
-            Document cap =null;
-            try{
-                cap =Jsoup.connect("https://finance.yahoo.com/quote/"+marname+"?p="+marname).timeout(10 *10000).get();
-            } catch (IOException e){
-                e.printStackTrace();
-            }
-            Element test = cap.select("div[data-reactid='33']").first().select("span").get(1);
-            String foofoo =test.text().toString().replace("(","").replace(")","");
-            String[] foo = foofoo.split(" ");
-            String f =foo[1];
-            stock_kings_ipdown.add(f);
-            }
-        }
 
 
     public static void get_masternodes(){
@@ -556,7 +545,7 @@ public class Service_Main_Equities {
         Element c = m.getElementById("coins");
         Elements tb = c.select("tbody");
         Elements n = tb.get(1).select("tr");
-        for(int x =0; x<10;x++){
+        for(int x =0; x<20;x++){
             Elements k = n.get(x).select("td");
             String z = k.text().replace("%","").replace("$","").replace(",","");
             String[] split = z.split(" ");
@@ -617,12 +606,14 @@ public class Service_Main_Equities {
             Date formatted = null;
             Date formatted2 = null;
             try {
-                formatted = f.parse(y);
+                if(y.isEmpty()){formatted = f.parse("December 31, 2099");}else{
+                    formatted = f.parse(y);}
             } catch (ParseException e1) {
                 e1.printStackTrace();
             }
             try {
-                formatted2 = f.parse(z);
+                if(z.isEmpty()){formatted2 = f.parse("December 31, 2099");}else{
+                    formatted2 = f.parse(z);}
             } catch (ParseException e1) {
                 formatted2 = formatted;
                 e1.printStackTrace();
@@ -643,6 +634,7 @@ public class Service_Main_Equities {
             //("SIZE "+ico_name.get(i)+" "+ico_message.get(i)+" "+ico_startdate.get(i)+" "+ico_enddate.get(i));
         }
     }
+
 
     public static void get_ipos(){
         Document d =null;
@@ -665,6 +657,28 @@ public class Service_Main_Equities {
     }
 
     public static void getWorldMarkets(){
+        Document us=null;
+        try{
+            us =Jsoup.connect("https://money.cnn.com/data/world_markets/americas/").timeout(10 *10000).get();
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+        Element etable1 = us.getElementById("wsod_indexDataTableGrid");
+        Elements et1 =etable1.select("tr");
+        Elements amer = et1.select("td");
+        dow_name=amer.select("td").get(1).text();
+        dow_change=amer.select("td").get(4).text();
+        dow_amount=amer.select("td").get(5).text();
+
+        sp_name=amer.select("td").get(8).text();
+        sp_change=amer.select("td").get(11).text();
+        sp_amount=amer.select("td").get(12).text();
+
+        bov_name =amer.select("td").get(15).text();
+        bov_change =amer.select("td").get(18).text();
+        bov_amount =amer.select("td").get(19).text();
+
+
         Document euro=null;
         try{
             euro =Jsoup.connect("https://money.cnn.com/data/world_markets/europe/").timeout(10 *10000).get();

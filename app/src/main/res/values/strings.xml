@@ -24,7 +24,7 @@
     <string name="volume">Volume</string>
     <string name="dow_jones">Dow Jones</string>
     <string name="s_p">S&amp;P 500</string>
-    <string name="nasdaq">Nasdaq</string>
+    <string name="bovespa">Brazil Bovespa</string>
     <string name="btc_market_cap">Bitcoin</string>
     <string name="crypto_cap">Cryptocurrency Cap</string>
     <string name="altcoin_cap">Alt Coins</string>

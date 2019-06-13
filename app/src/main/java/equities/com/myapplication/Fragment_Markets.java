@@ -28,9 +28,9 @@ import static equities.com.myapplication.Constructor_App_Variables.ftse_name;
 import static equities.com.myapplication.Constructor_App_Variables.hang_amount;
 import static equities.com.myapplication.Constructor_App_Variables.hang_change;
 import static equities.com.myapplication.Constructor_App_Variables.hang_name;
-import static equities.com.myapplication.Constructor_App_Variables.nas_amount;
-import static equities.com.myapplication.Constructor_App_Variables.nas_change;
-import static equities.com.myapplication.Constructor_App_Variables.nas_name;
+import static equities.com.myapplication.Constructor_App_Variables.bov_amount;
+import static equities.com.myapplication.Constructor_App_Variables.bov_change;
+import static equities.com.myapplication.Constructor_App_Variables.bov_name;
 import static equities.com.myapplication.Constructor_App_Variables.nikk_amount;
 import static equities.com.myapplication.Constructor_App_Variables.nikk_change;
 import static equities.com.myapplication.Constructor_App_Variables.nikk_name;
@@ -51,9 +51,9 @@ public class Fragment_Markets extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        String[] market_list = new String[]{dow_name, sp_name, nas_name, "Bitcoin",ftse_name,cac_name,dax_name,shse_name,hang_name,nikk_name};
-        String[] int_list = new String[]{dow_amount,sp_amount,nas_amount,btc_market_cap_amount,ftse_amount,cac_amount,dax_amount,shse_amount,hang_amount,nikk_amount};
-        String[] change_list = new String[]{dow_change,sp_change, nas_change, btc_market_cap_change,ftse_change,cac_change,dax_change,shse_change,hang_change,nikk_change};
+        String[] market_list = new String[]{dow_name, sp_name, bov_name, "Bitcoin",ftse_name,cac_name,dax_name,shse_name,hang_name,nikk_name};
+        String[] int_list = new String[]{dow_amount,sp_amount, bov_amount,btc_market_cap_amount,ftse_amount,cac_amount,dax_amount,shse_amount,hang_amount,nikk_amount};
+        String[] change_list = new String[]{dow_change,sp_change, bov_change, btc_market_cap_change,ftse_change,cac_change,dax_change,shse_change,hang_change,nikk_change};
 
         View rootView = inflater.inflate(R.layout.fragment_markets, container, false);
         stock = rootView.findViewById(R.id.stock);

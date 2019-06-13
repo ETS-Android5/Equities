@@ -1,13 +1,10 @@
 package equities.com.myapplication;
 
-import android.app.ActionBar;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.net.ConnectivityManager;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -16,7 +13,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.Patterns;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.Animation;
@@ -32,7 +28,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
@@ -59,7 +54,6 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -73,16 +67,7 @@ public class Activity_Main extends AppCompatActivity {
     Database_Local_Aequities check_saved = new Database_Local_Aequities(Activity_Main.this);
     RequestQueue requestQueue;
     TextView txt;
-    final int[] ICONS = new int[]{
-            R.drawable.direction_markets,
-            R.drawable.direction_up,
-            R.drawable.direction_down,
-            R.drawable.direction_kings,
-            R.drawable.direction_news,
-            R.drawable.direction_masternode,
-            R.drawable.direction_icos,
-            R.drawable.direction_ipos
-            };
+    //final int[] ICONS = new int[]{R.drawable.direction_markets, R.drawable.direction_up, R.drawable.direction_down, R.drawable.direction_kings, R.drawable.direction_news, R.drawable.direction_masternode, R.drawable.direction_icos, R.drawable.direction_ipos};
     static Element price = null;
     protected ArrayAdapter<String> ad;
     private static Toolbar toolbar;
@@ -110,7 +95,7 @@ public class Activity_Main extends AppCompatActivity {
     Context context =this;
     static Adapter_Main_Markets adapter;
     static RecyclerView.LayoutManager l;
-    private static InterstitialAd mInterstitialAd;
+    static InterstitialAd mInterstitialAd;
 
     public static String AssetJSONFile(String filename, Context context) throws IOException {
         AssetManager manager = context.getAssets();
@@ -123,7 +108,6 @@ public class Activity_Main extends AppCompatActivity {
 
     private boolean checkInternetConnection() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        // test for connection
         if (cm.getActiveNetworkInfo() != null
                 && cm.getActiveNetworkInfo().isAvailable()
                 && cm.getActiveNetworkInfo().isConnected()) {
@@ -158,7 +142,6 @@ public class Activity_Main extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         check_if_first_download();
         MobileAds.initialize(this, "ca-app-pub-6566728316210720/4471280326");
     }
@@ -170,188 +153,14 @@ public class Activity_Main extends AppCompatActivity {
         if(current_percentage_change.size()>0){
         //current_percentage_change.clear();
         }
-        new setAsyncChosenData(this).cancel(true);
-        new setAsyncForBackPressedSavedData(this).execute();}
+        new AsyncChosenData(this).cancel(true);
+        new AsyncForBackPressedSavedData(this).execute();}
 
     }
 
-    public class setAsyncDataMain extends AsyncTask<Integer, Integer, String> {
-
-        private WeakReference<Activity_Main> activityReference;
-        setAsyncDataMain(Activity_Main context) {
-            activityReference = new WeakReference<>(context);
-        }
-        long startTime;
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            Activity_Main activity = activityReference.get();
-            pager = activity.findViewById(R.id.viewpager);
-            if (pager!=null&&pager.getVisibility()==View.VISIBLE){
-                pager.setVisibility(View.GONE);
-                Random rand = new Random();
-                int value = rand.nextInt(31);
-                String [] qu =getResources().getStringArray(R.array.all_quotes);
-                String q = qu[value];
-                TextView txt2 =activity.findViewById(R.id.output2);
-                txt2.setText(q);
-                FrameLayout progLayout =activity.findViewById(R.id.frameLayout);
-                progLayout.setVisibility(View.VISIBLE);
-                ProgressBar mainbar = activity.findViewById(R.id.mainbar);
-                mainbar.setIndeterminate(true);
-                Snackbar sb = Snackbar.make(progLayout,"Loading Equities...", Snackbar.LENGTH_LONG);
-                View sbView = sb.getView();
-                sbView.setBackgroundColor(activity.getResources().getColor(R.color.colorTrans));
-                TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
-                textView.setTextColor(activity.getResources().getColor(R.color.darkTextColor2));
-                textView.setTextSize(30);
-                textView.setGravity(Gravity.CENTER_HORIZONTAL);
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                    textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                }
-                textView.setAnimation(AnimationUtils.loadAnimation(ApplicationContextProvider.getContext(), R.anim.flash));
-                sb.show();
-                pager = activity.findViewById(R.id.viewpager);
-                pager.setVisibility(View.GONE);
-            }else{
-                progressLayout =findViewById(R.id.progressLayout);
-                startTime = System.nanoTime();
-                Random rand = new Random();
-                int value = rand.nextInt(31);
-                String [] qu =getResources().getStringArray(R.array.all_quotes);
-                String q = qu[value];
-                TextView txt2 =activity.findViewById(R.id.output);
-                txt2.setText(q);
-                Snackbar sb = Snackbar.make(progressLayout,"Loading Equities...", Snackbar.LENGTH_LONG);
-                View sbView = sb.getView();
-                sbView.setBackgroundColor(activity.getResources().getColor(R.color.colorTrans));
-                TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
-                textView.setTextColor(activity.getResources().getColor(R.color.darkTextColor2));
-                textView.setTextSize(30);
-                textView.setGravity(Gravity.CENTER_HORIZONTAL);
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                    textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                }
-                textView.setAnimation(AnimationUtils.loadAnimation(context, R.anim.flash));
-                sb.show();
-            }
-
-        }
-
-        @Override
-        protected String doInBackground(Integer... params) {
-            Service_Main_Equities cst = new Service_Main_Equities();
-            cst.main();
-            return "task finished";
-        }
-        @Override
-        protected void onPostExecute(String result) {
-            Activity_Main activity = activityReference.get();
-            if (activity == null || activity.isFinishing()) return;
-            setMainPage();
 
 
 
-        }
-
-    }
-
-    public class setAsyncForBackPressedSavedData extends AsyncTask<Integer, Integer, String> {
-
-        private WeakReference<Activity_Main> activityReference;
-        setAsyncForBackPressedSavedData(Activity_Main context) {
-            activityReference = new WeakReference<>(context);
-        }
-        long startTime;
-        ViewPager pager = findViewById(R.id.viewpager);
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            if (pager.getVisibility()==View.VISIBLE){
-                finishAffinity();}else{
-
-
-                if (mInterstitialAd.isLoaded()) {
-                    mInterstitialAd.show();
-
-                }else{
-                    //mInterstitialAd.setAdUnitId("ca-app-pub-6566728316210720/4471280326");
-                    AdRequest adRequest = new AdRequest.Builder().build();
-                    mInterstitialAd.loadAd(adRequest);
-                    mInterstitialAd.show();
-                }
-                mInterstitialAd.setAdListener(new AdListener() {
-                    public void onAdLoaded() {
-                        //("Ad is showing");
-                        mInterstitialAd.show();
-                    }
-                    @Override
-                    public void onAdClosed() {
-                        System.err.println("Ad loaded");
-                    }
-                });
-
-
-            }
-        }
-
-        @Override
-        protected String doInBackground(Integer... params) {
-            ArrayList aa = check_saved.getType();
-            if(aa.size()>0){
-                getSavedEquities();}
-            return "task finished";
-        }
-        @Override
-        protected void onPostExecute(String result) {
-            Activity_Main activity = activityReference.get();
-            if (activity == null || activity.isFinishing()) return;
-            graph_change.clear();
-            exchange_list.clear();
-            aequity_exchanges.clear();
-            stocktwits_feedItems.clear();
-            graph_date.clear();
-            graph_high.clear();
-            graph_volume.clear();
-            new setAsyncChosenData(Activity_Main.this).cancel(true);
-            pager.setVisibility(View.VISIBLE);
-            ViewPager market_pager = findViewById(R.id.market_pager);
-            market_pager.setVisibility(View.GONE);
-            TabLayout tabs = findViewById(R.id.tabs);
-            setupMainViewPager(pager);
-            tabs.setupWithViewPager(pager);
-            tabs.getTabAt(0).setIcon(ICONS[0]);
-            tabs.getTabAt(1).setIcon(ICONS[1]);
-            if (check_saved.getName().isEmpty()){
-                tabs.getTabAt(2).setIcon(ICONS[2]);
-                tabs.getTabAt(3).setIcon(ICONS[3]);
-                tabs.getTabAt(4).setIcon(ICONS[4]);
-                tabs.getTabAt(5).setIcon(ICONS[5]);
-                tabs.getTabAt(6).setIcon(ICONS[6]);
-                tabs.getTabAt(7).setIcon(ICONS[7]);
-            }else{
-                tabs.getTabAt(2).setIcon(ICONS[2]);
-                tabs.getTabAt(3).setIcon(android.R.drawable.btn_star_big_on);
-                tabs.getTabAt(4).setIcon(ICONS[3]);
-                tabs.getTabAt(5).setIcon(ICONS[4]);
-                tabs.getTabAt(6).setIcon(ICONS[5]);
-                tabs.getTabAt(7).setIcon(ICONS[6]);
-                tabs.getTabAt(8).setIcon(ICONS[7]);
-
-
-            }
-
-            long endTime = System.nanoTime();
-            long duration = (endTime - startTime);
-            //("SERVICE MAIN TIME IS " + duration / 1000000000 + " seconds");
-
-        }
-
-    }
 
     public class setAsyncCreateSavedData extends AsyncTask<Integer, Integer, String> {
 
@@ -370,199 +179,15 @@ public class Activity_Main extends AppCompatActivity {
         }
         @Override
         protected void onPostExecute(String result) {
-            new setAsyncDataMain(Activity_Main.this).execute();
+            new AsyncDataMain(Activity_Main.this).execute();
 
         }
 
     }
 
-    public class setAsyncChosenData extends AsyncTask<Void, Void, String> {
-
-        private WeakReference<Activity_Main> activityReference;
-        setAsyncChosenData(Activity_Main context) {
-            activityReference = new WeakReference<>(context);
-        }
-        long startTime;
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            graph_change.clear();
-            exchange_list.clear();
-            aequity_exchanges.clear();
-            stocktwits_feedItems.clear();
-            graph_date.clear();
-            graph_high.clear();
-            graph_volume.clear();
-            feedItems.clear();
-            Random rand = new Random();
-            int svalue = rand.nextInt(25);
-            int cvalue = rand.nextInt(25);
-            Activity_Main activity = activityReference.get();
-            market_pager = activity.findViewById(R.id.market_pager);
-            if (market_pager.getVisibility()==View.VISIBLE){
-                market_pager.setVisibility(View.GONE);
-            }
-            String [] sq =activity.getResources().getStringArray(R.array.stock_quotes);
-            String [] cq =activity.getResources().getStringArray(R.array.crypto_quotes);
-            String q;
-            if (ap_info.getMarketType().equals("Stock")){
-                q = sq[svalue];}
-                else{
-                q = cq[cvalue];
-            }
-            TextView txt2 =activity.findViewById(R.id.output2);
-            txt2.setText(q);
-            startTime = System.nanoTime();
-            RelativeLayout progLayout =activity.findViewById(R.id.progLayout);
-            progLayout.setVisibility(View.VISIBLE);
-            ProgressBar mainbar = activity.findViewById(R.id.mainbar);
-            mainbar.setIndeterminate(true);
-            Snackbar sb = Snackbar.make(progLayout,"Loading data for "+ap_info.getMarketName(), Snackbar.LENGTH_LONG);
-            View sbView = sb.getView();
-            sbView.setBackgroundColor(activity.getResources().getColor(R.color.colorTrans));
-            TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
-            textView.setTextColor(activity.getResources().getColor(R.color.darkTextColor2));
-            textView.setMaxLines(10);
-            textView.setTextSize(30);
-            textView.setGravity(Gravity.CENTER_HORIZONTAL);
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-            }
-            textView.setAnimation(AnimationUtils.loadAnimation(ApplicationContextProvider.getContext(), R.anim.flash));
-            sb.show();
-            pager = activity.findViewById(R.id.viewpager);
-            pager.setVisibility(View.GONE);
-
-        }
-
-        @Override
-        protected String doInBackground(Void... params) {
-            Activity_Main activity = activityReference.get();
-            if(isCancelled())
-            {
-
-                //("Async Cancelled");
-                return null;}
 
 
-
-//            getSupportActionBar().setDisplayShowTitleEnabled(true);
-            if (async_analysis_page) {
-                reloadAllData();
-                if (ap_info.getMarketType().equals("Crypto")||(ap_info.getMarketType().equals("Cryptocurrency"))) {
-
-                    activity.getChosenCryptoInfo();
-                    activity.getStockTwitsData();
-                    activity.get_coinmarketcap_exchange_listing();
-                    Service_Chosen_Equity shoe = new Service_Chosen_Equity(Activity_Main.this);
-                    shoe.main();
-                    do_graph_change();
-                }
-                if (ap_info.getMarketType().equals("Index")) {
-
-                    activity.get_stock_exchange_info();
-                    activity.get_current_stock_info();
-                    activity.getStockTwitsData();
-                    Service_Chosen_Equity shoe = new Service_Chosen_Equity(Activity_Main.this);
-                    shoe.main();
-                    do_graph_change();
-                }
-                else {
-
-                    activity.get_stock_exchange_info();
-                    activity.get_current_stock_info();
-                    activity.getStockTwitsData();
-                    Service_Chosen_Equity shoe = new Service_Chosen_Equity(Activity_Main.this);
-                    shoe.main();
-                    do_graph_change();
-                }
-
-
-
-            } else {
-                if (ap_info.getMarketType().equals("Crypto")||(ap_info.getMarketType().equals("Cryptocurrency"))) {
-
-                    activity.getChosenCryptoInfo();
-                    activity.getStockTwitsData();
-                    activity.get_coinmarketcap_exchange_listing();
-                    Service_Chosen_Equity shoe = new Service_Chosen_Equity(Activity_Main.this);
-                    shoe.main();
-                    do_graph_change();
-                }
-                if (ap_info.getMarketType().equals("Index")) {
-
-                    activity.get_stock_exchange_info();
-                    activity.get_current_stock_info();
-                    activity.getStockTwitsData();
-                    Service_Chosen_Equity shoe = new Service_Chosen_Equity(Activity_Main.this);
-                    shoe.main();
-                    do_graph_change();
-                }
-                else
-                {
-
-                    activity.get_stock_exchange_info();
-                    activity.get_current_stock_info();
-                    activity.getStockTwitsData();
-                    Service_Chosen_Equity shoe = new Service_Chosen_Equity(Activity_Main.this);
-                    shoe.main();
-                    do_graph_change();
-                }
-                activity.ProcessXmlx(GoogleRSFeedx());
-
-                async_analysis_page = true;
-
-
-            }
-            return "task finished";
-        }
-
-
-
-        @Override
-        protected void onPostExecute(String result) {
-            fullScreen="go";
-            // get a reference to the activity if it is still there
-            Activity_Main activity = activityReference.get();
-
-
-            String a=ap_info.getCurrent_Aequity_Price();
-            if (activity == null || activity.isFinishing()&&graph_high.size()>0&&requestQueue !=null&& forward) return;
-            ProgressBar mainbar = activity.findViewById(R.id.mainbar);
-            mainbar.setIndeterminate(false);
-            pager = activity.findViewById(R.id.viewpager);
-            pager.setVisibility(View.GONE);
-            market_pager = activity.findViewById(R.id.market_pager);
-            market_pager.setVisibility(View.VISIBLE);
-
-            tabs = activity.findViewById(R.id.tabs);
-            tabs.setupWithViewPager(market_pager);
-            activity.setupChosenViewPager(market_pager);
-
-            if (ap_info.getMarketType().equals("Index")) {
-                tabs.getTabAt(0).setIcon(R.drawable.direction_info);
-                tabs.getTabAt(1).setIcon(R.drawable.direction_news);
-                tabs.getTabAt(2).setIcon(R.drawable.direction_youtube_video);
-                tabs.getTabAt(3).setIcon(R.drawable.direction_socialmedia);
-            }else{
-                tabs.getTabAt(0).setIcon(R.drawable.direction_info);
-                tabs.getTabAt(1).setIcon(R.drawable.direction_news);
-                tabs.getTabAt(2).setIcon(R.drawable.direction_youtube_video);
-                tabs.getTabAt(3).setIcon(R.drawable.direction_exchange);
-                tabs.getTabAt(4).setIcon(R.drawable.direction_socialmedia);
-            }
-
-
-            RelativeLayout progLayout =activity.findViewById(R.id.progLayout);
-            progLayout.setVisibility(View.GONE);
-
-        }
-
-
-    }
-
-    private void setMainPage() {
+    protected void setMainPage() {
         setContentView(R.layout.activity_main);
         setJSON_INFO();
         toolbar = findViewById(R.id.toolbar);
@@ -586,7 +211,7 @@ public class Activity_Main extends AppCompatActivity {
                     starterup();
                 }
                 if (market_pager.getVisibility()==View.VISIBLE){
-                    new setAsyncChosenData(Activity_Main.this).execute();
+                    new AsyncChosenData(Activity_Main.this).execute();
                 }
             }
         });
@@ -594,26 +219,7 @@ public class Activity_Main extends AppCompatActivity {
         TabLayout tabs = findViewById(R.id.tabs);
         setupMainViewPager(pager);
         tabs.setupWithViewPager(pager);
-        tabs.getTabAt(0).setIcon(ICONS[0]);
-        tabs.getTabAt(1).setIcon(ICONS[1]);
-        if (check_saved.getName().isEmpty()){
-            tabs.getTabAt(2).setIcon(ICONS[2]);
-            tabs.getTabAt(3).setIcon(ICONS[3]);
-            tabs.getTabAt(4).setIcon(ICONS[4]);
-            tabs.getTabAt(5).setIcon(ICONS[5]);
-            tabs.getTabAt(6).setIcon(ICONS[6]);
-            tabs.getTabAt(7).setIcon(ICONS[7]);
-        }else{
-            tabs.getTabAt(2).setIcon(ICONS[2]);
-            tabs.getTabAt(3).setIcon(android.R.drawable.btn_star_big_on);
-            tabs.getTabAt(4).setIcon(ICONS[3]);
-            tabs.getTabAt(5).setIcon(ICONS[4]);
-            tabs.getTabAt(6).setIcon(ICONS[5]);
-            tabs.getTabAt(7).setIcon(ICONS[6]);
-            tabs.getTabAt(8).setIcon(ICONS[7]);
 
-
-        }
 
 
 
@@ -630,7 +236,7 @@ public class Activity_Main extends AppCompatActivity {
         }
               }
 
-    private void setupMainViewPager(ViewPager viewPager) {
+    public void setupMainViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFrag(new Fragment_Markets(), getString(R.string.title_markets));
         adapter.addFrag(new Fragment_Winners(), getString(R.string.leaders));
@@ -646,7 +252,7 @@ public class Activity_Main extends AppCompatActivity {
         viewPager.setAdapter(adapter);
     }
 
-    private void setupChosenViewPager(ViewPager viewPager) {
+    public void setupChosenViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         if (ap_info.getMarketType().equals("Index")) {
             adapter.addFrag(new Fragment_Analysis(), getString(R.string.action_analysis));
@@ -689,7 +295,7 @@ public class Activity_Main extends AppCompatActivity {
         }
     }
 
-    private void reloadAllData() {
+    static void reloadAllData() {
         graph_date.clear();
         graph_high.clear();
         graph_volume.clear();
@@ -726,7 +332,7 @@ public class Activity_Main extends AppCompatActivity {
                 ap_info.setMarketType(split_marketinfo[2]);
                 System.out.println(ap_info.getMarketSymbol()+" "+ap_info.getMarketName()+" "+ap_info.getMarketType());
                 chosen_searchView_item.onEditorAction(EditorInfo.IME_ACTION_DONE);
-                new setAsyncChosenData(Activity_Main.this).execute();
+                new AsyncChosenData(Activity_Main.this).execute();
                 chosen_searchView_item.setText("");
 
             }
@@ -1204,7 +810,7 @@ public class Activity_Main extends AppCompatActivity {
 
     }
 
-    private static void ProcessXmlx(org.w3c.dom.Document data) {
+    public static void ProcessXmlx(org.w3c.dom.Document data) {
         all_feedItems.clear();
         if (data != null) {
             String st, sd, sp, sl,si;

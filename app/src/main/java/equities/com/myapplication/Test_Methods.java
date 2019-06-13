@@ -26,8 +26,6 @@ import java.util.regex.Pattern;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import static equities.com.myapplication.Activity_Main.aequity_name_arraylist;
-import static equities.com.myapplication.Activity_Main.aequity_symbol_arraylist;
 import static equities.com.myapplication.Constructor_App_Variables.*;
 import static equities.com.myapplication.Service_Main_Equities.stock_kings_changelist;
 import static equities.com.myapplication.Service_Main_Equities.stock_kings_namelist;
@@ -40,27 +38,32 @@ public class Test_Methods {
     static String cryptopia_list;
 
     public static void main(String[] args) {
-       // get_stock_kings_points();
-       get_masternodes();
+        //getStock_Kings();
+        //get_stock_kings_points();
+       //get_masternodes();
        // get_icos();
        // get_ipos();
        // find_urls();
        //get_ipos();
-       // getWorldMarkets();
+        getWorldMarkets();
 //get_stock_points();
         //getSavedEquities();
         //get_stock_kings_points();
     }
 
     public static void get_stock_kings_points() {
+
+
+        for(int i=0;i<=stock_kings_symbollist.size();i++){
             Document cap =null;
             try{ cap =Jsoup.connect("https://finance.yahoo.com/quote/DPW?p=DPW").timeout(10 *10000).get();
             } catch (IOException e){ e.printStackTrace(); }
-            Element test = cap.select("div[data-reactid='33']").first().select("span").get(1);
+            Elements test = cap.select("div[data-reactid='50']");
+
             String foofoo =test.text().toString().replace("(","").replace(")","").replace("%","");
             String[] foo = foofoo.split(" ");
             String f =foo[1];
-            System.out.println("Here is updown "+f);
+            System.out.println("Here is updown "+f);}
     }
 
     public static void getWorldMarkets(){
@@ -121,27 +124,27 @@ public class Test_Methods {
         Elements as6 = table.select("li");
         sp_name = as.get(0).text().replace("&", "");
         dow_name = as.get(2).text();
-        nas_name = as.get(4).text();
+        bov_name = as.get(4).text();
         Elements as1 = z.select("h3>span");
         sp_amount =as1.get(0).text();
         dow_amount=as1.get(1).text();
-        nas_amount=as1.get(2).text();
+        bov_amount =as1.get(2).text();
         Elements as2 =z.select("span>span");
         sp_change =as2.get(2).text();
         dow_change=as2.get(3).text();
-        nas_change=as2.get(4).text();
+        bov_change =as2.get(4).text();
         if (sp_change.contains("-")){
             sp_flow=true;
         }
         if (dow_change.contains("-")){
             dow_flow=true;
         }
-        if (nas_change.contains("-")){
+        if (bov_change.contains("-")){
             nd_flow=true;
         }
         System.out.println(sp_name+" "+sp_amount+" "+sp_change);
         System.out.println(dow_name+" "+dow_amount+" "+dow_change);
-        System.out.println(nas_name+" "+nas_amount+" "+nas_change);
+        System.out.println(bov_name +" "+ bov_amount +" "+ bov_change);
         System.out.println(as6.text());
     }
 
@@ -208,41 +211,40 @@ public class Test_Methods {
         }
 
     public static void getStock_Kings() {
-        int x;
         Document sv = null;
-        String t;
         try {
-            sv = Jsoup.connect("http://fortune.com/global500/list/filtered?sortBy=profits&first500").get();
+            sv = Jsoup.connect("http://www.dogsofthedow.com/largest-companies-by-market-cap.htm").userAgent("Opera").timeout(10 * 10000).get();
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        Elements e = sv.select("li");
-        for (int i = 0; i < e.size(); i++) {
-            Elements z = e.select("span");
-            for (x = 1; x < e.size(); x = x + 3) {
-                stock_kings_namelist.add(z.get(x).text());
-                //(z.get(x).text());
-                t = z.get(x).text();
-                for (int s = 0; s < aequity_name_arraylist.size(); s++) {
-                    if (aequity_name_arraylist.contains(t)) {
-                        stock_kings_symbollist.add(aequity_symbol_arraylist.get(s));
-                        //("Yo " + aequity_symbol_arraylist.get(s));
-                    }
-                }
-                //    aequity_name_arraylist;
-                //ap_info.setMarketSymbol();
-                //stock_kings_changelist.add();
+        Elements tbody =sv.select("tbody");
+        Elements tbody2 =tbody.select("tbody");
+        Elements tr =tbody2.select("tr");
+        for (int i = 15; i <= 24; i++) {
+            Element td0 = tr.get(i).select("td").get(0);
+            Element td1 = tr.get(i).select("td").get(1);
+            Element td2 = tr.get(i).select("td").get(3);
+            String remove =td2.text().replace(",","");
+            double add = Double.parseDouble(remove);
+            int value = (int)Math.round(add);
+            String added = String.valueOf(value);
+            if (add > 1000) {
+                added = added + " T";
+            } else
+            {
+                added = added + " B";
             }
-
-
-            for (int n = 2; n < e.size(); n = n + 3) {
-                ////(z.get(n).text().substring(1, 5).replace(",", ".") + " B");
-                stock_kings_changelist.add(z.get(n).text().substring(1, 5).replace(",", ".") + " B");
-            }
+            stock_kings_namelist.add(td0.text());
+            stock_kings_symbollist.add(td1.text());
+            stock_kings_changelist.add(added);
+            //System.out.println(i-14+" "+td0.text()+" "+td1.text()+" "+added);
         }
-
     }
+
+
+
+
+
 
     public static void get_crypto_listings() {
 
@@ -524,7 +526,7 @@ public class Test_Methods {
             symbol = String.valueOf(stock_kings_symbollist.get(z));
             Document d = null;
             try {
-                d = Jsoup.connect("https://www.nasdaq.com/symbol/" + symbol).userAgent("Mozilla").timeout(10 * 100000).get();
+                d = Jsoup.connect("https://www.bovespa.com/symbol/" + symbol).userAgent("Mozilla").timeout(10 * 100000).get();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -609,12 +611,14 @@ public class Test_Methods {
             Date formatted = null;
             Date formatted2 = null;
             try {
-                formatted = f.parse(y);
+                if(y.isEmpty()){formatted = f.parse("December 31, 2019");}else{
+                formatted = f.parse(y);}
             } catch (ParseException e1) {
                 e1.printStackTrace();
             }
             try {
-                formatted2 = f.parse(z);
+                if(z.isEmpty()){formatted2 = f.parse("December 31, 2019");}else{
+                formatted2 = f.parse(z);}
             } catch (ParseException e1) {
                 formatted2 = formatted;
                 e1.printStackTrace();

@@ -68,9 +68,9 @@ public class Constructor_App_Variables {
     public static String dow_name;
     public static String dow_amount;
     public static String dow_change;
-    public static String nas_name;
-    public static String nas_amount;
-    public static String nas_change;
+    public static String bov_name;
+    public static String bov_amount;
+    public static String bov_change;
 
     public static String shse_name;
     public static String shse_amount;
@@ -104,7 +104,7 @@ public class Constructor_App_Variables {
     protected static ArrayList<Constructor_Ipos> ipo_feedItems =new ArrayList<>();
 
     protected static ArrayList<Constructor_Icos> ico_feedItems =new ArrayList<>();
-    protected static ArrayList<Constructor_News_Feed> feedItems = new ArrayList<>();
+    public static ArrayList<Constructor_News_Feed> feedItems = new ArrayList<>();
     protected static ArrayList<Constructor_Stock_Twits> stocktwits_feedItems = new ArrayList<>();
 
     protected static ArrayList<Constructor_Masternodes> masternode_feedItems = new ArrayList<>();

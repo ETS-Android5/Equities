@@ -99,7 +99,7 @@ if (l.equalsIgnoreCase("Cryptocurrency")){
                 ap_info.setMarketType(holder.type.getText().toString());
                 //("THIS SI I INFO "+ap_info.getMarketName()+" "+ap_info.getMarketSymbol()+" "+ap_info.getMarketType());
                 db_exist=true;
-                ((Activity_Main)context).new setAsyncChosenData((Activity_Main)context).execute();
+                new AsyncChosenData((Activity_Main)context).execute();
 
 
             }
