@@ -28,7 +28,7 @@
             android:gravity="left|center"
             android:singleLine="true"
             android:text="Loser"
-            android:textColor="@color/colorBlack"
+            android:textColor="@color/colorPrimary"
             android:textSize="14sp"
             android:visibility="gone" />
 
@@ -40,7 +40,7 @@
             android:gravity="left|center"
             android:singleLine="true"
             android:text="#"
-            android:textColor="@color/colorBlack"
+            android:textColor="@color/colorPrimary"
             android:textSize="14sp" />
 
         <ImageView
@@ -57,7 +57,7 @@
             android:gravity="left|center"
             android:singleLine="true"
             android:text="AAPL"
-            android:textColor="@color/colorBlack"
+            android:textColor="@color/colorPrimary"
             android:textSize="14sp" />
 
         <TextView
@@ -68,41 +68,41 @@
             android:gravity="left|center"
             android:singleLine="true"
             android:text="Symbol"
-            android:textColor="@color/colorBlack"
+            android:textColor="@color/colorPrimary"
             android:textSize="14sp" />
 
         <TextView
-            android:id="@+id/changes"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:fontFamily="@font/scpro"
-            android:gravity="center|right"
-            android:shadowColor="#ffffff"
-            android:shadowDx="0"
-            android:shadowDy="0"
-            android:shadowRadius="1"
-            android:singleLine="true"
-            android:textColor="@color/colorBlack"
-            android:textSize="14sp"
-            android:textStyle="bold" />
+                android:id="@+id/changes"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:fontFamily="@font/scpro"
+                android:gravity="center|right"
+                android:shadowColor="#ffffff"
+                android:shadowDx="0"
+                android:shadowDy="0"
+                android:shadowRadius="1"
+                android:singleLine="true"
+                android:textColor="@color/colorPrimary"
+                android:textSize="14sp"
+                android:textStyle="bold"/>
 
         <TextView
-            android:id="@+id/value"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight=".9"
-            android:fontFamily="@font/scpro"
-            android:gravity="center|right"
-            android:shadowColor="#ffffff"
-            android:shadowDx="0"
-            android:shadowDy="0"
-            android:shadowRadius="1"
-            android:singleLine="true"
-            android:text="Symbol"
-            android:textColor="@color/colorBlack"
-            android:textSize="14sp"
-            android:textStyle="bold" />
+                android:id="@+id/value"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight=".9"
+                android:fontFamily="@font/scpro"
+                android:gravity="center|right"
+                android:shadowColor="#ffffff"
+                android:shadowDx="0"
+                android:shadowDy="0"
+                android:shadowRadius="1"
+                android:singleLine="true"
+                android:text="Symbol"
+                android:textColor="@color/colorPrimary"
+                android:textSize="14sp"
+                android:textStyle="bold"/>
 
     </TableRow>
 

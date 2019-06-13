@@ -159,10 +159,10 @@ public class Adapter_Main_Markets extends RecyclerView.Adapter<Adapter_Main_Mark
         holder.mPriceView.setText("$ " + int_list[position]);
         holder.mChangeView.setText(change_list[position]);
         if (change_list[position] !=null && change_list[position].contains("-")){
-            holder.circle.setImageResource(R.drawable.direction_down);
+            holder.circle.setImageResource(R.drawable.holder_red_circle);
             holder.mChangeView.setTextColor(Color.parseColor("#FF0000"));
         } else {
-            holder.circle.setImageResource(R.drawable.direction_up);
+            holder.circle.setImageResource(R.drawable.holder_green_circle);
             holder.mChangeView.setTextColor(Color.parseColor("#00cc00"));
 
         }

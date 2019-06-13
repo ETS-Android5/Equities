@@ -20,14 +20,8 @@
                 android:orientation="vertical">
 
             <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:src="@drawable/direction_down" />
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:layout_gravity="center">
 
                 <android.support.v7.widget.AppCompatTextView
 
@@ -43,12 +37,6 @@
                         android:textColor="@color/colorPrimary"
                         android:textSize="46sp"/>
 
-                <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-
-                        android:src="@drawable/direction_down" />
             </TableRow>
             <TableRow
                     android:layout_width="match_parent"
@@ -97,22 +85,22 @@
             </TableRow>
 
             <TextView
-                android:id="@+id/stock_loser_data_provider"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:autoLink="web"
-                android:gravity="center"
-                android:text="@string/stock_loser_winner_data_provider"
-                android:textColor="@color/colorPrimary"
-                android:textColorLink="@color/darkTextColor"
-                android:textSize="24sp" />
+                    android:id="@+id/stock_loser_data_provider"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:autoLink="web"
+                    android:gravity="center"
+                    android:text="@string/stock_loser_winner_data_provider"
+                    android:textColor="@color/colorPrimary"
+                    android:textColorLink="@color/darkTextColor"
+                    android:textSize="24sp"/>
 
             <android.support.v7.widget.RecyclerView
                     android:id="@+id/stock_items"
                     android:layout_width="match_parent"
                     android:layout_height="0dip"
                     android:layout_weight="1"
-                    android:background="@color/colorPrimary" />
+                    android:background="#000000"/>
 
         </LinearLayout>
 
@@ -124,14 +112,8 @@
                 android:orientation="vertical">
 
             <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:src="@drawable/direction_down" />
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:layout_gravity="center">
 
                 <android.support.v7.widget.AppCompatTextView
 
@@ -145,14 +127,8 @@
 
                         android:text="@string/crypto_losers"
                         android:textColor="@color/colorPrimary"
-                        android:textSize="46sp" />
+                        android:textSize="46sp"/>
 
-                <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-
-                        android:src="@drawable/direction_down" />
             </TableRow>
 
             <TableRow
@@ -217,7 +193,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dip"
                     android:layout_weight="1"
-                    android:background="@color/colorPrimary" />
+                    android:background="#000000"/>
         </LinearLayout>
     </LinearLayout>
 

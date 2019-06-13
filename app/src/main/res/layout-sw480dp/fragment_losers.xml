@@ -20,37 +20,25 @@
             android:orientation="vertical">
 
             <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingLeft="3dp"
-                android:paddingRight="3dp">
-
-                <ImageView
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:src="@drawable/direction_down" />
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="3dp"
+                    android:paddingRight="3dp" android:layout_gravity="center">
 
                 <android.support.v7.widget.AppCompatTextView
 
-                    android:id="@+id/stock"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:background="#00000000"
-                    android:gravity="center"
-                    android:layout_weight="1"
+                        android:id="@+id/stock"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:background="#00000000"
+                        android:gravity="center"
+                        android:layout_weight="1"
 
-                    android:text="@string/stock_market_losers"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="26sp" />
+                        android:text="@string/stock_market_losers"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="26sp"/>
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-
-                    android:src="@drawable/direction_down" />
             </TableRow>
             <TextView android:id="@+id/stock_loser_data_provider"
                       android:layout_height="wrap_content"
@@ -63,13 +51,13 @@
           />
 
             <android.support.v7.widget.RecyclerView
-                android:id="@+id/stock_items"
-                android:layout_width="match_parent"
-                android:layout_height="0dip"
-                android:layout_marginLeft="3dp"
-                android:layout_marginRight="3dp"
-                android:layout_weight="1"
-                android:background="@color/colorPrimary" />
+                    android:id="@+id/stock_items"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dip"
+                    android:layout_marginLeft="3dp"
+                    android:layout_marginRight="3dp"
+                    android:layout_weight="1"
+                    android:background="#000000"/>
 
         </LinearLayout>
 
@@ -81,37 +69,25 @@
             android:orientation="vertical">
 
             <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingLeft="3dp"
-                android:paddingRight="3dp">
-
-                <ImageView
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:src="@drawable/direction_down" />
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="3dp"
+                    android:paddingRight="3dp" android:layout_gravity="center">
 
                 <android.support.v7.widget.AppCompatTextView
 
-                    android:id="@+id/crypto"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:background="#00000000"
-                    android:gravity="center"
-                    android:layout_weight="1"
+                        android:id="@+id/crypto"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:background="#00000000"
+                        android:gravity="center"
+                        android:layout_weight="1"
 
-                    android:text="@string/crypto_losers"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="26sp" />
+                        android:text="@string/crypto_losers"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="26sp"/>
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-
-                    android:src="@drawable/direction_down" />
             </TableRow>
 
             <TextView android:id="@+id/crypto_loser_data_provider"
@@ -125,13 +101,13 @@
             />
 
             <android.support.v7.widget.RecyclerView
-                android:id="@+id/crypto_items"
-                android:layout_width="match_parent"
-                android:layout_height="0dip"
-                android:layout_marginLeft="3dp"
-                android:layout_marginRight="3dp"
-                android:layout_weight="1"
-                android:background="@color/colorPrimary" />
+                    android:id="@+id/crypto_items"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dip"
+                    android:layout_marginLeft="3dp"
+                    android:layout_marginRight="3dp"
+                    android:layout_weight="1"
+                    android:background="#000000"/>
         </LinearLayout>
     </LinearLayout>
 
