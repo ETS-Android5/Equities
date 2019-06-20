@@ -180,7 +180,6 @@
         android:id="@+id/tabchoice"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone"
         app:tabGravity="fill"
         app:tabIndicatorColor="@color/green_color_text"
         app:tabMode="fixed"

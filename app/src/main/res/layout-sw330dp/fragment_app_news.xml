@@ -12,12 +12,6 @@
             android:paddingLeft="3dp"
             android:paddingRight="3dp">
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:src="@drawable/direction_news" />
-
             <TextView
                 android:id="@+id/news"
                 android:layout_width="match_parent"
@@ -28,12 +22,6 @@
                 android:textColor="@color/colorPrimary"
                 android:textSize="26sp" />
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-
-                android:src="@drawable/direction_news" />
         </TableRow>
 
     <TextView
@@ -48,12 +36,10 @@
         android:textSize="12sp" />
 
 
-
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/all_news_feed"
-        android:background="#ffffff"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+            android:id="@+id/all_news_feed"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
 
 
 </LinearLayout>

@@ -36,23 +36,21 @@ public class AsyncDataMain extends AsyncTask<Integer, Integer, String> {
                 String q = qu[value];
                 TextView txt2 =activity.findViewById(R.id.output2);
                 txt2.setText(q);
-                FrameLayout progLayout =activity.findViewById(R.id.frameLayout);
-                progLayout.setVisibility(View.VISIBLE);
                 ProgressBar mainbar = activity.findViewById(R.id.mainbar);
                 mainbar.setIndeterminate(true);
-                Snackbar sb = Snackbar.make(progLayout,"Loading Equities...", Snackbar.LENGTH_LONG);
-                View sbView = sb.getView();
-                sbView.setBackgroundColor(activity.getResources().getColor(R.color.colorTrans));
-                TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
-                textView.setTextColor(activity.getResources().getColor(R.color.darkTextColor2));
-                textView.setTextSize(30);
-                textView.setGravity(Gravity.CENTER_HORIZONTAL);
+                //Snackbar sb = Snackbar.make(progLayout,"Loading Equities...", Snackbar.LENGTH_LONG);
+                //View sbView = sb.getView();
+                //sbView.setBackgroundColor(activity.getResources().getColor(R.color.colorTrans));
+                //TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+                //textView.setTextColor(activity.getResources().getColor(R.color.darkTextColor2));
+                //textView.setTextSize(30);
+                //textView.setGravity(Gravity.CENTER_HORIZONTAL);
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                    textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                  //  textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                 }
-                textView.setAnimation(AnimationUtils.loadAnimation(ApplicationContextProvider.getContext(), R.anim.flash));
-                sb.show();
+                //textView.setAnimation(AnimationUtils.loadAnimation(ApplicationContextProvider.getContext(), R.anim.flash));
+                //sb.show();
                 pager = activity.findViewById(R.id.viewpager);
                 pager.setVisibility(View.GONE);
             }else{

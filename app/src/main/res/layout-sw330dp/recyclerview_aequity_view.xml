@@ -6,70 +6,70 @@
     android:orientation="vertical">
 
     <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:layout_margin="5dp">
 
         <TextView
-            android:id="@+id/types"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1.1"
-            android:gravity="left|center"
-            android:singleLine="true"
-            android:textColor="@color/colorBlack"
-            android:textSize="14sp"
-            android:visibility="gone" />
+                android:id="@+id/types"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1.1"
+                android:gravity="left|center"
+                android:singleLine="true"
+                android:textColor="@color/colorBlack"
+                android:textSize="14sp"
+                android:visibility="gone"/>
 
         <TextView
-            android:id="@+id/issue"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1.1"
-            android:gravity="left|center"
-            android:singleLine="true"
-            android:text="Loser"
-            android:textColor="@color/colorPrimary"
-            android:textSize="14sp"
-            android:visibility="gone" />
+                android:id="@+id/issue"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1.1"
+                android:gravity="left|center"
+                android:singleLine="true"
+                android:text="Loser"
+                android:textColor="@color/colorPrimary"
+                android:textSize="14sp"
+                android:visibility="gone"/>
 
         <TextView
-            android:id="@+id/number"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1.1"
-            android:gravity="left|center"
-            android:singleLine="true"
-            android:text="#"
-            android:textColor="@color/colorPrimary"
-            android:textSize="14sp" />
+                android:id="@+id/number"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1.1"
+                android:gravity="left|center"
+                android:singleLine="true"
+                android:text="#"
+                android:textColor="@color/colorPrimary"
+                android:textSize="14sp" android:visibility="gone"/>
 
         <ImageView
-            android:id="@+id/circle"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            app:srcCompat="@drawable/holder_green_circle" />
+                android:id="@+id/circle"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                app:srcCompat="@drawable/holder_green_circle" android:visibility="gone"/>
 
         <TextView
-            android:id="@+id/symbol"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="left|center"
-            android:singleLine="true"
-            android:text="AAPL"
-            android:textColor="@color/colorPrimary"
-            android:textSize="14sp" />
+                android:id="@+id/symbol"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="left|center"
+                android:singleLine="true"
+                android:text="AAPL"
+                android:textColor="@color/colorPrimary"
+                android:textSize="14sp"/>
 
         <TextView
-            android:id="@+id/name"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight=".6"
-            android:gravity="left|center"
-            android:singleLine="true"
-            android:text="Symbol"
-            android:textColor="@color/colorPrimary"
-            android:textSize="14sp" />
+                android:id="@+id/name"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight=".6"
+                android:gravity="left|center"
+                android:singleLine="true"
+                android:text="Symbol"
+                android:textColor="@color/colorPrimary"
+                android:textSize="14sp"/>
 
         <TextView
                 android:id="@+id/changes"
@@ -85,7 +85,7 @@
                 android:singleLine="true"
                 android:textColor="@color/colorPrimary"
                 android:textSize="14sp"
-                android:textStyle="bold"/>
+        />
 
         <TextView
                 android:id="@+id/value"
@@ -102,7 +102,7 @@
                 android:text="Symbol"
                 android:textColor="@color/colorPrimary"
                 android:textSize="14sp"
-                android:textStyle="bold"/>
+        />
 
     </TableRow>
 

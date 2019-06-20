@@ -158,10 +158,6 @@ public class Activity_Main extends AppCompatActivity {
 
     }
 
-
-
-
-
     public class setAsyncCreateSavedData extends AsyncTask<Integer, Integer, String> {
 
         private WeakReference<Activity_Main> activityReference;
@@ -185,14 +181,10 @@ public class Activity_Main extends AppCompatActivity {
 
     }
 
-
-
     protected void setMainPage() {
         setContentView(R.layout.activity_main);
         setJSON_INFO();
         toolbar = findViewById(R.id.toolbar);
-        fu=findViewById(R.id.frameLayout);
-        fu.setVisibility(View.VISIBLE);
         progLayout=findViewById(R.id.progLayout);
         openSearchView();
         setSupportActionBar(toolbar);
@@ -223,10 +215,7 @@ public class Activity_Main extends AppCompatActivity {
 
 
 
-        recyclerView = findViewById(R.id.item_list);
-        l =new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        recyclerView.setLayoutManager(l);
-        recyclerView.setAdapter(adapter);
+
         if(pager.getVisibility()==View.VISIBLE){
             progLayout.setVisibility(View.GONE);
         }else{
@@ -307,13 +296,8 @@ public class Activity_Main extends AppCompatActivity {
     }
 
     public void openSearchView() {
-        LayoutInflater i = (LayoutInflater) Activity_Main.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View v = i.inflate(R.layout.searchbar, null);
-        v.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-        toolbar = findViewById(R.id.toolbar);
-        toolbar.addView(v);
-        ad = new ArrayAdapter(Activity_Main.this, android.R.layout.simple_dropdown_item_1line, searchview_arraylist);
-        AutoCompleteTextView chosen_searchView_item = v.findViewById(R.id.searchtool);
+        ad = new ArrayAdapter(Activity_Main.this, R.layout.searchbar, searchview_arraylist);
+        AutoCompleteTextView chosen_searchView_item = findViewById(R.id.searchtool);
         chosen_searchView_item.setAdapter(ad);
 
 
@@ -323,14 +307,13 @@ public class Activity_Main extends AppCompatActivity {
                 searchview_arraylist.clear();
                 setJSON_INFO();
                 InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                inputMethodManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
                 ViewPager mp = findViewById(R.id.market_pager);
                 mp.setVisibility(View.GONE);
                 String[] split_marketinfo = ad.getItem(position).toString().split("  ");
                 ap_info.setMarketSymbol(split_marketinfo[0]);
                 ap_info.setMarketName(split_marketinfo[1]);
                 ap_info.setMarketType(split_marketinfo[2]);
-                System.out.println(ap_info.getMarketSymbol()+" "+ap_info.getMarketName()+" "+ap_info.getMarketType());
                 chosen_searchView_item.onEditorAction(EditorInfo.IME_ACTION_DONE);
                 new AsyncChosenData(Activity_Main.this).execute();
                 chosen_searchView_item.setText("");

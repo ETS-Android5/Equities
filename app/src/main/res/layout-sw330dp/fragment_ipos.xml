@@ -24,12 +24,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:src="@drawable/direction_ipos" />
-
                 <android.support.v7.widget.AppCompatTextView
 
                     android:id="@+id/crypto"
@@ -44,12 +38,6 @@
                     android:textColor="@color/colorPrimary"
                     android:textSize="26sp" />
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-
-                    android:src="@drawable/direction_ipos" />
             </TableRow>
 
             <TextView
@@ -63,13 +51,13 @@
                 android:textColorLink="@color/darkTextColor"
                 android:textSize="12sp" />
             <android.support.v7.widget.RecyclerView
-                android:id="@+id/crypto_items"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="3dp"
-                android:layout_marginRight="3dp"
-                android:layout_weight="1"
-                android:background="#ffffff" />
+                    android:id="@+id/crypto_items"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="3dp"
+                    android:layout_marginRight="3dp"
+                    android:layout_weight="1"
+            />
         </LinearLayout>
 
     </LinearLayout>

@@ -24,12 +24,6 @@
                 android:paddingLeft="3dp"
                 android:paddingRight="3dp">
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:src="@drawable/direction_up" />
-
                 <android.support.v7.widget.AppCompatTextView
 
                     android:id="@+id/stock"
@@ -44,12 +38,6 @@
                     android:textColor="@color/colorPrimary"
                     android:textSize="26sp" />
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-
-                    android:src="@drawable/direction_up" />
             </TableRow>
 
             <TextView android:id="@+id/stock_leaders_data_provider"
@@ -67,7 +55,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="#000000"/>
+            />
         </LinearLayout>
 
         <LinearLayout
@@ -83,12 +71,6 @@
                 android:paddingLeft="3dp"
                 android:paddingRight="3dp">
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:src="@drawable/direction_up" />
-
                 <android.support.v7.widget.AppCompatTextView
 
                     android:id="@+id/crypto"
@@ -103,12 +85,6 @@
                     android:textColor="@color/colorPrimary"
                     android:textSize="26sp" />
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-
-                    android:src="@drawable/direction_up" />
             </TableRow>
 
 
@@ -127,7 +103,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="#000000"/>
+            />
         </LinearLayout>
     </LinearLayout>
 

@@ -1,24 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <AutoCompleteTextView
+<TextView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
         android:id="@+id/searchtool"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
         android:ems="25"
+        android:background="#ffffff"
         android:foregroundGravity="center"
         android:gravity="left"
-        android:hint="Search for Equities"
         android:imeOptions="actionDone"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="#ffffff"
-        android:textColorHint="#d3d3d3"
-        android:textSize="18dp"
-        android:textStyle="italic"></AutoCompleteTextView>
-</LinearLayout>
+        android:textColor="#0000ff"
+        android:textColorHint="#090886"
+        android:textSize="22dp" android:layout_marginBottom="40dp" android:layout_marginTop="40dp"></TextView>
+
+

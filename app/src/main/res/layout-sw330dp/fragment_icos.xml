@@ -24,12 +24,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:src="@drawable/direction_icos" />
-
                 <android.support.v7.widget.AppCompatTextView
 
                     android:id="@+id/ico"
@@ -44,12 +38,6 @@
                     android:textColor="@color/colorPrimary"
                     android:textSize="26sp" />
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-
-                    android:src="@drawable/direction_icos" />
             </TableRow>
 
             <TextView
@@ -64,11 +52,11 @@
                 android:textSize="12sp" />
 
             <android.support.v7.widget.RecyclerView
-                android:id="@+id/ico_items"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="#ffffff" />
+                    android:id="@+id/ico_items"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+            />
         </LinearLayout>
 
     </LinearLayout>

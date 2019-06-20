@@ -4,7 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="20dp"
-    android:background="@drawable/background_rounded_corners"
     android:orientation="vertical"
     android:visibility="visible">
 <TableRow
@@ -23,7 +22,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/scpro"
         android:gravity="left"
-        android:textColor="@color/colorBlack"
+        android:textColor="@color/colorPrimary"
         android:textSize="20sp" />
 
 
@@ -35,7 +34,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/scpro"
         android:gravity="left"
-        android:textColor="@color/colorBlack"
+        android:textColor="@color/colorPrimary"
         android:textSize="12sp" />
 
     <TextView
@@ -44,7 +43,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/scpro"
         android:gravity="left"
-        android:textColor="@color/colorBlack"
+        android:textColor="@color/colorPrimary"
         android:textSize="26sp"
         android:textStyle="bold" />
 
@@ -68,15 +67,15 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/scpro"
         android:gravity="left"
-        android:textColor="@color/darkText"
+        android:textColor="@color/colorPrimary"
         android:textSize="12sp" />
 
 
     <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:alpha=".1"
-        android:background="@color/colorBlack">
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:alpha=".1"
+            android:background="@color/colorPrimary" android:visibility="gone">
 
     </View>
 </LinearLayout>
