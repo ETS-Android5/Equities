@@ -2,6 +2,8 @@ package equities.com.myapplication;
 
 import android.app.SearchManager;
 import android.content.Intent;
+import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -23,7 +25,7 @@ import static equities.com.myapplication.Constructor_App_Variables.stock_exchang
 
 public class Fragment_Exchanges extends Fragment {
     private RecyclerView exchange_feed;
-    TextView yes;
+    TextView yes,exchanges;
     TableRow yesnotable;
 
     @Override
@@ -37,6 +39,11 @@ public class Fragment_Exchanges extends Fragment {
         TextView t = rootView.findViewById(R.id.greeting);
         yes =rootView.findViewById(R.id.yes);
         yesnotable =rootView.findViewById(R.id.yesnotable);
+        Typeface custom_font = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Oregon.ttf");
+        exchanges =rootView.findViewById(R.id.exchanges);
+        exchanges.setTypeface(custom_font);
+        exchanges.setPaintFlags(exchanges.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
+
         if(ap_info.getMarketType().equalsIgnoreCase("OTC")){
             stock_exchange_name.remove(4);
         }

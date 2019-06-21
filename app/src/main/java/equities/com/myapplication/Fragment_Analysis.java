@@ -2,6 +2,8 @@ package equities.com.myapplication;
 
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.TabLayout;
@@ -20,6 +22,11 @@ import com.jjoe64.graphview.helper.StaticLabelsFormatter;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 import static equities.com.myapplication.Constructor_App_Variables._AllDays;
 import static equities.com.myapplication.Constructor_App_Variables.graph_change;
 import static equities.com.myapplication.Constructor_App_Variables.graph_date;
@@ -31,7 +38,7 @@ import static equities.com.myapplication.Constructor_App_Variables.graph_volume;
  */
 
 public class Fragment_Analysis extends Fragment {
-    TextView a_price,a_price_change,a_name,a_symbol,a_type,a_supply,a_cap,sup,saved,savedd;
+    TextView a_price,a_price_change,a_name,a_symbol,a_type,a_supply,a_cap,sup,saved,savedd,analysis;
     ImageView save;
     LineGraphSeries<DataPoint> series = new LineGraphSeries<>();
     int xx= 0;
@@ -60,6 +67,11 @@ public class Fragment_Analysis extends Fragment {
         a_price=rootView.findViewById(R.id.aequity_price);
         saved =rootView.findViewById(R.id.saved);
         a_cap =rootView.findViewById(R.id.aequity_cap);
+        Typeface custom_font = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Oregon.ttf");
+        analysis =rootView.findViewById(R.id.analysis);
+        analysis.setTypeface(custom_font);
+
+        analysis.setPaintFlags(analysis.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
         a_cap.setText(ap_info.getMarketCap());
         try {
             if (ap_info.getCurrent_Aequity_Price()!=null) {
@@ -142,6 +154,48 @@ public class Fragment_Analysis extends Fragment {
         final Adapter_Graph_Points[] ab = {new Adapter_Graph_Points(getContext(), integer[0], graph_high,graph_change, graph_volume, graph_date)};
         ab_list = new Adapter_Graph_Points(getContext(),integer[0], graph_high,graph_change, graph_volume, graph_date);
         historical_listview.setAdapter(ab_list);
+
+        graph_view.removeAllSeries();
+        ab_list.notifyDataSetChanged();
+        integer[0] =7;
+        historical_listview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+        ab_list =new Adapter_Graph_Points(getContext(), integer[0],graph_high,graph_change,graph_volume,graph_date);
+        historical_listview.setAdapter(ab_list);
+        series = new LineGraphSeries<>();
+
+        for (int i= 0; i < integer[0];i++){
+            try {
+                Calendar calendar = Calendar.getInstance();
+                String s= String.valueOf(graph_high.get(integer[0]-i).toString().replace(",",""));
+                Date date1= null;
+                try {
+                    date1 = new SimpleDateFormat("MM/DD/yyyy").parse(String.valueOf(graph_date.get(i)));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                xx = (int) Double.parseDouble(s.trim());
+                DataPoint point = new DataPoint(date1,xx);
+                series.appendData(point,true,integer[0]);
+            } catch (IndexOutOfBoundsException e) {
+                //("Invalid date");
+            }
+            continue;
+        }
+
+        graph_view.getGridLabelRenderer().setGridColor(Color.TRANSPARENT);
+        graph_view.getGridLabelRenderer().setHorizontalLabelsColor(Color.WHITE);
+        graph_view.getGridLabelRenderer().setVerticalLabelsColor(Color.WHITE);
+
+        //graph_view.getViewport().setMinX(0);
+        //graph_view.getViewport().setMaxX((graph_date.get(integer[0])));
+        //graph_view.getViewport().setMinY(0);
+        //graph_view.getViewport().setMaxY((Double.parseDouble((String)graph_high.get(integer[0]))));
+
+        //graph_view.getViewport().setYAxisBoundsManual(true);
+        //graph_view.getViewport().setXAxisBoundsManual(true);
+
+        series.setColor(Color.GREEN);
+        graph_view.addSeries(series);
 
         //Collections.reverse(graph_high);
         TabLayout tabLayoutchoice = (TabLayout)rootView.findViewById(R.id.tabchoice);

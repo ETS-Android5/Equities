@@ -374,7 +374,7 @@ public class Service_Chosen_Equity
             Context context;
             String f = ap_info.getMarketName();
             String g =ap_info.getMarketType();
-            String address = "https://news.google.com/news/rss/search/section/q/" + f +"%"+g+ "?ned=us&gl=US&hl=en";
+            String address = "https://news.google.com/news/rss/search/section/q/" + f +"%20"+g+ "?ned=us&gl=US&hl=en";
 
 
             url = new URL(address);

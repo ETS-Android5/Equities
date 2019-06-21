@@ -191,16 +191,16 @@ public class AsyncChosenData extends AsyncTask<Void, Void, String> {
             activity.setupChosenViewPager(market_pager);
 
             if (activity.ap_info.getMarketType().equals("Index")) {
-                tabs.getTabAt(0).setIcon(R.drawable.direction_info);
-                tabs.getTabAt(1).setIcon(R.drawable.direction_news);
-                tabs.getTabAt(2).setIcon(R.drawable.direction_youtube_video);
-                tabs.getTabAt(3).setIcon(R.drawable.direction_socialmedia);
+                //tabs.getTabAt(0).setIcon(R.drawable.direction_info);
+                //tabs.getTabAt(1).setIcon(R.drawable.direction_news);
+                //tabs.getTabAt(2).setIcon(R.drawable.direction_youtube_video);
+                //tabs.getTabAt(3).setIcon(R.drawable.direction_socialmedia);
             }else{
-                tabs.getTabAt(0).setIcon(R.drawable.direction_info);
-                tabs.getTabAt(1).setIcon(R.drawable.direction_news);
-                tabs.getTabAt(2).setIcon(R.drawable.direction_youtube_video);
-                tabs.getTabAt(3).setIcon(R.drawable.direction_exchange);
-                tabs.getTabAt(4).setIcon(R.drawable.direction_socialmedia);
+                //tabs.getTabAt(0).setIcon(R.drawable.direction_info);
+                //tabs.getTabAt(1).setIcon(R.drawable.direction_news);
+                //tabs.getTabAt(2).setIcon(R.drawable.direction_youtube_video);
+                //tabs.getTabAt(3).setIcon(R.drawable.direction_exchange);
+                //tabs.getTabAt(4).setIcon(R.drawable.direction_socialmedia);
             }
 
 

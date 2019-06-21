@@ -6,7 +6,14 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:orientation="vertical">
-
+    <TextView
+            android:id="@+id/analysis"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/action_analysis"
+            android:textColor="@color/colorPrimary"
+            android:textSize="26sp" />
     <TableRow
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -167,24 +174,31 @@
         android:visibility="invisible" />
 
     <android.support.design.widget.TabLayout
-        android:id="@+id/tabs"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:tabGravity="fill"
-        app:tabIndicatorColor="@color/green_color_text"
-        app:tabMode="fixed"
-        app:tabSelectedTextColor="@color/green_color_text"
-        app:tabTextColor="#ffffff " />
-
-    <android.support.design.widget.TabLayout
         android:id="@+id/tabchoice"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:tabGravity="fill"
         app:tabIndicatorColor="@color/green_color_text"
         app:tabMode="fixed"
+        android:visibility="gone"
         app:tabSelectedTextColor="@color/green_color_text"
         app:tabTextColor="#ffffff " />
+    <com.jjoe64.graphview.GraphView
+            android:id="@+id/graph_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="#00000000"
+    ></com.jjoe64.graphview.GraphView>
+    <android.support.design.widget.TabLayout
+            android:id="@+id/tabs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:tabGravity="fill"
+            app:tabIndicatorColor="@color/green_color_text"
+            app:tabMode="fixed"
+            app:tabSelectedTextColor="@color/green_color_text"
+            app:tabTextColor="#ffffff " />
 
     <TableRow
         android:layout_width="match_parent"
@@ -228,17 +242,10 @@
             android:textStyle="bold" />
     </TableRow>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/historical_listview"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"></android.support.v7.widget.RecyclerView>
 
-    <com.jjoe64.graphview.GraphView
-        android:id="@+id/graph_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:background="#00000000"
-        android:visibility="gone"></com.jjoe64.graphview.GraphView>
+    <android.support.v7.widget.RecyclerView
+            android:id="@+id/historical_listview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"></android.support.v7.widget.RecyclerView>
 </LinearLayout>
