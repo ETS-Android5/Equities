@@ -22,6 +22,7 @@ import com.jjoe64.graphview.helper.StaticLabelsFormatter;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -53,7 +54,6 @@ public class Fragment_Analysis extends Fragment {
     @Override
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
         View rootView = inflater.inflate(R.layout.fragment_analysis, container, false);
         RecyclerView historical_listview =rootView.findViewById(R.id.historical_listview);
         graph_view=rootView.findViewById(R.id.graph_view);
@@ -162,20 +162,26 @@ public class Fragment_Analysis extends Fragment {
         ab_list =new Adapter_Graph_Points(getContext(), integer[0],graph_high,graph_change,graph_volume,graph_date);
         historical_listview.setAdapter(ab_list);
         series = new LineGraphSeries<>();
+        //Collections.reverse(graph_high);
+        Calendar calendar = Calendar.getInstance();
 
-        for (int i= 0; i < integer[0];i++){
+        for (int i= 0; i < 7;i++){
+            series.resetData(new DataPoint[] {});
             try {
-                Calendar calendar = Calendar.getInstance();
-                String s= String.valueOf(graph_high.get(integer[0]-i).toString().replace(",",""));
+                String s= String.valueOf(graph_date.get(i).toString().replace(",",""));
                 Date date1= null;
                 try {
-                    date1 = new SimpleDateFormat("MM/DD/yyyy").parse(String.valueOf(graph_date.get(i)));
+
+                    date1 = new SimpleDateFormat("MMM DD, yyyy").parse(s);
+                    xx = (int) Double.parseDouble(graph_high.get(i).toString());
+                    DataPoint point = new DataPoint(date1,xx);
+
+                    series.appendData(new DataPoint(date1, xx), true, 7);
+                    System.out.println(point);
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-                xx = (int) Double.parseDouble(s.trim());
-                DataPoint point = new DataPoint(date1,xx);
-                series.appendData(point,true,integer[0]);
+
             } catch (IndexOutOfBoundsException e) {
                 //("Invalid date");
             }
@@ -252,6 +258,7 @@ public class Fragment_Analysis extends Fragment {
         if (graph_high.size()>365){
         tabLayout.addTab(tabLayout.newTab().setText("MAX"));}
         tabLayout.setSelectedTabIndicatorColor(Color.TRANSPARENT);
+
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -260,23 +267,22 @@ public class Fragment_Analysis extends Fragment {
                     case 0:
                         graph_view.removeAllSeries();
                         ab_list.notifyDataSetChanged();
-                        integer[0] =7;
-                        historical_listview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-                        ab_list =new Adapter_Graph_Points(getContext(), integer[0],graph_high,graph_change,graph_volume,graph_date);
-                        historical_listview.setAdapter(ab_list);
-                        series = new LineGraphSeries<>();
 
-                        for (int i= 0; i < integer[0];i++){
-                            try {
-                                String s= String.valueOf(graph_high.get(integer[0]-i).toString().replace(",",""));
-                                xx = (int) Double.parseDouble(s.trim());
-                                DataPoint point = new DataPoint(i,xx);
-                                series.appendData(point,true,integer[0]);
-                            } catch (IndexOutOfBoundsException e) {
-                                //("Invalid date");
-                            }
-                            continue;
+                        DataPoint [] dp = new DataPoint[7];
+                        for(int z= 0; z<=7;z++){
+                            Calendar calendar1 =Calendar.getInstance();
+                            DateFormat dateFormat = new SimpleDateFormat("MMM, DD");
+                            String d =dateFormat.format(calendar1.getTime());
+                            calendar1.add(Calendar.DATE,-z);
+                            Date date =calendar1.getTime();
+                            LineGraphSeries<DataPoint> series = new LineGraphSeries<>(new DataPoint[] {
+                                    new DataPoint(date, z+7)
+
+                            });
+                            graph_view.addSeries(series);
+
                         }
+                        //graph_view.getGridLabelRenderer().setNumVerticalLabels(roundVal); // Approx 28-3
                         graph_view.getGridLabelRenderer().setGridColor(Color.TRANSPARENT);
                         graph_view.getGridLabelRenderer().setHorizontalLabelsColor(Color.WHITE);
                         graph_view.getGridLabelRenderer().setVerticalLabelsColor(Color.WHITE);
@@ -290,7 +296,6 @@ public class Fragment_Analysis extends Fragment {
                         //graph_view.getViewport().setXAxisBoundsManual(true);
 
                         series.setColor(Color.GREEN);
-                        graph_view.addSeries(series);
                         break;
                     case 1:
                         graph_view.removeAllSeries();
@@ -460,6 +465,9 @@ public class Fragment_Analysis extends Fragment {
         graph_high.clear();
         graph_volume.clear();
     }
+
+
+
 
 
 
