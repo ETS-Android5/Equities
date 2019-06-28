@@ -17,7 +17,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.jjoe64.graphview.DefaultLabelFormatter;
 import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
 import com.jjoe64.graphview.helper.StaticLabelsFormatter;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
@@ -25,8 +27,12 @@ import com.jjoe64.graphview.series.LineGraphSeries;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 import static equities.com.myapplication.Constructor_App_Variables._AllDays;
 import static equities.com.myapplication.Constructor_App_Variables.graph_change;
@@ -41,14 +47,16 @@ import static equities.com.myapplication.Constructor_App_Variables.graph_volume;
 public class Fragment_Analysis extends Fragment {
     TextView a_price,a_price_change,a_name,a_symbol,a_type,a_supply,a_cap,sup,saved,savedd,analysis;
     ImageView save;
-    LineGraphSeries<DataPoint> series = new LineGraphSeries<>();
     int xx= 0;
     Constructor_App_Variables ap_info =new Constructor_App_Variables();
     private Database_Local_Aequities db;
     TabLayout tabchoice;
     GraphView graph_view;
+    LineGraphSeries series;
     Adapter_Graph_Points ab;
     Adapter_Graph_Points ab_list;
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("mm-dd");
+
 
 
     @Override
@@ -149,61 +157,16 @@ public class Fragment_Analysis extends Fragment {
 
             }
         });
-        final Integer[] integer = {7};
+        Integer[] integer = {7};
         historical_listview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         final Adapter_Graph_Points[] ab = {new Adapter_Graph_Points(getContext(), integer[0], graph_high,graph_change, graph_volume, graph_date)};
         ab_list = new Adapter_Graph_Points(getContext(),integer[0], graph_high,graph_change, graph_volume, graph_date);
         historical_listview.setAdapter(ab_list);
 
-        graph_view.removeAllSeries();
-        ab_list.notifyDataSetChanged();
-        integer[0] =7;
-        historical_listview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-        ab_list =new Adapter_Graph_Points(getContext(), integer[0],graph_high,graph_change,graph_volume,graph_date);
-        historical_listview.setAdapter(ab_list);
-        series = new LineGraphSeries<>();
-        //Collections.reverse(graph_high);
-        Calendar calendar = Calendar.getInstance();
 
-        for (int i= 0; i < 7;i++){
-            series.resetData(new DataPoint[] {});
-            try {
-                String s= String.valueOf(graph_date.get(i).toString().replace(",",""));
-                Date date1= null;
-                try {
 
-                    date1 = new SimpleDateFormat("MMM DD, yyyy").parse(s);
-                    xx = (int) Double.parseDouble(graph_high.get(i).toString());
-                    DataPoint point = new DataPoint(date1,xx);
 
-                    series.appendData(new DataPoint(date1, xx), true, 7);
-                    System.out.println(point);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
 
-            } catch (IndexOutOfBoundsException e) {
-                //("Invalid date");
-            }
-            continue;
-        }
-
-        graph_view.getGridLabelRenderer().setGridColor(Color.TRANSPARENT);
-        graph_view.getGridLabelRenderer().setHorizontalLabelsColor(Color.WHITE);
-        graph_view.getGridLabelRenderer().setVerticalLabelsColor(Color.WHITE);
-
-        //graph_view.getViewport().setMinX(0);
-        //graph_view.getViewport().setMaxX((graph_date.get(integer[0])));
-        //graph_view.getViewport().setMinY(0);
-        //graph_view.getViewport().setMaxY((Double.parseDouble((String)graph_high.get(integer[0]))));
-
-        //graph_view.getViewport().setYAxisBoundsManual(true);
-        //graph_view.getViewport().setXAxisBoundsManual(true);
-
-        series.setColor(Color.GREEN);
-        graph_view.addSeries(series);
-
-        //Collections.reverse(graph_high);
         TabLayout tabLayoutchoice = (TabLayout)rootView.findViewById(R.id.tabchoice);
         tabLayoutchoice.addTab(tabLayoutchoice.newTab().setText("LIST"));
         tabLayoutchoice.addTab(tabLayoutchoice.newTab().setText("GRAPH"));
@@ -213,27 +176,18 @@ public class Fragment_Analysis extends Fragment {
                 int position = tab.getPosition();
                 switch (position) {
                     case 0:
-//SHOW LIST
+                        //SHOW LIST
                         historical_listview.setVisibility(View.VISIBLE);
                         graph_view.setVisibility(View.GONE);
                         break;
                     case 1:
-//SHOW GRAPH
-
+                        //SHOW GRAPH
                         historical_listview.setVisibility(View.GONE);
                         graph_view.setVisibility(View.VISIBLE);
-
-
                         break;
-
-
                     default:
                         break;
                 }
-
-
-
-
 
             }
 
@@ -262,79 +216,38 @@ public class Fragment_Analysis extends Fragment {
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
+                List<String> allDates = new ArrayList<>();
+                Calendar cal = Calendar.getInstance();
+                String maxDate = new SimpleDateFormat("MMM").format(cal.getTime());
+                SimpleDateFormat monthDate = new SimpleDateFormat("MMM");
+                String maxDayDate = new SimpleDateFormat("EEE").format(cal.getTime());
+                SimpleDateFormat dayDate = new SimpleDateFormat("EEE");
+                SimpleDateFormat yearDate = new SimpleDateFormat("YYYY");
+                StaticLabelsFormatter staticLabelsFormatter = new StaticLabelsFormatter(graph_view);
                 int position = tab.getPosition();
                 switch (position) {
                     case 0:
-                        graph_view.removeAllSeries();
-                        ab_list.notifyDataSetChanged();
-
-                        DataPoint [] dp = new DataPoint[7];
-                        for(int z= 0; z<=7;z++){
-                            Calendar calendar1 =Calendar.getInstance();
-                            DateFormat dateFormat = new SimpleDateFormat("MMM, DD");
-                            String d =dateFormat.format(calendar1.getTime());
-                            calendar1.add(Calendar.DATE,-z);
-                            Date date =calendar1.getTime();
-                            LineGraphSeries<DataPoint> series = new LineGraphSeries<>(new DataPoint[] {
-                                    new DataPoint(date, z+7)
-
-                            });
-                            graph_view.addSeries(series);
-
-                        }
-                        //graph_view.getGridLabelRenderer().setNumVerticalLabels(roundVal); // Approx 28-3
-                        graph_view.getGridLabelRenderer().setGridColor(Color.TRANSPARENT);
-                        graph_view.getGridLabelRenderer().setHorizontalLabelsColor(Color.WHITE);
-                        graph_view.getGridLabelRenderer().setVerticalLabelsColor(Color.WHITE);
-
-                        //graph_view.getViewport().setMinX(1);
-                        //graph_view.getViewport().setMaxX(integer[0]);
-                        //graph_view.getViewport().setMinY(0);
-                        //graph_view.getViewport().setMaxY(Double.parseDouble((String) graph_high.get(integer[0])));
-
-                        //graph_view.getViewport().setYAxisBoundsManual(true);
-                        //graph_view.getViewport().setXAxisBoundsManual(true);
-
-                        series.setColor(Color.GREEN);
-                        break;
-                    case 1:
+                        cal.clear();
                         graph_view.removeAllSeries();
                         ab[0].notifyDataSetChanged();
-                        integer[0] =30;
-
-                        historical_listview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-                        ab[0] =new Adapter_Graph_Points(getContext(), integer[0],graph_high,graph_change,graph_volume,graph_date);
-                        historical_listview.setAdapter(ab[0]);
-                        series = new LineGraphSeries<>();
-                        for (int i= 0; i < integer[0];i++){
-                            try {
-                                String s= String.valueOf(graph_high.get(integer[0]-i).toString().replace(",",""));
-                                xx = (int) Double.parseDouble(s.trim());
-                                DataPoint point = new DataPoint(i,xx);
-                                series.appendData(point,true,integer[0]);
-                            } catch (NumberFormatException numberFormatException) {
-                                //("Invalid date");
-                            }
-                            continue;
+                        try {
+                            cal.setTime(dayDate.parse(maxDayDate));
+                        } catch (ParseException e) {
+                            e.printStackTrace();
                         }
-                        graph_view.getGridLabelRenderer().setGridColor(Color.TRANSPARENT);
-                        graph_view.getGridLabelRenderer().setHorizontalLabelsColor(Color.WHITE);
-                        graph_view.getGridLabelRenderer().setVerticalLabelsColor(Color.WHITE);
-                        series.setColor(Color.GREEN);
-                        graph_view.addSeries(series);
-                        break;
-                    case 2:
-                        graph_view.removeAllSeries();
-                        ab[0].notifyDataSetChanged();
-                        integer[0] =90;
-
+                        for (int i = 0; i <= 6; i++) {
+                            String month_name1 = dayDate.format(cal.getTime());
+                            allDates.add(month_name1);
+                            cal.add(Calendar.DAY_OF_WEEK, -1);
+                        }
+                        Collections.reverse(allDates);
                         series = new LineGraphSeries<>();
-                        for (int i= 0; i < integer[0];i++){
+                        for (int i= 0; i < 7;i++){
                             try {
-                                String s= String.valueOf(graph_high.get(integer[0]-i).toString().replace(",",""));
+                                String s= String.valueOf(graph_high.get(7-i).toString().replace(",",""));
                                 xx = (int) Double.parseDouble(s.trim());
                                 DataPoint point = new DataPoint(i,xx);
-                                series.appendData(point,true,integer[0]);
+                                series.appendData(point,true,7);
                             } catch (IndexOutOfBoundsException e) {
                                 //("Invalid date");
                             }
@@ -344,10 +257,97 @@ public class Fragment_Analysis extends Fragment {
                         graph_view.getGridLabelRenderer().setHorizontalLabelsColor(Color.WHITE);
                         graph_view.getGridLabelRenderer().setVerticalLabelsColor(Color.WHITE);
                         series.setColor(Color.GREEN);
+
+                        staticLabelsFormatter.setHorizontalLabels(allDates.toArray(new String[0]));
+                        graph_view.getGridLabelRenderer().setLabelFormatter(staticLabelsFormatter);
+
                         graph_view.addSeries(series);
                         historical_listview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
                         ab[0] =new Adapter_Graph_Points(getContext(), integer[0],graph_high,graph_change,graph_volume,graph_date);
                         historical_listview.setAdapter(ab[0]);
+
+
+                        break;
+                    case 1:
+                        cal.clear();
+                        graph_view.removeAllSeries();
+                        ab[0].notifyDataSetChanged();
+                        try {
+                            cal.setTime(dayDate.parse(maxDayDate));
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                        for (int i = 0; i <= 5; i++) {
+                            String month_name1 = dayDate.format(cal.getTime());
+                            allDates.add(month_name1);
+                            cal.add(Calendar.WEEK_OF_MONTH, -1);
+                        }
+                        Collections.reverse(allDates);
+                        series = new LineGraphSeries<>();
+                        for (int i= 0; i < 30;i++){
+                            try {
+                                String s= String.valueOf(graph_high.get(30-i).toString().replace(",",""));
+                                xx = (int) Double.parseDouble(s.trim());
+                                DataPoint point = new DataPoint(i,xx);
+                                series.appendData(point,true,30);
+                            } catch (IndexOutOfBoundsException e) {
+                                //("Invalid date");
+                            }
+                            continue;
+                        }
+                        graph_view.getGridLabelRenderer().setGridColor(Color.TRANSPARENT);
+                        graph_view.getGridLabelRenderer().setHorizontalLabelsColor(Color.WHITE);
+                        graph_view.getGridLabelRenderer().setVerticalLabelsColor(Color.WHITE);
+                        series.setColor(Color.GREEN);
+
+                        staticLabelsFormatter.setHorizontalLabels(allDates.toArray(new String[0]));
+                        graph_view.getGridLabelRenderer().setLabelFormatter(staticLabelsFormatter);
+
+                        graph_view.addSeries(series);
+                        historical_listview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+                        ab[0] =new Adapter_Graph_Points(getContext(), integer[0],graph_high,graph_change,graph_volume,graph_date);
+                        historical_listview.setAdapter(ab[0]);
+                        break;
+                    case 2:
+                        cal.clear();
+                        graph_view.removeAllSeries();
+                        ab[0].notifyDataSetChanged();
+                        try {
+                            cal.setTime(monthDate.parse(maxDate));
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                        for (int i = 0; i <= 3; i++) {
+                            String month_name1 = monthDate.format(cal.getTime());
+                            allDates.add(month_name1);
+                            cal.add(Calendar.MONTH, -1);
+                        }
+                        Collections.reverse(allDates);
+                        series = new LineGraphSeries<>();
+                        for (int i= 0; i < 90;i++){
+                            try {
+                                String s= String.valueOf(graph_high.get(90-i).toString().replace(",",""));
+                                xx = (int) Double.parseDouble(s.trim());
+                                DataPoint point = new DataPoint(i,xx);
+                                series.appendData(point,true,90);
+                            } catch (IndexOutOfBoundsException e) {
+                                //("Invalid date");
+                            }
+                            continue;
+                        }
+                        graph_view.getGridLabelRenderer().setGridColor(Color.TRANSPARENT);
+                        graph_view.getGridLabelRenderer().setHorizontalLabelsColor(Color.WHITE);
+                        graph_view.getGridLabelRenderer().setVerticalLabelsColor(Color.WHITE);
+                        series.setColor(Color.GREEN);
+
+                        staticLabelsFormatter.setHorizontalLabels(allDates.toArray(new String[0]));
+                        graph_view.getGridLabelRenderer().setLabelFormatter(staticLabelsFormatter);
+
+                        graph_view.addSeries(series);
+                        historical_listview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+                        ab[0] =new Adapter_Graph_Points(getContext(), integer[0],graph_high,graph_change,graph_volume,graph_date);
+                        historical_listview.setAdapter(ab[0]);
+
                         break;
                     case 3:
                         graph_view.removeAllSeries();
@@ -357,6 +357,18 @@ public class Fragment_Analysis extends Fragment {
                         }else{
                         integer[0] =180;}
 
+
+                        try {
+                            cal.setTime(monthDate.parse(maxDate));
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                        for (int i = 0; i <= 5; i++) {
+                            String month_name1 = monthDate.format(cal.getTime());
+                            allDates.add(month_name1);
+                            cal.add(Calendar.MONTH, -1);
+                        }
+                        Collections.reverse(allDates);
                         series = new LineGraphSeries<>();
                         for (int i= 0; i < integer[0];i++){
                             try {
@@ -373,6 +385,10 @@ public class Fragment_Analysis extends Fragment {
                         graph_view.getGridLabelRenderer().setHorizontalLabelsColor(Color.WHITE);
                         graph_view.getGridLabelRenderer().setVerticalLabelsColor(Color.WHITE);
                         series.setColor(Color.GREEN);
+
+                        staticLabelsFormatter.setHorizontalLabels(allDates.toArray(new String[0]));
+                        graph_view.getGridLabelRenderer().setLabelFormatter(staticLabelsFormatter);
+
                         graph_view.addSeries(series);
                         historical_listview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
                         ab[0] =new Adapter_Graph_Points(getContext(), integer[0],graph_high,graph_change,graph_volume,graph_date);
@@ -383,9 +399,21 @@ public class Fragment_Analysis extends Fragment {
                         ab[0].notifyDataSetChanged();
                         integer[0] =365;
 
+                        try {
+                            cal.setTime(monthDate.parse(maxDate));
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                        for (int i = 0; i <= 11; i++) {
+                            String month_name1 = monthDate.format(cal.getTime());
+                            allDates.add(month_name1);
+                            cal.add(Calendar.MONTH, -1);
+                        }
+                        Collections.reverse(allDates);
                         series = new LineGraphSeries<>();
                         for (int i= 0; i < integer[0];i++){
                             try {
+
                                 String s= String.valueOf(graph_high.get(integer[0]-i).toString().replace(",",""));
                                 xx = (int) Double.parseDouble(s.trim());
                                 DataPoint point = new DataPoint(i,xx);
@@ -427,7 +455,6 @@ public class Fragment_Analysis extends Fragment {
                         graph_view.getGridLabelRenderer().setGridColor(Color.TRANSPARENT);
                         graph_view.getGridLabelRenderer().setHorizontalLabelsColor(Color.WHITE);
                         graph_view.getGridLabelRenderer().setVerticalLabelsColor(Color.WHITE);
-                        StaticLabelsFormatter staticLabelsFormatter = new StaticLabelsFormatter(graph_view);
                         staticLabelsFormatter.setHorizontalLabels(new String[] {"Jan", "Feb", "Mar", "Apr","May", "Jun", "Jul", "Aug","Sept"});
                         graph_view.getGridLabelRenderer().setLabelFormatter(staticLabelsFormatter);
                         graph_view.addSeries(series);
@@ -465,9 +492,6 @@ public class Fragment_Analysis extends Fragment {
         graph_high.clear();
         graph_volume.clear();
     }
-
-
-
 
 
 
