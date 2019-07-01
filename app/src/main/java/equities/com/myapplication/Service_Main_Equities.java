@@ -29,11 +29,7 @@ import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -549,20 +545,29 @@ public class Service_Main_Equities {
             Elements k = n.get(x).select("td");
             String z = k.text().replace("%","").replace("$","").replace(",","");
             String[] split = z.split(" ");
+            //
+            // split[6] = split[6].substring(0, 1) + "." + split[6].substring(4, split[6].length());
+            //System.out.println("GET ! "+ split.length);
             if(split.length<12){
                 masternode_name.add(split[0]);
                 masternode_symbol.add(split[1].replace("(","").replace(")",""));
                 masternode_percent_change.add(split[3]);
                 Float add = Float.parseFloat(split[6]);
                 String a = String.format("%.0f", add);
+                //replaceFirst(",", ".").replace(",","")
                 String added = null;
                 if (split[6].length() >9 ) {
-                    added = a.substring(0, 3) + " B";
+                    added = a.substring(0,3) + " B";
                 }
                 if (split[6].length() <= 9) {
                     added = a.substring(0, 3) + " M";
                 }
-                masternode_marketcap.add(added);
+                if(split[6].length()==11){masternode_marketcap.add(added.substring(0, 2) + "." + added.substring(2, added.length()));}
+                if(split[6].length()==10){masternode_marketcap.add(added.substring(0, 1) + "." + added.substring(1, added.length()));};
+                if(split[6].length()==9){masternode_marketcap.add(added.substring(0, 3) + "." + added.substring(3, added.length()));}
+                if(split[6].length()==8){masternode_marketcap.add(added.substring(0, 2) + "." + added.substring(2, added.length()));}
+                if(split[6].length()==7){masternode_marketcap.add(added.substring(0, 1) + "." + added.substring(1, added.length()));}
+                if(split[6].length()==6){masternode_marketcap.add(added.substring(0, 3) + "." + added.substring(2, added.length()));}
                 masternode_node_count.add(split[8]);
                 masternode_purchase_value.add(split[10]);}
             else{
@@ -572,16 +577,22 @@ public class Service_Main_Equities {
                 Double add = Double.parseDouble(split[6]);
                 String a = String.format("%.0f", add);
                 String added = null;
-                if (split[6].length() >9 ) {
+                if (split[7].length() >9 ) {
                     added = a.substring(0, 3) + " B";
                 }
-                if (split[6].length() <= 9) {
+                if (split[7].length() <= 9) {
                     added = a.substring(0, 3) + " M";
                 }
-                masternode_marketcap.add(added);
+
+                if(split[7].length()==11){masternode_marketcap.add(added.substring(0, 2) + "." + added.substring(2, added.length()));}
+                if(split[7].length()==10){masternode_marketcap.add(added.substring(0, 1) + "." + added.substring(1, added.length()));}
+                if(split[7].length()==9){masternode_marketcap.add(added.substring(0, 3) + "." + added.substring(3, added.length()));}
+                if(split[7].length()==8){masternode_marketcap.add(added.substring(0, 2) + "." + added.substring(2, added.length()));}
+                if(split[7].length()==7){masternode_marketcap.add(added.substring(0, 1) + "." + added.substring(1, added.length()));}
+                if(split[7].length()==6){masternode_marketcap.add(added.substring(0, 3) + "." + added.substring(2, added.length()));}
                 masternode_node_count.add(split[9]);
                 masternode_purchase_value.add(split[11]);}
-            System.out.println("THIS IS "+x+" "+split[6].length()+" "+masternode_name.get(x)+" "+masternode_symbol.get(x)+" "+masternode_percent_change.get(x)+" "+masternode_marketcap.get(x)+" "+masternode_node_count.get(x)+" "+masternode_purchase_value.get(x));
+            //System.out.println("THIS IS "+x+" "+split[6].length()+" "+masternode_name.get(x)+" "+masternode_symbol.get(x)+" "+masternode_percent_change.get(x)+" "+masternode_marketcap.get(x)+" "+masternode_node_count.get(x)+" "+masternode_purchase_value.get(x));
 
         }
     }

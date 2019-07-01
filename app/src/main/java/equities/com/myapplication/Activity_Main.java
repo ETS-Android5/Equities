@@ -293,7 +293,8 @@ public class Activity_Main extends AppCompatActivity {
     }
 
     public void openSearchView() {
-        ad = new ArrayAdapter(Activity_Main.this, R.layout.searchbar, searchview_arraylist);
+        ad = new ArrayAdapter<String>(Activity_Main.this, R.layout.searchbar,
+                R.id.searchtool, searchview_arraylist);
         AutoCompleteTextView chosen_searchView_item = findViewById(R.id.searchtool);
         chosen_searchView_item.setAdapter(ad);
 
@@ -660,7 +661,20 @@ public class Activity_Main extends AppCompatActivity {
         stock_exchange_image.add("exchange_stock_schwab");
         stock_exchange_image.add("exchange_stock_robinhood");
 
+        HashSet sen = new HashSet();
+        sen.addAll(stock_exchange_name);
+        stock_exchange_name.clear();
+        stock_exchange_name.addAll(sen);
 
+        HashSet seu = new HashSet();
+        seu.addAll(stock_exchange_url);
+        stock_exchange_url.clear();
+        stock_exchange_url.addAll(seu);
+
+        HashSet sei = new HashSet();
+        sei.addAll(stock_exchange_image);
+        stock_exchange_image.clear();
+        stock_exchange_image.addAll(sei);
 
     }
 
@@ -680,11 +694,13 @@ public class Activity_Main extends AppCompatActivity {
             if (i > 0) {
                 int z = i - 1;
                 //("BANANAS2 "+graph_high.get(z));
+                //if(graph_high.get(z).toString().contains(",")){
                 double b = new Double(graph_high.get(z).toString().replace(",",""));
                 double c = ((a - b) / a) * 100;
                 DecimalFormat numberFormat = new DecimalFormat("#0.00");
                 String add =numberFormat.format(c).replace("-","");
                 graph_change.add(add);
+            //}
 
             }
         }

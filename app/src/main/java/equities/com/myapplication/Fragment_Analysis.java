@@ -25,8 +25,7 @@ import com.jjoe64.graphview.series.LineGraphSeries;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
+import java.util.*;
 
 import static equities.com.myapplication.Constructor_App_Variables._AllDays;
 import static equities.com.myapplication.Constructor_App_Variables.graph_change;
@@ -262,184 +261,261 @@ public class Fragment_Analysis extends Fragment {
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
+                List<String> allDates = new ArrayList<>();
+                Calendar cal = Calendar.getInstance();
+                String maxDate = new SimpleDateFormat("MMM").format(cal.getTime());
+                SimpleDateFormat monthDate = new SimpleDateFormat("MMM");
+                String maxDayDate = new SimpleDateFormat("EEE").format(cal.getTime());
+                SimpleDateFormat dayDate = new SimpleDateFormat("EEE");
+                String maxYearDate = new SimpleDateFormat("YYYY").format(cal.getTime());
+                SimpleDateFormat yearDate = new SimpleDateFormat("YYYY");
+                StaticLabelsFormatter staticLabelsFormatter = new StaticLabelsFormatter(graph_view);
                 int position = tab.getPosition();
                 switch (position) {
                     case 0:
-                        graph_view.removeAllSeries();
-                        ab_list.notifyDataSetChanged();
-
-                        DataPoint [] dp = new DataPoint[7];
-                        for(int z= 0; z<=7;z++){
-                            Calendar calendar1 =Calendar.getInstance();
-                            DateFormat dateFormat = new SimpleDateFormat("MMM, DD");
-                            String d =dateFormat.format(calendar1.getTime());
-                            calendar1.add(Calendar.DATE,-z);
-                            Date date =calendar1.getTime();
-                            LineGraphSeries<DataPoint> series = new LineGraphSeries<>(new DataPoint[] {
-                                    new DataPoint(date, z+7)
-
-                            });
-                            graph_view.addSeries(series);
-
-                        }
-                        //graph_view.getGridLabelRenderer().setNumVerticalLabels(roundVal); // Approx 28-3
-                        graph_view.getGridLabelRenderer().setGridColor(Color.TRANSPARENT);
-                        graph_view.getGridLabelRenderer().setHorizontalLabelsColor(Color.WHITE);
-                        graph_view.getGridLabelRenderer().setVerticalLabelsColor(Color.WHITE);
-
-                        //graph_view.getViewport().setMinX(1);
-                        //graph_view.getViewport().setMaxX(integer[0]);
-                        //graph_view.getViewport().setMinY(0);
-                        //graph_view.getViewport().setMaxY(Double.parseDouble((String) graph_high.get(integer[0])));
-
-                        //graph_view.getViewport().setYAxisBoundsManual(true);
-                        //graph_view.getViewport().setXAxisBoundsManual(true);
-
-                        series.setColor(Color.GREEN);
-                        break;
-                    case 1:
+                        cal.clear();
                         graph_view.removeAllSeries();
                         ab[0].notifyDataSetChanged();
-                        integer[0] =30;
-
-                        historical_listview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-                        ab[0] =new Adapter_Graph_Points(getContext(), integer[0],graph_high,graph_change,graph_volume,graph_date);
-                        historical_listview.setAdapter(ab[0]);
-                        series = new LineGraphSeries<>();
-                        for (int i= 0; i < integer[0];i++){
-                            try {
-                                String s= String.valueOf(graph_high.get(integer[0]-i).toString().replace(",",""));
-                                xx = (int) Double.parseDouble(s.trim());
-                                DataPoint point = new DataPoint(i,xx);
-                                series.appendData(point,true,integer[0]);
-                            } catch (NumberFormatException numberFormatException) {
-                                //("Invalid date");
-                            }
-                            continue;
+                        try {
+                            cal.setTime(dayDate.parse(maxDayDate));
+                        } catch (ParseException e) {
+                            e.printStackTrace();
                         }
-                        graph_view.getGridLabelRenderer().setGridColor(Color.TRANSPARENT);
-                        graph_view.getGridLabelRenderer().setHorizontalLabelsColor(Color.WHITE);
-                        graph_view.getGridLabelRenderer().setVerticalLabelsColor(Color.WHITE);
-                        series.setColor(Color.GREEN);
-                        graph_view.addSeries(series);
-                        break;
-                    case 2:
-                        graph_view.removeAllSeries();
-                        ab[0].notifyDataSetChanged();
-                        integer[0] =90;
-
+                        for (int i = 0; i <= 6; i++) {
+                            String month_name1 = dayDate.format(cal.getTime());
+                            allDates.add(month_name1);
+                            cal.add(Calendar.DAY_OF_WEEK, -1);
+                        }
+                        Collections.reverse(allDates);
                         series = new LineGraphSeries<>();
-                        for (int i= 0; i < integer[0];i++){
+                        for (int i= 0; i < 7;i++){
                             try {
-                                String s= String.valueOf(graph_high.get(integer[0]-i).toString().replace(",",""));
+                                String s= String.valueOf(graph_high.get(7-i).toString().replace(",",""));
                                 xx = (int) Double.parseDouble(s.trim());
                                 DataPoint point = new DataPoint(i,xx);
-                                series.appendData(point,true,integer[0]);
+                                series.appendData(point,true,7);
                             } catch (IndexOutOfBoundsException e) {
                                 //("Invalid date");
                             }
                             continue;
                         }
-                        graph_view.getGridLabelRenderer().setGridColor(Color.TRANSPARENT);
                         graph_view.getGridLabelRenderer().setHorizontalLabelsColor(Color.WHITE);
                         graph_view.getGridLabelRenderer().setVerticalLabelsColor(Color.WHITE);
                         series.setColor(Color.GREEN);
+                        series.setDrawBackground(true);
+
+                        staticLabelsFormatter.setHorizontalLabels(allDates.toArray(new String[0]));
+                        graph_view.getGridLabelRenderer().setLabelFormatter(staticLabelsFormatter);
+
                         graph_view.addSeries(series);
                         historical_listview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-                        ab[0] =new Adapter_Graph_Points(getContext(), integer[0],graph_high,graph_change,graph_volume,graph_date);
+                        ab[0] =new Adapter_Graph_Points(getContext(), 7,graph_high,graph_change,graph_volume,graph_date);
+                        historical_listview.setAdapter(ab[0]);
+                        break;
+                    case 1:
+                        cal.clear();
+                        allDates.clear();
+                        graph_view.removeAllSeries();
+                        ab[0].notifyDataSetChanged();
+                        try {
+                            cal.setTime(dayDate.parse(maxDayDate));
+                        } catch (ParseException e) {
+                            e.printStackTrace(); }
+                        for (int i = 0; i <= 3; i++) {
+                            //String month_name1 = dayDate.format(cal.getTime());
+                            allDates.add(i+" week");
+                            //int d = cal.getActualMaximum(Calendar.WEEK_OF_MONTH);
+                            //cal.add(Calendar.WEEK_OF_MONTH, -d);
+                            }
+                        Collections.reverse(allDates);
+                        series = new LineGraphSeries<>();
+                        for (int i= 0; i < 30;i++){
+                            try {
+                                String s= String.valueOf(graph_high.get(30-i).toString().replace(",",""));
+                                xx = (int) Double.parseDouble(s.trim());
+                                DataPoint point = new DataPoint(i,xx);
+                                series.appendData(point,true,30);
+                            } catch (IndexOutOfBoundsException e) {
+                                //("Invalid date");
+                            }
+                            continue; }
+                        graph_view.getGridLabelRenderer().setHorizontalLabelsColor(Color.WHITE);
+                        graph_view.getGridLabelRenderer().setVerticalLabelsColor(Color.WHITE);
+                        series.setColor(Color.GREEN);
+                        series.setDrawBackground(true);
+                        staticLabelsFormatter.setHorizontalLabels(allDates.toArray(new String[0]));
+                        graph_view.getGridLabelRenderer().setLabelFormatter(staticLabelsFormatter);
+                        graph_view.addSeries(series);
+                        historical_listview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+                        ab[0] =new Adapter_Graph_Points(getContext(), 30,graph_high,graph_change,graph_volume,graph_date);
+                        historical_listview.setAdapter(ab[0]);
+                        break;
+                    case 2:
+                        cal.clear();
+                        allDates.clear();
+                        graph_view.removeAllSeries();
+                        ab[0].notifyDataSetChanged();
+
+                        try {
+                            cal.setTime(monthDate.parse(maxDate));
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                        for (int i = 0; i <= 3; i++) {
+                            String month_name1 = monthDate.format(cal.getTime());
+                            allDates.add(month_name1);
+                            cal.add(Calendar.MONTH, -1);
+                        }
+                        Collections.reverse(allDates);
+                        series = new LineGraphSeries<>();
+                        for (int i= 0; i < 90;i++){
+                            try {
+                                String s= String.valueOf(graph_high.get(90-i).toString().replace(",",""));
+                                xx = (int) Double.parseDouble(s.trim());
+                                DataPoint point = new DataPoint(i,xx);
+                                series.appendData(point,true,90);
+                            } catch (IndexOutOfBoundsException e) {
+                                //("Invalid date");
+                            }
+                            continue;
+                        }
+                        graph_view.getGridLabelRenderer().setHorizontalLabelsColor(Color.WHITE);
+                        graph_view.getGridLabelRenderer().setVerticalLabelsColor(Color.WHITE);
+                        series.setColor(Color.GREEN);
+                        series.setDrawBackground(true);
+
+                        staticLabelsFormatter.setHorizontalLabels(allDates.toArray(new String[0]));
+                        graph_view.getGridLabelRenderer().setLabelFormatter(staticLabelsFormatter);
+
+                        graph_view.addSeries(series);
+                        historical_listview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+                        ab[0] =new Adapter_Graph_Points(getContext(), 90,graph_high,graph_change,graph_volume,graph_date);
                         historical_listview.setAdapter(ab[0]);
                         break;
                     case 3:
+                        cal.clear();
                         graph_view.removeAllSeries();
                         ab[0].notifyDataSetChanged();
-                        if(ap_info.getMarketType().equalsIgnoreCase("stock")){
-                            integer[0] =98;
-                        }else{
-                        integer[0] =180;}
-
+                        try {
+                            cal.setTime(monthDate.parse(maxDate));
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                        for (int i = 0; i <= 6; i++) {
+                            String month_name1 = monthDate.format(cal.getTime());
+                            allDates.add(month_name1);
+                            cal.add(Calendar.MONTH, -1);
+                        }
+                        Collections.reverse(allDates);
                         series = new LineGraphSeries<>();
-                        for (int i= 0; i < integer[0];i++){
+                        for (int i= 0; i < 180;i++){
                             try {
-                                String s= String.valueOf(graph_high.get(integer[0]-i).toString().replace(",",""));
+                                String s= String.valueOf(graph_high.get(180-i).toString().replace(",",""));
                                 xx = (int) Double.parseDouble(s.trim());
                                 DataPoint point = new DataPoint(i,xx);
-                                series.appendData(point,true,integer[0]);
+                                series.appendData(point,true,180);
                             } catch (IndexOutOfBoundsException e) {
                                 //("Invalid date");
                             }
                             continue;
                         }
-                        graph_view.getGridLabelRenderer().setGridColor(Color.TRANSPARENT);
                         graph_view.getGridLabelRenderer().setHorizontalLabelsColor(Color.WHITE);
                         graph_view.getGridLabelRenderer().setVerticalLabelsColor(Color.WHITE);
                         series.setColor(Color.GREEN);
+                        series.setDrawBackground(true);
+
+                        staticLabelsFormatter.setHorizontalLabels(allDates.toArray(new String[0]));
+                        graph_view.getGridLabelRenderer().setLabelFormatter(staticLabelsFormatter);
+
                         graph_view.addSeries(series);
                         historical_listview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-                        ab[0] =new Adapter_Graph_Points(getContext(), integer[0],graph_high,graph_change,graph_volume,graph_date);
+                        ab[0] =new Adapter_Graph_Points(getContext(), 180,graph_high,graph_change,graph_volume,graph_date);
                         historical_listview.setAdapter(ab[0]);
                         break;
                     case 4:
+                        cal.clear();
                         graph_view.removeAllSeries();
                         ab[0].notifyDataSetChanged();
-                        integer[0] =365;
-
+                        try {
+                            cal.setTime(monthDate.parse(maxDate));
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                        for (int i = 0; i <= 11; i++) {
+                            String month_name1 = monthDate.format(cal.getTime());
+                            allDates.add(month_name1);
+                            cal.add(Calendar.MONTH, -1);
+                        }
+                        Collections.reverse(allDates);
                         series = new LineGraphSeries<>();
-                        for (int i= 0; i < integer[0];i++){
+                        for (int i= 0; i < 365;i++){
                             try {
-                                String s= String.valueOf(graph_high.get(integer[0]-i).toString().replace(",",""));
+                                String s= String.valueOf(graph_high.get(365-i).toString().replace(",",""));
                                 xx = (int) Double.parseDouble(s.trim());
                                 DataPoint point = new DataPoint(i,xx);
-                                series.appendData(point,true,integer[0]);
+                                series.appendData(point,true,365);
                             } catch (IndexOutOfBoundsException e) {
                                 //("Invalid date");
                             }
                             continue;
                         }
-                        graph_view.getGridLabelRenderer().setGridColor(Color.TRANSPARENT);
                         graph_view.getGridLabelRenderer().setHorizontalLabelsColor(Color.WHITE);
                         graph_view.getGridLabelRenderer().setVerticalLabelsColor(Color.WHITE);
-                        graph_view.addSeries(series);
                         series.setColor(Color.GREEN);
-                        historical_listview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-                        ab[0] =new Adapter_Graph_Points(getContext(), integer[0],graph_high,graph_change,graph_volume,graph_date);
-                        historical_listview.setAdapter(ab[0]);
+                        series.setDrawBackground(true);
 
+                        staticLabelsFormatter.setHorizontalLabels(allDates.toArray(new String[0]));
+                        graph_view.getGridLabelRenderer().setLabelFormatter(staticLabelsFormatter);
+
+                        graph_view.addSeries(series);
+                        historical_listview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+                        ab[0] =new Adapter_Graph_Points(getContext(), 365,graph_high,graph_change,graph_volume,graph_date);
+                        historical_listview.setAdapter(ab[0]);
                         break;
                     case 5:
+                        cal.clear();
                         graph_view.removeAllSeries();
                         ab[0].notifyDataSetChanged();
-                        //(_AllDays.size());
-                        integer[0] =_AllDays.size();
+                        try {
+                            cal.setTime(yearDate.parse(maxYearDate));
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                        for (int i = 0; i <= 5; i++) {
+                            String month_name1 = yearDate.format(cal.getTime());
+                            allDates.add(month_name1);
+                            cal.add(Calendar.YEAR, -1);
+                        }
+                        Collections.reverse(allDates);
                         series = new LineGraphSeries<>();
-                        for (int i= 0; i < integer[0];i++){
+                        for (int i= 0; i < graph_high.size();i++){
                             try {
-                                String s= String.valueOf(graph_high.get(integer[0]-i).toString().replace(",",""));
+                                String s= String.valueOf(graph_high.get(graph_high.size()-i).toString().replace(",",""));
                                 xx = (int) Double.parseDouble(s.trim());
                                 DataPoint point = new DataPoint(i,xx);
-                                series.appendData(point,true,integer[0]);
+                                series.appendData(point,true,graph_high.size());
                             } catch (IndexOutOfBoundsException e) {
-
+                                //("Invalid date");
                             }
-
+                            continue;
                         }
-                        //("SIZE of iteration"+integer[0]);
-                        //("SIZE OF ALL DAYS "+_AllDays.size());
-                        graph_view.getGridLabelRenderer().setGridColor(Color.TRANSPARENT);
                         graph_view.getGridLabelRenderer().setHorizontalLabelsColor(Color.WHITE);
                         graph_view.getGridLabelRenderer().setVerticalLabelsColor(Color.WHITE);
-                        StaticLabelsFormatter staticLabelsFormatter = new StaticLabelsFormatter(graph_view);
-                        staticLabelsFormatter.setHorizontalLabels(new String[] {"Jan", "Feb", "Mar", "Apr","May", "Jun", "Jul", "Aug","Sept"});
-                        graph_view.getGridLabelRenderer().setLabelFormatter(staticLabelsFormatter);
-                        graph_view.addSeries(series);
                         series.setColor(Color.GREEN);
+                        series.setDrawBackground(true);
+
+                        staticLabelsFormatter.setHorizontalLabels(allDates.toArray(new String[0]));
+                        graph_view.getGridLabelRenderer().setLabelFormatter(staticLabelsFormatter);
+
+                        graph_view.addSeries(series);
                         historical_listview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-                        ab[0] =new Adapter_Graph_Points(getContext(), integer[0],graph_high,graph_change,graph_volume,graph_date);
+                        ab[0] =new Adapter_Graph_Points(getContext(), graph_high.size(),graph_high,graph_change,graph_volume,graph_date);
                         historical_listview.setAdapter(ab[0]);
                         break;
 
                     default:
 
-                    break;
+                        break;
                 }
 
 

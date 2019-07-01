@@ -139,7 +139,7 @@ public class AsyncChosenData extends AsyncTask<Void, Void, String> {
                     shoe.main();
                     activity.do_graph_change();
                 }
-                if (activity.ap_info.getMarketType().equals("Index")) {
+               if (activity.ap_info.getMarketType().equals("Index")) {
 
                     activity.get_stock_exchange_info();
                     activity.get_current_stock_info();
@@ -148,6 +148,7 @@ public class AsyncChosenData extends AsyncTask<Void, Void, String> {
                     shoe.main();
                     activity.do_graph_change();
                 }
+
                 else
                 {
 
