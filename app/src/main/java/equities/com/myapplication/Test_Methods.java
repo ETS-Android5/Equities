@@ -3,6 +3,9 @@ package equities.com.myapplication;
 import android.content.Context;
 
 
+import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.LineGraphSeries;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -18,6 +21,8 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -38,6 +43,49 @@ public class Test_Methods {
     static String cryptopia_list;
 
     public static void main(String[] args) {
+        List<String> allDates = new ArrayList<>();
+        Calendar cal = Calendar.getInstance();
+        String maxDate = new SimpleDateFormat("EEE").format(cal.getTime());
+        SimpleDateFormat monthDate = new SimpleDateFormat("EEE");
+        try {
+            cal.setTime(monthDate.parse(maxDate));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        for (int i = 0; i <= 5; i++) {
+            String month_name1 = monthDate.format(cal.getTime());
+            allDates.add(month_name1);
+            cal.add(Calendar.DAY_OF_WEEK, -1);
+        }
+        Collections.reverse(allDates);
+        LineGraphSeries series;
+
+        System.out.println(allDates);
+        int xx= 0;
+        Integer[] integer = {7};
+        integer[0] =7;
+        graph_high.add(20000);
+        graph_high.add(30000);
+        graph_high.add(40000);
+        graph_high.add(10000);
+        graph_high.add(20000);
+        graph_high.add(15000);
+        graph_high.add(20000);
+        graph_high.add(11000);
+
+
+        for (int i= 0; i < integer[0];i++){
+            try {
+                String s= String.valueOf(graph_high.get(integer[0]-i).toString().replace(",",""));
+                xx = (int) Double.parseDouble(s.trim());
+                DataPoint point = new DataPoint(i,xx);
+                System.out.println(point);
+                //series.appendData(point,true,integer[0]);
+            } catch (IndexOutOfBoundsException e) {
+                //("Invalid date");
+            }
+            continue;
+        }
         //getStock_Kings();
         //get_stock_kings_points();
        //get_masternodes();
@@ -45,7 +93,7 @@ public class Test_Methods {
        // get_ipos();
        // find_urls();
        //get_ipos();
-        getWorldMarkets();
+        //getWorldMarkets();
 //get_stock_points();
         //getSavedEquities();
         //get_stock_kings_points();
