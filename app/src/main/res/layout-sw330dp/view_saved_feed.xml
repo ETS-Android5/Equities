@@ -20,7 +20,7 @@
         android:singleLine="true"
         android:visibility="gone"
         android:text="BTC"
-        android:textColor="@color/colorBlack"
+        android:textColor="@color/colorPrimary"
         android:textSize="16sp" />
 
     <TextView
@@ -31,7 +31,7 @@
         android:gravity="left|center"
         android:singleLine="true"
         android:text="BITCOIN"
-        android:textColor="@color/colorBlack"
+        android:textColor="@color/colorPrimary"
         android:textSize="16sp" />
 
     <TextView
@@ -53,9 +53,9 @@
         android:layout_gravity="end"
         android:layout_weight=".5"
         android:singleLine="true"
+        android:textColor="@color/colorPrimary"
         android:text="Symbol"
         android:textAlignment="textEnd"
-        android:textColor="@color/colorBlack"
         android:textSize="16sp"
         android:textStyle="bold" />
 </TableRow>

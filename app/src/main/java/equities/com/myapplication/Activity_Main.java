@@ -939,8 +939,8 @@ public class Activity_Main extends AppCompatActivity {
         for( int x=0;x<b.size();x++) {
             Document cap = null;
             if (c.get(x).equals("Stock")) {
-
                 get_saved_stock_price_change(""+check_saved.getSymbol().get(x));
+                System.out.println("STOCK "+ current_percentage_change.size());
             } else {
                 ArrayList d = check_saved.getName();
                 Document caps = null;
@@ -955,13 +955,14 @@ public class Activity_Main extends AppCompatActivity {
                         e.printStackTrace();
                     }
                     Elements as = caps.select("div>span");
-                    String f = as.get(4).text();
+                    String f = as.get(3).text();
                     f = f.replaceAll("\\(", "").replaceAll("\\)", "");
                     current_percentage_change.add(f);
+                    System.out.println("CRYPTOCHANGE "+ check_saved.getName()+"    "+current_percentage_change+"   "+f);
+
                 }
             }
 
         }check_saved.close();
-        System.out.println("getSavedEquities "+ current_percentage_change.size());
     }
 }

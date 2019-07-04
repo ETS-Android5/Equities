@@ -3,10 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/Equities.iml" filepath="$PROJECT_DIR$/.idea/Equities.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/Equities.iml" filepath="$PROJECT_DIR$/.idea/Equities.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/Equities-app.iml" filepath="$PROJECT_DIR$/app/Equities-app.iml" />
       <module fileurl="file://$PROJECT_DIR$/IdeaProjects-Equities.iml" filepath="$PROJECT_DIR$/IdeaProjects-Equities.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

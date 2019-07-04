@@ -50,10 +50,9 @@
         android:textSize="12sp"
         android:visibility="invisible" />
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/saved_feed"
-        android:background="#ffffff"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+            android:id="@+id/saved_feed"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
 
 
 </LinearLayout>
