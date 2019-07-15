@@ -541,7 +541,7 @@ public class Service_Main_Equities {
         Element c = m.getElementById("coins");
         Elements tb = c.select("tbody");
         Elements n = tb.get(1).select("tr");
-        for(int x =0; x<20;x++){
+        for(int x =0; x<15;x++){
             Elements k = n.get(x).select("td");
             String z = k.text().replace("%","").replace("$","").replace(",","");
             String[] split = z.split(" ");

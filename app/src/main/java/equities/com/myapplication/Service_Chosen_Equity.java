@@ -15,10 +15,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -30,15 +27,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import static equities.com.myapplication.Activity_Main.ap_info;
-import static equities.com.myapplication.Constructor_App_Variables._AllDays;
-import static equities.com.myapplication.Constructor_App_Variables.aequity_exchanges;
-import static equities.com.myapplication.Constructor_App_Variables.feedItems;
-import static equities.com.myapplication.Constructor_App_Variables.saved_helper;
-import static equities.com.myapplication.Constructor_App_Variables.graph_date;
-import static equities.com.myapplication.Constructor_App_Variables.graph_high;
-import static equities.com.myapplication.Constructor_App_Variables.graph_low;
-import static equities.com.myapplication.Constructor_App_Variables.graph_market_cap;
-import static equities.com.myapplication.Constructor_App_Variables.graph_volume;
+import static equities.com.myapplication.Constructor_App_Variables.*;
 
 //The original version of this code was found on StackOverflow.com from user flup
 //https://stackoverflow.com/users/1973271/flup
@@ -151,6 +140,8 @@ public class Service_Chosen_Equity
 
     }
 
+
+
     public static void get_stock_points() {
         //("Get stock points called");
         String marname = ap_info.getMarketSymbol();
@@ -166,11 +157,12 @@ public class Service_Chosen_Equity
 
         for(int z =0; z < x.size();z++){
             String text =x.get(z).text();
-            if(text.contains("Dividend")){continue;}else{
+            System.out.println("THIS SIS TH ETEXT "+text+" "+x.size());
+            if(text.contains("Split")||text.contains("Dividend")){continue;}else{
                 String date =x.get(z).select("td").get(0).text();
                 graph_date.add(date);
                 String close =x.get(z).select("td").get(5).text();
-                graph_high.add(close);
+                graph_high.add(close.replace(",",""));
                 String volume =x.get(z).select("td").get(6).text();
                 graph_volume.add(volume);
                 List<String> numbers = graph_high;
@@ -201,6 +193,12 @@ public class Service_Chosen_Equity
         try {
             d = Jsoup.connect(url).timeout(10 * 10000).get();
         } catch (IOException e) {
+            try{
+                String[] s = f.split("(?=\\p{Lu})");
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
             e.printStackTrace();
         }
 
@@ -215,7 +213,7 @@ public class Service_Chosen_Equity
                                     String g = p.text();
                                     String[] splited = g.split("\\s+");
                                     if (v != null && !g.isEmpty()) {
-                                        graph_high.add(splited[3]);
+                                        graph_high.add(splited[0].replaceAll("[^\\d.]",""));
                                         graph_low.add(splited[2]);
                                     }
                                     Elements pn = ss.select("td[data-format-market-cap]");
@@ -236,7 +234,7 @@ public class Service_Chosen_Equity
                             }
                             ////("THIs Is graph high "+ Arrays.asList(graph_high));
                             _AllDays = graph_high;
-
+        if (graph_high.size()==0){graph_high.add(0);}
 
 
 

@@ -18,7 +18,6 @@ import static equities.com.myapplication.Constructor_App_Variables.graph_date;
 import static equities.com.myapplication.Constructor_App_Variables.graph_high;
 import static equities.com.myapplication.Constructor_App_Variables.graph_volume;
 import static equities.com.myapplication.Constructor_App_Variables.stocktwits_feedItems;
-import static equities.com.myapplication.Test_Methods.getSavedEquities;
 
 public class AsyncForBackPressedSavedData extends AsyncTask<Integer, Integer, String> {
 
@@ -26,14 +25,13 @@ public class AsyncForBackPressedSavedData extends AsyncTask<Integer, Integer, St
         AsyncForBackPressedSavedData(Activity_Main context) {
             activityReference = new WeakReference<>(context);
         }
-    Activity_Main activity = activityReference.get();
-
-    long startTime;
-        ViewPager pager = activity.findViewById(R.id.viewpager);
+        long startTime;
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            Activity_Main activity = activityReference.get();
+            ViewPager pager = activity.findViewById(R.id.viewpager);
             if (pager.getVisibility()== View.VISIBLE){
                 activity.finishAffinity();}else{
 
@@ -64,14 +62,17 @@ public class AsyncForBackPressedSavedData extends AsyncTask<Integer, Integer, St
 
         @Override
         protected String doInBackground(Integer... params) {
+            Activity_Main activity = activityReference.get();
             ArrayList aa = activity.check_saved.getType();
-            if(aa.size()>0){
-                getSavedEquities();}
+            if(aa.size()>0) {
+                activity.getSavedEquities();
+            }
             return "task finished";
         }
         @Override
         protected void onPostExecute(String result) {
             Activity_Main activity = activityReference.get();
+            ViewPager pager = activity.findViewById(R.id.viewpager);
             if (activity == null || activity.isFinishing()) return;
             graph_change.clear();
             exchange_list.clear();
@@ -87,8 +88,6 @@ public class AsyncForBackPressedSavedData extends AsyncTask<Integer, Integer, St
             TabLayout tabs = activity.findViewById(R.id.tabs);
             activity.setupMainViewPager(pager);
             tabs.setupWithViewPager(pager);
-
-
             long endTime = System.nanoTime();
             long duration = (endTime - startTime);
             //("SERVICE MAIN TIME IS " + duration / 1000000000 + " seconds");

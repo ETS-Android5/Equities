@@ -191,7 +191,7 @@
             android:background="#00000000"
     ></com.jjoe64.graphview.GraphView>
     <android.support.design.widget.TabLayout
-            android:id="@+id/tabs"
+            android:id="@+id/chosen_tabs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:tabGravity="fill"

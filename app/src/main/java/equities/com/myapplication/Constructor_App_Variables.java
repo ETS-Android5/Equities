@@ -54,6 +54,9 @@ public class Constructor_App_Variables {
     public static ArrayList graph_volume_today = new ArrayList<>();
     public static ArrayList graph_date = new ArrayList<>();
     public static ArrayList graph_high = new ArrayList<>();
+    public static ArrayList graph_24 = new ArrayList<>();
+    public static ArrayList reversed_graph_high = new ArrayList<>();
+    public static ArrayList graph_open = new ArrayList<>();
     public static ArrayList graph_change = new ArrayList<>();
     public static ArrayList graph_low = new ArrayList<>();
     public static ArrayList graph_volume = new ArrayList<>();

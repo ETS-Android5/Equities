@@ -125,6 +125,7 @@
                     android:background="#00000000"
                     android:visibility="gone"/>
             <TableRow
+                    android:id="@+id/table_tabs"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="15"
@@ -146,7 +147,7 @@
                         app:tabIndicatorColor="#0000ff"
                         app:tabMode="scrollable"
                         app:tabSelectedTextColor="#543533"
-                        app:tabTextAppearance="@style/TextAppearance.AppCompat.Small"
+                        app:tabTextAppearance="@style/TextAppearance.AppCompat.Small.Inverse"
                         app:tabTextColor="#0000ff"/>
                 <View
                         android:layout_width="match_parent"

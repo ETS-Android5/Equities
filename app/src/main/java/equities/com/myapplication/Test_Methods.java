@@ -43,61 +43,7 @@ public class Test_Methods {
     static String cryptopia_list;
 
     public static void main(String[] args) {
-        List<String> allDates = new ArrayList<>();
-        Calendar cal = Calendar.getInstance();
-        String maxDate = new SimpleDateFormat("EEE").format(cal.getTime());
-        SimpleDateFormat monthDate = new SimpleDateFormat("EEE");
-        try {
-            cal.setTime(monthDate.parse(maxDate));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        for (int i = 0; i <= 5; i++) {
-            String month_name1 = monthDate.format(cal.getTime());
-            allDates.add(month_name1);
-            cal.add(Calendar.DAY_OF_WEEK, -1);
-        }
-        Collections.reverse(allDates);
-        LineGraphSeries series;
-
-        System.out.println(allDates);
-        int xx= 0;
-        Integer[] integer = {7};
-        integer[0] =7;
-        graph_high.add(20000);
-        graph_high.add(30000);
-        graph_high.add(40000);
-        graph_high.add(10000);
-        graph_high.add(20000);
-        graph_high.add(15000);
-        graph_high.add(20000);
-        graph_high.add(11000);
-
-
-        for (int i= 0; i < integer[0];i++){
-            try {
-                String s= String.valueOf(graph_high.get(integer[0]-i).toString().replace(",",""));
-                xx = (int) Double.parseDouble(s.trim());
-                DataPoint point = new DataPoint(i,xx);
-                System.out.println(point);
-                //series.appendData(point,true,integer[0]);
-            } catch (IndexOutOfBoundsException e) {
-                //("Invalid date");
-            }
-            continue;
-        }
-        //getStock_Kings();
-        //get_stock_kings_points();
-       //get_masternodes();
-       // get_icos();
-       // get_ipos();
-       // find_urls();
-       //get_ipos();
-        //getWorldMarkets();
-//get_stock_points();
-        //getSavedEquities();
-        //get_stock_kings_points();
-    }
+       }
 
     public static void get_stock_kings_points() {
 
@@ -196,37 +142,6 @@ public class Test_Methods {
         System.out.println(as6.text());
     }
 
-    public static void getSavedEquities(){
-
-        ArrayList b =new ArrayList();
-        b.add("GSAT");
-        b.add("DPW");
-        b.add("APPL");
-        ArrayList c =new ArrayList();
-        c.add("Stock");
-        c.add("Stock");
-        c.add("Stock");
-                for( int x=0;x<b.size();x++) {
-            Document cap = null;
-            if (c.get(x).equals("Stock")) {
-
-                try {
-                    cap = Jsoup.connect("https://finance.yahoo.com/quote/" + b.get(x)).get();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                Element test = cap.select("div[data-reactid='34']").first().select("span").get(1);
-                String foofoo = test.text().toString().replace("(", "").replace(")", "");
-                String[] foo = foofoo.split(" ");
-                String f = foo[1];
-                System.out.println("MAYBE? "+cap.getElementsByClass("D(ib) Mend(20px)").text());
-                System.out.println("THIS IS F? "+ f);
-                current_percentage_change.add(f);
-                System.out.println("getSavedEquities "+ current_percentage_change.get(x));
-            }
-
-        }
-    }
 
     public static void get_stock_points2() {
         //("Get stock points called");
@@ -288,11 +203,6 @@ public class Test_Methods {
             //System.out.println(i-14+" "+td0.text()+" "+td1.text()+" "+added);
         }
     }
-
-
-
-
-
 
     public static void get_crypto_listings() {
 
@@ -737,7 +647,6 @@ public class Test_Methods {
 
     }
 
-
     private static void ProcessXml(org.w3c.dom.Document data) {
         if (data != null) {
             String st, sd, sp, sl;
@@ -816,5 +725,7 @@ public class Test_Methods {
 
 
     }
+
+
 
 }

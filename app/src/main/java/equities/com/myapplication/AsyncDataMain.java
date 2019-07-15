@@ -3,6 +3,7 @@ package equities.com.myapplication;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.view.Gravity;
 import android.view.View;
@@ -27,6 +28,8 @@ public class AsyncDataMain extends AsyncTask<Integer, Integer, String> {
         protected void onPreExecute() {
             super.onPreExecute();
             Activity_Main activity = activityReference.get();
+            //TabLayout t = activity.findViewById(R.id.tabs);
+            //t.setVisibility(View.GONE);
             ViewPager pager = activity.findViewById(R.id.viewpager);
             if (pager!=null&&pager.getVisibility()== View.VISIBLE){
                 pager.setVisibility(View.GONE);
@@ -88,6 +91,8 @@ public class AsyncDataMain extends AsyncTask<Integer, Integer, String> {
         @Override
         protected void onPostExecute(String result) {
             Activity_Main activity = activityReference.get();
+//            TabLayout t = activity.findViewById(R.id.tabs);
+  //          t.setVisibility(View.VISIBLE);
             if (activity == null || activity.isFinishing()) return;
             activity.setMainPage();
 

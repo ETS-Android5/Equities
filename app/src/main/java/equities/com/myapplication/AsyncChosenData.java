@@ -1,5 +1,6 @@
 package equities.com.myapplication;
 
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.support.design.widget.Snackbar;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 import java.lang.ref.WeakReference;
@@ -35,7 +37,8 @@ public class AsyncChosenData extends AsyncTask<Void, Void, String> {
         protected void onPreExecute() {
             super.onPreExecute();
             Activity_Main activity = activityReference.get();
-
+            TableRow t = activity.findViewById(R.id.table_tabs);
+            t.setVisibility(View.GONE);
             graph_change.clear();
             exchange_list.clear();
             aequity_exchanges.clear();
@@ -94,7 +97,7 @@ public class AsyncChosenData extends AsyncTask<Void, Void, String> {
                 //("Async Cancelled");
                 return null;}
 
-
+//System.out.print("THIS IS WHAT MARKET TYPE EQUALS "+activity.ap_info.getMarketType());
 
 //            getSupportActionBar().setDisplayShowTitleEnabled(true);
             if (activity.async_analysis_page) {
@@ -151,10 +154,9 @@ public class AsyncChosenData extends AsyncTask<Void, Void, String> {
 
                 else
                 {
-
-                    activity.get_stock_exchange_info();
-                    activity.get_current_stock_info();
+                    activity.getChosenCryptoInfo();
                     activity.getStockTwitsData();
+                    activity.get_coinmarketcap_exchange_listing();
                     Service_Chosen_Equity shoe = new Service_Chosen_Equity(activity);
                     shoe.main();
                     activity.do_graph_change();
@@ -176,8 +178,8 @@ public class AsyncChosenData extends AsyncTask<Void, Void, String> {
             activity.fullScreen="go";
             // get a reference to the activity if it is still there
 
-
-
+            TableRow t = activity.findViewById(R.id.table_tabs);
+            t.setVisibility(View.VISIBLE);
             String a=activity.ap_info.getCurrent_Aequity_Price();
             if (activity == null || activity.isFinishing()&&graph_high.size()>0&&activity.requestQueue !=null&& activity.forward) return;
             ProgressBar mainbar = activity.findViewById(R.id.mainbar);

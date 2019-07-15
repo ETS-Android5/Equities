@@ -71,6 +71,7 @@ public class Activity_Main extends AppCompatActivity {
     static Element price = null;
     protected ArrayAdapter<String> ad;
     private static Toolbar toolbar;
+    TableRow table_tabs;
     ProgressBar progress;
     ImageView refresh;
     public static ArrayList<String> searchview_arraylist = new ArrayList<>();
@@ -151,7 +152,8 @@ public class Activity_Main extends AppCompatActivity {
         //current_percentage_change.clear();
         }
         new AsyncChosenData(this).cancel(true);
-        new AsyncForBackPressedSavedData(this).execute();}
+        new AsyncForBackPressedSavedData(this).execute();
+            }
 
     }
 
@@ -205,14 +207,10 @@ public class Activity_Main extends AppCompatActivity {
             }
         });
 
-        TabLayout tabs = findViewById(R.id.tabs);
+        table_tabs = findViewById(R.id.table_tabs);
+        TabLayout pagetabs = findViewById(R.id.tabs);
         setupMainViewPager(pager);
-        tabs.setupWithViewPager(pager);
-
-
-
-
-
+        pagetabs.setupWithViewPager(pager);
         if(pager.getVisibility()==View.VISIBLE){
             progLayout.setVisibility(View.GONE);
         }else{
@@ -321,7 +319,7 @@ public class Activity_Main extends AppCompatActivity {
     }
 
     public void getChosenCryptoInfo(){
-
+System.out.println("CHOSEN VCRYPTO HAS BEEN CALLED");
         long startTime = System.nanoTime();
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         String newString =ap_info.getMarketName();
@@ -679,28 +677,26 @@ public class Activity_Main extends AppCompatActivity {
     }
 
     public static void do_graph_change() {
-        //("BANANAS"+graph_high);
         Double a=0.00;
         for (int i = 0; i < graph_high.size(); i++) {
-
             if(graph_high.get(i)!=null) {
                    if(graph_high.get(i)=="null"){
                        graph_high.get(i).toString().replace("null","0.00");
                    }
-                a = new Double(graph_high.get(i).toString().replace(",", ""));
+                a = new Double(graph_high.get(i).toString().replace(",", "").replace("<","").replace("/",""));
             }else{
                 a=0.00;
             }
             if (i > 0) {
                 int z = i - 1;
-                //("BANANAS2 "+graph_high.get(z));
-                //if(graph_high.get(z).toString().contains(",")){
-                double b = new Double(graph_high.get(z).toString().replace(",",""));
+                if(graph_high!=null){
+                double b = new Double(graph_high.get(z).toString().replace(",","").replace("<","").replace("/",""));
                 double c = ((a - b) / a) * 100;
                 DecimalFormat numberFormat = new DecimalFormat("#0.00");
                 String add =numberFormat.format(c).replace("-","");
-                graph_change.add(add);
-            //}
+                graph_change.add(add);}else{
+                    graph_change.add("0");
+                }
 
             }
         }
@@ -932,15 +928,12 @@ public class Activity_Main extends AppCompatActivity {
     public void getSavedEquities(){
         ArrayList b = check_saved.getSymbol();
         ArrayList c = check_saved.getType();
-        for(int i=0;i<check_saved.getSymbol().size();i++){
-            System.out.println(check_saved.getSymbol().get(i));
-            System.out.println(check_saved.getName().get(i));
-            System.out.println(check_saved.getType().get(i));}
         for( int x=0;x<b.size();x++) {
             Document cap = null;
-            if (c.get(x).equals("Stock")) {
+            System.out.println("THIS IS WHAT CX EQUASLS "+ c.get(x));
+
+            if (c.get(x).equals("Stock")||c.get(x).equals("Index")) {
                 get_saved_stock_price_change(""+check_saved.getSymbol().get(x));
-                System.out.println("STOCK "+ current_percentage_change.size());
             } else {
                 ArrayList d = check_saved.getName();
                 Document caps = null;
