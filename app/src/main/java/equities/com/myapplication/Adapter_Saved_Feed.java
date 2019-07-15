@@ -66,7 +66,6 @@ public class Adapter_Saved_Feed extends RecyclerView.Adapter<Adapter_Saved_Feed.
        if(current_percentage_change.size()==0) {
            current_percentage_change.add("Reload");
        }
-        ////("SIZES "+ld.getSymbol().get(i)+" "+ld.getName().get(i)+" "+current_percentage_change.get(i));}
         holder.currentchange.setText(""+current_percentage_change.get(position));
         String cc = String.valueOf(current_percentage_change.get(position));
         if(cc.contains("-")){

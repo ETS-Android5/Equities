@@ -43,6 +43,7 @@ public class Test_Methods {
     static String cryptopia_list;
 
     public static void main(String[] args) {
+        getTESTSavedEquities();
        }
 
     public static void get_stock_kings_points() {
@@ -141,6 +142,26 @@ public class Test_Methods {
         System.out.println(bov_name +" "+ bov_amount +" "+ bov_change);
         System.out.println(as6.text());
     }
+
+    public static void getTESTSavedEquities(){
+
+                Document caps = null;
+
+                    try {
+                        caps = Jsoup.connect("https://coinmarketcap.com/currencies/" + "bitcoin").timeout(10 * 10000).get();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    Element as = caps.getElementsByClass("details-panel-item--header flex-container").first();
+                    Elements d = as.select("span:eq(1)");
+                    String f = d.get(2).text();;
+
+                    current_percentage_change.add(f);
+System.out.println(f);
+                }
+
+
+
 
 
     public static void get_stock_points2() {

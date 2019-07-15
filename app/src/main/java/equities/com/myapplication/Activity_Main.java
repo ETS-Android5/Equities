@@ -947,11 +947,12 @@ System.out.println("CHOSEN VCRYPTO HAS BEEN CALLED");
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    Elements as = caps.select("div>span");
-                    String f = as.get(3).text();
+                    Element as = caps.getElementsByClass("details-panel-item--header flex-container").first();
+                    Elements e = as.select("span:eq(1)");
+                    String f = e.get(2).text();;
                     f = f.replaceAll("\\(", "").replaceAll("\\)", "");
                     current_percentage_change.add(f);
-                    System.out.println("CRYPTOCHANGE "+ check_saved.getName()+"    "+current_percentage_change+"   "+f);
+
 
                 }
             }
