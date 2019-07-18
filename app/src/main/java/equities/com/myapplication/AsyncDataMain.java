@@ -28,8 +28,6 @@ public class AsyncDataMain extends AsyncTask<Integer, Integer, String> {
         protected void onPreExecute() {
             super.onPreExecute();
             Activity_Main activity = activityReference.get();
-            //TabLayout t = activity.findViewById(R.id.tabs);
-            //t.setVisibility(View.GONE);
             ViewPager pager = activity.findViewById(R.id.viewpager);
             if (pager!=null&&pager.getVisibility()== View.VISIBLE){
                 pager.setVisibility(View.GONE);
@@ -91,8 +89,8 @@ public class AsyncDataMain extends AsyncTask<Integer, Integer, String> {
         @Override
         protected void onPostExecute(String result) {
             Activity_Main activity = activityReference.get();
-//            TabLayout t = activity.findViewById(R.id.tabs);
-  //          t.setVisibility(View.VISIBLE);
+//          TabLayout t = activity.findViewById(R.id.tabs);
+//          t.setVisibility(View.VISIBLE);
             if (activity == null || activity.isFinishing()) return;
             activity.setMainPage();
 

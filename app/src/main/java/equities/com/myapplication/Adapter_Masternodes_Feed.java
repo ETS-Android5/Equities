@@ -35,7 +35,7 @@ public class Adapter_Masternodes_Feed extends RecyclerView.Adapter<Adapter_Maste
            super(itemView);
 
            symbol=itemView.findViewById(R.id.symbol);
-           changes=itemView.findViewById(R.id.changes);
+           changes=itemView.findViewById(R.id.cPrice);
            name=itemView.findViewById(R.id.name);
            count=itemView.findViewById(R.id.count);
            cost_to_own=itemView.findViewById(R.id.cost_to_own);

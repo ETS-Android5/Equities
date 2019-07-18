@@ -35,12 +35,12 @@ public class Adapter_Main_Equities extends RecyclerView.Adapter<Adapter_Main_Equ
 
         }
         public class MyViewHolder extends RecyclerView.ViewHolder{
-            public TextView number, symbol, name, value, types,changes;
+            public TextView number, symbol, name, value, types, cPrice;
             public ImageView circle;
 
             public MyViewHolder(View itemView) {
                 super(itemView);
-                changes =itemView.findViewById(R.id.changes);
+                cPrice =itemView.findViewById(R.id.cPrice);
                 number=itemView.findViewById(R.id.number);
                 circle =itemView.findViewById(R.id.circle);
                 symbol=itemView.findViewById(R.id.symbol);
@@ -77,13 +77,22 @@ public class Adapter_Main_Equities extends RecyclerView.Adapter<Adapter_Main_Equ
 
             if ("Stock_Winner".equals(type_and_case)){
                 holder.number.setText((1+position)+".");
+                if (stock_win_symbollist.size()>0){
                 holder.symbol.setText(""+stock_win_symbollist.get(position));
-                holder.circle.setImageResource(R.drawable.holder_green_circle);
-                holder.name.setText(""+stock_win_namelist.get(position));
-                holder.value.setText(""+stock_win_changelist.get(position));
-                holder.value.setTextColor(Color.parseColor("#00cc00"));
-                holder.changes.setVisibility(View.GONE);
-                holder.types.setText("Stock");
+                    holder.circle.setImageResource(R.drawable.holder_green_circle);
+                    holder.name.setText(""+stock_win_namelist.get(position));
+                    holder.value.setText(""+stock_win_changelist.get(position));
+                    holder.value.setTextColor(Color.parseColor("#00cc00"));
+                    holder.cPrice.setText("$ "+stock_win_pricelist.get(position));
+                    holder.types.setText("Stock");}else{
+                holder.symbol.setText("Weak Signal");
+                    holder.circle.setImageResource(R.drawable.holder_green_circle);
+                    holder.name.setText("Weak Signal");
+                    holder.value.setText("Weak Signal");
+                    holder.value.setTextColor(Color.parseColor("#00cc00"));
+                    holder.cPrice.setVisibility(View.GONE);
+                    holder.types.setText("Stock");}
+
             }
             if ("Stock_Loser".equals(type_and_case)){
                 holder.number.setText((1+position)+".");
@@ -93,7 +102,7 @@ public class Adapter_Main_Equities extends RecyclerView.Adapter<Adapter_Main_Equ
                 holder.value.setText(""+stock_losers_changelist.get(position));
                 holder.value.setTextColor(Color.parseColor("#ff0000"));
                 holder.types.setText("Stock");
-                holder.changes.setVisibility(View.GONE);
+                holder.cPrice.setVisibility(View.GONE);
             }
             if ("Stock_Kings".equals(type_and_case)){
                 holder.number.setText((1+position)+".");
@@ -109,18 +118,18 @@ public class Adapter_Main_Equities extends RecyclerView.Adapter<Adapter_Main_Equ
                 holder.circle.setImageResource(R.drawable.holder_green_circle);
             }
                              holder.types.setText("Stock");
-                holder.changes.setText(""+stock_kings_changelist.get(position));
+                holder.cPrice.setText(""+stock_kings_changelist.get(position));
             }
 
             if ("Crypto_Winner".equals(type_and_case)){
                 holder.number.setText((1+position)+".");
                 holder.symbol.setText(""+crypto_winners_symbollist.get(position));
                 holder.name.setText(""+crypto_winners_namelist.get(position));
+                holder.cPrice.setText(""+crypto_win_pricelist.get(position));
                 holder.circle.setImageResource(R.drawable.holder_green_circle);
                 holder.value.setText("+"+crypto_winners_changelist.get(position));
                 holder.value.setTextColor(Color.parseColor("#00cc00"));
-                holder.types.setText("Cryptocurrency");
-                holder.changes.setVisibility(View.GONE);}
+                holder.types.setText("Cryptocurrency");}
             if ("Crypto_Loser".equals(type_and_case)){
                 holder.number.setText((1+position)+".");
                 holder.symbol.setText(""+crypto_losers_symbollist.get(position));
@@ -129,12 +138,12 @@ public class Adapter_Main_Equities extends RecyclerView.Adapter<Adapter_Main_Equ
                 holder.value.setText(""+crypto_losers_changelist.get(position));
                 holder.value.setTextColor(Color.parseColor("#ff0000"));
                 holder.types.setText("Cryptocurrency");
-                holder.changes.setVisibility(View.GONE);}
+                holder.cPrice.setText(""+crypto_losers_pricelist.get(position));}
             if (("Crypto_Kings".equals(type_and_case))){
                 holder.number.setText((1+position)+".");
                 holder.symbol.setText(""+crypto_kings_symbolist.get(position));
                 holder.name.setText(""+crypto_kings_namelist.get(position));
-
+                holder.cPrice.setText("$"+crypto_kings_pricelist.get(position));
                 String poo= String.valueOf(crypto_kings_changelist.get(position));
                 if(poo.contains("-")){
                     holder.circle.setImageResource(R.drawable.holder_red_circle);
@@ -144,7 +153,7 @@ public class Adapter_Main_Equities extends RecyclerView.Adapter<Adapter_Main_Equ
                     holder.circle.setImageResource(R.drawable.holder_green_circle);
                 }
                 holder.value.setText(""+crypto_kings_changelist.get(position)+"%");
-                holder.changes.setText(""+crypto_kings_marketcaplist.get(position));
+                holder.cPrice.setText(""+crypto_kings_marketcaplist.get(position));
                 //if (crypto_kings_changelist.get(position)>0){
                 //    holder.circle.setImageResource(R.drawable.holder_green_circle);
                 //holder.value.setTextColor(Color.parseColor("#00ff00"));

@@ -16,6 +16,7 @@
         android:hardwareAccelerated="true"
         android:largeHeap="true"
         android:supportsRtl="true"
+        android:usesCleartextTraffic="true"
         android:theme="@style/AppTheme">
         <!-- Sample AdMob App ID: ca-app-pub-3940256099942544~3347511713 -->
         <!-- Real App Id: ca-app-pub-6566728316210720~7103498314 -->
@@ -34,7 +35,7 @@
             </intent-filter>
         </activity>
         <activity android:name="equities.com.myapplication.Activity_Web_View"/>
-        <activity android:name="com.amazon.device.ads.AdActivity" android:configChanges="keyboardHidden|orientation|screenSize"/>
+        <!--activity android:name="com.amazon.device.ads.AdActivity" android:configChanges="keyboardHidden|orientation|screenSize"-->
 
     </application>
 

@@ -39,7 +39,7 @@ public class Adapter_Main_Markets extends RecyclerView.Adapter<Adapter_Main_Mark
             super(itemView);
             mIdView = itemView.findViewById(R.id.symbol);
             mPriceView = itemView.findViewById(R.id.name);
-            mChangeView = itemView.findViewById(R.id.changes);
+            mChangeView = itemView.findViewById(R.id.cPrice);
             circle=itemView.findViewById(R.id.circle);
 
 

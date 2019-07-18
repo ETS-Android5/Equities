@@ -32,19 +32,95 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import static equities.com.myapplication.Constructor_App_Variables.*;
-import static equities.com.myapplication.Service_Main_Equities.stock_kings_changelist;
-import static equities.com.myapplication.Service_Main_Equities.stock_kings_namelist;
-import static equities.com.myapplication.Service_Main_Equities.stock_kings_symbollist;
+import static equities.com.myapplication.Service_Main_Equities.*;
 
 public class Test_Methods {
     static ArrayList exchange_url = new ArrayList<>();
     static ArrayList exchange_name = new ArrayList<>();
     private static Context mContext;
     static String cryptopia_list;
+    static Document sss =null;
 
     public static void main(String[] args) {
-        getTESTSavedEquities();
+        getCrypto_Winners_Losers();
        }
+
+    public static void getStock_Winners_Losers() {
+        try {
+            sss = Jsoup.connect("https://money.cnn.com/data/hotstocks/").timeout(10 * 10000).get();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Elements ddd = sss.getElementsByClass("wsod_dataTable wsod_dataTableBigAlt");
+        Element ff = ddd.get(1);
+        Elements a = ff.select("a");
+        Elements b = ff.select("span[title]");
+        Elements aa = ff.select("span.posData");
+        Elements bb = ff.select("span[stream]");
+        for (Element stock_symbol : a) {
+            String symbol = stock_symbol.select("a.wsod_symbol").text();
+            stock_win_symbollist.add(symbol);
+        }
+        for (Element stock_name : b) {
+            String name = stock_name.text();
+            if (name.isEmpty()) {
+            } else {
+                stock_win_namelist.add(name);
+            }
+        }
+        for (Element stock_price : bb) {
+            String price = stock_price.text();
+            if (price.isEmpty()) {
+            } else {
+                stock_win_pricelist.add(price);
+                System.out.println(price);
+            }
+        }
+        for (Element stock_change : aa) {
+            String change = stock_change.text();
+            if (change.isEmpty()) {
+            } else {
+                if (change.contains("%")) {
+                    stock_win_changelist.add(change);
+                }
+
+            }
+
+        }
+//STOCK LOSERS ARRAYS
+        Element fl = ddd.get(2);
+        Elements al = fl.select("a");
+        Elements bl = fl.select("span[title]");
+        Elements aal = fl.select("span.negData");
+        Elements bb1 = fl.select("span[stream]");
+        for (Element x : al) {
+            stock_losers_symbollist.add(x.text());
+        }
+        for (Element x : bl) {
+            stock_losers_namelist.add(x.text());
+        }
+        for (Element stock_price : bb1) {
+            String price = stock_price.text();
+            if (price.isEmpty()) {
+            } else {
+                stock_losers_pricelist.add(price);
+                //System.out.println(price);
+            }
+        }
+        for (int i = 0; i < aal.size(); i++) {
+            if (i % 2 == 0) {
+                // This is point amount
+            } else {
+                stock_losers_changelist.add(aal.get(i).text());
+            }
+        }
+        System.out.println("THIS IS LIST SIZE " +stock_losers_symbollist
+                .size());
+        if (stock_win_symbollist.size()>0 && stock_losers_symbollist.size()>0){
+
+        }else{getStock_Winners_Losers();}
+    }
 
     public static void get_stock_kings_points() {
 
@@ -159,10 +235,6 @@ public class Test_Methods {
                     current_percentage_change.add(f);
 System.out.println(f);
                 }
-
-
-
-
 
     public static void get_stock_points2() {
         //("Get stock points called");
@@ -748,5 +820,51 @@ System.out.println(f);
     }
 
 
+    public static void getCrypto_Winners_Losers() {
+        try {
+            stock_data = Jsoup.connect("https://coinmarketcap.com/gainers-losers/").timeout(10 * 10000).get();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Elements ffsd = stock_data.getElementsByClass("table-responsive");
+        Elements tr = stock_data.select("div#losers-24h");
+        Elements lose1 = tr.select("td.text-left");
+        Elements lose2 = tr.select("td[data-sort]");
+        Elements links = tr.select("a.price");
+        Element link = links.first();
+        for(Element x : links){
+        String url = x.attr("data-usd");
+        System.out.println("url = " + url);}
+
+        for (Element s : lose1) {
+            crypto_losers_symbollist.add(s.text());
+        }
+        for (int i = 0; i < lose2.size(); i++) {
+            if (i % 2 == 0) {
+                crypto_losers_namelist.add(lose2.get(i).text());
+            } else {
+                crypto_losers_changelist.add(lose2.get(i).text());
+            }
+        }
+//CRYPTO WINNERS ARRAYS
+        Element l = ffsd.get(2);
+        Elements xx = l.select("tbody");
+        Elements xxxd = xx.select("td[data-usd]");//Get's percentage change
+        Elements ax = xx.select("tr");
+        Elements name_change = xx.select("img[src]");
+        for (Element crypto_symbol : ax) {
+            String symbol = crypto_symbol.select("td.text-left").text();
+            crypto_winners_symbollist.add(symbol);
+        }
+        for (Element crypto_name : name_change) {
+            String name = crypto_name.attr("alt");
+            crypto_winners_namelist.add(name);
+        }
+        for (Element crypto_change : xxxd) {
+            crypto_winners_changelist.add(crypto_change.text());
+        }
+
+    }
 
 }

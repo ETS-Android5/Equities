@@ -7,13 +7,12 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.Patterns;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -94,6 +93,7 @@ public class Activity_Main extends AppCompatActivity {
     static Adapter_Main_Markets adapter;
     static RecyclerView.LayoutManager l;
     static InterstitialAd mInterstitialAd;
+    private SwipeRefreshLayout swipe_container;
 
     public static String AssetJSONFile(String filename, Context context) throws IOException {
         AssetManager manager = context.getAssets();
@@ -183,6 +183,7 @@ public class Activity_Main extends AppCompatActivity {
     protected void setMainPage() {
         setContentView(R.layout.activity_main);
         setJSON_INFO();
+
         toolbar = findViewById(R.id.toolbar);
         progLayout=findViewById(R.id.progLayout);
         openSearchView();
@@ -193,17 +194,17 @@ public class Activity_Main extends AppCompatActivity {
         ViewPager market_pager = findViewById(R.id.market_pager);
         market_pager.setVisibility(View.GONE);
 
-        refresh=findViewById(R.id.refresh);
-        refresh.setOnClickListener(new View.OnClickListener() {
+        swipe_container = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
+        swipe_container.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
-            public void onClick(View v) {
-
+            public void onRefresh() {
                 if (pager.getVisibility()==View.VISIBLE){
                     starterup();
                 }
                 if (market_pager.getVisibility()==View.VISIBLE){
                     new AsyncChosenData(Activity_Main.this).execute();
                 }
+                swipe_container.setRefreshing(false);
             }
         });
 
@@ -930,8 +931,6 @@ System.out.println("CHOSEN VCRYPTO HAS BEEN CALLED");
         ArrayList c = check_saved.getType();
         for( int x=0;x<b.size();x++) {
             Document cap = null;
-            System.out.println("THIS IS WHAT CX EQUASLS "+ c.get(x));
-
             if (c.get(x).equals("Stock")||c.get(x).equals("Index")) {
                 get_saved_stock_price_change(""+check_saved.getSymbol().get(x));
             } else {

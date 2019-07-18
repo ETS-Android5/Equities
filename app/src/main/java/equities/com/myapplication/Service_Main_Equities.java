@@ -53,26 +53,27 @@ public class Service_Main_Equities {
 
     public Service_Main_Equities() {
     }
-    static Database_Local_Aequities co =new Database_Local_Aequities(ApplicationContextProvider.getContext());
-
     static Document sss = null;
     static Document sv = null;
     static Document z = null;
-    static Document bb;
     static Document stock_data;
-    static Document crypto_data;
     static ArrayList stock_kings_symbollist = new ArrayList();
     static ArrayList stock_kings_namelist = new ArrayList();
     static ArrayList stock_kings_ipdown = new ArrayList();
     static ArrayList stock_kings_changelist = new ArrayList();
     static ArrayList stock_win_symbollist = new ArrayList();
+    static ArrayList stock_win_pricelist = new ArrayList();
+    static ArrayList stock_losers_pricelist = new ArrayList();
+    static ArrayList stock_kings_pricelist = new ArrayList();
+    static ArrayList crypto_win_pricelist = new ArrayList();
+    static ArrayList crypto_losers_pricelist = new ArrayList();
+    static ArrayList crypto_kings_pricelist = new ArrayList();
+
     static ArrayList stock_win_namelist = new ArrayList();
     static ArrayList stock_win_changelist = new ArrayList();
     static ArrayList stock_losers_symbollist = new ArrayList();
     static ArrayList stock_losers_namelist = new ArrayList();
     static ArrayList stock_losers_changelist = new ArrayList();
-    public static ArrayList crypto_volume_namelist = new ArrayList();
-    public static ArrayList crypto_volume_volumelist = new ArrayList();
     static ArrayList crypto_winners_changelist = new ArrayList();
     static ArrayList crypto_winners_namelist = new ArrayList();
     static ArrayList crypto_winners_symbollist = new ArrayList();
@@ -86,6 +87,7 @@ public class Service_Main_Equities {
 
     static String repo;
     public static void main() {
+        clearMainData();
         ExecutorService service = Executors.newCachedThreadPool();
         Set<Callable<String>> callables = new HashSet<Callable<String>>();
 
@@ -200,14 +202,13 @@ public class Service_Main_Equities {
         RequestQueue requestQueue = Volley.newRequestQueue(ApplicationContextProvider.getContext());
         final String url = "https://api.coinmarketcap.com/v2/ticker/?sort=rank";
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
-
-
             @Override
             public void onResponse(JSONObject response) {
                 try {
                     JSONObject obj = response.getJSONObject("data");
                     JSONArray keys = obj.names ();
                     String market_cap = null;
+                    String price =null;
                     for (int i = 0; i < keys.length (); ++i) {
                         String key = keys.getString (i); // Here's your key
                         String value = obj.getString (key);// Here's your value
@@ -226,13 +227,18 @@ public class Service_Main_Equities {
                             String valuez = quotes.getString (keyz);
                             JSONObject jzO = new JSONObject(valuez);
                             market_cap= jzO.getString("market_cap");
+                            price =jzO.getString("price");
                             DecimalFormat df = new DecimalFormat("0.00");
                             df.setMaximumFractionDigits(2);
                             String p =market_cap;
+                            String pr =price;
                             double d = Double.parseDouble(p);
+                            double dr = Double.parseDouble(pr);
                             p =df.format(d);
+                            pr =df.format(dr);
                             int l =p.length();
                             long t = 1000000000000L;
+                            crypto_kings_pricelist.add(pr);
                             if (l<=12){
                                 p= String.valueOf(d/1000000);
                                 crypto_kings_marketcaplist.add(p.substring(0,3)+" M");}
@@ -279,6 +285,7 @@ public class Service_Main_Equities {
         Elements a = ff.select("a");
         Elements b = ff.select("span[title]");
         Elements aa = ff.select("span.posData");
+        Elements bb = ff.select("span[stream]");
         for (Element stock_symbol : a) {
             String symbol = stock_symbol.select("a.wsod_symbol").text();
             stock_win_symbollist.add(symbol);
@@ -290,6 +297,16 @@ public class Service_Main_Equities {
                 stock_win_namelist.add(name);
             }
         }
+        for (Element stock_price : bb) {
+            String price = stock_price.text();
+            if (price.isEmpty()) {
+            } else {
+                if (price.contains("+")||price.contains("-")||price.contains("%")) {
+                }else{
+                    stock_win_pricelist.add(price);}
+            }
+
+        }
         for (Element stock_change : aa) {
             String change = stock_change.text();
             if (change.isEmpty()) {
@@ -299,6 +316,7 @@ public class Service_Main_Equities {
                 }
 
             }
+
         }
 //STOCK LOSERS ARRAYS
         Element fl = ddd.get(2);
@@ -318,7 +336,11 @@ public class Service_Main_Equities {
                 stock_losers_changelist.add(aal.get(i).text());
             }
         }
+        System.out.println("THIS IS LIST SIZE " +stock_losers_symbollist
+                .size());
+    if (stock_win_symbollist.size()>0 && stock_losers_symbollist.size()>0){
 
+    }else{getStock_Winners_Losers();}
     }
 
     private static void ProcessXml(org.w3c.dom.Document data) {
@@ -435,7 +457,6 @@ public class Service_Main_Equities {
 
     }
 
-    //7
     public static void getCrypto_Winners_Losers() {
         try {
 
@@ -449,9 +470,17 @@ public class Service_Main_Equities {
         Elements tr = stock_data.select("div#losers-24h");
         Elements lose1 = tr.select("td.text-left");
         Elements lose2 = tr.select("td[data-sort]");
+
         for (Element s : lose1) {
             crypto_losers_symbollist.add(s.text());
         }
+        Elements links = tr.select("a.price");
+        for(Element x : links){
+            String url = x.attr("data-usd");
+            Double d =Double.parseDouble(url);
+            DecimalFormat df = new DecimalFormat("#.##");
+            df.format(d);
+            crypto_losers_pricelist.add("$ "+d);}
         for (int i = 0; i < lose2.size(); i++) {
             if (i % 2 == 0) {
                 crypto_losers_namelist.add(lose2.get(i).text());
@@ -459,7 +488,6 @@ public class Service_Main_Equities {
                 crypto_losers_changelist.add(lose2.get(i).text());
             }
         }
-//CRYPTO WINNERS ARRAYS
         Element l = ffsd.get(2);
         Elements xx = l.select("tbody");
         Elements xxxd = xx.select("td[data-usd]");//Get's percentage change
@@ -469,6 +497,13 @@ public class Service_Main_Equities {
             String symbol = crypto_symbol.select("td.text-left").text();
             crypto_winners_symbollist.add(symbol);
         }
+        Elements link = tr.select("a.price");
+        for(Element x : link){
+            String url = x.attr("data-usd");
+            Double d =Double.parseDouble(url);
+            DecimalFormat df = new DecimalFormat("#.##");
+            df.format(d);
+            crypto_win_pricelist.add("$ "+d);}
         for (Element crypto_name : name_change) {
             String name = crypto_name.attr("alt");
             crypto_winners_namelist.add(name);
@@ -478,21 +513,6 @@ public class Service_Main_Equities {
         }
 
     }
-
-
-    public void getSaved_Crypto_Price() {
-
-        Database_Local_Aequities db = new Database_Local_Aequities(myContext);
-        db.getName();
-        for (int i = 0; i <= db.getName().size(); i++) {
-            try {
-                bb = Jsoup.connect("https://coinmarketcap.com/currencies/" + db.getName().get(i)).timeout(10 * 10000).get();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
 
     public static void getStock_Kings() {
         Document sv = null;
@@ -528,8 +548,6 @@ public class Service_Main_Equities {
         }
 
     }
-
-
 
     public static void get_masternodes(){
         Document m =null;
@@ -646,7 +664,6 @@ public class Service_Main_Equities {
         }
     }
 
-
     public static void get_ipos(){
         Document d =null;
         try {
@@ -734,6 +751,27 @@ public class Service_Main_Equities {
         nikk_amount=dt.select("td").get(33).text();
 
     }
+    private static void clearMainData(){
+        stock_kings_symbollist.clear();
+        stock_kings_namelist.clear();
+          stock_kings_ipdown.clear();
+          stock_kings_changelist.clear();
+          stock_win_symbollist.clear();
+          stock_win_namelist.clear();
+          stock_win_changelist.clear();
+          stock_losers_symbollist.clear();
+          stock_losers_namelist.clear();
+          stock_losers_changelist.clear();
+          crypto_winners_changelist.clear();
+          crypto_winners_namelist.clear();
+          crypto_winners_symbollist.clear();
+          crypto_losers_changelist.clear();
+          crypto_losers_namelist.clear();
+          crypto_losers_symbollist.clear();
+          crypto_kings_symbolist.clear();
+          crypto_kings_namelist.clear();
+          crypto_kings_marketcaplist.clear();
+          crypto_kings_changelist.clear();}
     }
 
 

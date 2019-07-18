@@ -86,7 +86,7 @@ public class Adapter_Icos_Feed extends RecyclerView.Adapter<Adapter_Icos_Feed.My
              @Override
              public void onClick(View view) {
 
-                 Snackbar sb = Snackbar.make(view, "Searching for "+name.getText().toString()+" website...", Snackbar.LENGTH_LONG);
+                 Snackbar sb = Snackbar.make(view, "Searching for "+name.getText().toString()+" website...", Snackbar.LENGTH_INDEFINITE);
                  //sb.setActionTextColor(context.getResources().getColor(R.color.darkTextColor2));
                  View sbView = sb.getView();
                  sbView.setBackgroundColor(context.getResources().getColor(R.color.colorBlack));

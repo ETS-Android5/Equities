@@ -88,7 +88,7 @@
                     android:textSize="22sp" />
 
                 <TextView
-                    android:id="@+id/changes"
+                    android:id="@+id/cPrice"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight=".9"
