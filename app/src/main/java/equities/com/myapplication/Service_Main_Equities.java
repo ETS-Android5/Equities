@@ -23,6 +23,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.invoke.MethodHandle;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.DateFormat;
@@ -56,7 +57,7 @@ public class Service_Main_Equities {
     static Document sss = null;
     static Document sv = null;
     static Document z = null;
-    static Document stock_data;
+    static Document crypto_data;
     static ArrayList stock_kings_symbollist = new ArrayList();
     static ArrayList stock_kings_namelist = new ArrayList();
     static ArrayList stock_kings_ipdown = new ArrayList();
@@ -198,6 +199,73 @@ public class Service_Main_Equities {
         }
     }
 
+    public static void getCryptoData(){
+        //Scrape data and if any Array is 0 use API as backup
+        try {
+            crypto_data = Jsoup.connect("https://coinmarketcap.com/gainers-losers/").timeout(10 * 10000).get();
+        } catch (IOException e) {
+            //Use alternative method
+            e.printStackTrace();
+        }
+        Elements losers_table = crypto_data.getElementsByClass("table-responsive");
+        Elements losers = crypto_data.select("div#losers-24h");
+        Elements loser_symbol = losers.select("td.text-left");
+        Elements loser_name_change = losers.select("td[data-sort]");
+        for (Element s : loser_symbol) {
+            crypto_losers_symbollist.add(s.text());
+        }
+        CryptoArrayEmptyCheck(crypto_losers_symbollist);
+        Elements price = losers.select("a.price");
+        for(Element x : price){
+            String url = x.attr("data-usd");
+            Double d =Double.parseDouble(url);
+            DecimalFormat df = new DecimalFormat("#.##");
+            df.format(d);
+            crypto_losers_pricelist.add("$ "+d);}
+        for (int i = 0; i < loser_name_change.size(); i++) {
+            if (i % 2 == 0) {
+                crypto_losers_namelist.add(loser_name_change.get(i).text());
+            } else {
+                crypto_losers_changelist.add(loser_name_change.get(i).text());
+            }
+        }
+        Element winners_table = losers_table.get(2);
+        Elements tbody = winners_table.select("tbody");
+        Elements winners = crypto_data.select("div#gainers-24h");
+        Elements winner_change = tbody.select("td[data-usd]");//Get's percentage change
+        Elements winner_symbol = tbody.select("tr");
+        Elements winner_name = tbody.select("img[src]");
+        for (Element crypto_symbol : winner_symbol) {
+            String symbol = crypto_symbol.select("td.text-left").text();
+            crypto_winners_symbollist.add(symbol);
+        }
+        Elements link = winners.select("a.price");
+        for(Element x : link){
+            String url = x.attr("data-usd");
+            Double d =Double.parseDouble(url);
+            DecimalFormat df = new DecimalFormat("#.##");
+            df.format(d);
+            crypto_win_pricelist.add("$ "+d);}
+        for (Element crypto_name : winner_name) {
+            String name = crypto_name.attr("alt");
+            crypto_winners_namelist.add(name);
+        }
+        for (Element crypto_change : winner_change) {
+            crypto_winners_changelist.add(crypto_change.text());
+        }
+
+         if(crypto_losers_symbollist.size()==0||crypto_losers_namelist.size()==0){
+             //Use alternative method
+         }
+
+    }
+
+
+    public static void CryptoArrayEmptyCheck(ArrayList array){
+        if (array.size()==0){
+
+        }else{System.out.println(array+" is not returning 0");}
+    }
     public static void getCrypto_Kings() {
         RequestQueue requestQueue = Volley.newRequestQueue(ApplicationContextProvider.getContext());
         final String url = "https://api.coinmarketcap.com/v2/ticker/?sort=rank";
@@ -461,13 +529,13 @@ public class Service_Main_Equities {
         try {
 
 
-            stock_data = Jsoup.connect("https://coinmarketcap.com/gainers-losers/").timeout(10 * 10000).get();
+            crypto_data = Jsoup.connect("https://coinmarketcap.com/gainers-losers/").timeout(10 * 10000).get();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        Elements ffsd = stock_data.getElementsByClass("table-responsive");
-        Elements tr = stock_data.select("div#losers-24h");
+        Elements ffsd = crypto_data.getElementsByClass("table-responsive");
+        Elements tr = crypto_data.select("div#losers-24h");
         Elements lose1 = tr.select("td.text-left");
         Elements lose2 = tr.select("td[data-sort]");
 

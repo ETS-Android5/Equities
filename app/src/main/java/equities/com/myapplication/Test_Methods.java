@@ -3,9 +3,6 @@ package equities.com.myapplication;
 import android.content.Context;
 
 
-import com.jjoe64.graphview.series.DataPoint;
-import com.jjoe64.graphview.series.LineGraphSeries;
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -15,14 +12,16 @@ import org.w3c.dom.NodeList;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.invoke.MethodHandle;
+import java.lang.reflect.Array;
+import java.lang.reflect.Method;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -33,6 +32,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import static equities.com.myapplication.Constructor_App_Variables.*;
 import static equities.com.myapplication.Service_Main_Equities.*;
+import static equities.com.myapplication.Service_Main_Equities.crypto_losers_changelist;
 
 public class Test_Methods {
     static ArrayList exchange_url = new ArrayList<>();
@@ -42,9 +42,73 @@ public class Test_Methods {
     static Document sss =null;
 
     public static void main(String[] args) {
-        getCrypto_Winners_Losers();
+        getCryptoData();
        }
 
+    public static void getCryptoData(){
+        //Scrape data and if any Array is 0 use API as backup
+        try {
+            crypto_data = Jsoup.connect("https://coinmarketcap.com/gainers-losers/").timeout(10 * 10000).get();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Elements losers_table = crypto_data.getElementsByClass("table-responsive");
+        Elements losers = crypto_data.select("div#losers-24h");
+        Elements loser_symbol = losers.select("td.text-left");
+        Elements loser_name_change = losers.select("td[data-sort]");
+        for (Element s : loser_symbol) {
+            crypto_losers_symbollist.add(s.text());
+        }
+        Elements price = losers.select("a.price");
+        for(Element x : price){
+            String url = x.attr("data-usd");
+            Double d =Double.parseDouble(url);
+            DecimalFormat df = new DecimalFormat("#.##");
+            df.format(d);
+            crypto_losers_pricelist.add("$ "+d);}
+        for (int i = 0; i < loser_name_change.size(); i++) {
+            if (i % 2 == 0) {
+                crypto_losers_namelist.add(loser_name_change.get(i).text());
+            } else {
+                crypto_losers_changelist.add(loser_name_change.get(i).text());
+            }
+        }
+        Element winners_table = losers_table.get(2);
+        Elements tbody = winners_table.select("tbody");
+        Elements winners = crypto_data.select("div#gainers-24h");
+        Elements winner_change = tbody.select("td[data-usd]");//Get's percentage change
+        Elements winner_symbol = tbody.select("tr");
+        Elements winner_name = tbody.select("img[src]");
+        for (Element crypto_symbol : winner_symbol) {
+            String symbol = crypto_symbol.select("td.text-left").text();
+            crypto_winners_symbollist.add(symbol);
+        }
+        Elements link = winners.select("a.price");
+        for(Element x : link){
+            String url = x.attr("data-usd");
+            Double d =Double.parseDouble(url);
+            DecimalFormat df = new DecimalFormat("#.##");
+            df.format(d);
+            crypto_win_pricelist.add("$ "+d);}
+        for (Element crypto_name : winner_name) {
+            String name = crypto_name.attr("alt");
+            crypto_winners_namelist.add(name);
+        }
+        for (Element crypto_change : winner_change) {
+            crypto_winners_changelist.add(crypto_change.text());
+        }
+
+
+       System.out.println(crypto_losers_symbollist+" "+crypto_losers_namelist+" "+crypto_losers_pricelist+" "+crypto_losers_changelist);
+
+    }
+
+
+    public static void ArrayNullCheck(ArrayList array, MethodHandle method){
+        if (array.size()==0){
+            //doAlternativeMethod(method);
+        }
+    }
     public static void getStock_Winners_Losers() {
         try {
             sss = Jsoup.connect("https://money.cnn.com/data/hotstocks/").timeout(10 * 10000).get();
@@ -822,13 +886,13 @@ System.out.println(f);
 
     public static void getCrypto_Winners_Losers() {
         try {
-            stock_data = Jsoup.connect("https://coinmarketcap.com/gainers-losers/").timeout(10 * 10000).get();
+            crypto_data = Jsoup.connect("https://coinmarketcap.com/gainers-losers/").timeout(10 * 10000).get();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        Elements ffsd = stock_data.getElementsByClass("table-responsive");
-        Elements tr = stock_data.select("div#losers-24h");
+        Elements ffsd = crypto_data.getElementsByClass("table-responsive");
+        Elements tr = crypto_data.select("div#losers-24h");
         Elements lose1 = tr.select("td.text-left");
         Elements lose2 = tr.select("td[data-sort]");
         Elements links = tr.select("a.price");
