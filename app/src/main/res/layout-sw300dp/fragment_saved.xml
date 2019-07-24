@@ -1,59 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_height="match_parent"
-    android:layout_width="match_parent">
+              android:orientation="vertical"
+              android:layout_height="match_parent"
+              android:layout_width="match_parent">
 
     <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingLeft="3dp"
-        android:paddingRight="3dp">
-
-        <ImageView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:scaleType="fitStart"
-            android:src="@android:drawable/btn_star_big_on" />
+            android:layout_height="wrap_content"
+            android:paddingLeft="3dp"
+            android:paddingRight="3dp">
 
         <android.support.v7.widget.AppCompatTextView
 
-            android:id="@+id/fav"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:background="#00000000"
-            android:gravity="center"
-            android:text="@string/saved"
-            android:textColor="@color/colorPrimary"
-            android:textSize="24sp" />
+                android:id="@+id/fav"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:background="#00000000"
+                android:gravity="center"
+                android:text="@string/saved"
+                android:textColor="@color/colorPrimary"
+                android:textSize="24sp" />
 
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:scaleType="fitEnd"
-            android:src="@android:drawable/btn_star_big_on" />
     </TableRow>
 
     <TextView
-        android:id="@+id/stock_kings_data_provider"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:autoLink="web"
-        android:gravity="center"
-        android:text="@string/stock_kings_data_provider"
-        android:textColor="@color/colorPrimary"
-        android:textColorLink="@color/darkTextColor"
-        android:textSize="10sp"
-        android:visibility="invisible" />
+            android:id="@+id/stock_kings_data_provider"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autoLink="web"
+            android:gravity="center"
+            android:text="@string/stock_kings_data_provider"
+            android:textColor="@color/colorPrimary"
+            android:textColorLink="@color/darkTextColor"
+            android:textSize="12sp"
+            android:visibility="invisible" />
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/saved_feed"
-        android:background="#ffffff"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+            android:id="@+id/saved_feed"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
 
 
 </LinearLayout>

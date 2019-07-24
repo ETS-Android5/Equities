@@ -1,136 +1,106 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
-
-    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#00000000"
         android:orientation="vertical">
 
-        <LinearLayout
+    <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:background="#00000000"
             android:orientation="vertical">
 
-            <TableRow
+        <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingLeft="3dp"
-                android:paddingRight="3dp">
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical">
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:src="@drawable/direction_kings" />
+            <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="3dp"
+                    android:paddingRight="3dp">
 
                 <android.support.v7.widget.AppCompatTextView
 
-                    android:id="@+id/stock"
+                        android:id="@+id/stock"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:background="#00000000"
+                        android:gravity="center"
+
+                        android:text="@string/stock_volume_leaders"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="24sp" />
+
+            </TableRow>
+            <TextView android:id="@+id/stock_kings_data_provider"
+                      android:layout_height="wrap_content"
+                      android:layout_width="match_parent"
+                      android:gravity="center"
+                      android:textColor="@color/colorPrimary"
+                      android:autoLink="web"
+                      android:textColorLink="@color/darkTextColor"
+                      android:text="@string/stock_kings_data_provider" android:textSize="12sp"
+            />
+
+            <android.support.v7.widget.RecyclerView
+                    android:id="@+id/stock_items"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:background="#00000000"
-                    android:gravity="center"
-
-                    android:text="@string/stock_volume_leaders"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="20sp" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-
-                    android:src="@drawable/direction_kings" />
-            </TableRow>
-
-            <TextView
-                android:id="@+id/stock_kings_data_provider"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:autoLink="web"
-                android:gravity="center"
-                android:text="@string/stock_kings_data_provider"
-                android:textColor="@color/colorPrimary"
-                android:textColorLink="@color/darkTextColor"
-                android:textSize="10sp" />
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/stock_items"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="3dp"
-                android:layout_marginRight="3dp"
-                android:layout_weight="1"
-                android:background="#ffffff" />
+            />
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
 
-            android:layout_weight="1"
-            android:orientation="vertical">
+                android:layout_weight="1"
+                android:orientation="vertical">
 
             <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingLeft="3dp"
-                android:paddingRight="3dp">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:src="@drawable/direction_kings" />
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="3dp"
+                    android:paddingRight="3dp">
 
                 <android.support.v7.widget.AppCompatTextView
 
-                    android:id="@+id/crypto"
+                        android:id="@+id/crypto"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:background="#00000000"
+                        android:gravity="center"
+
+                        android:text="@string/crypto_volume_leaders"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="24sp" />
+
+            </TableRow>
+            <TextView android:id="@+id/crypto_kings_data_provider"
+                      android:layout_height="wrap_content"
+                      android:layout_width="match_parent"
+                      android:gravity="center"
+                      android:textColor="@color/colorPrimary"
+                      android:autoLink="web"
+                      android:textColorLink="@color/darkTextColor"
+                      android:text="@string/crypto_kings_data_provider" android:textSize="12sp"
+            />
+
+            <android.support.v7.widget.RecyclerView
+                    android:id="@+id/crypto_items"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:background="#00000000"
-                    android:gravity="center"
-
-                    android:text="@string/crypto_volume_leaders"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="20sp" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-
-                    android:src="@drawable/direction_kings" />
-            </TableRow>
-
-            <TextView
-                android:id="@+id/crypto_kings_data_provider"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:autoLink="web"
-                android:gravity="center"
-                android:text="@string/crypto_kings_data_provider"
-                android:textColor="@color/colorPrimary"
-                android:textColorLink="@color/darkTextColor"
-                android:textSize="10sp" />
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/crypto_items"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="3dp"
-                android:layout_marginRight="3dp"
-                android:layout_weight="1"
-                android:background="#ffffff" />
+            />
         </LinearLayout>
     </LinearLayout>
 

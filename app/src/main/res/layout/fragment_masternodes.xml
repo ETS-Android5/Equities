@@ -25,12 +25,6 @@
                     android:paddingLeft="3dp"
                     android:paddingRight="3dp">
 
-                <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:src="@drawable/direction_masternode"/>
-
                 <android.support.v7.widget.AppCompatTextView
 
                         android:id="@+id/crypto"
@@ -43,135 +37,117 @@
 
                         android:text="@string/masternodes"
                         android:textColor="@color/colorPrimary"
-                        android:textSize="26sp"/>
+                        android:textSize="26sp" />
 
-                <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-
-                        android:src="@drawable/direction_masternode"/>
             </TableRow>
+
+            <TextView
+                    android:id="@+id/masternode_data_provider"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:autoLink="web"
+                    android:gravity="center"
+                    android:text="@string/masternode_data_provider"
+                    android:textColor="@color/colorPrimary"
+                    android:textColorLink="@color/darkTextColor"
+                    android:textSize="12sp" />
 
             <TableRow
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="3dp"
-                    android:layout_marginRight="3dp">
-
-                <TextView
-                    android:id="@+id/number"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1.1"
-                    android:gravity="left|center"
-                    android:singleLine="true"
-                    android:text="#"
-                    android:textColor="@color/colorBlack"
-                    android:textSize="14sp" />
+                    android:layout_margin="5dp">
 
                 <ImageView
-                    android:id="@+id/circle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:scaleType="fitCenter"
-                    app:srcCompat="@drawable/holder_blue_circle" />
+                        android:id="@+id/circle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:scaleType="fitCenter"
+                        app:srcCompat="@drawable/holder_blue_circle"
+                        android:visibility="gone"/>
 
                 <TextView
-                    android:id="@+id/symbol"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="left|center"
-                    android:singleLine="true"
-                    android:text="Sym"
-                    android:textColor="@color/colorBlack"
-                    android:textSize="14sp" />
+                        android:id="@+id/symbol"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="left|center"
+                        android:singleLine="true"
+                        android:text="Sym"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="12sp"/>
 
                 <TextView
-                    android:id="@+id/cPrice"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight=".9"
-                    android:fontFamily="@font/scpro"
-                    android:gravity="center"
-                    android:shadowColor="#ffffff"
-                    android:shadowDx="0"
-                    android:shadowDy="0"
-                    android:shadowRadius="1"
-                    android:singleLine="true"
-                    android:text=" %"
-                    android:textColor="@color/colorBlack"
-                    android:textSize="14sp" />
+                        android:id="@+id/cPrice"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight=".9"
+                        android:fontFamily="@font/scpro"
+                        android:gravity="center"
+                        android:shadowColor="#ffffff"
+                        android:shadowDx="0"
+                        android:shadowDy="0"
+                        android:shadowRadius="1"
+                        android:singleLine="true"
+                        android:text=" %"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="12sp"/>
 
                 <TextView
-                    android:id="@+id/name"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight=".8"
-                    android:gravity="left|center"
-                    android:singleLine="true"
-                    android:text="Name"
-                    android:textColor="@color/colorBlack"
-                    android:textSize="14sp" />
+                        android:id="@+id/name"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight=".8"
+                        android:gravity="left|center"
+                        android:singleLine="true"
+                        android:text="Name"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="12sp"/>
 
                 <TextView
-                    android:id="@+id/count"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="left|center"
-                    android:singleLine="true"
-                    android:text="23160"
-                    android:textColor="@color/colorBlack"
-                    android:textSize="14sp"
-                    android:visibility="gone" />
+                        android:id="@+id/count"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="left|center"
+                        android:singleLine="true"
+                        android:text="23160"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="14sp"
+                        android:visibility="gone"/>
 
                 <TextView
-                    android:id="@+id/cost_to_own"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight=".9"
-                    android:gravity="left|center"
-                    android:singleLine="true"
-                    android:text="Cost"
-                    android:textColor="@color/colorBlack"
-                    android:textSize="14sp" />
+                        android:id="@+id/cost_to_own"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight=".9"
+                        android:gravity="left|center"
+                        android:singleLine="true"
+                        android:text="Cost"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="12sp"/>
 
 
                 <TextView
-                    android:id="@+id/cap"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:fontFamily="@font/scpro"
-                    android:gravity="center|right"
-                    android:shadowColor="#ffffff"
-                    android:shadowDx="0"
-                    android:shadowDy="0"
-                    android:shadowRadius="1"
-                    android:singleLine="true"
-                    android:text="Cap"
-                    android:textColor="@color/colorBlack"
-                    android:textSize="14sp" />
+                        android:id="@+id/cap"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/scpro"
+                        android:gravity="center|right"
+                        android:shadowColor="#ffffff"
+                        android:shadowDx="0"
+                        android:shadowDy="0"
+                        android:shadowRadius="1"
+                        android:singleLine="true"
+                        android:text="Cap"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="12sp"/>
             </TableRow>
-            <TextView android:id="@+id/masternode_data_provider"
-                      android:layout_height="wrap_content"
-                      android:layout_width="match_parent"
-                      android:gravity="center"
-                      android:textColor="@color/colorPrimary"
-                      android:autoLink="web"
-                      android:textColorLink="@color/darkTextColor"
-                      android:text="@string/masternode_data_provider" android:textSize="12sp"
-            />
 
             <android.support.v7.widget.RecyclerView
-                android:id="@+id/masternode_items"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="3dp"
-                android:layout_marginRight="3dp"
-                android:background="#ffffff" />
+                    android:id="@+id/masternode_items"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
         </LinearLayout>
 
 

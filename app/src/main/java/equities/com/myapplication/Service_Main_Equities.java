@@ -1,14 +1,12 @@
 package equities.com.myapplication;
 
 import android.content.Context;
-
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,7 +21,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.invoke.MethodHandle;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.DateFormat;
@@ -39,11 +36,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static equities.com.myapplication.Constructor_App_Variables.*;
-
-//The original version of the core code was found on StackOverflow.com from user flup
-//https://stackoverflow.com/users/1973271/flup
-//https://stackoverflow.com/questions/21670451/how-to-send-multiple-asynchronous-requests-to-different-web-services
-
 
 public class Service_Main_Equities {
     public static Context myContext;
@@ -123,7 +115,7 @@ public class Service_Main_Equities {
             @Override
             public String call() throws Exception {
                 if(saved_helper == 1){}else{
-                getCrypto_Winners_Losers();}
+                getCryptoData();}
                 return null;
             }
         });
@@ -199,72 +191,89 @@ public class Service_Main_Equities {
         }
     }
 
+    public static void toDouble(ArrayList array, String string){
+        Double doub = Double.parseDouble(string);
+        DecimalFormat DollarPlus = new DecimalFormat("#.##");
+        DecimalFormat Between = new DecimalFormat("#.##");
+        DecimalFormat Dimeless = new DecimalFormat(".####");
+
+        if (doub>1){
+            string=DollarPlus.format(doub);
+        }
+        if (doub<.1){
+            string=Dimeless.format(doub);
+
+        }
+        else{
+            //For values between .1 and 1
+            string=Between.format(doub);
+
+        }
+        array.add("$ "+string);
+    }
     public static void getCryptoData(){
         //Scrape data and if any Array is 0 use API as backup
         try {
             crypto_data = Jsoup.connect("https://coinmarketcap.com/gainers-losers/").timeout(10 * 10000).get();
+            Elements losers_table = crypto_data.getElementsByClass("table-responsive");
+            Elements losers = crypto_data.select("div#losers-24h");
+            Elements loser_symbol = losers.select("td.text-left");
+            Elements loser_name_change = losers.select("td[data-sort]");
+            for (Element s : loser_symbol) {
+                crypto_losers_symbollist.add(s.text());
+            }
+            Elements price = losers.select("a.price");
+            for(Element x : price){
+                String url = x.attr("data-usd");
+                toDouble(crypto_losers_pricelist,url);
+            }
+            for (int i = 0; i < loser_name_change.size(); i++) {
+                if (i % 2 == 0) {
+                    crypto_losers_namelist.add(loser_name_change.get(i).text());
+                } else {
+                    crypto_losers_changelist.add(loser_name_change.get(i).text());
+                }
+            }
+            Element winners_table = losers_table.get(2);
+            Elements tbody = winners_table.select("tbody");
+            Elements winners = crypto_data.select("div#gainers-24h");
+            Elements winner_change = tbody.select("td[data-usd]");//Get's percentage change
+            Elements winner_symbol = tbody.select("tr");
+            Elements winner_name = tbody.select("img[src]");
+            for (Element crypto_symbol : winner_symbol) {
+                String symbol = crypto_symbol.select("td.text-left").text();
+                crypto_winners_symbollist.add(symbol);
+            }
+            Elements link = winners.select("a.price");
+            for(Element x : link){
+                String url = x.attr("data-usd");
+                toDouble(crypto_win_pricelist,url);}
+            for (Element crypto_name : winner_name) {
+                String name = crypto_name.attr("alt");
+                crypto_winners_namelist.add(name);
+            }
+            for (Element crypto_change : winner_change) {
+                crypto_winners_changelist.add(crypto_change.text());
+            }
+            crypto_data = Jsoup.connect("").timeout(10*10000).get();
         } catch (IOException e) {
             //Use alternative method
-            e.printStackTrace();
-        }
-        Elements losers_table = crypto_data.getElementsByClass("table-responsive");
-        Elements losers = crypto_data.select("div#losers-24h");
-        Elements loser_symbol = losers.select("td.text-left");
-        Elements loser_name_change = losers.select("td[data-sort]");
-        for (Element s : loser_symbol) {
-            crypto_losers_symbollist.add(s.text());
-        }
-        CryptoArrayEmptyCheck(crypto_losers_symbollist);
-        Elements price = losers.select("a.price");
-        for(Element x : price){
-            String url = x.attr("data-usd");
-            Double d =Double.parseDouble(url);
-            DecimalFormat df = new DecimalFormat("#.##");
-            df.format(d);
-            crypto_losers_pricelist.add("$ "+d);}
-        for (int i = 0; i < loser_name_change.size(); i++) {
-            if (i % 2 == 0) {
-                crypto_losers_namelist.add(loser_name_change.get(i).text());
-            } else {
-                crypto_losers_changelist.add(loser_name_change.get(i).text());
+            try{
+                crypto_data = Jsoup.connect("https://www.coingecko.com/en/coins/trending").timeout(10 * 10000).get();
+                Elements tbody = crypto_data.select("tbody");
+                Elements winner_change = tbody.select("tr");
+                for (int i=0;i<winner_change.size();i++){
+                    String name = winner_change.attr("span");
+                    System.out.println(name);
+                }
+
+                System.out.println(winner_change);}
+            catch (IOException i){
+                //i.printStackTrace();
             }
+            //e.printStackTrace();
+            return;
         }
-        Element winners_table = losers_table.get(2);
-        Elements tbody = winners_table.select("tbody");
-        Elements winners = crypto_data.select("div#gainers-24h");
-        Elements winner_change = tbody.select("td[data-usd]");//Get's percentage change
-        Elements winner_symbol = tbody.select("tr");
-        Elements winner_name = tbody.select("img[src]");
-        for (Element crypto_symbol : winner_symbol) {
-            String symbol = crypto_symbol.select("td.text-left").text();
-            crypto_winners_symbollist.add(symbol);
-        }
-        Elements link = winners.select("a.price");
-        for(Element x : link){
-            String url = x.attr("data-usd");
-            Double d =Double.parseDouble(url);
-            DecimalFormat df = new DecimalFormat("#.##");
-            df.format(d);
-            crypto_win_pricelist.add("$ "+d);}
-        for (Element crypto_name : winner_name) {
-            String name = crypto_name.attr("alt");
-            crypto_winners_namelist.add(name);
-        }
-        for (Element crypto_change : winner_change) {
-            crypto_winners_changelist.add(crypto_change.text());
-        }
-
-         if(crypto_losers_symbollist.size()==0||crypto_losers_namelist.size()==0){
-             //Use alternative method
-         }
-
-    }
-
-
-    public static void CryptoArrayEmptyCheck(ArrayList array){
-        if (array.size()==0){
-
-        }else{System.out.println(array+" is not returning 0");}
     }
     public static void getCrypto_Kings() {
         RequestQueue requestQueue = Volley.newRequestQueue(ApplicationContextProvider.getContext());
@@ -391,11 +400,23 @@ public class Service_Main_Equities {
         Elements al = fl.select("a");
         Elements bl = fl.select("span[title]");
         Elements aal = fl.select("span.negData");
+        Elements bb1 = fl.select("span[stream]");
+
         for (Element x : al) {
             stock_losers_symbollist.add(x.text());
         }
         for (Element x : bl) {
             stock_losers_namelist.add(x.text());
+        }
+        for (Element stock_price : bb1) {
+            String price = stock_price.text();
+            if (price.isEmpty()) {
+            } else {
+                if (price.contains("+")||price.contains("-")||price.contains("%")) {
+                }else{
+                    stock_losers_pricelist.add(price);}
+            }
+
         }
         for (int i = 0; i < aal.size(); i++) {
             if (i % 2 == 0) {
@@ -753,6 +774,7 @@ public class Service_Main_Equities {
     }
 
     public static void getWorldMarkets(){
+        //This method can be improved by iterating td and using arrays of strings instead of individual strings.
         Document us=null;
         try{
             us =Jsoup.connect("https://money.cnn.com/data/world_markets/americas/").timeout(10 *10000).get();

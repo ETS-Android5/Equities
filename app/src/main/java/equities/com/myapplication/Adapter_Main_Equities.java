@@ -99,10 +99,11 @@ public class Adapter_Main_Equities extends RecyclerView.Adapter<Adapter_Main_Equ
                 holder.symbol.setText(""+stock_losers_symbollist.get(position));
                 holder.name.setText(""+stock_losers_namelist.get(position));
                 holder.circle.setImageResource(R.drawable.holder_red_circle);
+                holder.cPrice.setText("$ "+stock_losers_pricelist.get(position));
                 holder.value.setText(""+stock_losers_changelist.get(position));
                 holder.value.setTextColor(Color.parseColor("#ff0000"));
                 holder.types.setText("Stock");
-                holder.cPrice.setVisibility(View.GONE);
+
             }
             if ("Stock_Kings".equals(type_and_case)){
                 holder.number.setText((1+position)+".");

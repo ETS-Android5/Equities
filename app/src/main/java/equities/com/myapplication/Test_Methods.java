@@ -3,6 +3,7 @@ package equities.com.myapplication;
 import android.content.Context;
 
 
+import android.util.Log;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -45,70 +46,98 @@ public class Test_Methods {
         getCryptoData();
        }
 
+
+
+    public static void toDouble(ArrayList array, String string){
+        Double doub = Double.parseDouble(string);
+        DecimalFormat DollarPlus = new DecimalFormat("##.##");
+        DecimalFormat Between = new DecimalFormat(".##");
+        DecimalFormat Dimeless = new DecimalFormat(".####");
+
+        if (doub>1){
+            string=DollarPlus.format(doub);
+        }
+        if (doub<.1){
+            string=Dimeless.format(doub);
+
+        }
+        else{
+            //For values between .1 and 1
+            string=Between.format(doub);
+
+        }
+        array.add(string);
+    }
     public static void getCryptoData(){
         //Scrape data and if any Array is 0 use API as backup
         try {
-            crypto_data = Jsoup.connect("https://coinmarketcap.com/gainers-losers/").timeout(10 * 10000).get();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        Elements losers_table = crypto_data.getElementsByClass("table-responsive");
-        Elements losers = crypto_data.select("div#losers-24h");
-        Elements loser_symbol = losers.select("td.text-left");
-        Elements loser_name_change = losers.select("td[data-sort]");
-        for (Element s : loser_symbol) {
-            crypto_losers_symbollist.add(s.text());
-        }
-        Elements price = losers.select("a.price");
-        for(Element x : price){
-            String url = x.attr("data-usd");
-            Double d =Double.parseDouble(url);
-            DecimalFormat df = new DecimalFormat("#.##");
-            df.format(d);
-            crypto_losers_pricelist.add("$ "+d);}
-        for (int i = 0; i < loser_name_change.size(); i++) {
-            if (i % 2 == 0) {
-                crypto_losers_namelist.add(loser_name_change.get(i).text());
-            } else {
-                crypto_losers_changelist.add(loser_name_change.get(i).text());
+            crypto_data = Jsoup.connect("https://coinmarketcap.com/gaiers-losers/").timeout(10 * 10000).get();
+            Elements losers_table = crypto_data.getElementsByClass("table-responsive");
+            Elements losers = crypto_data.select("div#losers-24h");
+            Elements loser_symbol = losers.select("td.text-left");
+            Elements loser_name_change = losers.select("td[data-sort]");
+            for (Element s : loser_symbol) {
+                crypto_losers_symbollist.add(s.text());
             }
-        }
-        Element winners_table = losers_table.get(2);
-        Elements tbody = winners_table.select("tbody");
-        Elements winners = crypto_data.select("div#gainers-24h");
-        Elements winner_change = tbody.select("td[data-usd]");//Get's percentage change
-        Elements winner_symbol = tbody.select("tr");
-        Elements winner_name = tbody.select("img[src]");
-        for (Element crypto_symbol : winner_symbol) {
-            String symbol = crypto_symbol.select("td.text-left").text();
-            crypto_winners_symbollist.add(symbol);
-        }
-        Elements link = winners.select("a.price");
-        for(Element x : link){
-            String url = x.attr("data-usd");
-            Double d =Double.parseDouble(url);
-            DecimalFormat df = new DecimalFormat("#.##");
-            df.format(d);
-            crypto_win_pricelist.add("$ "+d);}
-        for (Element crypto_name : winner_name) {
-            String name = crypto_name.attr("alt");
-            crypto_winners_namelist.add(name);
-        }
-        for (Element crypto_change : winner_change) {
-            crypto_winners_changelist.add(crypto_change.text());
-        }
+            Elements price = losers.select("a.price");
+            for(Element x : price){
+                String url = x.attr("data-usd");
+                toDouble(crypto_losers_pricelist,url);
+            }
+            for (int i = 0; i < loser_name_change.size(); i++) {
+                if (i % 2 == 0) {
+                    crypto_losers_namelist.add(loser_name_change.get(i).text());
+                } else {
+                    crypto_losers_changelist.add(loser_name_change.get(i).text());
+                }
+            }
+            Element winners_table = losers_table.get(2);
+            Elements tbody = winners_table.select("tbody");
+            Elements winners = crypto_data.select("div#gainers-24h");
+            Elements winner_change = tbody.select("td[data-usd]");//Get's percentage change
+            Elements winner_symbol = tbody.select("tr");
+            Elements winner_name = tbody.select("img[src]");
+            for (Element crypto_symbol : winner_symbol) {
+                String symbol = crypto_symbol.select("td.text-left").text();
+                crypto_winners_symbollist.add(symbol);
+            }
+            Elements link = winners.select("a.price");
+            for(Element x : link){
+                String url = x.attr("data-usd");
+                Double d =Double.parseDouble(url);
+                DecimalFormat df = new DecimalFormat("#.##");
+                df.format(d);
+                crypto_win_pricelist.add("$ "+d);}
+            for (Element crypto_name : winner_name) {
+                String name = crypto_name.attr("alt");
+                crypto_winners_namelist.add(name);
+            }
+            for (Element crypto_change : winner_change) {
+                crypto_winners_changelist.add(crypto_change.text());
+            }
+            //System.out.println(crypto_win_pricelist);
+        } catch (IOException e) {
+            //Use alternative method
+            try{
+                crypto_data = Jsoup.connect("https://www.coingecko.com/en/coins/trending").timeout(10 * 10000).get();
+                Elements tbody = crypto_data.select("tbody");
+                Elements winner_change = tbody.select("tr");
+                for (int i=0;i<winner_change.size();i++){
+                    String name = winner_change.attr("span");
+                    System.out.println(name);
+                }
 
-
-       System.out.println(crypto_losers_symbollist+" "+crypto_losers_namelist+" "+crypto_losers_pricelist+" "+crypto_losers_changelist);
-
+                System.out.println(winner_change);}
+            catch (IOException i){
+                //i.printStackTrace();
+            }
+            //e.printStackTrace();
+            return;
+        }
     }
 
 
-    public static void ArrayNullCheck(ArrayList array, MethodHandle method){
-        if (array.size()==0){
-            //doAlternativeMethod(method);
-        }
-    }
+
     public static void getStock_Winners_Losers() {
         try {
             sss = Jsoup.connect("https://money.cnn.com/data/hotstocks/").timeout(10 * 10000).get();
@@ -911,11 +940,20 @@ System.out.println(f);
                 crypto_losers_changelist.add(lose2.get(i).text());
             }
         }
+        for (int i=0;i<crypto_losers_namelist.size();i++){
+            System.out.println(crypto_losers_namelist.get(i)+" "+crypto_losers_symbollist.get(i)+" "+crypto_losers_changelist.get(i));
+        }
 //CRYPTO WINNERS ARRAYS
         Element l = ffsd.get(2);
         Elements xx = l.select("tbody");
+        Elements ca = crypto_data.select("div#gainers-24h");
         Elements xxxd = xx.select("td[data-usd]");//Get's percentage change
         Elements ax = xx.select("tr");
+        Elements links1 = ca.select("a.price");
+        for(Element x : links1){
+            String url = x.attr("data-usd");
+            System.out.println("win" +
+                    " = " + url);}
         Elements name_change = xx.select("img[src]");
         for (Element crypto_symbol : ax) {
             String symbol = crypto_symbol.select("td.text-left").text();
@@ -929,6 +967,9 @@ System.out.println(f);
             crypto_winners_changelist.add(crypto_change.text());
         }
 
+        for (int i=0;i<crypto_winners_namelist.size();i++){
+       //     System.out.println(crypto_winners_namelist.get(i)+" "+crypto_winners_symbollist.get(i)+" "+crypto_win_pricelist.get(i)+" "+crypto_winners_changelist.get(i));
+        }
     }
 
 }

@@ -1,55 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
-
-    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#00000000"
         android:orientation="vertical">
 
-        <LinearLayout
+    <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:background="#00000000"
             android:orientation="vertical">
 
-            <TableRow
+        <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingLeft="3dp"
-                android:paddingRight="3dp">
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical">
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:src="@drawable/direction_kings" />
+            <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="3dp"
+                    android:paddingRight="3dp">
 
                 <android.support.v7.widget.AppCompatTextView
 
-                    android:id="@+id/stock"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:background="#00000000"
-                    android:gravity="center"
+                        android:id="@+id/stock"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:background="#00000000"
+                        android:gravity="center"
 
-                    android:text="@string/stock_volume_leaders"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="26sp" />
+                        android:text="@string/stock_volume_leaders"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="26sp" />
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-
-                    android:src="@drawable/direction_kings" />
             </TableRow>
             <TextView android:id="@+id/stock_kings_data_provider"
                       android:layout_height="wrap_content"
@@ -62,52 +50,40 @@
             />
 
             <android.support.v7.widget.RecyclerView
-                android:id="@+id/stock_items"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="#ffffff" />
+                    android:id="@+id/stock_items"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+            />
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
 
-            android:layout_weight="1"
-            android:orientation="vertical">
+                android:layout_weight="1"
+                android:orientation="vertical">
 
             <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingLeft="3dp"
-                android:paddingRight="3dp">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:src="@drawable/direction_kings" />
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="3dp"
+                    android:paddingRight="3dp">
 
                 <android.support.v7.widget.AppCompatTextView
 
-                    android:id="@+id/crypto"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:background="#00000000"
-                    android:gravity="center"
+                        android:id="@+id/crypto"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:background="#00000000"
+                        android:gravity="center"
 
-                    android:text="@string/crypto_volume_leaders"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="26sp" />
+                        android:text="@string/crypto_volume_leaders"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="26sp" />
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-
-                    android:src="@drawable/direction_kings" />
             </TableRow>
             <TextView android:id="@+id/crypto_kings_data_provider"
                       android:layout_height="wrap_content"
@@ -120,11 +96,11 @@
             />
 
             <android.support.v7.widget.RecyclerView
-                android:id="@+id/crypto_items"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="#ffffff" />
+                    android:id="@+id/crypto_items"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+            />
         </LinearLayout>
     </LinearLayout>
 

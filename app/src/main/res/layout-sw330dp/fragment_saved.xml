@@ -10,13 +10,6 @@
         android:paddingLeft="3dp"
         android:paddingRight="3dp">
 
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:scaleType="fitStart"
-            android:src="@android:drawable/btn_star_big_on" />
-
         <android.support.v7.widget.AppCompatTextView
 
             android:id="@+id/fav"
@@ -30,12 +23,6 @@
             android:textColor="@color/colorPrimary"
             android:textSize="26sp" />
 
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:scaleType="fitEnd"
-            android:src="@android:drawable/btn_star_big_on" />
     </TableRow>
 
     <TextView
