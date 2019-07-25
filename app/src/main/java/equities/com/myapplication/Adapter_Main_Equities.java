@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.lang.ref.WeakReference;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import static equities.com.myapplication.Activity_Main.ap_info;
@@ -153,8 +154,8 @@ public class Adapter_Main_Equities extends RecyclerView.Adapter<Adapter_Main_Equ
                     holder.value.setTextColor(Color.parseColor("#00cc00"));
                     holder.circle.setImageResource(R.drawable.holder_green_circle);
                 }
-                holder.value.setText(""+crypto_kings_changelist.get(position)+"%");
-                holder.cPrice.setText(""+crypto_kings_marketcaplist.get(position));
+                holder.value.setText(""+crypto_kings_changelist.get(position));
+                //holder.cPrice.setText(""+crypto_kings_marketcaplist.get(position));
                 //if (crypto_kings_changelist.get(position)>0){
                 //    holder.circle.setImageResource(R.drawable.holder_green_circle);
                 //holder.value.setTextColor(Color.parseColor("#00ff00"));

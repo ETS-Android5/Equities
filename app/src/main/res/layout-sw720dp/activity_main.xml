@@ -17,7 +17,10 @@
             android:background="#00000000"
             app:elevation="0dp">
 
-
+        <android.support.v4.widget.SwipeRefreshLayout
+                android:clickable="true" android:id="@+id/swipe_container"
+                android:layout_width="match_parent"
+                android:layout_height="46dp">
         <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
@@ -62,15 +65,9 @@
                         android:src="@drawable/refresh"/>
             </TableRow>
         </android.support.v7.widget.Toolbar>
-
+        </android.support.v4.widget.SwipeRefreshLayout>
 
     </android.support.design.widget.AppBarLayout>
-
-    <android.support.v4.widget.SwipeRefreshLayout
-            android:clickable="true" android:id="@+id/swipe_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
 
 
 
@@ -160,7 +157,6 @@
 
             </TableRow>
         </LinearLayout>
-    </android.support.v4.widget.SwipeRefreshLayout>
 
 
 </LinearLayout>
