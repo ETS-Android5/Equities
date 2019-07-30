@@ -20,7 +20,6 @@ import java.util.Arrays;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import static com.google.android.gms.internal.zzagz.runOnUiThread;
 import static equities.com.myapplication.Constructor_App_Variables.btc_market_cap_amount;
 import static equities.com.myapplication.Constructor_App_Variables.btc_market_cap_change;
 import static equities.com.myapplication.Constructor_App_Variables.cac_amount;
@@ -71,7 +70,7 @@ public class Fragment_Markets extends Fragment {
         return new TimerTask() {
             @Override
             public void run() {
-                runOnUiThread(new Runnable() {
+                getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         Handler handler = new Handler();

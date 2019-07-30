@@ -16,7 +16,6 @@ import android.widget.TextView;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import static com.google.android.gms.internal.zzagz.runOnUiThread;
 import static equities.com.myapplication.Constructor_App_Variables.masternode_feedItems;
 import static equities.com.myapplication.Service_Main_Equities.*;
 import static equities.com.myapplication.Service_Main_Equities.stock_win_changelist;
@@ -36,7 +35,7 @@ public class Fragment_Masternodes extends Fragment {
         return new TimerTask() {
             @Override
             public void run() {
-                runOnUiThread(new Runnable() {
+                getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         Handler handler = new Handler();

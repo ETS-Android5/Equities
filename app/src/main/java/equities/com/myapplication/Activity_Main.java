@@ -27,9 +27,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.InterstitialAd;
-import com.google.android.gms.ads.MobileAds;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -61,6 +58,8 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import static equities.com.myapplication.Constructor_App_Variables.*;
+import static equities.com.myapplication.Service_Main_Equities.crypto_kings_symbolist;
+import static equities.com.myapplication.Service_Main_Equities.lowest_integer;
 
 public class Activity_Main extends AppCompatActivity {
     Database_Local_Aequities check_saved = new Database_Local_Aequities(Activity_Main.this);
@@ -91,7 +90,7 @@ public class Activity_Main extends AppCompatActivity {
     Context context =this;
     static Adapter_Main_Markets adapter;
     static RecyclerView.LayoutManager l;
-    static InterstitialAd mInterstitialAd;
+    //static InterstitialAd mInterstitialAd;
     private SwipeRefreshLayout swipe_container;
     static ViewPager pager;
     public static String AssetJSONFile(String filename, Context context) throws IOException {
@@ -117,10 +116,10 @@ public class Activity_Main extends AppCompatActivity {
     }
 
     public void starterup(){
-        MobileAds.initialize(this, "ca-app-pub-6566728316210720/4471280326");
-        mInterstitialAd = new InterstitialAd(this);
-        mInterstitialAd.setAdUnitId("ca-app-pub-6566728316210720/4471280326");
-        mInterstitialAd.loadAd(new AdRequest.Builder().build());
+        //MobileAds.initialize(this, "ca-app-pub-6566728316210720/4471280326");
+        //mInterstitialAd = new InterstitialAd(this);
+        //mInterstitialAd.setAdUnitId("ca-app-pub-6566728316210720/4471280326");
+        //mInterstitialAd.loadAd(new AdRequest.Builder().build());
         checkInternetConnection();
         get_crypto_exchange_info();
         get_stock_exchange_info();
@@ -140,19 +139,20 @@ public class Activity_Main extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         check_if_first_download();
-        MobileAds.initialize(this, "ca-app-pub-6566728316210720/4471280326");
+        //MobileAds.initialize(this, "ca-app-pub-6566728316210720/4471280326");
     }
 
     public void onBackPressed() {
         ViewPager pager = findViewById(R.id.viewpager);
+
         if (pager.getVisibility()==View.VISIBLE){
-            finish();}else{
-        if(current_percentage_change.size()>0){
-        //current_percentage_change.clear();
+            finish();}else {
+
+                new AsyncChosenData(this).cancel(true);
+                new AsyncForBackPressedSavedData(Activity_Main.this).execute();
+
+
         }
-        new AsyncChosenData(this).cancel(true);
-        new AsyncForBackPressedSavedData(this).execute();
-            }
 
     }
 
@@ -685,7 +685,7 @@ System.out.println("CHOSEN VCRYPTO HAS BEEN CALLED");
                    if(graph_high.get(i)=="null"){
                        graph_high.get(i).toString().replace("null","0.00");
                    }
-                a = new Double(graph_high.get(i).toString().replace(",", "").replace("<","").replace("/",""));
+                a = new Double(graph_high.get(i).toString().replace(",", "").replace("<","").replace("/","").replace("-",""));
             }else{
                 a=0.00;
             }

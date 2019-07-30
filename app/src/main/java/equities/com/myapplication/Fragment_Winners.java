@@ -17,7 +17,6 @@ import android.widget.Toast;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import static com.google.android.gms.internal.zzagz.runOnUiThread;
 import static equities.com.myapplication.Service_Main_Equities.stock_win_changelist;
 import static equities.com.myapplication.Service_Main_Equities.stock_win_namelist;
 import static equities.com.myapplication.Service_Main_Equities.stock_win_symbollist;
@@ -42,7 +41,7 @@ public class Fragment_Winners extends Fragment {
         return new TimerTask() {
             @Override
             public void run() {
-                runOnUiThread(new Runnable() {
+                getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         Handler handler = new Handler();
