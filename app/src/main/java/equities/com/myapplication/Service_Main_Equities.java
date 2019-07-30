@@ -46,6 +46,7 @@ public class Service_Main_Equities {
 
     public Service_Main_Equities() {
     }
+    static Integer[] lowest_integer;
     static Document sss = null;
     static Document sv = null;
     static Document z = null;
@@ -174,8 +175,9 @@ public class Service_Main_Equities {
         callables.add(new Callable<String>() {
             @Override
             public String call() throws Exception {
-                if(saved_helper == 1){}else{
-                get_ipos();}
+                if(saved_helper == 1){}else {
+                    get_ipos();
+                        }
                 return null;
             }
         });
@@ -322,7 +324,7 @@ public class Service_Main_Equities {
                     crypto_kings_marketcaplist.add(cap.substring(0,3)+" B");}
                 if (l>15){cap= String.valueOf(d/ti);
                     crypto_kings_marketcaplist.add(cap.substring(0,3)+" T");}
-                btc_market_cap_change =crypto_kings_changelist.get(0)+"%";
+                btc_market_cap_change =crypto_kings_changelist.get(0)+"";
                 btc_market_cap_amount =(String) crypto_kings_marketcaplist.get(0);
 
                // System.out.println("X "+symbol+" "+name+" "+price+" "+change);
@@ -406,7 +408,7 @@ public class Service_Main_Equities {
                             }
                             btc_market_cap_amount =(String) crypto_kings_marketcaplist.get(0);
                             btc_market_cap_amount =btc_market_cap_amount.replace(" ","");
-                            btc_market_cap_change =crypto_kings_changelist.get(0)+"%";
+                            btc_market_cap_change =crypto_kings_changelist.get(0)+"";
                         } catch (JSONException e) {
                             //SEND A MESSAGE TO THE DEVELOPER AS ALL 3 METHODS HAVE FAILED
                             e.printStackTrace();

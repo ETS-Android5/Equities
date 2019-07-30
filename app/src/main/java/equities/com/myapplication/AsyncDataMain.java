@@ -16,6 +16,8 @@ import android.widget.TextView;
 import java.lang.ref.WeakReference;
 import java.util.Random;
 
+import static equities.com.myapplication.Service_Main_Equities.*;
+
 public class AsyncDataMain extends AsyncTask<Integer, Integer, String> {
 
         private WeakReference<Activity_Main> activityReference;
@@ -88,6 +90,16 @@ public class AsyncDataMain extends AsyncTask<Integer, Integer, String> {
         }
         @Override
         protected void onPostExecute(String result) {
+            int a = stock_win_symbollist.size();
+            int b = stock_losers_symbollist.size();
+            int c = stock_kings_symbollist.size();
+            int d = crypto_winners_symbollist.size();
+            int e = crypto_losers_symbollist.size();
+            int f = crypto_kings_symbolist.size();
+            lowest_integer = new Integer[]{a, b, c, d, e, f};
+            System.out.println("THIS IS LOWEST INTEGER "+lowest_integer[0]
+                    +" THIS IS ARRAYS sizes"+ stock_win_symbollist.size()+" "+stock_losers_symbollist.size()+" "+stock_kings_symbollist.size()+" "+crypto_winners_symbollist.size()+"  "+crypto_losers_symbollist.size()+" "+crypto_kings_symbolist.size());
+
             Activity_Main activity = activityReference.get();
 //          TabLayout t = activity.findViewById(R.id.tabs);
 //          t.setVisibility(View.VISIBLE);

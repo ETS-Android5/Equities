@@ -72,7 +72,6 @@ public class Activity_Main extends AppCompatActivity {
     private static Toolbar toolbar;
     TableRow table_tabs;
     ProgressBar progress;
-    ImageView refresh;
     public static ArrayList<String> searchview_arraylist = new ArrayList<>();
     public static ArrayList<String> aequity_symbol_arraylist = new ArrayList<>();
     public static ArrayList<String> aequity_name_arraylist = new ArrayList<>();
@@ -94,7 +93,7 @@ public class Activity_Main extends AppCompatActivity {
     static RecyclerView.LayoutManager l;
     static InterstitialAd mInterstitialAd;
     private SwipeRefreshLayout swipe_container;
-
+    static ViewPager pager;
     public static String AssetJSONFile(String filename, Context context) throws IOException {
         AssetManager manager = context.getAssets();
         InputStream file = manager.open(filename);
@@ -189,7 +188,7 @@ public class Activity_Main extends AppCompatActivity {
         openSearchView();
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-        ViewPager pager = findViewById(R.id.viewpager);
+        pager = findViewById(R.id.viewpager);
         pager.setVisibility(View.VISIBLE);
         ViewPager market_pager = findViewById(R.id.market_pager);
         market_pager.setVisibility(View.GONE);
@@ -235,11 +234,13 @@ public class Activity_Main extends AppCompatActivity {
         adapter.addFrag(new Fragment_Icos(),getString(R.string.ico));
         adapter.addFrag(new Fragment_Ipos(),getString(R.string.ipo));
         viewPager.setAdapter(adapter);
+        viewPager.setOffscreenPageLimit(8);
+
     }
 
     public void setupChosenViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        if (ap_info.getMarketType().equals("Index")) {
+        if (ap_info.getMarketType().equals("Index")||ap_info.getMarketType().equals("Stock")) {
             adapter.addFrag(new Fragment_Analysis(), getString(R.string.action_analysis));
             adapter.addFrag(new Fragment_News_Chosen(), getString(R.string.title_news));
             adapter.addFrag(new Fragment_Video(), getString(R.string.title_video));

@@ -92,7 +92,7 @@ public class Adapter_Icos_Feed extends RecyclerView.Adapter<Adapter_Icos_Feed.My
                  sbView.setBackgroundColor(context.getResources().getColor(R.color.colorBlack));
                  TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
                  textView.setTextColor(context.getResources().getColor(R.color.darkTextColor2));
-                 textView.setMaxLines(10);
+                 //textView.setMaxLines(10);
                  sb.show();
                  z=textlink.replace("ICO","").replace(" ","");
                  new getURLS(view).execute();
@@ -167,7 +167,7 @@ public class Adapter_Icos_Feed extends RecyclerView.Adapter<Adapter_Icos_Feed.My
                         sbView.setBackgroundColor(context.getResources().getColor(R.color.colorBlack));
                         TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
                         textView.setTextColor(context.getResources().getColor(R.color.darkTextColor2));
-                        textView.setMaxLines(10);
+                        //textView.setMaxLines(10);
                         sb.show();}//("fail "+URLs.get(i));
                 }}
             return "task finished";

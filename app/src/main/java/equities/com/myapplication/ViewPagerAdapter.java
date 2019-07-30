@@ -3,9 +3,12 @@ package equities.com.myapplication;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.view.View;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static equities.com.myapplication.Activity_Main.pager;
 
 public class ViewPagerAdapter extends FragmentPagerAdapter {
     private final List<Fragment> mFragmentList = new ArrayList<>();
@@ -17,7 +20,51 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
+    if (pager.getVisibility()== View.VISIBLE){
+        System.out.println("PAGER IS VISIBLE" );
+
+        Fragment fragment = null;
+        switch (position) {
+            case 0: {
+                fragment = new Fragment_Markets();
+                break;
+            }
+            case 1: {
+                fragment = new Fragment_Winners();
+                break;
+            }
+            case 2: {
+                fragment = new Fragment_Losers();
+                break;
+            }
+            case 3: {
+                fragment = new Fragment_Market_Kings();
+                break;
+            }
+            case 4: {
+                fragment = new Fragment_App_News();
+                break;
+            }
+            case 5: {
+                fragment = new Fragment_Masternodes();
+                break;
+            }
+            case 6: {
+                fragment = new Fragment_Icos();
+                break;
+            }
+            case 7: {
+                fragment = new Fragment_Ipos();
+                break;
+            }
+
+        }
+
+        return fragment;}else{
+        System.out.println("PAGER IS NOT VISIBLE" );
         return mFragmentList.get(position);
+
+    }
     }
 
     @Override

@@ -101,7 +101,7 @@
                 android:singleLine="true"
                 android:text="Symbol"
                 android:textColor="@color/colorPrimary"
-                android:textSize="14sp"
+                android:textSize="18sp"
         />
 
     </TableRow>

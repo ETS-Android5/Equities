@@ -36,7 +36,7 @@
                 android:id="@+id/number"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1.1"
+                android:layout_weight="1.2"
                 android:gravity="left|center"
                 android:singleLine="true"
                 android:text="#"
@@ -47,7 +47,7 @@
                 android:id="@+id/circle"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                app:srcCompat="@drawable/holder_green_circle" android:visibility="gone"/>
+                app:srcCompat="@drawable/holder_green_circle" />
 
         <TextView
                 android:id="@+id/symbol"
@@ -58,7 +58,8 @@
                 android:singleLine="true"
                 android:text="AAPL"
                 android:textColor="@color/colorPrimary"
-                android:textSize="14sp"/>
+                android:textSize="14sp"
+                android:visibility="gone"/>
 
         <TextView
                 android:id="@+id/name"
@@ -69,7 +70,7 @@
                 android:singleLine="true"
                 android:text="Symbol"
                 android:textColor="@color/colorPrimary"
-                android:textSize="14sp"/>
+                android:textSize="16sp"/>
 
         <TextView
                 android:id="@+id/cPrice"
@@ -84,7 +85,7 @@
                 android:shadowRadius="1"
                 android:singleLine="true"
                 android:textColor="@color/colorPrimary"
-                android:textSize="14sp"
+                android:textSize="16sp"
         />
 
         <TextView
@@ -101,7 +102,7 @@
                 android:singleLine="true"
                 android:text="Symbol"
                 android:textColor="@color/colorPrimary"
-                android:textSize="14sp"
+                android:textSize="18sp"
         />
 
     </TableRow>
