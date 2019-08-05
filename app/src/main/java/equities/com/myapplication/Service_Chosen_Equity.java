@@ -142,6 +142,32 @@ public class Service_Chosen_Equity
 
 
 
+    public static void updatePrice(){
+        Constructor_App_Variables app_info =new Constructor_App_Variables();
+        if(app_info.getMarketType()=="Crypto"||app_info.getMarketType()=="Cryptocurrency"){
+            //get crypto update
+            Document caps = null;
+            String name = app_info.getMarketName();
+            try {
+                caps = Jsoup.connect("https://coinmarketcap.com/currencies/" + name).timeout(10 * 10000).get();
+                Element as = caps.getElementsByClass("details-panel-item--header flex-container").first();
+                Elements e = as.select("span:eq(1)");
+                Elements p = as.select("span:eq(0)");
+
+                String change = e.get(2).text();
+                String price = p.get(1).text();
+                change = change.replaceAll("\\(", "").replaceAll("\\)", "");
+                current_percentage_change.clear();
+                current_updated_price.clear();
+                current_percentage_change.add(change);
+                current_updated_price.add(price);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }else{
+            //getstockupdate
+        }
+    }
     public static void get_stock_points() {
         //("Get stock points called");
         String marname = ap_info.getMarketSymbol();
@@ -157,8 +183,9 @@ public class Service_Chosen_Equity
 
         for(int z =0; z < x.size();z++){
             String text =x.get(z).text();
-            System.out.println("THIS SIS TH ETEXT "+text+" "+x.size());
-            if(text.contains("Split")||text.contains("Dividend")){continue;}else{
+            if(text.contains("Split")||text.contains("Dividend")){
+                continue;
+            }
                 String date =x.get(z).select("td").get(0).text();
                 graph_date.add(date);
                 String close =x.get(z).select("td").get(5).text();
@@ -167,7 +194,9 @@ public class Service_Chosen_Equity
                 graph_volume.add(volume);
                 List<String> numbers = graph_high;
                 //Collections.reverse(numbers);
-                _AllDays = numbers;}}
+                _AllDays = numbers;}
+        System.out.println("THIS IS THE GRAPH YAHOO "+ graph_high.size());
+
         //(graph_high.size());
     }
 

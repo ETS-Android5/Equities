@@ -49,6 +49,7 @@ public class Constructor_App_Variables {
     static ArrayList Smessage=new ArrayList<>();
     static ArrayList Simg_url=new ArrayList<>();
     public static ArrayList current_percentage_change = new ArrayList<>();
+    public static ArrayList current_updated_price = new ArrayList<>();
     public static ArrayList graph_date_today = new ArrayList<>();
     public static ArrayList graph_high_today = new ArrayList<>();
     public static ArrayList graph_volume_today = new ArrayList<>();

@@ -49,6 +49,8 @@ import static equities.com.myapplication.Constructor_App_Variables.shse_name;
 import static equities.com.myapplication.Constructor_App_Variables.sp_amount;
 import static equities.com.myapplication.Constructor_App_Variables.sp_change;
 import static equities.com.myapplication.Constructor_App_Variables.sp_name;
+import static equities.com.myapplication.Service_Main_Equities.*;
+import static equities.com.myapplication.Service_Main_Equities.stock_kings_changelist;
 
 /**
  * Created by Julian Dinkins on 4/25/2018.
@@ -61,11 +63,8 @@ public class Fragment_Markets extends Fragment {
     String[] market_list = new String[]{dow_name, sp_name, bov_name, "Bitcoin",ftse_name,cac_name,dax_name,shse_name,hang_name,nikk_name};
     String[] int_list = new String[]{dow_amount,sp_amount, bov_amount,btc_market_cap_amount,ftse_amount,cac_amount,dax_amount,shse_amount,hang_amount,nikk_amount};
     String[] change_list = new String[]{dow_change,sp_change, bov_change, btc_market_cap_change,ftse_change,cac_change,dax_change,shse_change,hang_change,nikk_change};
-
-
-    Timer mTimer= new Timer();
-    View mView;
-
+    Timer mTimer;
+    int t =0;
     private TimerTask createTimerTask() {
         return new TimerTask() {
             @Override
@@ -76,10 +75,11 @@ public class Fragment_Markets extends Fragment {
                         Handler handler = new Handler();
                         handler.postDelayed(new Runnable() {
                             public void run() {
-                                System.out.print("GETTING NEW DATA");
-                                getNewData();
+                                if(t>0) {
+                                    getNewData();}
+                                t=t+1;
                             }
-                        }, 10000);
+                        }, 0);
                     }
 
                 });
@@ -101,17 +101,17 @@ public class Fragment_Markets extends Fragment {
 
         stock.setTypeface(custom_font);
         stock.setPaintFlags(stock.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
-        mTimer.scheduleAtFixedRate(createTimerTask(),0,10000);
-
+        mTimer = new Timer();
+        mTimer.scheduleAtFixedRate(createTimerTask(),0,15000);
         return rootView;
 
     }
 
     public void getNewData(){
-        new ASYNCUpdate().execute();
+        new ASYNCUpdateMarkets().execute();
 
     }
-    public class ASYNCUpdate extends AsyncTask<Integer, Integer, String> {
+    public class ASYNCUpdateMarkets extends AsyncTask<Integer, Integer, String> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -125,14 +125,21 @@ public class Fragment_Markets extends Fragment {
         }
         @Override
         protected void onPostExecute(String result) {
+            setMarketsUserVisibleHint(true);
+
+        }
+    }
+
+    public void setMarketsUserVisibleHint(boolean isVisibleToUser){
+        super.setUserVisibleHint(isVisibleToUser);
+        if(isVisibleToUser){
             stockitems.removeAllViewsInLayout();
+            stockitems.setAdapter(null);
             adapter.notifyDataSetChanged();
             adapter =new Adapter_Main_Markets(getActivity(),  market_list,int_list,change_list);
             stockitems.setAdapter(adapter);
         }
-    }
-
-
+}
     public void clearMarkets(){
         Arrays.fill(market_list, null);
         Arrays.fill(int_list, null);

@@ -4,7 +4,6 @@ import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,12 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
 import static equities.com.myapplication.Constructor_App_Variables.masternode_feedItems;
-import static equities.com.myapplication.Service_Main_Equities.*;
-import static equities.com.myapplication.Service_Main_Equities.stock_win_changelist;
 
 /**
  * Created by Julian Dinkins on 4/25/2018.
@@ -28,28 +22,6 @@ public class Fragment_Masternodes extends Fragment {
     TextView stock, crypto;
     private RecyclerView masternode_items;
     Adapter_Masternodes_Feed masternodes_adapter;
-
-    Timer mTimer;
-    View mView;
-    private TimerTask createTimerTask() {
-        return new TimerTask() {
-            @Override
-            public void run() {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Handler handler = new Handler();
-                        handler.postDelayed(new Runnable() {
-                            public void run() {
-                                getNewData();
-                            }
-                        }, 10000);
-                    }
-
-                });
-            }
-        };
-    }
 
 
     @Override
@@ -68,8 +40,7 @@ public class Fragment_Masternodes extends Fragment {
         crypto.setTypeface(custom_font);
         //stock.setPaintFlags(stock.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
         crypto.setPaintFlags(crypto.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
-        mTimer = new Timer();
-        mTimer.scheduleAtFixedRate(createTimerTask(),0,30000);
+
         return rootView;
 
     }

@@ -30,7 +30,7 @@ public class Fragment_Market_Kings extends Fragment {
     Adapter_Main_Equities crypto_adapter;
     Adapter_Main_Equities stock_adapter;
     Timer mTimer;
-    View mView;
+    int t =0;
     private TimerTask createTimerTask() {
         return new TimerTask() {
             @Override
@@ -41,9 +41,12 @@ public class Fragment_Market_Kings extends Fragment {
                         Handler handler = new Handler();
                         handler.postDelayed(new Runnable() {
                             public void run() {
-                                getNewData();
+                                if(t>0) {
+                                    getNewData();
+                                    }
+                                t=t+1;
                             }
-                        }, 10000);
+                        }, 0);
                     }
 
                 });
@@ -74,17 +77,16 @@ public class Fragment_Market_Kings extends Fragment {
         stock.setPaintFlags(stock.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
         crypto.setPaintFlags(stock.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
         mTimer = new Timer();
-        mTimer.scheduleAtFixedRate(createTimerTask(),0,10000);
-
+        mTimer.scheduleAtFixedRate(createTimerTask(),0,15000);
 
         return rootView;
 
     }
     public void getNewData(){
-        new ASYNCUpdate().execute();
+        new ASYNCUpdateKings().execute();
 
     }
-    public class ASYNCUpdate extends AsyncTask<Integer, Integer, String> {
+    public class ASYNCUpdateKings extends AsyncTask<Integer, Integer, String> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -93,22 +95,28 @@ public class Fragment_Market_Kings extends Fragment {
         protected String doInBackground(Integer... integers) {
             Service_Main_Equities sme =new Service_Main_Equities();
             sme.clearKingsData();
-            sme.getCrypto_Data();
-            sme.getStock_Data();
+            sme.getMarketKings();
             return null;
         }
         @Override
         protected void onPostExecute(String result) {
-            stockitems.removeAllViewsInLayout();
-            cryptoitems.removeAllViewsInLayout();
+            setKingsUserVisibleHint(true);
+        }
+    }
+    public void setKingsUserVisibleHint(boolean isVisibleToUser){
+        super.setUserVisibleHint(isVisibleToUser);
+        if(isVisibleToUser){
+
+            //stockitems.removeAllViewsInLayout();
+            //
+            // cryptoitems.removeAllViewsInLayout();
             crypto_adapter.notifyDataSetChanged();
             stock_adapter.notifyDataSetChanged();
             crypto_adapter=new Adapter_Main_Equities(getActivity(), "Crypto_Kings",crypto_kings_symbolist,crypto_kings_namelist,crypto_kings_marketcaplist);
             cryptoitems.setAdapter(crypto_adapter);
             stock_adapter=new Adapter_Main_Equities(getActivity(), "Stock_Kings", stock_kings_symbollist,stock_kings_namelist,stock_kings_changelist);
             stockitems.setAdapter(stock_adapter);
-        }
-    }
+        }}
 }
 
 

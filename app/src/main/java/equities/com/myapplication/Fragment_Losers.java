@@ -25,9 +25,8 @@ public class Fragment_Losers extends Fragment {
     private RecyclerView cryptoitems;
     Adapter_Main_Equities crypto_adapter;
     Adapter_Main_Equities stock_adapter;
-
     Timer mTimer;
-    View mView;
+    int t =0;
     private TimerTask createTimerTask() {
         return new TimerTask() {
             @Override
@@ -38,9 +37,31 @@ public class Fragment_Losers extends Fragment {
                         Handler handler = new Handler();
                         handler.postDelayed(new Runnable() {
                             public void run() {
-                                getNewData();
+                                if(t>0) {
+                                    getNewData();}
+                                t=t+1;
                             }
-                        }, 10000);
+                        }, 0);
+                    }
+
+                });
+            }
+        };
+    }
+    private TimerTask Pause() {
+        return new TimerTask() {
+            @Override
+            public void run() {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Handler handler = new Handler();
+                        handler.postDelayed(new Runnable() {
+                            public void run() {
+                                //Just a pause
+                                setUserVisibleHint(true);
+                            }
+                        }, 0);
                     }
 
                 });
@@ -63,38 +84,49 @@ public class Fragment_Losers extends Fragment {
         crypto_adapter=new Adapter_Main_Equities(getActivity(), "Crypto_Loser",crypto_losers_symbollist,crypto_losers_namelist,crypto_losers_changelist);
         cryptoitems.setAdapter(crypto_adapter);
         Typeface custom_font = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Oregon.ttf");
-        mTimer = new Timer();
-        mTimer.scheduleAtFixedRate(createTimerTask(),0,10000);
         stock.setTypeface(custom_font);
         crypto.setTypeface(custom_font);
         stock.setPaintFlags(stock.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
         crypto.setPaintFlags(stock.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
-
+        mTimer = new Timer();
+        mTimer.scheduleAtFixedRate(createTimerTask(),0,15000);
         return rootView;
 
     }
     public void getNewData(){
-        new ASYNCUpdate().execute();
+        new ASYNCUpdateLosers().execute();
 
     }
 
-    public class ASYNCUpdate extends AsyncTask<Integer, Integer, String> {
+    public class ASYNCUpdateLosers extends AsyncTask<Integer, Integer, String> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
         }
+
         @Override
         protected String doInBackground(Integer... integers) {
-            Service_Main_Equities sme =new Service_Main_Equities();
+            Service_Main_Equities sme = new Service_Main_Equities();
             sme.clearLosersData();
-            sme.getCrypto_Data();
-            sme.getStock_Data();
+            sme.getMarketLosers();
             return null;
         }
+
         @Override
         protected void onPostExecute(String result) {
-            stockitems.removeAllViewsInLayout();
-            cryptoitems.removeAllViewsInLayout();
+            if(crypto_losers_symbollist.size()>0||stock_losers_symbollist.size()>0){
+                setLosersUserVisibleHint(true);}else{
+                mTimer = new Timer();
+                mTimer.scheduleAtFixedRate(createTimerTask(),0,2000);
+            }
+        }
+
+    }
+    public void setLosersUserVisibleHint(boolean isVisibleToUser){
+        super.setUserVisibleHint(isVisibleToUser);
+        if(isVisibleToUser){
+            //stockitems.removeAllViewsInLayout();
+            //cryptoitems.removeAllViewsInLayout();
             crypto_adapter.notifyDataSetChanged();
             stock_adapter.notifyDataSetChanged();
             stockitems.setAdapter(new Adapter_Main_Equities(getActivity(), "Stock_Loser", stock_losers_symbollist,stock_losers_namelist,stock_losers_changelist));

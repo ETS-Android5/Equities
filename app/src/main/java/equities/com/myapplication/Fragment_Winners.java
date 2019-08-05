@@ -12,31 +12,25 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 
-import static equities.com.myapplication.Service_Main_Equities.stock_win_changelist;
-import static equities.com.myapplication.Service_Main_Equities.stock_win_namelist;
-import static equities.com.myapplication.Service_Main_Equities.stock_win_symbollist;
-import static equities.com.myapplication.Service_Main_Equities.crypto_winners_changelist;
-import static equities.com.myapplication.Service_Main_Equities.crypto_winners_namelist;
-import static equities.com.myapplication.Service_Main_Equities.crypto_winners_symbollist;
+import static equities.com.myapplication.Service_Main_Equities.*;
 
 /**
  * Created by Julian Dinkins on 4/25/2018.
  */
 
 public class Fragment_Winners extends Fragment {
-    TextView stock, crypto;
+    TextView stock;
+    TextView crypto;
     private RecyclerView stockitems;
     private RecyclerView cryptoitems;
-    Adapter_Main_Equities crypto_adapter;
-    Adapter_Main_Equities stock_adapter;
 
+    Adapter_Main_Equities stock_adapter;
+    Adapter_Main_Equities crypto_adapter;
     Timer mTimer;
-    View mView;
+    int t =0;
     private TimerTask createTimerTask() {
         return new TimerTask() {
             @Override
@@ -47,9 +41,31 @@ public class Fragment_Winners extends Fragment {
                         Handler handler = new Handler();
                         handler.postDelayed(new Runnable() {
                             public void run() {
-                                getNewData();
+                              if(t>0) {
+                             getNewData();}
+                                t=t+1;
                             }
-                        }, 10000);
+                        }, 0);
+                    }
+
+                });
+            }
+        };
+    }
+    private TimerTask Pause() {
+        return new TimerTask() {
+            @Override
+            public void run() {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Handler handler = new Handler();
+                        handler.postDelayed(new Runnable() {
+                            public void run() {
+                                //Just a pause
+                                setUserVisibleHint(true);
+                            }
+                        }, 0);
                     }
 
                 });
@@ -62,57 +78,69 @@ public class Fragment_Winners extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_leaders, container, false);
         stock = rootView.findViewById(R.id.stock);
-        crypto = rootView.findViewById(R.id.crypto);
-
         stockitems= rootView.findViewById(R.id.stock_items);
-        stockitems.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-        stock_adapter=new Adapter_Main_Equities(getActivity(), "Stock_Winner", stock_win_symbollist,stock_win_namelist,stock_win_changelist);
-        stockitems.setAdapter(stock_adapter);
-
         cryptoitems= rootView.findViewById(R.id.crypto_items);
+
+        stockitems.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         cryptoitems.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-        crypto_adapter =new Adapter_Main_Equities(getActivity(), "Crypto_Winner",crypto_winners_symbollist,crypto_winners_namelist,crypto_winners_changelist);
+
+        stock_adapter=new Adapter_Main_Equities(getActivity(), "Stock_Winner", stock_winners_symbollist, stock_winners_namelist, stock_winners_changelist);
+        stockitems.setAdapter(stock_adapter);
+        crypto_adapter=new Adapter_Main_Equities(getActivity(), "Crypto_Winner", crypto_winners_symbollist, crypto_winners_namelist, crypto_winners_changelist);
         cryptoitems.setAdapter(crypto_adapter);
         Typeface custom_font = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Oregon.ttf");
 
         stock.setTypeface(custom_font);
-        crypto.setTypeface(custom_font);
         stock.setPaintFlags(stock.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
-        crypto.setPaintFlags(stock.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
         mTimer = new Timer();
-        mTimer.scheduleAtFixedRate(createTimerTask(),0,10000);
+        mTimer.scheduleAtFixedRate(createTimerTask(),0,15000);
         return rootView;
 
     }
     public void getNewData(){
-        new ASYNCUpdate().execute();
+        new ASYNCUpdateWinners().execute();
 
     }
-    public class ASYNCUpdate extends AsyncTask<Integer, Integer, String> {
+
+    public class ASYNCUpdateWinners extends AsyncTask<Integer, Integer, String> {
         @Override
         protected void onPreExecute() {
+
             super.onPreExecute();
            }
         @Override
         protected String doInBackground(Integer... integers) {
             Service_Main_Equities sme =new Service_Main_Equities();
             sme.clearWinnersData();
-            sme.getCrypto_Data();
-            sme.getStock_Data();
+            sme.getMarketWinners();
             return null;
         }
         @Override
         protected void onPostExecute(String result) {
-            stockitems.removeAllViewsInLayout();
-            cryptoitems.removeAllViewsInLayout();
-            crypto_adapter.notifyDataSetChanged();
-            stock_adapter.notifyDataSetChanged();
-            crypto_adapter =new Adapter_Main_Equities(getActivity(), "Crypto_Winner",crypto_winners_symbollist,crypto_winners_namelist,crypto_winners_changelist);
-            cryptoitems.setAdapter(crypto_adapter);
-            stock_adapter=new Adapter_Main_Equities(getActivity(), "Stock_Winner", stock_win_symbollist,stock_win_namelist,stock_win_changelist);
-            stockitems.setAdapter(stock_adapter);
+            if(crypto_winners_symbollist.size()>0||stock_winners_symbollist.size()>0){
+                setUserVisibleHint(true);}else{
+                mTimer = new Timer();
+                mTimer.scheduleAtFixedRate(createTimerTask(),0,2000);
+            }
+
         }
     }
+
+    public void setUserVisibleHint(boolean isVisibleToUser){
+        super.setUserVisibleHint(isVisibleToUser);
+        if(isVisibleToUser){
+            stock_adapter.notifyDataSetChanged();
+            crypto_adapter.notifyDataSetChanged();
+            stock_adapter=new Adapter_Main_Equities(getActivity(), "Stock_Winner", stock_winners_symbollist, stock_winners_namelist, stock_winners_changelist);
+            stockitems.setAdapter(stock_adapter);
+            crypto_adapter=new Adapter_Main_Equities(getActivity(), "Crypto_Winner", crypto_winners_symbollist, crypto_winners_namelist, crypto_winners_changelist);
+            cryptoitems.setAdapter(crypto_adapter);
+        }
+    }
+
+
+
+
 }
 
 

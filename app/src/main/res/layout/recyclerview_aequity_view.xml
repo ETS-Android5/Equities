@@ -10,17 +10,6 @@
             android:layout_height="wrap_content" android:layout_margin="5dp">
 
         <TextView
-                android:id="@+id/types"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1.1"
-                android:gravity="left|center"
-                android:singleLine="true"
-                android:textColor="@color/colorBlack"
-                android:textSize="14sp"
-                android:visibility="gone"/>
-
-        <TextView
                 android:id="@+id/issue"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -41,7 +30,7 @@
                 android:singleLine="true"
                 android:text="#"
                 android:textColor="@color/colorPrimary"
-                android:textSize="14sp" android:visibility="gone"/>
+                android:textSize="14sp"/>
 
         <ImageView
                 android:id="@+id/circle"
@@ -71,6 +60,15 @@
                 android:textColor="@color/colorPrimary"
                 android:textSize="14sp"/>
 
+        <TextView
+                android:id="@+id/types"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1.1"
+                android:gravity="left|center"
+                android:singleLine="true"
+                android:textColor="@color/colorPrimary"
+                android:textSize="14sp"/>
         <TextView
                 android:id="@+id/cPrice"
                 android:layout_width="match_parent"

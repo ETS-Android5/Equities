@@ -5,6 +5,7 @@ import android.content.res.AssetManager;
 import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -45,11 +46,7 @@ import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -58,8 +55,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import static equities.com.myapplication.Constructor_App_Variables.*;
-import static equities.com.myapplication.Service_Main_Equities.crypto_kings_symbolist;
-import static equities.com.myapplication.Service_Main_Equities.lowest_integer;
+import static equities.com.myapplication.Service_Main_Equities.*;
 
 public class Activity_Main extends AppCompatActivity {
     Database_Local_Aequities check_saved = new Database_Local_Aequities(Activity_Main.this);
@@ -93,6 +89,33 @@ public class Activity_Main extends AppCompatActivity {
     //static InterstitialAd mInterstitialAd;
     private SwipeRefreshLayout swipe_container;
     static ViewPager pager;
+
+    Timer mTimer;
+    int t =0;
+    private TimerTask createTimerTask() {
+        return new TimerTask() {
+            @Override
+            public void run() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Handler handler = new Handler();
+                        handler.postDelayed(new Runnable() {
+                            public void run() {
+                                if(t>0) {
+                                   // new AsyncReloadData(Activity_Main.this).execute();
+                                }
+                                t=t+1;
+                            }
+                        }, 0);
+                    }
+
+                });
+            }
+        };
+    }
+
+
     public static String AssetJSONFile(String filename, Context context) throws IOException {
         AssetManager manager = context.getAssets();
         InputStream file = manager.open(filename);
@@ -140,6 +163,7 @@ public class Activity_Main extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         check_if_first_download();
         //MobileAds.initialize(this, "ca-app-pub-6566728316210720/4471280326");
+
     }
 
     public void onBackPressed() {
@@ -153,6 +177,51 @@ public class Activity_Main extends AppCompatActivity {
 
 
         }
+
+    }
+
+
+    public class AsyncReloadData extends AsyncTask<Integer, Integer, String> {
+
+        private WeakReference<Activity_Main> activityReference;
+        AsyncReloadData(Activity_Main context) {
+            activityReference = new WeakReference<>(context);
+        }
+
+
+        @Override
+        protected String doInBackground(Integer... params) {
+            Service_Main_Equities sme =new Service_Main_Equities();
+            sme.clearMainData();
+            sme.main();
+
+            return "task finished";
+        }
+        @Override
+        protected void onPostExecute(String result) {
+            ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+            adapter.notifyDataSetChanged();
+            TabLayout pagetabs = findViewById(R.id.tabs);
+            setupMainViewPager(pager);
+            pagetabs.setupWithViewPager(pager);        }
+
+    }
+    public void reloadFragmentData(
+            RecyclerView recyclerView1, RecyclerView recyclerView2, RecyclerView.Adapter adapter1, RecyclerView.Adapter adapter2,
+            Context context1, String type1, ArrayList symbollist1, ArrayList namelist1, ArrayList changelist1,
+            Context context2, String type2, ArrayList symbollist2, ArrayList namelist2, ArrayList changelist2){
+        recyclerView1.removeAllViewsInLayout();
+        recyclerView2.removeAllViewsInLayout();
+        adapter1.notifyDataSetChanged();
+        adapter2.notifyDataSetChanged();
+        adapter1 =new Adapter_Main_Equities(context1, type1,symbollist1,namelist1,changelist1);
+        adapter2 =new Adapter_Main_Equities(context2, type2,symbollist2,namelist2,changelist2);
+        recyclerView1.setAdapter(adapter1);
+        recyclerView2.setAdapter(adapter2);
+
+
+
+
 
     }
 
@@ -218,6 +287,8 @@ public class Activity_Main extends AppCompatActivity {
 
 
         }
+//        mTimer = new Timer();
+  //      mTimer.scheduleAtFixedRate(createTimerTask(),0,30000);
               }
 
     public void setupMainViewPager(ViewPager viewPager) {
@@ -321,7 +392,6 @@ public class Activity_Main extends AppCompatActivity {
     }
 
     public void getChosenCryptoInfo(){
-System.out.println("CHOSEN VCRYPTO HAS BEEN CALLED");
         long startTime = System.nanoTime();
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         String newString =ap_info.getMarketName();

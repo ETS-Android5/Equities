@@ -199,7 +199,14 @@
             app:tabMode="fixed"
             app:tabSelectedTextColor="@color/green_color_text"
             app:tabTextColor="#ffffff " />
-
+    <TextView
+            android:id="@+id/chosen_price_change"
+            android:gravity="center"
+            android:textSize="18dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorPrimary"
+            android:text="test"/>
     <TableRow
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -33,13 +34,14 @@ import java.util.*;
 
 import static equities.com.myapplication.Constructor_App_Variables.*;
 import static equities.com.myapplication.Constructor_App_Variables.market_type;
+import static equities.com.myapplication.Service_Main_Equities.*;
 
 /**
  * Created by Julian Dinkins on 4/25/2018.
  */
 
 public class Fragment_Analysis extends Fragment {
-    TextView a_price,a_price_change,a_name,a_symbol,a_type,a_supply,a_cap,sup,saved,savedd,analysis;
+    TextView a_price,a_price_change,a_name,a_symbol,a_type,a_supply,a_cap,sup,saved,savedd,analysis,chosen_price_change;
     ImageView save;
     LineGraphSeries<DataPoint> series = new LineGraphSeries<>();
     int xx= 0;
@@ -66,6 +68,29 @@ public class Fragment_Analysis extends Fragment {
     String maxYearDate = new SimpleDateFormat("yyyy").format(cal.getTime());
     SimpleDateFormat yearDate = new SimpleDateFormat("yyyy");
     List<Integer> years= new ArrayList<Integer>();
+    Timer mTimer;
+    int t =0;
+    private TimerTask createTimerTask() {
+        return new TimerTask() {
+            @Override
+            public void run() {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Handler handler = new Handler();
+                        handler.postDelayed(new Runnable() {
+                            public void run() {
+                                if(t>0) {
+                                    getNewData();}
+                                t=t+1;
+                            }
+                        }, 0);
+                    }
+
+                });
+            }
+        };
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -77,6 +102,7 @@ public class Fragment_Analysis extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_analysis, container, false);
         historical_listview =rootView.findViewById(R.id.historical_listview);
+        chosen_price_change =rootView.findViewById(R.id.chosen_price_change);
         graph_view=rootView.findViewById(R.id.graph_view);
         String ap_pc = ap_info.getCurrent_Aequity_Price_Change();
         savedd =rootView.findViewById(R.id.savedd);
@@ -105,7 +131,8 @@ public class Fragment_Analysis extends Fragment {
 
 
 
-
+        mTimer = new Timer();
+        mTimer.scheduleAtFixedRate(createTimerTask(),0,6000);
         if (ap_pc !=null && ap_pc.contains("-")){
             a_price_change.setTextColor(Color.parseColor("#ff0000"));
         }else{a_price_change.setTextColor(Color.parseColor("#00ff00"));}
@@ -398,11 +425,11 @@ public void getGraphData(List<Double> array, int xDates, int xPoints, int calend
     Double result = ((graph_end-graph_start)/graph_start)*100;
     if(graph_end>graph_start){
     series.setColor(Color.GREEN);
-    a_price_change.setTextColor(Color.GREEN);
+        chosen_price_change.setTextColor(Color.GREEN);
     }
     else{series.setColor(Color.RED);
-        a_price_change.setTextColor(Color.RED);}
-    a_price_change.setText(((df.format(result))+" %"));
+        chosen_price_change.setTextColor(Color.RED);}
+    chosen_price_change.setText(((df.format(result))+" %"));
     staticLabelsFormatter.setHorizontalLabels(allDates.toArray(new String[0]));
     Collections.sort(labels);
     //Collections.reverse(labels);
@@ -424,6 +451,45 @@ public void getGraphData(List<Double> array, int xDates, int xPoints, int calend
 
 }
 
+    public void getNewData(){
+        new ASYNCUpdatePrice().execute();
+
+    }
+
+    public class ASYNCUpdatePrice extends AsyncTask<Integer, Integer, String> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected String doInBackground(Integer... integers) {
+            Service_Chosen_Equity service_chosen_equity = new Service_Chosen_Equity(getActivity());
+            service_chosen_equity.updatePrice();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            if(Double.parseDouble(graph_high.get(0).toString())>0){
+                setLosersUserVisibleHint(true);}else{
+                mTimer = new Timer();
+                mTimer.scheduleAtFixedRate(createTimerTask(),0,2000);
+            }
+        }
+
+    }
+    public void setLosersUserVisibleHint(boolean isVisibleToUser){
+        super.setUserVisibleHint(isVisibleToUser);
+        if(isVisibleToUser){
+            System.out.println("updating price!!!");
+        a_price.setText(""+current_updated_price.get(0));
+            if (current_percentage_change.get(0).toString().contains("-")){
+                a_price_change.setTextColor(Color.parseColor("#ff0000"));
+            }else{a_price_change.setTextColor(Color.parseColor("#00ff00"));}
+        a_price_change.setText(""+current_percentage_change.get(0));
+        }
+    }
 
 
 

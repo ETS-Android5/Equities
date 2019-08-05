@@ -3,12 +3,10 @@ package equities.com.myapplication;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.support.design.widget.Snackbar;
-import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.view.Gravity;
 import android.view.View;
 import android.view.animation.AnimationUtils;
-import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -90,16 +88,6 @@ public class AsyncDataMain extends AsyncTask<Integer, Integer, String> {
         }
         @Override
         protected void onPostExecute(String result) {
-            int a = stock_win_symbollist.size();
-            int b = stock_losers_symbollist.size();
-            int c = stock_kings_symbollist.size();
-            int d = crypto_winners_symbollist.size();
-            int e = crypto_losers_symbollist.size();
-            int f = crypto_kings_symbolist.size();
-            lowest_integer = new Integer[]{a, b, c, d, e, f};
-            System.out.println("THIS IS LOWEST INTEGER "+lowest_integer[0]
-                    +" THIS IS ARRAYS sizes"+ stock_win_symbollist.size()+" "+stock_losers_symbollist.size()+" "+stock_kings_symbollist.size()+" "+crypto_winners_symbollist.size()+"  "+crypto_losers_symbollist.size()+" "+crypto_kings_symbolist.size());
-
             Activity_Main activity = activityReference.get();
 //          TabLayout t = activity.findViewById(R.id.tabs);
 //          t.setVisibility(View.VISIBLE);

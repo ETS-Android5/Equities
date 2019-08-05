@@ -13,12 +13,12 @@
                 android:id="@+id/types"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1.1"
+                android:layout_weight="1"
                 android:gravity="left|center"
                 android:singleLine="true"
-                android:textColor="@color/colorBlack"
-                android:textSize="14sp"
-                android:visibility="gone"/>
+                android:background="#000000"
+                android:textColor="@color/colorPrimary"
+                android:textSize="12sp" android:visibility="gone"/>
 
         <TextView
                 android:id="@+id/issue"
@@ -36,18 +36,19 @@
                 android:id="@+id/number"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1.2"
+                android:layout_weight="1.1"
                 android:gravity="left|center"
                 android:singleLine="true"
                 android:text="#"
                 android:textColor="@color/colorPrimary"
-                android:textSize="14sp" android:visibility="gone"/>
+                android:textSize="14sp"/>
 
         <ImageView
                 android:id="@+id/circle"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                app:srcCompat="@drawable/holder_green_circle" />
+                app:srcCompat="@drawable/holder_green_circle"
+                android:visibility="gone"/>
 
         <TextView
                 android:id="@+id/symbol"
