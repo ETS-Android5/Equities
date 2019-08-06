@@ -5,7 +5,6 @@ import android.content.res.AssetManager;
 import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -28,6 +27,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.MobileAds;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -55,7 +57,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import static equities.com.myapplication.Constructor_App_Variables.*;
-import static equities.com.myapplication.Service_Main_Equities.*;
 
 public class Activity_Main extends AppCompatActivity {
     Database_Local_Aequities check_saved = new Database_Local_Aequities(Activity_Main.this);
@@ -86,34 +87,9 @@ public class Activity_Main extends AppCompatActivity {
     Context context =this;
     static Adapter_Main_Markets adapter;
     static RecyclerView.LayoutManager l;
-    //static InterstitialAd mInterstitialAd;
+    static InterstitialAd mInterstitialAd;
     private SwipeRefreshLayout swipe_container;
     static ViewPager pager;
-
-    Timer mTimer;
-    int t =0;
-    private TimerTask createTimerTask() {
-        return new TimerTask() {
-            @Override
-            public void run() {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Handler handler = new Handler();
-                        handler.postDelayed(new Runnable() {
-                            public void run() {
-                                if(t>0) {
-                                   // new AsyncReloadData(Activity_Main.this).execute();
-                                }
-                                t=t+1;
-                            }
-                        }, 0);
-                    }
-
-                });
-            }
-        };
-    }
 
 
     public static String AssetJSONFile(String filename, Context context) throws IOException {
@@ -138,23 +114,22 @@ public class Activity_Main extends AppCompatActivity {
         }
     }
 
-    public void starterup(){
-        //MobileAds.initialize(this, "ca-app-pub-6566728316210720/4471280326");
-        //mInterstitialAd = new InterstitialAd(this);
-        //mInterstitialAd.setAdUnitId("ca-app-pub-6566728316210720/4471280326");
-        //mInterstitialAd.loadAd(new AdRequest.Builder().build());
+    public void StartApplication(){
+        MobileAds.initialize(this, "ca-app-pub-6566728316210720/4471280326");
+        mInterstitialAd = new InterstitialAd(this);
+        mInterstitialAd.setAdUnitId("ca-app-pub-6566728316210720/4471280326");
+        mInterstitialAd.loadAd(new AdRequest.Builder().build());
         checkInternetConnection();
         get_crypto_exchange_info();
         get_stock_exchange_info();
         setContentView(R.layout.splash);
-        lin_lay =(LinearLayout)findViewById(R.id.lin_lay);
+        lin_lay =findViewById(R.id.lin_lay);
 
         centerLinear = AnimationUtils.loadAnimation(this, R.anim.center);
         imageView =findViewById(R.id.imageView);
-        //imageView.startAnimation(centerLinear);
 
-        progress= (ProgressBar) findViewById(R.id.progressBar);
-        txt = (TextView) findViewById(R.id.output);
+        progress= findViewById(R.id.progressBar);
+        txt = findViewById(R.id.output);
         new setAsyncCreateSavedData(this).execute();
     }
 
@@ -171,57 +146,11 @@ public class Activity_Main extends AppCompatActivity {
 
         if (pager.getVisibility()==View.VISIBLE){
             finish();}else {
-
                 new AsyncChosenData(this).cancel(true);
                 new AsyncForBackPressedSavedData(Activity_Main.this).execute();
 
 
         }
-
-    }
-
-
-    public class AsyncReloadData extends AsyncTask<Integer, Integer, String> {
-
-        private WeakReference<Activity_Main> activityReference;
-        AsyncReloadData(Activity_Main context) {
-            activityReference = new WeakReference<>(context);
-        }
-
-
-        @Override
-        protected String doInBackground(Integer... params) {
-            Service_Main_Equities sme =new Service_Main_Equities();
-            sme.clearMainData();
-            sme.main();
-
-            return "task finished";
-        }
-        @Override
-        protected void onPostExecute(String result) {
-            ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-            adapter.notifyDataSetChanged();
-            TabLayout pagetabs = findViewById(R.id.tabs);
-            setupMainViewPager(pager);
-            pagetabs.setupWithViewPager(pager);        }
-
-    }
-    public void reloadFragmentData(
-            RecyclerView recyclerView1, RecyclerView recyclerView2, RecyclerView.Adapter adapter1, RecyclerView.Adapter adapter2,
-            Context context1, String type1, ArrayList symbollist1, ArrayList namelist1, ArrayList changelist1,
-            Context context2, String type2, ArrayList symbollist2, ArrayList namelist2, ArrayList changelist2){
-        recyclerView1.removeAllViewsInLayout();
-        recyclerView2.removeAllViewsInLayout();
-        adapter1.notifyDataSetChanged();
-        adapter2.notifyDataSetChanged();
-        adapter1 =new Adapter_Main_Equities(context1, type1,symbollist1,namelist1,changelist1);
-        adapter2 =new Adapter_Main_Equities(context2, type2,symbollist2,namelist2,changelist2);
-        recyclerView1.setAdapter(adapter1);
-        recyclerView2.setAdapter(adapter2);
-
-
-
-
 
     }
 
@@ -267,7 +196,7 @@ public class Activity_Main extends AppCompatActivity {
             @Override
             public void onRefresh() {
                 if (pager.getVisibility()==View.VISIBLE){
-                    starterup();
+                    StartApplication();
                 }
                 if (market_pager.getVisibility()==View.VISIBLE){
                     new AsyncChosenData(Activity_Main.this).execute();
@@ -282,15 +211,13 @@ public class Activity_Main extends AppCompatActivity {
         pagetabs.setupWithViewPager(pager);
         if(pager.getVisibility()==View.VISIBLE){
             progLayout.setVisibility(View.GONE);
-        }else{
+        }else {
             progLayout.setVisibility(View.VISIBLE);
 
-
         }
-//        mTimer = new Timer();
-  //      mTimer.scheduleAtFixedRate(createTimerTask(),0,30000);
-              }
 
+              }
+              
     public void setupMainViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFrag(new Fragment_Markets(), getString(R.string.title_markets));
@@ -393,12 +320,17 @@ public class Activity_Main extends AppCompatActivity {
 
     public void getChosenCryptoInfo(){
         long startTime = System.nanoTime();
+        String newString= null;
         RequestQueue requestQueue = Volley.newRequestQueue(this);
-        String newString =ap_info.getMarketName();
-        //("1 -"+newString);
-        if(newString.contains(" ")){
+        if(ap_info.getMarketName().equalsIgnoreCase("XRP")){
+            newString = "Ripple";
+        }else {
+            newString = ap_info.getMarketName();
+            //("1 -"+newString);
+        }if(newString.contains(" ")){
             newString =newString.replace(" ","-");
         }
+
         final String url = "https://api.coinmarketcap.com/v1/ticker/"+newString;
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
 
@@ -783,7 +715,7 @@ public class Activity_Main extends AppCompatActivity {
         //SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         //savedVersionCode = prefs.getInt(PREF_VERSION_CODE_KEY, DOESNT_EXIST);
        // if (currentVersionCode == savedVersionCode) {
-            starterup();
+            StartApplication();
       /*
             return;
 
@@ -857,7 +789,7 @@ public class Activity_Main extends AppCompatActivity {
                      editor.commit();
                  }
 
-                 starterup();
+                 StartApplication();
                  return;
              }});
 
@@ -865,7 +797,7 @@ public class Activity_Main extends AppCompatActivity {
 
 
         } else if (currentVersionCode > savedVersionCode) {
-            starterup();
+            StartApplication();
             return;
         }
 

@@ -102,7 +102,7 @@ public class Fragment_Analysis extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_analysis, container, false);
         historical_listview =rootView.findViewById(R.id.historical_listview);
-        chosen_price_change =rootView.findViewById(R.id.chosen_price_change);
+        chosen_price_change =rootView.findViewById(R.id.chosenpricechange);
         graph_view=rootView.findViewById(R.id.graph_view);
         String ap_pc = ap_info.getCurrent_Aequity_Price_Change();
         savedd =rootView.findViewById(R.id.savedd);
@@ -471,7 +471,7 @@ public void getGraphData(List<Double> array, int xDates, int xPoints, int calend
 
         @Override
         protected void onPostExecute(String result) {
-            if(Double.parseDouble(graph_high.get(0).toString())>0){
+            if(Double.parseDouble(String.valueOf(graph_high.size()))>0){
                 setLosersUserVisibleHint(true);}else{
                 mTimer = new Timer();
                 mTimer.scheduleAtFixedRate(createTimerTask(),0,2000);

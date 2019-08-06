@@ -41,7 +41,7 @@ public class Test_Methods {
        // if(app_info.getMarketType()=="Crypto"||app_info.getMarketType()=="Cryptocurrency"){
             //get crypto update
             Document caps = null;
-            String name = "Ethereum";
+            String name = "Pixel";
             try {
                 caps = Jsoup.connect("https://coinmarketcap.com/currencies/" + name).timeout(10 * 10000).get();
                 Element as = caps.getElementsByClass("details-panel-item--header flex-container").first();

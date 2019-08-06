@@ -4,11 +4,9 @@ import android.os.AsyncTask;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.view.View;
-
-
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
 import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-
 import static equities.com.myapplication.Constructor_App_Variables.aequity_exchanges;
 import static equities.com.myapplication.Constructor_App_Variables.exchange_list;
 import static equities.com.myapplication.Constructor_App_Variables.graph_change;
@@ -16,7 +14,6 @@ import static equities.com.myapplication.Constructor_App_Variables.graph_date;
 import static equities.com.myapplication.Constructor_App_Variables.graph_high;
 import static equities.com.myapplication.Constructor_App_Variables.graph_volume;
 import static equities.com.myapplication.Constructor_App_Variables.stocktwits_feedItems;
-import static equities.com.myapplication.Service_Main_Equities.lowest_integer;
 
 public class AsyncForBackPressedSavedData extends AsyncTask<Integer, Integer, String> {
 
@@ -24,20 +21,17 @@ public class AsyncForBackPressedSavedData extends AsyncTask<Integer, Integer, St
         AsyncForBackPressedSavedData(Activity_Main context) {
             activityReference = new WeakReference<>(context);
         }
-        long startTime;
-
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
             Activity_Main activity = activityReference.get();
             ViewPager pager = activity.findViewById(R.id.viewpager);
+            ViewPager market_pager = activity.findViewById(R.id.viewpager);
+
             if (pager.getVisibility()== View.VISIBLE){
                 activity.finishAffinity();}else{
-
-/**
                 if (activity.mInterstitialAd.isLoaded()) {
                     activity.mInterstitialAd.show();
-
                 }else{
                     //mInterstitialAd.setAdUnitId("ca-app-pub-6566728316210720/4471280326");
                     AdRequest adRequest = new AdRequest.Builder().build();
@@ -50,14 +44,11 @@ public class AsyncForBackPressedSavedData extends AsyncTask<Integer, Integer, St
                         activity.mInterstitialAd.show();
                     }
                     @Override
-                    public void onAdClosed() {
-                        System.err.println("Ad loaded");
+                    public void onAdClosed() {pager.setVisibility(View.VISIBLE);
+                        ViewPager market_pager = activity.findViewById(R.id.market_pager);
+                        market_pager.setVisibility(View.GONE);
                     }
                 });
-
-
-
-                    **/
         }}
 
         @Override
@@ -74,7 +65,6 @@ public class AsyncForBackPressedSavedData extends AsyncTask<Integer, Integer, St
         protected void onPostExecute(String result) {
             Activity_Main activity = activityReference.get();
             ViewPager pager = activity.findViewById(R.id.viewpager);
-
             if (activity == null || activity.isFinishing()) return;
             graph_change.clear();
             exchange_list.clear();

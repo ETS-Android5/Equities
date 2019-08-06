@@ -147,7 +147,11 @@ public class Service_Chosen_Equity
         if(app_info.getMarketType()=="Crypto"||app_info.getMarketType()=="Cryptocurrency"){
             //get crypto update
             Document caps = null;
-            String name = app_info.getMarketName();
+            String name=null;
+            if(ap_info.getMarketName().equalsIgnoreCase("XRP")){
+                name = "Ripple";
+            }else{
+            name = app_info.getMarketName();}
             try {
                 caps = Jsoup.connect("https://coinmarketcap.com/currencies/" + name).timeout(10 * 10000).get();
                 Element as = caps.getElementsByClass("details-panel-item--header flex-container").first();
@@ -168,6 +172,7 @@ public class Service_Chosen_Equity
             //getstockupdate
         }
     }
+
     public static void get_stock_points() {
         //("Get stock points called");
         String marname = ap_info.getMarketSymbol();
@@ -204,7 +209,12 @@ public class Service_Chosen_Equity
         long startTime = System.nanoTime();
         DateFormat sdf = new SimpleDateFormat("yyyyMMdd");
         Date begindate = new Date();
-        String f = ap_info.getMarketName();
+        String f=null;
+        if(ap_info.getMarketName().equalsIgnoreCase("XRP")){
+            f = "Ripple";
+        }else {
+            f=ap_info.getMarketName();
+        }
         if(ap_info.getMarketName().equalsIgnoreCase("bitcoin")||
                 ap_info.getMarketName().equalsIgnoreCase("ethereum")||
                 ap_info.getMarketName().equalsIgnoreCase("litecoin")||

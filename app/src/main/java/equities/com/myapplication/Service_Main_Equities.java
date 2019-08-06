@@ -370,7 +370,7 @@ try{
                         crypto_kings_marketcaplist.add(cap.substring(0, 3) + " T");
                     }
                     btc_market_cap_change = crypto_kings_changelist.get(0) + "";
-                    btc_market_cap_amount = (String) crypto_kings_marketcaplist.get(0);
+                    btc_market_cap_amount = (String) crypto_kings_pricelist.get(0);
                 }
                 // System.out.println("X "+symbol+" "+name+" "+price+" "+change);
 
@@ -392,7 +392,7 @@ try{
                     //System.out.println(symbol+" "+name+" "+price+" "+change);
                 }
                 btc_market_cap_change =crypto_kings_changelist.get(0)+"%";
-                btc_market_cap_amount =(String) crypto_kings_marketcaplist.get(0);
+                btc_market_cap_amount =(String) crypto_kings_pricelist.get(0);
 
             }catch (IOException o){
                 //USING API AS LAST RESORT IF SITES ARE DOWN
@@ -451,8 +451,7 @@ try{
 
 
                             }
-                            btc_market_cap_amount =(String) crypto_kings_marketcaplist.get(0);
-                            btc_market_cap_amount =btc_market_cap_amount.replace(" ","");
+                            btc_market_cap_amount =(String) crypto_kings_pricelist.get(0);
                             btc_market_cap_change =crypto_kings_changelist.get(0)+"";
                         } catch (JSONException e) {
                             //SEND A MESSAGE TO THE DEVELOPER AS ALL 3 METHODS HAVE FAILED
@@ -690,7 +689,7 @@ try{
                         crypto_kings_marketcaplist.add(cap.substring(0, 3) + " T");
                     }
                     btc_market_cap_change = crypto_kings_changelist.get(0) + "";
-                    btc_market_cap_amount = (String) crypto_kings_marketcaplist.get(0);
+                    btc_market_cap_amount = (String) crypto_kings_pricelist.get(0);
                 }
             }
         }catch (IOException n){
@@ -711,7 +710,7 @@ try{
                     //System.out.println(symbol+" "+name+" "+price+" "+change);
                 }
                 btc_market_cap_change =crypto_kings_changelist.get(0)+"%";
-                btc_market_cap_amount =(String) crypto_kings_marketcaplist.get(0);
+                btc_market_cap_amount =(String) crypto_kings_pricelist.get(0);
 
             }catch (IOException o){
             //USING API AS LAST RESORT IF SITES ARE DOWN
@@ -770,7 +769,7 @@ try{
 
 
                             }
-                            btc_market_cap_amount =(String) crypto_kings_marketcaplist.get(0);
+                            btc_market_cap_amount =(String) crypto_kings_pricelist.get(0);
                             btc_market_cap_amount =btc_market_cap_amount.replace(" ","");
                             btc_market_cap_change =crypto_kings_changelist.get(0)+"";
                         } catch (JSONException e) {
