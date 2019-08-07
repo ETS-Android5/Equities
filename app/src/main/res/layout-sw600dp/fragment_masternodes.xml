@@ -50,7 +50,7 @@
                     android:text="@string/masternode_data_provider"
                     android:textColor="@color/colorPrimary"
                     android:textColorLink="@color/darkTextColor"
-                    android:textSize="16sp" />
+                    android:textSize="24sp"/>
 
             <TableRow
                     android:layout_width="match_parent"

@@ -811,12 +811,12 @@ try{
                 stock_winners_pricelist.add(price);
                 stock_winners_changelist.add(change);
                 typelist.add("Stock");
-               // System.out.println("FIRST METHOD WINNERS"+symbol+" "+name+" "+price+" "+change);
+                //System.out.println("FIRST METHOD WINNERS"+symbol+" "+name+" "+price+" "+change);
 
             }
-//LOSERS
-            sv = Jsoup.connect("https://finance.yahoo.com/losers").userAgent("Opera").timeout(10 * 10000).get();
-            Elements tbodyl = sv.select("tbody");
+            Document sv1=null;
+            sv1 = Jsoup.connect("https://finance.yahoo.com/losers").userAgent("Opera").timeout(10 * 10000).get();
+            Elements tbodyl = sv1.select("tbody");
             Elements trl = tbodyl.select("tr");
             for (int il = 0; il < 20; il++) {
                 String lsymbol = trl.get(il).select("td").get(0).text();
@@ -828,7 +828,7 @@ try{
                 stock_losers_pricelist.add(lprice);
                 stock_losers_changelist.add(lchange);
                 typelist.add("Stock");
-               // System.out.println("FIRST METHOD  LOSERS"+lsymbol + " " + lname + " " + lprice + " " + lchange);
+                System.out.println("FIRST METHOD  LOSERS"+lsymbol + " " + lname + " " + lprice + " " + lchange);
             }
 
         } catch (IOException e) {
