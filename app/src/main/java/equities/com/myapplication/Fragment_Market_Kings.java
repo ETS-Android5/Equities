@@ -100,16 +100,16 @@ public class Fragment_Market_Kings extends Fragment {
         }
         @Override
         protected void onPostExecute(String result) {
-            setKingsUserVisibleHint(true);
+            if(crypto_kings_namelist.size()>0||stock_kings_namelist.size()>0){
+                setKingsUserVisibleHint(true);}else{
+                mTimer = new Timer();
+                mTimer.scheduleAtFixedRate(createTimerTask(),0,2000);
         }
-    }
+    }}
     public void setKingsUserVisibleHint(boolean isVisibleToUser){
         super.setUserVisibleHint(isVisibleToUser);
         if(isVisibleToUser){
 
-            //stockitems.removeAllViewsInLayout();
-            //
-            // cryptoitems.removeAllViewsInLayout();
             crypto_adapter.notifyDataSetChanged();
             stock_adapter.notifyDataSetChanged();
             crypto_adapter=new Adapter_Main_Equities(getActivity(), "Crypto_Kings",crypto_kings_symbolist,crypto_kings_namelist,crypto_kings_marketcaplist);

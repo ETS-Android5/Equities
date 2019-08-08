@@ -3,6 +3,16 @@ package equities.com.myapplication;
 import android.content.Context;
 
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -33,30 +43,8 @@ import static equities.com.myapplication.Service_Main_Equities.crypto_losers_cha
 
 public class Test_Methods {
     public static void main(String[] args) {
-        updatePrice();
+        getCrypto_Data();
     }
 
-    public static void updatePrice(){
-        Constructor_App_Variables app_info =new Constructor_App_Variables();
-       // if(app_info.getMarketType()=="Crypto"||app_info.getMarketType()=="Cryptocurrency"){
-            //get crypto update
-            Document caps = null;
-            String name = "Pixel";
-            try {
-                caps = Jsoup.connect("https://coinmarketcap.com/currencies/" + name).timeout(10 * 10000).get();
-                Element as = caps.getElementsByClass("details-panel-item--header flex-container").first();
-                Elements e = as.select("span:eq(1)");
-                String change = e.get(2).text();
-                String price = e.get(1).text();
-                System.out.println("This is the price change info "+as);
-                change = change.replaceAll("\\(", "").replaceAll("\\)", "");
-                current_percentage_change.add(change);
-                current_updated_price.add(price);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-     //   }else{
-            //getstockupdate
-       // }
-    }
+
 }

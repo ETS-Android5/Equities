@@ -57,6 +57,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import static equities.com.myapplication.Constructor_App_Variables.*;
+import static equities.com.myapplication.Fragment_Analysis.mTimer;
 
 public class Activity_Main extends AppCompatActivity {
     Database_Local_Aequities check_saved = new Database_Local_Aequities(Activity_Main.this);
@@ -90,7 +91,36 @@ public class Activity_Main extends AppCompatActivity {
     static InterstitialAd mInterstitialAd;
     private SwipeRefreshLayout swipe_container;
     static ViewPager pager;
+    @Override
+    protected void onStart() {
+        super.onStart();
+        //Starting Car
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //Put car in gear
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        //Put car in neutral
+
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        //Turn off car
+
+    }
+    protected void onRestart(){
+        super.onRestart();
+        System.out.println("RESTARTING APPLICATION");
+    }
 
     public static String AssetJSONFile(String filename, Context context) throws IOException {
         AssetManager manager = context.getAssets();
@@ -146,6 +176,7 @@ public class Activity_Main extends AppCompatActivity {
 
         if (pager.getVisibility()==View.VISIBLE){
             finish();}else {
+            reloadAllData();
                 new AsyncChosenData(this).cancel(true);
                 new AsyncForBackPressedSavedData(Activity_Main.this).execute();
 
@@ -191,7 +222,9 @@ public class Activity_Main extends AppCompatActivity {
         ViewPager market_pager = findViewById(R.id.market_pager);
         market_pager.setVisibility(View.GONE);
 
+
         swipe_container = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
+        swipe_container.setEnabled(false);
         swipe_container.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -279,7 +312,11 @@ public class Activity_Main extends AppCompatActivity {
         }
     }
 
-    static void reloadAllData() {
+    void reloadAllData() {
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        Fragment_Analysis fragment_analysis = new Fragment_Analysis();
+        adapter.removeFrag(fragment_analysis, "Fragment_Analysis");
+        mTimer.cancel();
         graph_date.clear();
         graph_high.clear();
         graph_volume.clear();
@@ -313,6 +350,7 @@ public class Activity_Main extends AppCompatActivity {
                 chosen_searchView_item.onEditorAction(EditorInfo.IME_ACTION_DONE);
                 new AsyncChosenData(Activity_Main.this).execute();
                 chosen_searchView_item.setText("");
+                reloadAllData();
 
             }
         });

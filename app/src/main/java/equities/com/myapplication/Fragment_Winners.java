@@ -117,7 +117,7 @@ public class Fragment_Winners extends Fragment {
         }
         @Override
         protected void onPostExecute(String result) {
-            if(crypto_winners_symbollist.size()>0||stock_winners_symbollist.size()>0){
+            if(stock_winners_namelist.size()>0||crypto_winners_namelist.size()>0){
                 setUserVisibleHint(true);}else{
                 mTimer = new Timer();
                 mTimer.scheduleAtFixedRate(createTimerTask(),0,2000);

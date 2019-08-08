@@ -206,7 +206,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/colorPrimary"
-        android:text="test"/>
+        />
     <TableRow
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

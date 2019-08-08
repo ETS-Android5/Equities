@@ -21,7 +21,7 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
     if (pager.getVisibility()== View.VISIBLE){
-        System.out.println("PAGER IS VISIBLE" );
+        //System.out.println("PAGER IS VISIBLE" );
 
         Fragment fragment = null;
         switch (position) {
@@ -61,7 +61,7 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
         }
 
         return fragment;}else{
-        System.out.println("PAGER IS NOT VISIBLE" );
+        //System.out.println("PAGER IS NOT VISIBLE" );
         return mFragmentList.get(position);
 
     }

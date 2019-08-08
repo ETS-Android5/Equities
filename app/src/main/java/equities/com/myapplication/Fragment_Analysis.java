@@ -68,7 +68,7 @@ public class Fragment_Analysis extends Fragment {
     String maxYearDate = new SimpleDateFormat("yyyy").format(cal.getTime());
     SimpleDateFormat yearDate = new SimpleDateFormat("yyyy");
     List<Integer> years= new ArrayList<Integer>();
-    Timer mTimer;
+    static Timer mTimer;
     int t =0;
     private TimerTask createTimerTask() {
         return new TimerTask() {
@@ -119,6 +119,9 @@ public class Fragment_Analysis extends Fragment {
         analysis.setTypeface(custom_font);
         analysis.setPaintFlags(analysis.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
         a_cap.setText(ap_info.getMarketCap());
+        if(!a_price.getText().toString().isEmpty()){
+            a_price.setText("Updating");
+        }
         try {
                 a_price.setText("$ " +graph_high.get(0));
 
@@ -132,7 +135,7 @@ public class Fragment_Analysis extends Fragment {
 
 
         mTimer = new Timer();
-        mTimer.scheduleAtFixedRate(createTimerTask(),0,6000);
+        mTimer.scheduleAtFixedRate(createTimerTask(),0,15000);
         if (ap_pc !=null && ap_pc.contains("-")){
             a_price_change.setTextColor(Color.parseColor("#ff0000"));
         }else{a_price_change.setTextColor(Color.parseColor("#00ff00"));}
@@ -483,7 +486,7 @@ public void getGraphData(List<Double> array, int xDates, int xPoints, int calend
         super.setUserVisibleHint(isVisibleToUser);
         if(isVisibleToUser){
             System.out.println("updating price!!!");
-        a_price.setText(""+current_updated_price.get(0));
+        //a_price.setText(""+current_updated_price.get(0));
             if (current_percentage_change.get(0).toString().contains("-")){
                 a_price_change.setTextColor(Color.parseColor("#ff0000"));
             }else{a_price_change.setTextColor(Color.parseColor("#00ff00"));}

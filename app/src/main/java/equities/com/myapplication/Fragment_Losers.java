@@ -48,26 +48,7 @@ public class Fragment_Losers extends Fragment {
             }
         };
     }
-    private TimerTask Pause() {
-        return new TimerTask() {
-            @Override
-            public void run() {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Handler handler = new Handler();
-                        handler.postDelayed(new Runnable() {
-                            public void run() {
-                                //Just a pause
-                                setUserVisibleHint(true);
-                            }
-                        }, 0);
-                    }
 
-                });
-            }
-        };
-    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
@@ -114,7 +95,7 @@ public class Fragment_Losers extends Fragment {
 
         @Override
         protected void onPostExecute(String result) {
-            if(crypto_losers_symbollist.size()>0||stock_losers_symbollist.size()>0){
+            if(stock_losers_namelist.size()>0||crypto_losers_namelist.size()>0){
                 setLosersUserVisibleHint(true);}else{
                 mTimer = new Timer();
                 mTimer.scheduleAtFixedRate(createTimerTask(),0,2000);

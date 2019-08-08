@@ -51,32 +51,36 @@ public class Service_Main_Equities {
     static Document sv = null;
     static Document z = null;
     static Document crypto_data;
+    static ArrayList top_news_list;
     static ArrayList stock_kings_symbollist = new ArrayList();
     static ArrayList stock_kings_namelist = new ArrayList();
     static ArrayList stock_kings_ipdown = new ArrayList();
     static ArrayList stock_kings_changelist = new ArrayList();
+    static ArrayList stock_kings_pricelist = new ArrayList();
+
     static ArrayList stock_winners_symbollist = new ArrayList();
     static ArrayList stock_winners_pricelist = new ArrayList();
     static ArrayList stock_winners_namelist = new ArrayList();
     static ArrayList stock_winners_changelist = new ArrayList();
+
     static ArrayList crypto_winners_symbollist = new ArrayList();
     static ArrayList crypto_winners_pricelist = new ArrayList();
     static ArrayList crypto_winners_namelist = new ArrayList();
     static ArrayList crypto_winners_changelist = new ArrayList();
+
     static ArrayList typelist = new ArrayList();
-    static ArrayList stock_losers_pricelist = new ArrayList();
-    static ArrayList stock_kings_pricelist = new ArrayList();
     static ArrayList crypto_losers_pricelist = new ArrayList();
-    static ArrayList crypto_kings_pricelist = new ArrayList();
+    static ArrayList crypto_losers_changelist = new ArrayList();
+    static ArrayList crypto_losers_namelist = new ArrayList();
+    static ArrayList crypto_losers_symbollist = new ArrayList();
 
-
+    static ArrayList stock_losers_pricelist = new ArrayList();
     static ArrayList stock_losers_symbollist = new ArrayList();
     static ArrayList stock_losers_namelist = new ArrayList();
     static ArrayList stock_losers_changelist = new ArrayList();
 
-    static ArrayList crypto_losers_changelist = new ArrayList();
-    static ArrayList crypto_losers_namelist = new ArrayList();
-    static ArrayList crypto_losers_symbollist = new ArrayList();
+    static ArrayList crypto_kings_pricelist = new ArrayList();
+
     static ArrayList crypto_kings_symbolist = new ArrayList();
     static ArrayList crypto_kings_namelist = new ArrayList();
     static ArrayList crypto_kings_marketcaplist = new ArrayList();
@@ -198,6 +202,7 @@ public class Service_Main_Equities {
             if(crypto_winners_changelist.size()<20){
                 crypto_winners_changelist.add(crypto_change.text());}
         }
+
     } catch (IOException e) {
         //Use alternative method
     }
@@ -217,7 +222,7 @@ public class Service_Main_Equities {
                 stock_winners_pricelist.add(price);
                 stock_winners_changelist.add(change);
                 typelist.add("Stock");
-                System.out.println("FIRST METHOD WINNERS"+symbol+" "+name+" "+price+" "+change);
+
 
             }}catch (IOException e) {
                        //Use alternative method
@@ -576,24 +581,32 @@ try{
             Elements losers_table = crypto_data.getElementsByClass("table-responsive");
             Elements losers = crypto_data.select("div#losers-24h");
             Elements loser_symbol = losers.select("td.text-left");
+            Elements loser_volume = losers.select("td.text-right");
             Elements loser_name_change = losers.select("td[data-sort]");
-            for (Element s : loser_symbol) {
-                crypto_losers_symbollist.add(s.text());
-            }
-            Elements price = losers.select("a.price");
-            for(Element x : price){
-                if(crypto_losers_pricelist.size()<20){
-                String url = x.attr("data-usd");
-                toDouble(crypto_losers_pricelist,url);}
-            }
-            for (int i = 0; i < loser_name_change.size(); i++) {
-                if (i % 2 == 0) {
-                    if(crypto_losers_namelist.size()<20){
-                    crypto_losers_namelist.add(loser_name_change.get(i).text());}
-                } else {
-                    if(crypto_losers_changelist.size()<20){
-                    crypto_losers_changelist.add(loser_name_change.get(i).text());}
-                }
+            for (Element x: loser_volume) {
+                String v =x.getElementsByClass("volume").text().replace("$","").replace(",","");
+                if (v.isEmpty()){}else{
+                    if(Double.parseDouble(v)>250000){
+
+                        for (Element s : loser_symbol) {
+                            crypto_losers_symbollist.add(s.text());
+                        }
+                        Elements price = losers.select("a.price");
+                        for(Element xx : price){
+                            if(crypto_losers_pricelist.size()<20){
+                                String url = xx.attr("data-usd");
+                                toDouble(crypto_losers_pricelist,url);}
+                        }
+                        for (int i = 0; i < loser_name_change.size(); i++) {
+                            if (i % 2 == 0) {
+                                if(crypto_losers_namelist.size()<20){
+                                    crypto_losers_namelist.add(loser_name_change.get(i).text());}
+                            } else {
+                                if(crypto_losers_changelist.size()<20){
+                                    crypto_losers_changelist.add(loser_name_change.get(i).text());}
+                            }
+                        }
+                       }}
             }
             Element winners_table = losers_table.get(2);
             Elements tbody = winners_table.select("tbody");
@@ -603,19 +616,19 @@ try{
             Elements winner_name = tbody.select("img[src]");
             for (Element crypto_symbol : winner_symbol) {
                 if(crypto_winners_symbollist.size()<20){
-                String symbol = crypto_symbol.select("td.text-left").text();
-                crypto_winners_symbollist.add(symbol);
-                typelist.add("Cryptocurrency");}
+                    String symbol = crypto_symbol.select("td.text-left").text();
+                    crypto_winners_symbollist.add(symbol);
+                    typelist.add("Cryptocurrency");}
             }
             Elements link = winners.select("a.price");
             for(Element x : link){
                 if(crypto_winners_pricelist.size()<20){
-                String url = x.attr("data-usd");
-                toDouble(crypto_winners_pricelist,url);}
+                    String url = x.attr("data-usd");
+                    toDouble(crypto_winners_pricelist,url);}
             }
             for (Element crypto_name : winner_name) {
                 if(crypto_winners_namelist.size()<20){
-                String name = crypto_name.attr("alt");
+                    String name = crypto_name.attr("alt");
                     crypto_winners_namelist.add(name);}
             }
             for (Element crypto_change : winner_change) {
@@ -647,9 +660,9 @@ try{
             catch (IOException i){
                 //i.printStackTrace();
                 //USE 3rd OPTION api IF NECCESSARY as winners and losers methods have failed
-            //Send a message to me stating how all 3 methods have failed.
+                //Send a message to me stating how all 3 methods have failed.
 
-        }}
+            }}
         //GETTING CRYPTO MARKET CAP LEADERS
         try {
             crypto_data = Jsoup.connect("https://coinmarketcap.com/").timeout(10 * 10000).get();
@@ -707,13 +720,12 @@ try{
                     crypto_kings_namelist.add(name);
                     crypto_kings_pricelist.add(price);
                     crypto_kings_changelist.add(change);
-                    //System.out.println(symbol+" "+name+" "+price+" "+change);
                 }
                 btc_market_cap_change =crypto_kings_changelist.get(0)+"%";
                 btc_market_cap_amount =(String) crypto_kings_pricelist.get(0);
 
             }catch (IOException o){
-            //USING API AS LAST RESORT IF SITES ARE DOWN
+                //USING API AS LAST RESORT IF SITES ARE DOWN
                 RequestQueue requestQueue = Volley.newRequestQueue(ApplicationContextProvider.getContext());
                 final String url = "https://api.coinmarketcap.com/v2/ticker/?sort=rank";
                 JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
@@ -791,7 +803,7 @@ try{
             }
 
         }
-        }
+    }
 
     public static void getStock_Data() {
         //Getting winners and losers
@@ -828,7 +840,7 @@ try{
                 stock_losers_pricelist.add(lprice);
                 stock_losers_changelist.add(lchange);
                 typelist.add("Stock");
-                System.out.println("FIRST METHOD  LOSERS"+lsymbol + " " + lname + " " + lprice + " " + lchange);
+
             }
 
         } catch (IOException e) {
@@ -1030,14 +1042,91 @@ try{
         }
     }
 
-    public static org.w3c.dom.Document GoogleRSFeed() {
+    public static void addTopNews(){}
+    public static org.w3c.dom.Document getTopCryptoNews(){
         try {
             URL url;
-            Context context;
+            repo = top_news_list.get(0).toString();
+            String address = "https://news.google.com/news/rss/search/section/q/" + repo + "?ned=us&gl=US&hl=en";
+            url = new URL(address);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+            InputStream inputStream = connection.getInputStream();
+            DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = builderFactory.newDocumentBuilder();
+            org.w3c.dom.Document xmlDoc = builder.parse(inputStream);
+
+            return xmlDoc;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+    }
+    public static org.w3c.dom.Document getBottomCryptoNews(){
+        try {
+            URL url;
+            repo = top_news_list.get(1).toString();
+            String address = "https://news.google.com/news/rss/search/section/q/" + repo + "?ned=us&gl=US&hl=en";
+            url = new URL(address);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+            InputStream inputStream = connection.getInputStream();
+            DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = builderFactory.newDocumentBuilder();
+            org.w3c.dom.Document xmlDoc = builder.parse(inputStream);
+
+            return xmlDoc;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    public static org.w3c.dom.Document getTopStockNews(){
+        try {
+            URL url;
+            repo = top_news_list.get(2).toString();
+            String address = "https://news.google.com/news/rss/search/section/q/" + repo + "?ned=us&gl=US&hl=en";
+            url = new URL(address);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+            InputStream inputStream = connection.getInputStream();
+            DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = builderFactory.newDocumentBuilder();
+            org.w3c.dom.Document xmlDoc = builder.parse(inputStream);
+
+            return xmlDoc;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    public static org.w3c.dom.Document getBottomStockNews(){
+        try {
+            URL url;
+            repo = top_news_list.get(3).toString();
+            String address = "https://news.google.com/news/rss/search/section/q/" + repo + "?ned=us&gl=US&hl=en";
+            url = new URL(address);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+            InputStream inputStream = connection.getInputStream();
+            DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = builderFactory.newDocumentBuilder();
+            org.w3c.dom.Document xmlDoc = builder.parse(inputStream);
+
+            return xmlDoc;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static org.w3c.dom.Document GoogleRSFeed() {
+
+        try {
+            URL url;
             repo = "Stock%20Cryptocurrency";
             String address = "https://news.google.com/news/rss/search/section/q/" + repo + "?ned=us&gl=US&hl=en";
-
-
             url = new URL(address);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");

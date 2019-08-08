@@ -23,27 +23,19 @@ public class Adapter_Main_Equities extends RecyclerView.Adapter<Adapter_Main_Equ
     ArrayList stockloserssymbol_list;
         ArrayList stocklosersname_list;
         ArrayList change_list;
-
-    String type_and_case;
+        String type_and_case;
         Context context;
-Fragment_Winners fragment_winners;
         public Adapter_Main_Equities(Context context, String type_and_case, ArrayList stock_losers_symbollist, ArrayList stock_losers_namelist, ArrayList changelist){
             this.context=context;
-
             this.stockloserssymbol_list = stock_losers_symbollist;
             this.stocklosersname_list =stock_losers_namelist;
             this.change_list =changelist;
             this.type_and_case =type_and_case;
-
-        }
-
-        public Adapter_Main_Equities(Context context, int id, Fragment_Winners fragment_winners){
-            this.fragment_winners = fragment_winners;
         }
 
 
     public class MyViewHolder extends RecyclerView.ViewHolder{
-            public TextView number, symbol, name, value, types, cPrice;
+            public TextView number, symbol,name, value, types, cPrice;
             public ImageView circle;
 
             public MyViewHolder(View itemView) {
@@ -73,20 +65,14 @@ Fragment_Winners fragment_winners;
         }
 
         @Override
-        public Adapter_Main_Equities.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            
-            View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.recyclerview_aequity_view, parent, false);
-            return new Adapter_Main_Equities.MyViewHolder(view);
+        public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_aequity_view, parent, false);
+            return new MyViewHolder(view);
         }
 
         @Override
-        public void onBindViewHolder(Adapter_Main_Equities.MyViewHolder holder, int i) {
-            //.i=lowest_integer[0];
-            //if (lowest_integer[0] > 0|| stock_losers_symbollist.size()>0||crypto_losers_symbollist.size()>0||symbollist.size()>0||symbollist.size()>0){
-
-
-
+        public void onBindViewHolder(MyViewHolder holder, int i) {
+            try {
                 if ("Stock_Loser".equals(type_and_case)) {
                     holder.number.setText((1 + i) + ".");
                     holder.symbol.setText("" + stock_losers_symbollist.get(i));
@@ -115,7 +101,7 @@ Fragment_Winners fragment_winners;
                 }
 
                 if ("Crypto_Winner".equals(type_and_case)) {
-                 //   System.out.println(crypto_winners_changelist.get(i)+" "+crypto_winners_namelist.get(i)+" "+typelist.get(i));
+                    //   System.out.println(crypto_winners_changelist.get(i)+" "+crypto_winners_namelist.get(i)+" "+typelist.get(i));
 
                     holder.number.setText((1 + i) + ".");
                     holder.symbol.setText("" + crypto_winners_symbollist.get(i));
@@ -126,17 +112,17 @@ Fragment_Winners fragment_winners;
                     holder.value.setTextColor(Color.parseColor("#00cc00"));
                     holder.types.setText("+" + "Cryptocurrency");
                 }
-            if ("Stock_Winner".equals(type_and_case)) {
+                if ("Stock_Winner".equals(type_and_case)) {
 //               System.out.println(stock_winners_changelist.get(i)+" "+stock_winners_namelist.get(i)+" "+typelist.get(i)+" "+i);
-                holder.number.setText((1 + i) + ".");
-                holder.symbol.setText("" + stock_winners_symbollist.get(i));
-                holder.name.setText("" + stock_winners_namelist.get(i));
-                holder.cPrice.setText("" + stock_winners_pricelist.get(i));
-                holder.circle.setImageResource(R.drawable.holder_green_circle);
-                holder.value.setText("+" + stock_winners_changelist.get(i));
-                holder.value.setTextColor(Color.parseColor("#00cc00"));
-                holder.types.setText("+" + "Stock");
-            }
+                    holder.number.setText((1 + i) + ".");
+                    holder.symbol.setText("" + stock_winners_symbollist.get(i));
+                    holder.name.setText("" + stock_winners_namelist.get(i));
+                    holder.cPrice.setText("" + stock_winners_pricelist.get(i));
+                    holder.circle.setImageResource(R.drawable.holder_green_circle);
+                    holder.value.setText("+" + stock_winners_changelist.get(i));
+                    holder.value.setTextColor(Color.parseColor("#00cc00"));
+                    holder.types.setText("+" + "Stock");
+                }
                 if ("Crypto_Loser".equals(type_and_case)) {
                     holder.number.setText((1 + i) + ".");
                     holder.symbol.setText("" + crypto_losers_symbollist.get(i));
@@ -149,7 +135,7 @@ Fragment_Winners fragment_winners;
                 }
                 if (("Crypto_Kings".equals(type_and_case))) {
                     holder.number.setText((1 + i) + ".");
-                    holder.symbol.setText("" + "poop");
+                    holder.symbol.setText("" + crypto_kings_symbolist.get(i));
                     holder.name.setText("" + crypto_kings_namelist.get(i));
                     holder.cPrice.setText("$" + crypto_kings_pricelist.get(i));
                     String poo = String.valueOf(crypto_kings_changelist.get(i));
@@ -163,16 +149,22 @@ Fragment_Winners fragment_winners;
                     holder.value.setText("" + crypto_kings_changelist.get(i));
                     holder.types.setText("Cryptocurrency");
                 }
+
+            } catch (Exception e) {
+                holder.name.setText("" + "Updating");
+                holder.value.setText("" + "Updating");
+                holder.cPrice.setText("" + "Updating");
             }
-        //}
+        }
+
 
 
         @Override
         public int getItemCount() {
-            //if (lowest_integer[0]>0){
-           // return lowest_integer[0];}else{/
+
                 return 20;
-         //   }
+
+
         }
 
 
