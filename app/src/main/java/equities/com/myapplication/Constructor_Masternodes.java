@@ -3,7 +3,11 @@ package equities.com.myapplication;
 
 public class Constructor_Masternodes {
    String masternode_name;
-   String link;
+   String masternode_symbol;
+   String masternode_percent_change;
+   String masternode_marketcap;
+   String masternode_node_count;
+   String masternode_purchase_value;
 
     public String getMasternode_name() {
         return masternode_name;
@@ -11,14 +15,6 @@ public class Constructor_Masternodes {
 
     public void setMasternode_name(String masternode_name) {
         this.masternode_name = masternode_name;
-    }
-
-    public String getLink() {
-        return link;
-    }
-
-    public void setLink(String link) {
-        this.link = link;
     }
 
     public String getMasternode_symbol() {
@@ -60,11 +56,4 @@ public class Constructor_Masternodes {
     public void setMasternode_purchase_value(String masternode_purchase_value) {
         this.masternode_purchase_value = masternode_purchase_value;
     }
-
-    String masternode_symbol;
-   String masternode_percent_change;
-   String masternode_marketcap;
-   String masternode_node_count;
-   String masternode_purchase_value;
-
- }
+}

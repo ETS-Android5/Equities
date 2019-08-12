@@ -49,11 +49,11 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
                 fragment = new Fragment_Masternodes();
                 break;
             }
+            //case 6: {
+           //     fragment = new Fragment_Icos();
+           //     break;
+           // }
             case 6: {
-                fragment = new Fragment_Icos();
-                break;
-            }
-            case 7: {
                 fragment = new Fragment_Ipos();
                 break;
             }

@@ -13,25 +13,32 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+
 import static equities.com.myapplication.Activity_Main.ap_info;
 import static equities.com.myapplication.Service_Main_Equities.*;
 import static equities.com.myapplication.Service_Main_Equities.stock_winners_changelist;
 
 public class Adapter_Main_Equities extends RecyclerView.Adapter<Adapter_Main_Equities.MyViewHolder> {
 
-
-    ArrayList stockloserssymbol_list;
+        private List<Constructor_Crypto_Equities> crypto_equities ;
+        ArrayList stockloserssymbol_list;
         ArrayList stocklosersname_list;
         ArrayList change_list;
         String type_and_case;
         Context context;
-        public Adapter_Main_Equities(Context context, String type_and_case, ArrayList stock_losers_symbollist, ArrayList stock_losers_namelist, ArrayList changelist){
+        public Adapter_Main_Equities(Context context, String type_and_case, List<Constructor_Crypto_Equities> items){
             this.context=context;
-            this.stockloserssymbol_list = stock_losers_symbollist;
-            this.stocklosersname_list =stock_losers_namelist;
-            this.change_list =changelist;
+            this.crypto_equities = items;
             this.type_and_case =type_and_case;
         }
+    public Adapter_Main_Equities(Context context, String type_and_case, ArrayList stock_losers_symbollist, ArrayList stock_losers_namelist, ArrayList changelist){
+        this.context=context;
+        this.stockloserssymbol_list = stock_losers_symbollist;
+        this.stocklosersname_list =stock_losers_namelist;
+        this.change_list =changelist;
+        this.type_and_case =type_and_case;
+    }
+
 
 
     public class MyViewHolder extends RecyclerView.ViewHolder{
@@ -97,7 +104,7 @@ public class Adapter_Main_Equities extends RecyclerView.Adapter<Adapter_Main_Equ
                         holder.circle.setImageResource(R.drawable.holder_green_circle);
                     }
                     holder.types.setText("Stock");
-                    holder.cPrice.setText("" + stock_kings_changelist.get(i));
+                    holder.cPrice.setText("$ " + stock_kings_changelist.get(i));
                 }
 
                 if ("Crypto_Winner".equals(type_and_case)) {
@@ -117,7 +124,7 @@ public class Adapter_Main_Equities extends RecyclerView.Adapter<Adapter_Main_Equ
                     holder.number.setText((1 + i) + ".");
                     holder.symbol.setText("" + stock_winners_symbollist.get(i));
                     holder.name.setText("" + stock_winners_namelist.get(i));
-                    holder.cPrice.setText("" + stock_winners_pricelist.get(i));
+                    holder.cPrice.setText("$ " + stock_winners_pricelist.get(i));
                     holder.circle.setImageResource(R.drawable.holder_green_circle);
                     holder.value.setText("+" + stock_winners_changelist.get(i));
                     holder.value.setTextColor(Color.parseColor("#00cc00"));

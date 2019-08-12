@@ -18,7 +18,7 @@ public class Adapter_Masternodes_Feed extends RecyclerView.Adapter<Adapter_Maste
    List<Constructor_Masternodes> masternode_feedItems;
    static Context context;
    public Adapter_Masternodes_Feed(Context context, List<Constructor_Masternodes> items){
-     this.context=context;  
+     this.context=context;
      this.masternode_feedItems = items;
    }
 
@@ -63,26 +63,26 @@ public class Adapter_Masternodes_Feed extends RecyclerView.Adapter<Adapter_Maste
 
      return new Adapter_Masternodes_Feed.MyViewHolder(view);
    }
-   
-   @Override  
+
+   @Override
    public void onBindViewHolder(Adapter_Masternodes_Feed.MyViewHolder holder, int position) {
-     holder.symbol.setText(""+masternode_symbol.get(position));
-     if (masternode_percent_change.get(position).toString().contains("-")){
+       Constructor_Masternodes constructor_masternodes = masternode_feedItems.get(position);
+     holder.symbol.setText(constructor_masternodes.getMasternode_symbol());
+     if (constructor_masternodes.getMasternode_percent_change().contains("-")){
          holder.changes.setTextColor(Color.parseColor("#ff0000"));
      }else{
          holder.changes.setTextColor(Color.parseColor("#00cc00"));
      }
-     holder.changes.setText(""+masternode_percent_change.get(position)+"%");
-     if(masternode_node_count.size()>1){
-     holder.count.setText(""+masternode_node_count.get(position));
-     holder.cost_to_own.setText("$ "+masternode_purchase_value.get(position));
-     holder.cap.setText(""+masternode_marketcap.get(position));}
-     holder.name.setText(""+masternode_name.get(position));
+     holder.changes.setText(constructor_masternodes.getMasternode_percent_change());
+     holder.count.setText(constructor_masternodes.getMasternode_node_count());
+     holder.cost_to_own.setText(constructor_masternodes.getMasternode_purchase_value());
+     holder.cap.setText(""+constructor_masternodes.getMasternode_marketcap());
+     holder.name.setText(""+constructor_masternodes.getMasternode_name());
    }
    
    @Override  
    public int getItemCount() {  
-     return masternode_name.size();
+     return masternode_feedItems.size();
    }  
    
 

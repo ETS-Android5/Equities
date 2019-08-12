@@ -262,10 +262,10 @@ public class Activity_Main extends AppCompatActivity {
         adapter.addFrag(new Fragment_Market_Kings(), getString(R.string.market_kings));
         adapter.addFrag(new Fragment_App_News(), getString(R.string.news));
         adapter.addFrag(new Fragment_Masternodes(),getString(R.string.masternodes));
-        adapter.addFrag(new Fragment_Icos(),getString(R.string.ico));
+        //adapter.addFrag(new Fragment_Icos(),getString(R.string.ico));
         adapter.addFrag(new Fragment_Ipos(),getString(R.string.ipo));
         viewPager.setAdapter(adapter);
-        viewPager.setOffscreenPageLimit(8);
+        viewPager.setOffscreenPageLimit(7);
 
     }
 
@@ -302,7 +302,6 @@ public class Activity_Main extends AppCompatActivity {
                 aequity_name_arraylist.add(nam);
                 String typ = childJsonArray.getString(2);
                 aequity_type_arraylist.add(typ);
-
                 searchview_arraylist.add(sym + "  " + nam + "  " + typ);
             }
         } catch (JSONException e) {
@@ -719,30 +718,31 @@ public class Activity_Main extends AppCompatActivity {
     }
 
     public static void do_graph_change() {
-        Double a=0.00;
-        for (int i = 0; i < graph_high.size(); i++) {
-            if(graph_high.get(i)!=null) {
-                   if(graph_high.get(i)=="null"){
-                       graph_high.get(i).toString().replace("null","0.00");
-                   }
-                a = new Double(graph_high.get(i).toString().replace(",", "").replace("<","").replace("/","").replace("-",""));
-            }else{
-                a=0.00;
-            }
-            if (i > 0) {
-                int z = i - 1;
-                if(graph_high!=null){
-                double b = new Double(graph_high.get(z).toString().replace(",","").replace("<","").replace("/",""));
-                double c = ((a - b) / a) * 100;
-                DecimalFormat numberFormat = new DecimalFormat("#0.00");
-                String add =numberFormat.format(c).replace("-","");
-                graph_change.add(add);}else{
-                    graph_change.add("0");
+        Double a=0.00;if(graph_high.size()>0) {
+            for (int i = 0; i < graph_high.size(); i++) {
+                if (graph_high.get(i) != null) {
+                    if (graph_high.get(i) == "null") {
+                        graph_high.get(i).toString().replace("null", "0.00");
+                    }
+                    a = new Double(graph_high.get(i).toString().replace(",", "").replace("<", "").replace("/", "").replace("-", ""));
+                } else {
+                    a = 0.00;
                 }
+                if (i > 0) {
+                    int z = i - 1;
+                    if (graph_high != null) {
+                        double b = new Double(graph_high.get(z).toString().replace(",", "").replace("<", "").replace("/", ""));
+                        double c = ((a - b) / a) * 100;
+                        DecimalFormat numberFormat = new DecimalFormat("#0.00");
+                        String add = numberFormat.format(c).replace("-", "");
+                        graph_change.add(add);
+                    } else {
+                        graph_change.add("0");
+                    }
 
+                }
             }
         }
-
 
     }
 

@@ -113,6 +113,7 @@ public class Constructor_App_Variables {
 
     protected static ArrayList<Constructor_Masternodes> masternode_feedItems = new ArrayList<>();
     protected static ArrayList<Constructor_News_Feed> all_feedItems = new ArrayList<>();
+    protected static ArrayList<Constructor_Crypto_Equities> stock_loser_feedItems = new ArrayList<>();
     public static List<String> _AllDays =new ArrayList();
     public static String market_symbol;
     public static String market_name;
