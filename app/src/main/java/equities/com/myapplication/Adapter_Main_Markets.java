@@ -49,14 +49,14 @@ public class Adapter_Main_Markets extends RecyclerView.Adapter<Adapter_Main_Mark
 
                     ap_info.getCurrent_Aequity_Price();
                     String temp = mIdView.getText().toString();
-                    Activity_Main activity = new Activity_Main();
+                    Activity_Markets_Main activity = new Activity_Markets_Main();
                     switch (getAdapterPosition()) {
                         case 0:
                             temp = "Dow Jones";
                             ap_info.setMarketName(temp);
                             ap_info.setMarketSymbol("%5EDJI");
                             ap_info.setMarketType("Stock");
-                            new AsyncChosenData((Activity_Main) context)
+                            new AsyncChosenData((Activity_Markets_Main) context)
                                     .execute();
                             break;
                         case 1:
@@ -64,7 +64,7 @@ public class Adapter_Main_Markets extends RecyclerView.Adapter<Adapter_Main_Mark
                             ap_info.setMarketName(temp);
                             ap_info.setMarketSymbol("%5EGSPC");
                             ap_info.setMarketType("Stock");
-                            new AsyncChosenData((Activity_Main)context)
+                            new AsyncChosenData((Activity_Markets_Main)context)
                                     .execute();
                             break;
                         case 2:
@@ -72,7 +72,7 @@ public class Adapter_Main_Markets extends RecyclerView.Adapter<Adapter_Main_Mark
                             ap_info.setMarketName(temp);
                             ap_info.setMarketSymbol("%5EIXIC");
                             ap_info.setMarketType("Stock");
-                           new AsyncChosenData((Activity_Main) context)
+                           new AsyncChosenData((Activity_Markets_Main) context)
                                     .execute();
                             break;
                         case 3:
@@ -80,7 +80,7 @@ public class Adapter_Main_Markets extends RecyclerView.Adapter<Adapter_Main_Mark
                             ap_info.setMarketName(temp);
                             ap_info.setMarketSymbol("BTC");
                             ap_info.setMarketType("Cryptocurrency");
-                            new AsyncChosenData((Activity_Main) context)
+                            new AsyncChosenData((Activity_Markets_Main) context)
                                     .execute();
                             break;
                         case 4:
@@ -88,7 +88,7 @@ public class Adapter_Main_Markets extends RecyclerView.Adapter<Adapter_Main_Mark
                             ap_info.setMarketName(temp);
                             ap_info.setMarketSymbol("%5EFTSE");
                             ap_info.setMarketType("Index");
-                            new AsyncChosenData((Activity_Main) context)
+                            new AsyncChosenData((Activity_Markets_Main) context)
                                     .execute();
                             break;
                         case 5:
@@ -96,7 +96,7 @@ public class Adapter_Main_Markets extends RecyclerView.Adapter<Adapter_Main_Mark
                             ap_info.setMarketName(temp);
                             ap_info.setMarketSymbol("%5EFCHI");
                             ap_info.setMarketType("Index");
-                            new AsyncChosenData((Activity_Main) context)
+                            new AsyncChosenData((Activity_Markets_Main) context)
                                     .execute();
                             break;
 
@@ -105,7 +105,7 @@ public class Adapter_Main_Markets extends RecyclerView.Adapter<Adapter_Main_Mark
                             ap_info.setMarketName(temp);
                             ap_info.setMarketSymbol("%5EGDAXI");
                             ap_info.setMarketType("Index");
-                            new AsyncChosenData((Activity_Main) context)
+                            new AsyncChosenData((Activity_Markets_Main) context)
                                     .execute();
                             break;
                         case 7:
@@ -113,7 +113,7 @@ public class Adapter_Main_Markets extends RecyclerView.Adapter<Adapter_Main_Mark
                             ap_info.setMarketName(temp);
                             ap_info.setMarketSymbol("000001.ss");
                             ap_info.setMarketType("Index");
-                            new AsyncChosenData((Activity_Main) context)
+                            new AsyncChosenData((Activity_Markets_Main) context)
                                     .execute();
                             break;
                         case 8:
@@ -121,7 +121,7 @@ public class Adapter_Main_Markets extends RecyclerView.Adapter<Adapter_Main_Mark
                             ap_info.setMarketName(temp);
                             ap_info.setMarketSymbol("%5EHSI");
                             ap_info.setMarketType("Index");
-                            new AsyncChosenData((Activity_Main) context)
+                            new AsyncChosenData((Activity_Markets_Main) context)
                                     .execute();
                             break;
                         case 9:
@@ -129,7 +129,7 @@ public class Adapter_Main_Markets extends RecyclerView.Adapter<Adapter_Main_Mark
                             ap_info.setMarketName(temp);
                             ap_info.setMarketSymbol("%5EN225");
                             ap_info.setMarketType("Index");
-                            new AsyncChosenData((Activity_Main) context)
+                            new AsyncChosenData((Activity_Markets_Main) context)
                                     .execute();
                             break;
                         default:

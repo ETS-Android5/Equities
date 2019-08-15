@@ -11,8 +11,8 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import static equities.com.myapplication.Activity_Main.ap_info;
-import static equities.com.myapplication.Activity_Main.db_exist;
+import static equities.com.myapplication.Activity_Markets_Main.ap_info;
+import static equities.com.myapplication.Activity_Markets_Main.db_exist;
 import static equities.com.myapplication.Constructor_App_Variables.current_percentage_change;
 
 public class Adapter_Saved_Feed extends RecyclerView.Adapter<Adapter_Saved_Feed.MyViewHolder> {
@@ -98,7 +98,7 @@ if (l.equalsIgnoreCase("Cryptocurrency")){
                 ap_info.setMarketType(holder.type.getText().toString());
                 //("THIS SI I INFO "+ap_info.getMarketName()+" "+ap_info.getMarketSymbol()+" "+ap_info.getMarketType());
                 db_exist=true;
-                new AsyncChosenData((Activity_Main)context).execute();
+                new AsyncChosenData((Activity_Markets_Main)context).execute();
 
 
             }

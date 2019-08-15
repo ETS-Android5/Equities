@@ -40,6 +40,7 @@ import java.util.concurrent.Future;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static equities.com.myapplication.Activity_Markets_Main.ap_info;
 import static equities.com.myapplication.Constructor_App_Variables.*;
 
 public class Service_Main_Equities {
@@ -91,7 +92,6 @@ public class Service_Main_Equities {
     static ArrayList crypto_kings_marketcaplist = new ArrayList();
     static ArrayList crypto_kings_changelist = new ArrayList();
 
-    static String repo;
     public static void main() {
         clearMainData();
         ExecutorService service = Executors.newCachedThreadPool();
@@ -101,22 +101,12 @@ public class Service_Main_Equities {
             @Override
             public String call() throws Exception {
                 if(saved_helper == 1){}else{
-                getWorldMarkets();
-                getCrypto_Data();
-                getStock_Data();
+                    WorldMarketsMethod();
                 }
                 return null;
             }
         });
 
-        callables.add(new Callable<String>() {
-            @Override
-            public String call() throws Exception {
-                if(saved_helper == 1){}else{
-                ProcessXml(GoogleRSFeed());}
-                return null;
-            }
-        });
         callables.add(new Callable<String>() {
             @Override
             public String call() throws Exception {
@@ -145,6 +135,43 @@ public class Service_Main_Equities {
             e.printStackTrace();
         }
     }
+
+    public static void WorldMarketsMethod(){
+        getWorldMarkets();
+        ProcessXml(GoogleRSWorldMarketsFeed());
+        getVideoInfo("World Markets");
+
+    }
+
+    public static void getVideoInfo(String term) {
+        String url = "https://www.youtube.com/results";
+        String begin_url;
+        String mid_url;
+        String end_url;
+        String url_1st = "https://i.ytimg.com/vi/";
+        String url_3rd = "/hqdefault.jpg";
+        try {
+            Document doc = Jsoup.connect(url).data("search_query", term).userAgent("Mozilla/5.0").timeout(10 * 10000).get();
+
+            for (Element a : doc.select(".yt-lockup-title > a[title]")) {
+                begin_url = (a.attr("href") + " " + a.attr("title"));
+                begin_url = begin_url.replace("/watch?v=", "");
+                mid_url = begin_url.substring(0, begin_url.indexOf(" "));
+                end_url = begin_url.replace(mid_url, "");
+                String f_url = url_1st + mid_url + url_3rd;
+                Constructor_App_Variables.video_title.add(end_url);
+                Constructor_App_Variables.video_url.add(mid_url);
+                Constructor_App_Variables.image_video_url.add(f_url);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+
 
     //Completed Method but need a backup for masternodes
     public static void get_masternodes() {
@@ -211,7 +238,6 @@ public class Service_Main_Equities {
             Constructor_Masternodes constructor_masternodes1 = masternode_feedItems.get(i);
             System.out.println(constructor_masternodes1.getMasternode_name());}
     }
-
 
     public static void getMarketWinners(){
         try {
@@ -594,7 +620,6 @@ try{
 
 
     }
-
 
     public static void toDouble(ArrayList array, String string){
         Double doub = Double.parseDouble(string);
@@ -1101,91 +1126,10 @@ try{
         }
     }
 
-    public static void addTopNews(){}
-    public static org.w3c.dom.Document getTopCryptoNews(){
+    public static org.w3c.dom.Document GoogleRSWorldMarketsFeed() {
         try {
             URL url;
-            repo = top_news_list.get(0).toString();
-            String address = "https://news.google.com/news/rss/search/section/q/" + repo + "?ned=us&gl=US&hl=en";
-            url = new URL(address);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("GET");
-            InputStream inputStream = connection.getInputStream();
-            DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder builder = builderFactory.newDocumentBuilder();
-            org.w3c.dom.Document xmlDoc = builder.parse(inputStream);
-
-            return xmlDoc;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-
-    }
-    public static org.w3c.dom.Document getBottomCryptoNews(){
-        try {
-            URL url;
-            repo = top_news_list.get(1).toString();
-            String address = "https://news.google.com/news/rss/search/section/q/" + repo + "?ned=us&gl=US&hl=en";
-            url = new URL(address);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("GET");
-            InputStream inputStream = connection.getInputStream();
-            DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder builder = builderFactory.newDocumentBuilder();
-            org.w3c.dom.Document xmlDoc = builder.parse(inputStream);
-
-            return xmlDoc;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-    public static org.w3c.dom.Document getTopStockNews(){
-        try {
-            URL url;
-            repo = top_news_list.get(2).toString();
-            String address = "https://news.google.com/news/rss/search/section/q/" + repo + "?ned=us&gl=US&hl=en";
-            url = new URL(address);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("GET");
-            InputStream inputStream = connection.getInputStream();
-            DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder builder = builderFactory.newDocumentBuilder();
-            org.w3c.dom.Document xmlDoc = builder.parse(inputStream);
-
-            return xmlDoc;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-    public static org.w3c.dom.Document getBottomStockNews(){
-        try {
-            URL url;
-            repo = top_news_list.get(3).toString();
-            String address = "https://news.google.com/news/rss/search/section/q/" + repo + "?ned=us&gl=US&hl=en";
-            url = new URL(address);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("GET");
-            InputStream inputStream = connection.getInputStream();
-            DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder builder = builderFactory.newDocumentBuilder();
-            org.w3c.dom.Document xmlDoc = builder.parse(inputStream);
-
-            return xmlDoc;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    public static org.w3c.dom.Document GoogleRSFeed() {
-
-        try {
-            URL url;
-            repo = "Stock%20Cryptocurrency";
-            String address = "https://news.google.com/news/rss/search/section/q/" + repo + "?ned=us&gl=US&hl=en";
+            String address = "https://news.google.com/news/rss/search/section/q/" + "World Markets" + "?ned=us&gl=US&hl=en";
             url = new URL(address);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");

@@ -17,7 +17,7 @@ import com.google.android.youtube.player.YouTubeThumbnailLoader;
 import com.google.android.youtube.player.YouTubeThumbnailView;
 import java.util.ArrayList;
 
-import static equities.com.myapplication.Activity_Main.fullScreen;
+import static equities.com.myapplication.Activity_Markets_Main.fullScreen;
 import static equities.com.myapplication.Constructor_App_Variables.image_video_url;
 import static equities.com.myapplication.Constructor_App_Variables.video_title;
 import static equities.com.myapplication.Constructor_App_Variables.video_url;

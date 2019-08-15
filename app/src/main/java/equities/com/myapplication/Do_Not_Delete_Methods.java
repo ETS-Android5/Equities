@@ -70,7 +70,7 @@ public class Do_Not_Delete_Methods {
                     Constructor_App_Variables team = new Constructor_App_Variables();
                     team.setMarketSymbol(String.valueOf(childDataSnapshot.child("0").getValue()));
                     searchview_arraylist.add(String.valueOf(team));
-                    ld = new Database_Local_Aequities(Activity_Main.this);
+                    ld = new Database_Local_Aequities(Activity_Markets_Main.this);
                 }
 
             }

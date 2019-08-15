@@ -10,8 +10,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import static equities.com.myapplication.Activity_Main.ap_info;
-import static equities.com.myapplication.Constructor_App_Variables.*;
+import static equities.com.myapplication.Activity_Markets_Main.ap_info;
 
 public class Adapter_Masternodes_Feed extends RecyclerView.Adapter<Adapter_Masternodes_Feed.MyViewHolder> {
 
@@ -49,8 +48,8 @@ public class Adapter_Masternodes_Feed extends RecyclerView.Adapter<Adapter_Maste
                     ap_info.setMarketName(name.getText().toString());
                     ap_info.setMarketType("Crypto");
                     ap_info.setMarketChange(changes.getText().toString());
-                    Activity_Main activity_main = new Activity_Main();
-                    new AsyncChosenData((Activity_Main) context)
+                    Activity_Markets_Main activity_Markets_main = new Activity_Markets_Main();
+                    new AsyncChosenData((Activity_Markets_Main) context)
                             .execute();}
             });
         }

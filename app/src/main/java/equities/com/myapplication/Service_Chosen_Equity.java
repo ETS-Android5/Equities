@@ -26,7 +26,7 @@ import java.util.regex.Pattern;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import static equities.com.myapplication.Activity_Main.ap_info;
+import static equities.com.myapplication.Activity_Markets_Main.ap_info;
 import static equities.com.myapplication.Constructor_App_Variables.*;
 
 //The original version of this code was found on StackOverflow.com from user flup

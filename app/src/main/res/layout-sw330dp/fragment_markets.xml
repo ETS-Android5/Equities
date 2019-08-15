@@ -18,37 +18,6 @@
             android:layout_weight="1"
             android:orientation="vertical">
 
-            <TableRow
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="3dp"
-                    android:paddingRight="3dp" android:layout_gravity="center">
-
-                <android.support.v7.widget.AppCompatTextView
-
-                        android:id="@+id/stock"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_weight="1"
-                        android:background="#00000000"
-                        android:gravity="center"
-                        android:text="@string/markets"
-                        android:textColor="@color/colorPrimary"
-                        android:textSize="26sp"/>
-
-
-            </TableRow>
-
-            <TextView android:id="@+id/stock_leaders_data_provider"
-                      android:layout_height="wrap_content"
-                      android:layout_width="match_parent"
-                      android:gravity="center"
-                      android:textColor="@color/colorPrimary"
-                      android:autoLink="web"
-                      android:textColorLink="@color/darkTextColor"
-                      android:text="@string/stock_loser_winner_data_provider" android:textSize="12sp"
-            />
             <android.support.v7.widget.RecyclerView
                     android:id="@+id/stock_items"
                     android:layout_width="match_parent"

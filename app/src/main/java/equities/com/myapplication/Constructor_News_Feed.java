@@ -8,6 +8,17 @@ public class Constructor_News_Feed {
    String pubDate;
    String thumbnailUrl;
    String source;
+   String news_search_term;
+
+   public String getNews_search_term() {
+        return news_search_term;
+   }
+   public void setNews_search_term(String news_search_term) {
+        this.news_search_term = news_search_term;
+   }
+
+
+
 
     public String getSource() {
         return source;

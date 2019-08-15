@@ -59,8 +59,8 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import static equities.com.myapplication.Constructor_App_Variables.*;
 import static equities.com.myapplication.Fragment_Analysis.mTimer;
 
-public class Activity_Main extends AppCompatActivity {
-    Database_Local_Aequities check_saved = new Database_Local_Aequities(Activity_Main.this);
+public class Activity_Markets_Main extends AppCompatActivity {
+    Database_Local_Aequities check_saved = new Database_Local_Aequities(Activity_Markets_Main.this);
     RequestQueue requestQueue;
     TextView txt;
     //final int[] ICONS = new int[]{R.drawable.direction_markets, R.drawable.direction_up, R.drawable.direction_down, R.drawable.direction_kings, R.drawable.direction_news, R.drawable.direction_masternode, R.drawable.direction_icos, R.drawable.direction_ipos};
@@ -178,7 +178,7 @@ public class Activity_Main extends AppCompatActivity {
             finish();}else {
             reloadAllData();
                 new AsyncChosenData(this).cancel(true);
-                new AsyncForBackPressedSavedData(Activity_Main.this).execute();
+                new AsyncForBackPressedSavedData(Activity_Markets_Main.this).execute();
 
 
         }
@@ -187,12 +187,16 @@ public class Activity_Main extends AppCompatActivity {
 
     public class setAsyncCreateSavedData extends AsyncTask<Integer, Integer, String> {
 
-        private WeakReference<Activity_Main> activityReference;
-        setAsyncCreateSavedData(Activity_Main context) {
+        private WeakReference<Activity_Markets_Main> activityReference;
+        setAsyncCreateSavedData(Activity_Markets_Main context) {
             activityReference = new WeakReference<>(context);
         }
-
-
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            Constructor_News_Feed constructor_news_feed = new Constructor_News_Feed();
+            constructor_news_feed.setNews_search_term("World Markets");
+        }
         @Override
         protected String doInBackground(Integer... params) {
             ArrayList aa = check_saved.getType();
@@ -202,7 +206,7 @@ public class Activity_Main extends AppCompatActivity {
         }
         @Override
         protected void onPostExecute(String result) {
-            new AsyncDataMain(Activity_Main.this).execute();
+            new AsyncDataMain(Activity_Markets_Main.this).execute();
 
         }
 
@@ -211,7 +215,6 @@ public class Activity_Main extends AppCompatActivity {
     protected void setMainPage() {
         setContentView(R.layout.activity_main);
         setJSON_INFO();
-
         toolbar = findViewById(R.id.toolbar);
         progLayout=findViewById(R.id.progLayout);
         openSearchView();
@@ -221,23 +224,6 @@ public class Activity_Main extends AppCompatActivity {
         pager.setVisibility(View.VISIBLE);
         ViewPager market_pager = findViewById(R.id.market_pager);
         market_pager.setVisibility(View.GONE);
-
-
-        swipe_container = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
-        swipe_container.setEnabled(false);
-        swipe_container.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                if (pager.getVisibility()==View.VISIBLE){
-                    StartApplication();
-                }
-                if (market_pager.getVisibility()==View.VISIBLE){
-                    new AsyncChosenData(Activity_Main.this).execute();
-                }
-                swipe_container.setRefreshing(false);
-            }
-        });
-
         table_tabs = findViewById(R.id.table_tabs);
         TabLayout pagetabs = findViewById(R.id.tabs);
         setupMainViewPager(pager);
@@ -252,25 +238,17 @@ public class Activity_Main extends AppCompatActivity {
               }
               
     public void setupMainViewPager(ViewPager viewPager) {
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        PagerAdapter_WorldMarkets adapter = new PagerAdapter_WorldMarkets(getSupportFragmentManager());
         adapter.addFrag(new Fragment_Markets(), getString(R.string.title_markets));
-        adapter.addFrag(new Fragment_Winners(), getString(R.string.leaders));
-        adapter.addFrag(new Fragment_Losers(), getString(R.string.losers));
-        if (check_saved.getName().size()>0){
-            adapter.addFrag(new Fragment_Saved(), getString(R.string.saved));
-        }
-        adapter.addFrag(new Fragment_Market_Kings(), getString(R.string.market_kings));
         adapter.addFrag(new Fragment_App_News(), getString(R.string.news));
-        adapter.addFrag(new Fragment_Masternodes(),getString(R.string.masternodes));
-        //adapter.addFrag(new Fragment_Icos(),getString(R.string.ico));
-        adapter.addFrag(new Fragment_Ipos(),getString(R.string.ipo));
+        adapter.addFrag(new Fragment_Video(),getString(R.string.title_video));
         viewPager.setAdapter(adapter);
-        viewPager.setOffscreenPageLimit(7);
+        //viewPager.setOffscreenPageLimit(7);
 
     }
 
     public void setupChosenViewPager(ViewPager viewPager) {
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        PagerAdapter_WorldMarkets adapter = new PagerAdapter_WorldMarkets(getSupportFragmentManager());
         if (ap_info.getMarketType().equals("Index")||ap_info.getMarketType().equals("Stock")) {
             adapter.addFrag(new Fragment_Analysis(), getString(R.string.action_analysis));
             adapter.addFrag(new Fragment_News_Chosen(), getString(R.string.title_news));
@@ -289,7 +267,7 @@ public class Activity_Main extends AppCompatActivity {
 
     public void setJSON_INFO() {
         try {
-            String jsonLocation = AssetJSONFile("rd.json", Activity_Main.this);
+            String jsonLocation = AssetJSONFile("rd.json", Activity_Markets_Main.this);
             JSONObject obj = new JSONObject(jsonLocation);
 
             JSONArray Arry = obj.getJSONArray("ALL");
@@ -312,7 +290,7 @@ public class Activity_Main extends AppCompatActivity {
     }
 
     void reloadAllData() {
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        PagerAdapter_WorldMarkets adapter = new PagerAdapter_WorldMarkets(getSupportFragmentManager());
         Fragment_Analysis fragment_analysis = new Fragment_Analysis();
         adapter.removeFrag(fragment_analysis, "Fragment_Analysis");
         mTimer.cancel();
@@ -327,7 +305,7 @@ public class Activity_Main extends AppCompatActivity {
     }
 
     public void openSearchView() {
-        ad = new ArrayAdapter<String>(Activity_Main.this, R.layout.searchbar,
+        ad = new ArrayAdapter<String>(Activity_Markets_Main.this, R.layout.searchbar,
                 R.id.searchtool, searchview_arraylist);
         AutoCompleteTextView chosen_searchView_item = findViewById(R.id.searchtool);
         chosen_searchView_item.setAdapter(ad);
@@ -347,7 +325,7 @@ public class Activity_Main extends AppCompatActivity {
                 ap_info.setMarketName(split_marketinfo[1]);
                 ap_info.setMarketType(split_marketinfo[2]);
                 chosen_searchView_item.onEditorAction(EditorInfo.IME_ACTION_DONE);
-                new AsyncChosenData(Activity_Main.this).execute();
+                new AsyncChosenData(Activity_Markets_Main.this).execute();
                 chosen_searchView_item.setText("");
                 reloadAllData();
 

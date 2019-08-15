@@ -1,6 +1,5 @@
 package equities.com.myapplication;
 
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.support.design.widget.Snackbar;
@@ -28,15 +27,15 @@ import static equities.com.myapplication.Constructor_App_Variables.stocktwits_fe
 
 public class AsyncChosenData extends AsyncTask<Void, Void, String> {
 
-        private WeakReference<Activity_Main> activityReference;
-        AsyncChosenData(Activity_Main context) {
+        private WeakReference<Activity_Markets_Main> activityReference;
+        AsyncChosenData(Activity_Markets_Main context) {
             activityReference = new WeakReference<>(context);
         }
         long startTime;
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            Activity_Main activity = activityReference.get();
+            Activity_Markets_Main activity = activityReference.get();
             TableRow t = activity.findViewById(R.id.table_tabs);
             t.setVisibility(View.GONE);
             graph_change.clear();
@@ -90,7 +89,7 @@ public class AsyncChosenData extends AsyncTask<Void, Void, String> {
 
         @Override
         protected String doInBackground(Void... params) {
-            Activity_Main activity = activityReference.get();
+            Activity_Markets_Main activity = activityReference.get();
             if(isCancelled())
             {
 
@@ -174,7 +173,7 @@ public class AsyncChosenData extends AsyncTask<Void, Void, String> {
 
         @Override
         protected void onPostExecute(String result) {
-            Activity_Main activity = activityReference.get();
+            Activity_Markets_Main activity = activityReference.get();
             activity.fullScreen="go";
             // get a reference to the activity if it is still there
 

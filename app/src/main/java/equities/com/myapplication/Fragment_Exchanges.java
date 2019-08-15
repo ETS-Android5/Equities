@@ -17,7 +17,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 
-import static equities.com.myapplication.Activity_Main.ap_info;
+import static equities.com.myapplication.Activity_Markets_Main.ap_info;
 import static equities.com.myapplication.Constructor_App_Variables.aequity_exchanges;
 import static equities.com.myapplication.Constructor_App_Variables.exchanges_feedItems;
 import static equities.com.myapplication.Constructor_App_Variables.stock_exchange_name;

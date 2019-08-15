@@ -17,14 +17,14 @@ import static equities.com.myapplication.Constructor_App_Variables.stocktwits_fe
 
 public class AsyncForBackPressedSavedData extends AsyncTask<Integer, Integer, String> {
 
-        private WeakReference<Activity_Main> activityReference;
-        AsyncForBackPressedSavedData(Activity_Main context) {
+        private WeakReference<Activity_Markets_Main> activityReference;
+        AsyncForBackPressedSavedData(Activity_Markets_Main context) {
             activityReference = new WeakReference<>(context);
         }
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            Activity_Main activity = activityReference.get();
+            Activity_Markets_Main activity = activityReference.get();
             ViewPager pager = activity.findViewById(R.id.viewpager);
             ViewPager market_pager = activity.findViewById(R.id.viewpager);
 
@@ -53,7 +53,7 @@ public class AsyncForBackPressedSavedData extends AsyncTask<Integer, Integer, St
 
         @Override
         protected String doInBackground(Integer... params) {
-            //Activity_Main activity = activityReference.get();
+            //Activity_Markets_Main activity = activityReference.get();
            // ArrayList aa = activity.check_saved.getType();
            // if(aa.size()>0) {
               // // activity.getSavedEquities();
@@ -63,7 +63,7 @@ public class AsyncForBackPressedSavedData extends AsyncTask<Integer, Integer, St
         }
         @Override
         protected void onPostExecute(String result) {
-            Activity_Main activity = activityReference.get();
+            Activity_Markets_Main activity = activityReference.get();
             ViewPager pager = activity.findViewById(R.id.viewpager);
             if (activity == null || activity.isFinishing()) return;
             graph_change.clear();

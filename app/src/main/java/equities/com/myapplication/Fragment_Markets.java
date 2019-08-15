@@ -58,7 +58,6 @@ import static equities.com.myapplication.Service_Main_Equities.stock_kings_chang
  */
 
 public class Fragment_Markets extends Fragment {
-    TextView stock;
     private RecyclerView stockitems;
     Adapter_Main_Markets adapter;
     String[] market_list = new String[]{dow_name, sp_name, bov_name, "Bitcoin",ftse_name,cac_name,dax_name,shse_name,hang_name,nikk_name};
@@ -92,7 +91,6 @@ public class Fragment_Markets extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_markets, container, false);
-        stock = rootView.findViewById(R.id.stock);
 
         stockitems= rootView.findViewById(R.id.stock_items);
         stockitems.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
@@ -100,8 +98,7 @@ public class Fragment_Markets extends Fragment {
         stockitems.setAdapter(adapter);
         Typeface custom_font = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Oregon.ttf");
 
-        stock.setTypeface(custom_font);
-        stock.setPaintFlags(stock.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
+
         mTimer = new Timer();
         mTimer.scheduleAtFixedRate(createTimerTask(),0,15000);
         return rootView;

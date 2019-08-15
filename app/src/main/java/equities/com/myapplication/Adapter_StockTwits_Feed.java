@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import static equities.com.myapplication.Activity_Main.fullScreen;
+import static equities.com.myapplication.Activity_Markets_Main.fullScreen;
 import static equities.com.myapplication.Constructor_App_Variables.Simg_url;
 
 import com.squareup.picasso.MemoryPolicy;

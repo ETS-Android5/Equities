@@ -8,21 +8,19 @@ import android.view.View;
 import java.util.ArrayList;
 import java.util.List;
 
-import static equities.com.myapplication.Activity_Main.pager;
+import static equities.com.myapplication.Activity_Markets_Main.pager;
 
-public class ViewPagerAdapter extends FragmentPagerAdapter {
+public class PagerAdapter_WorldMarkets extends FragmentPagerAdapter {
     private final List<Fragment> mFragmentList = new ArrayList<>();
     private final List<String> mFragmentTitleList = new ArrayList<>();
 
-    public ViewPagerAdapter(FragmentManager manager) {
+    public PagerAdapter_WorldMarkets(FragmentManager manager) {
         super(manager);
     }
 
     @Override
     public Fragment getItem(int position) {
     if (pager.getVisibility()== View.VISIBLE){
-        //System.out.println("PAGER IS VISIBLE" );
-
         Fragment fragment = null;
         switch (position) {
             case 0: {
@@ -30,34 +28,13 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
                 break;
             }
             case 1: {
-                fragment = new Fragment_Winners();
-                break;
-            }
-            case 2: {
-                fragment = new Fragment_Losers();
-                break;
-            }
-            case 3: {
-                fragment = new Fragment_Market_Kings();
-                break;
-            }
-            case 4: {
                 fragment = new Fragment_App_News();
                 break;
             }
-            case 5: {
-                fragment = new Fragment_Masternodes();
+            case 2: {
+                fragment = new Fragment_Video();
                 break;
             }
-            //case 6: {
-           //     fragment = new Fragment_Icos();
-           //     break;
-           // }
-            case 6: {
-                fragment = new Fragment_Ipos();
-                break;
-            }
-
         }
 
         return fragment;}else{

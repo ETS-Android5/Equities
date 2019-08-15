@@ -16,8 +16,6 @@ import android.widget.TextView;
  */
 
 public class Fragment_Video extends Fragment {
-    Activity_Main mainActivity = (Activity_Main) getActivity();
-    TextView video;
     public Fragment_Video() {
     }
     @Override
@@ -28,11 +26,6 @@ public class Fragment_Video extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_video, container, false);
         RecyclerView recyclerView=(RecyclerView)rootView.findViewById(R.id.list);
-        Typeface custom_font = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Oregon.ttf");
-        video =rootView.findViewById(R.id.video);
-        video.setTypeface(custom_font);
-        video.setPaintFlags(video.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
-
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager=new LinearLayoutManager(getActivity());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);

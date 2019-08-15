@@ -14,12 +14,10 @@ import android.widget.TextView;
 import java.lang.ref.WeakReference;
 import java.util.Random;
 
-import static equities.com.myapplication.Service_Main_Equities.*;
-
 public class AsyncDataMain extends AsyncTask<Integer, Integer, String> {
 
-        private WeakReference<Activity_Main> activityReference;
-        AsyncDataMain(Activity_Main context) {
+        private WeakReference<Activity_Markets_Main> activityReference;
+        AsyncDataMain(Activity_Markets_Main context) {
             activityReference = new WeakReference<>(context);
         }
         long startTime;
@@ -27,7 +25,8 @@ public class AsyncDataMain extends AsyncTask<Integer, Integer, String> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            Activity_Main activity = activityReference.get();
+
+            Activity_Markets_Main activity = activityReference.get();
             ViewPager pager = activity.findViewById(R.id.viewpager);
             if (pager!=null&&pager.getVisibility()== View.VISIBLE){
                 pager.setVisibility(View.GONE);
@@ -88,7 +87,7 @@ public class AsyncDataMain extends AsyncTask<Integer, Integer, String> {
         }
         @Override
         protected void onPostExecute(String result) {
-            Activity_Main activity = activityReference.get();
+            Activity_Markets_Main activity = activityReference.get();
 //          TabLayout t = activity.findViewById(R.id.tabs);
 //          t.setVisibility(View.VISIBLE);
             if (activity == null || activity.isFinishing()) return;

@@ -16,7 +16,7 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
-import static equities.com.myapplication.Activity_Main.ap_info;
+import static equities.com.myapplication.Activity_Markets_Main.ap_info;
 import static equities.com.myapplication.Constructor_App_Variables.aequity_exchanges;
 import static equities.com.myapplication.Constructor_App_Variables.crypto_exchange_image;
 import static equities.com.myapplication.Constructor_App_Variables.crypto_exchange_name;

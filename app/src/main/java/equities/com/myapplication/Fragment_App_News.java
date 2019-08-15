@@ -20,7 +20,6 @@ import static equities.com.myapplication.Constructor_App_Variables.all_feedItems
 
 public class Fragment_App_News extends Fragment {
     private RecyclerView all_news_feed;
-    TextView news;
 
     public Fragment_App_News() {
     }
@@ -35,12 +34,6 @@ public class Fragment_App_News extends Fragment {
         all_news_feed=rootView.findViewById(R.id.all_news_feed);
         all_news_feed.setAdapter(new Adapter_App_News_Feed(getActivity(), all_feedItems));
         all_news_feed.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-        news= rootView.findViewById(R.id.news);
-        Typeface custom_font = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Oregon.ttf");
-
-        news.setTypeface(custom_font);
-
-        news.setPaintFlags(news.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
 
 
 
