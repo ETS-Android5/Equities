@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import java.util.*;
 
+import static com.google.android.gms.internal.zzagz.runOnUiThread;
 import static equities.com.myapplication.Service_Main_Equities.*;
 
 /**
@@ -35,7 +36,7 @@ public class Fragment_Winners extends Fragment {
         return new TimerTask() {
             @Override
             public void run() {
-                getActivity().runOnUiThread(new Runnable() {
+                runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         Handler handler = new Handler();
@@ -52,26 +53,7 @@ public class Fragment_Winners extends Fragment {
             }
         };
     }
-    private TimerTask Pause() {
-        return new TimerTask() {
-            @Override
-            public void run() {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Handler handler = new Handler();
-                        handler.postDelayed(new Runnable() {
-                            public void run() {
-                                //Just a pause
-                                setUserVisibleHint(true);
-                            }
-                        }, 0);
-                    }
 
-                });
-            }
-        };
-    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -129,12 +111,12 @@ public class Fragment_Winners extends Fragment {
     public void setUserVisibleHint(boolean isVisibleToUser){
         super.setUserVisibleHint(isVisibleToUser);
         if(isVisibleToUser){
-            stock_adapter.notifyDataSetChanged();
-            crypto_adapter.notifyDataSetChanged();
+//            stock_adapter.notifyDataSetChanged();
+        //    crypto_adapter.notifyDataSetChanged();
             //stock_adapter=new Adapter_Stock_Equities(getActivity(), "Stock_Winner", stock_winners_symbollist, stock_winners_namelist, stock_winners_changelist);
-            stockitems.setAdapter(stock_adapter);
+//            stockitems.setAdapter(stock_adapter);
             //crypto_adapter=new Adapter_Stock_Equities(getActivity(), "Crypto_Winner", crypto_winners_symbollist, crypto_winners_namelist, crypto_winners_changelist);
-            cryptoitems.setAdapter(crypto_adapter);
+    //        cryptoitems.setAdapter(crypto_adapter);
         }
     }
 

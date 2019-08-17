@@ -145,7 +145,6 @@
                             android:layout_height="wrap_content"
                             app:menu="@menu/bottom_nav_menu"
                             app:itemBackground="@color/colorTrans"
-                            app:itemIconTint="@color/colorPrimary"
                             app:itemTextColor="@color/colorPrimary"
                             >
                     </android.support.design.widget.BottomNavigationView>

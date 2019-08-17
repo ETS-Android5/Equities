@@ -4,25 +4,26 @@
     <item
             android:id="@+id/markets"
             android:enabled="true"
-            android:icon="@drawable/direction_markets"
             android:title="Markets"
-            app:showAsAction="always" />
+           android:icon="@drawable/direction_markets"
+        app:showAsAction="always" />
     <item
-            android:id="@+id/masternodes"
+            android:id="@+id/equities"
             android:enabled="true"
-            android:icon="@drawable/direction_masternode"
-            android:title="Masternodes"
-            app:showAsAction="always" />
+            android:title="Equities"
+        android:icon="@drawable/banner_ae"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/masternodes"
+        android:enabled="true"
+        android:title="Masternodes"
+        android:icon="@drawable/direction_masternode"
+        app:showAsAction="always" />
     <item
             android:id="@+id/ipos"
             android:enabled="true"
-            android:title="Ipos"
-            android:icon="@drawable/direction_ipos"
-            app:showAsAction="always" />
-    <item
-            android:id="@+id/commodities"
-            android:enabled="true"
-            android:icon="@drawable/direction_ipos"
-            android:title="Commodities"
-            app:showAsAction="always" />
+            android:title="Public Offerings"
+        android:icon="@drawable/direction_ipos"
+        app:showAsAction="always" />
+
 </menu>

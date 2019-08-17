@@ -111,6 +111,7 @@ public class Constructor_App_Variables {
     public static ArrayList<Constructor_News_Feed> feedItems = new ArrayList<>();
     protected static ArrayList<Constructor_Stock_Twits> stocktwits_feedItems = new ArrayList<>();
     protected static ArrayList<Constructor_Stock_Equities> stock_losers_feedItems = new ArrayList<>();
+    protected static ArrayList<Constructor_Stock_Equities> crypto_losers_feedItems = new ArrayList<>();
 
     protected static ArrayList<Constructor_Masternodes> masternode_feedItems = new ArrayList<>();
     protected static ArrayList<Constructor_News_Feed> all_feedItems = new ArrayList<>();

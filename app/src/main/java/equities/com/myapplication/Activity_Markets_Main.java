@@ -90,11 +90,12 @@ public class Activity_Markets_Main extends AppCompatActivity {
     static Boolean async_analysis_page = false;
     public static boolean db_exist =false;
     Context context =this;
-    static Adapter_Main_Markets adapter;
     static RecyclerView.LayoutManager l;
     static InterstitialAd mInterstitialAd;
     private SwipeRefreshLayout swipe_container;
     static ViewPager pager;
+    PagerAdapter_WorldMarkets adapter = new PagerAdapter_WorldMarkets(getSupportFragmentManager());
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -301,7 +302,7 @@ public class Activity_Markets_Main extends AppCompatActivity {
 
         }
         new AsyncOtherAppData(Activity_Markets_Main.this).execute();
-
+        activity_tabs.setItemIconTintList(null);
         activity_tabs.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -309,11 +310,14 @@ public class Activity_Markets_Main extends AppCompatActivity {
                     case R.id.markets:
                         Toast.makeText(Activity_Markets_Main.this, "Markets", Toast.LENGTH_SHORT).show();
                         break;
-                    case R.id.masternodes:
+                    case R.id.equities:
                         setupEquitiesViewPager(pager);
                         break;
+                    case R.id.masternodes:
+                        setupMasternnodeViewPager(pager);
+                        break;
                     case R.id.ipos:
-                        Toast.makeText(Activity_Markets_Main.this, "IPOS", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(Activity_Markets_Main.this, "IPOS", Toast.LENGTH_SHORT).show();
                         break;
                 }
                 return true;
@@ -323,8 +327,7 @@ public class Activity_Markets_Main extends AppCompatActivity {
     }
               
     public void setupWorldMarketsViewPager(ViewPager viewPager) {
-        PagerAdapter_WorldMarkets adapter = new PagerAdapter_WorldMarkets(getSupportFragmentManager());
-        adapter.addFrag(new Fragment_Markets(), getString(R.string.title_markets));
+        adapter.addFrag(new Fragment_Markets(), getString(R.string.markets));
         adapter.addFrag(new Fragment_App_News(), getString(R.string.news));
         adapter.addFrag(new Fragment_Video(),getString(R.string.title_video));
         viewPager.setAdapter(adapter);
@@ -333,13 +336,25 @@ public class Activity_Markets_Main extends AppCompatActivity {
     }
 
     public void setupEquitiesViewPager(ViewPager viewPager) {
-        PagerAdapter_App_Data adapter = new PagerAdapter_App_Data(getSupportFragmentManager());
+        viewPager.removeAllViews();
         viewPager.setAdapter(null);
-        adapter.addFrag(new Fragment_App_News(), getString(R.string.news));
-        adapter.addFrag(new Fragment_App_News(), getString(R.string.news));
-        adapter.addFrag(new Fragment_App_News(),getString(R.string.news));
+        adapter.removeAllFrag();
+        adapter.notifyDataSetChanged();
+        adapter.addFrag(new Fragment_Winners(), getString(R.string.leaders));
+        adapter.addFrag(new Fragment_Losers(), getString(R.string.losers));
+        adapter.addFrag(new Fragment_Market_Kings(),getString(R.string.market_kings));
         viewPager.setAdapter(adapter);
-        //viewPager.setOffscreenPageLimit(7);
+
+    }
+    public void setupMasternnodeViewPager(ViewPager viewPager) {
+        viewPager.removeAllViews();
+        viewPager.setAdapter(null);
+        adapter.removeAllFrag();
+        adapter.notifyDataSetChanged();
+        adapter.addFrag(new Fragment_Masternodes(), getString(R.string.leaders));
+        adapter.addFrag(new Fragment_App_News(), getString(R.string.news));
+        adapter.addFrag(new Fragment_Video(),getString(R.string.title_video));
+        viewPager.setAdapter(adapter);
 
     }
 

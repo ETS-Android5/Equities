@@ -15,6 +15,8 @@ import android.widget.TextView;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import static com.google.android.gms.internal.zzagz.runOnUiThread;
+import static equities.com.myapplication.Constructor_App_Variables.crypto_losers_feedItems;
 import static equities.com.myapplication.Constructor_App_Variables.stock_losers_feedItems;
 import static equities.com.myapplication.Service_Main_Equities.*;
 /**
@@ -32,7 +34,7 @@ public class Fragment_Losers extends Fragment {
         return new TimerTask() {
             @Override
             public void run() {
-                getActivity().runOnUiThread(new Runnable() {
+                runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         Handler handler = new Handler();
@@ -59,11 +61,11 @@ public class Fragment_Losers extends Fragment {
         crypto = rootView.findViewById(R.id.crypto);
         stockitems= rootView.findViewById(R.id.stock_items);
         stockitems.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-        //stock_adapter =new Adapter_Stock_Equities(getActivity(), "Stock_Loser", stock_losers_feedItems);
+        stock_adapter =new Adapter_Stock_Equities(getActivity(), "Stock_Loser", stock_losers_feedItems, null, null);
         stockitems.setAdapter(stock_adapter);
         cryptoitems= rootView.findViewById(R.id.crypto_items);
         cryptoitems.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-       // crypto_adapter=new Adapter_Stock_Equities(getActivity(), "Crypto_Loser",crypto_losers_feedItems);
+        crypto_adapter=new Adapter_Stock_Equities(getActivity(), "Crypto_Loser",crypto_losers_feedItems,null, null);
         cryptoitems.setAdapter(crypto_adapter);
         Typeface custom_font = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Oregon.ttf");
         stock.setTypeface(custom_font);
@@ -107,13 +109,13 @@ public class Fragment_Losers extends Fragment {
     public void setLosersUserVisibleHint(boolean isVisibleToUser){
         super.setUserVisibleHint(isVisibleToUser);
         if(isVisibleToUser){
-            //stockitems.removeAllViewsInLayout();
-            //cryptoitems.removeAllViewsInLayout();
+            stockitems.removeAllViewsInLayout();
+            cryptoitems.removeAllViewsInLayout();
             crypto_adapter.notifyDataSetChanged();
             stock_adapter.notifyDataSetChanged();
-           // stockitems.setAdapter(new Adapter_Stock_Equities(getActivity(), "Stock_Loser", stock_losers_feedItems));
+            stockitems.setAdapter(new Adapter_Stock_Equities(getActivity(), "Stock_Loser", stock_losers_feedItems, null, null));
             cryptoitems.setAdapter(crypto_adapter);
-          //  cryptoitems.setAdapter(new Adapter_Stock_Equities(getActivity(), "Crypto_Loser",crypto_losers_symbollist,crypto_losers_namelist,crypto_losers_changelist));
+            cryptoitems.setAdapter(new Adapter_Stock_Equities(getActivity(), "Crypto_Loser",crypto_losers_feedItems, null, null));
             stockitems.setAdapter(stock_adapter);
         }
     }
