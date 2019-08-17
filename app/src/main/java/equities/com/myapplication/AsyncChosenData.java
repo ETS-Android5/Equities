@@ -112,7 +112,7 @@ public class AsyncChosenData extends AsyncTask<Void, Void, String> {
                 }
                 if (activity.ap_info.getMarketType().equals("Index")) {
 
-                    activity.get_stock_exchange_info();
+                    activity.get_exchange_info();
                     activity.get_current_stock_info();
                     activity.getStockTwitsData();
                     Service_Chosen_Equity shoe = new Service_Chosen_Equity(activity);
@@ -121,7 +121,7 @@ public class AsyncChosenData extends AsyncTask<Void, Void, String> {
                 }
                 else {
 
-                    activity.get_stock_exchange_info();
+                    activity.get_exchange_info();
                     activity.get_current_stock_info();
                     activity.getStockTwitsData();
                     Service_Chosen_Equity shoe = new Service_Chosen_Equity(activity);
@@ -143,7 +143,7 @@ public class AsyncChosenData extends AsyncTask<Void, Void, String> {
                 }
                if (activity.ap_info.getMarketType().equals("Index")) {
 
-                    activity.get_stock_exchange_info();
+                    activity.get_exchange_info();
                     activity.get_current_stock_info();
                     activity.getStockTwitsData();
                     Service_Chosen_Equity shoe = new Service_Chosen_Equity(activity);

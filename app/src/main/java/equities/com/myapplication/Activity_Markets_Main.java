@@ -5,6 +5,8 @@ import android.content.res.AssetManager;
 import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -13,6 +15,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.Patterns;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -68,6 +71,7 @@ public class Activity_Markets_Main extends AppCompatActivity {
     protected ArrayAdapter<String> ad;
     private static Toolbar toolbar;
     TableRow table_tabs;
+    BottomNavigationView  activity_tabs;
     ProgressBar progress;
     public static ArrayList<String> searchview_arraylist = new ArrayList<>();
     public static ArrayList<String> aequity_symbol_arraylist = new ArrayList<>();
@@ -117,10 +121,25 @@ public class Activity_Markets_Main extends AppCompatActivity {
         //Turn off car
 
     }
+
     protected void onRestart(){
         super.onRestart();
         System.out.println("RESTARTING APPLICATION");
     }
+
+    public void onBackPressed() {
+        ViewPager pager = findViewById(R.id.viewpager);
+        if (pager.getVisibility()==View.VISIBLE){
+            finish();}else {
+            reloadAllData();
+            new AsyncChosenData(this).cancel(true);
+            new AsyncForBackPressedSavedData(Activity_Markets_Main.this).execute();
+
+
+        }
+
+    }
+
 
     public static String AssetJSONFile(String filename, Context context) throws IOException {
         AssetManager manager = context.getAssets();
@@ -129,6 +148,31 @@ public class Activity_Markets_Main extends AppCompatActivity {
         file.read(formArray);
         file.close();
         return new String(formArray);
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        STARTAPPLICATION();
+        //MobileAds.initialize(this, "ca-app-pub-6566728316210720/4471280326");
+
+    }
+
+    public void STARTAPPLICATION(){
+        MobileAds.initialize(this, "ca-app-pub-6566728316210720/4471280326");
+        mInterstitialAd = new InterstitialAd(this);
+        mInterstitialAd.setAdUnitId("ca-app-pub-6566728316210720/4471280326");
+        mInterstitialAd.loadAd(new AdRequest.Builder().build());
+        checkInternetConnection();
+        get_exchange_info();
+        setContentView(R.layout.splash);
+        lin_lay =findViewById(R.id.lin_lay);
+        centerLinear = AnimationUtils.loadAnimation(this, R.anim.center);
+        imageView =findViewById(R.id.imageView);
+        progress= findViewById(R.id.progressBar);
+        txt = findViewById(R.id.output);
+        new AsyncWorldMarketData(Activity_Markets_Main.this).execute();
+
     }
 
     private boolean checkInternetConnection() {
@@ -143,48 +187,69 @@ public class Activity_Markets_Main extends AppCompatActivity {
             return false;
         }
     }
+    public static void get_exchange_info() {
 
-    public void StartApplication(){
-        MobileAds.initialize(this, "ca-app-pub-6566728316210720/4471280326");
-        mInterstitialAd = new InterstitialAd(this);
-        mInterstitialAd.setAdUnitId("ca-app-pub-6566728316210720/4471280326");
-        mInterstitialAd.loadAd(new AdRequest.Builder().build());
-        checkInternetConnection();
-        get_crypto_exchange_info();
-        get_stock_exchange_info();
-        setContentView(R.layout.splash);
-        lin_lay =findViewById(R.id.lin_lay);
+        crypto_exchange_name.add("Binance");
+        crypto_exchange_name.add("Hbus");
+        crypto_exchange_name.add("Coinbase");
+        crypto_exchange_name.add("Cryptopia");;
+        crypto_exchange_name.add("CryptoBridge");
 
-        centerLinear = AnimationUtils.loadAnimation(this, R.anim.center);
-        imageView =findViewById(R.id.imageView);
 
-        progress= findViewById(R.id.progressBar);
-        txt = findViewById(R.id.output);
-        new setAsyncCreateSavedData(this).execute();
+        crypto_exchange_url.add("https://www.binance.com/?ref=35795495");
+        //Referral
+        crypto_exchange_url.add("https://www.hbus.com/invite/inviteRank?invite_code=kgd23");
+        //Referral
+        crypto_exchange_url.add("https://www.coinbase.com/join/5a2cc6b6f3b80300ef643aa4");
+        //Referral
+        crypto_exchange_url.add("https://www.cryptopia.co.nz/Register?referrer=juliansmulian");
+        //Referral
+        crypto_exchange_url.add("https://crypto-bridge.org/");
+
+
+
+        crypto_exchange_image.add("R.drawable.exchange_crypto_binance");
+        crypto_exchange_image.add("R.drawable.exchange_crypto_hbus");
+        crypto_exchange_image.add("R.drawable.exchange_crypto_coinbase");
+        crypto_exchange_image.add("R.drawable.exchange_crypto_cryptopia");
+        crypto_exchange_image.add("R.drawable.exchange_crypto_cryptobridge");
+
+
+        stock_exchange_name.add("E*TRADE");
+        stock_exchange_name.add("TD Ameritrade");
+        stock_exchange_name.add("Merrill Edge");
+        stock_exchange_name.add("Charles Schwab ");
+        stock_exchange_name.add("Robinhood");
+
+        stock_exchange_url.add("https://www.etrade.com");
+        stock_exchange_url.add("https://www.tdameritrade.com/home.page");
+        stock_exchange_url.add("https://www.merrilledge.com/");
+        stock_exchange_url.add("https://www.schwab.com/");
+        stock_exchange_url.add("https://www.robinhood.com/");
+
+        stock_exchange_image.add("exchange_stock_etrade");
+        stock_exchange_image.add("exchange_stock_tdameritrade");
+        stock_exchange_image.add("exchange_stock_merrill_edge");
+        stock_exchange_image.add("exchange_stock_schwab");
+        stock_exchange_image.add("exchange_stock_robinhood");
+
+        HashSet sen = new HashSet();
+        sen.addAll(stock_exchange_name);
+        stock_exchange_name.clear();
+        stock_exchange_name.addAll(sen);
+
+        HashSet seu = new HashSet();
+        seu.addAll(stock_exchange_url);
+        stock_exchange_url.clear();
+        stock_exchange_url.addAll(seu);
+
+        HashSet sei = new HashSet();
+        sei.addAll(stock_exchange_image);
+        stock_exchange_image.clear();
+        stock_exchange_image.addAll(sei);
+
+
     }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        check_if_first_download();
-        //MobileAds.initialize(this, "ca-app-pub-6566728316210720/4471280326");
-
-    }
-
-    public void onBackPressed() {
-        ViewPager pager = findViewById(R.id.viewpager);
-
-        if (pager.getVisibility()==View.VISIBLE){
-            finish();}else {
-            reloadAllData();
-                new AsyncChosenData(this).cancel(true);
-                new AsyncForBackPressedSavedData(Activity_Markets_Main.this).execute();
-
-
-        }
-
-    }
-
     public class setAsyncCreateSavedData extends AsyncTask<Integer, Integer, String> {
 
         private WeakReference<Activity_Markets_Main> activityReference;
@@ -206,7 +271,7 @@ public class Activity_Markets_Main extends AppCompatActivity {
         }
         @Override
         protected void onPostExecute(String result) {
-            new AsyncDataMain(Activity_Markets_Main.this).execute();
+            new AsyncWorldMarketData(Activity_Markets_Main.this).execute();
 
         }
 
@@ -225,8 +290,9 @@ public class Activity_Markets_Main extends AppCompatActivity {
         ViewPager market_pager = findViewById(R.id.market_pager);
         market_pager.setVisibility(View.GONE);
         table_tabs = findViewById(R.id.table_tabs);
+        activity_tabs =findViewById(R.id.activity_tabs);
         TabLayout pagetabs = findViewById(R.id.tabs);
-        setupMainViewPager(pager);
+        setupWorldMarketsViewPager(pager);
         pagetabs.setupWithViewPager(pager);
         if(pager.getVisibility()==View.VISIBLE){
             progLayout.setVisibility(View.GONE);
@@ -234,14 +300,44 @@ public class Activity_Markets_Main extends AppCompatActivity {
             progLayout.setVisibility(View.VISIBLE);
 
         }
+        new AsyncOtherAppData(Activity_Markets_Main.this).execute();
 
-              }
+        activity_tabs.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.markets:
+                        Toast.makeText(Activity_Markets_Main.this, "Markets", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.masternodes:
+                        setupEquitiesViewPager(pager);
+                        break;
+                    case R.id.ipos:
+                        Toast.makeText(Activity_Markets_Main.this, "IPOS", Toast.LENGTH_SHORT).show();
+                        break;
+                }
+                return true;
+            }
+        });
+
+    }
               
-    public void setupMainViewPager(ViewPager viewPager) {
+    public void setupWorldMarketsViewPager(ViewPager viewPager) {
         PagerAdapter_WorldMarkets adapter = new PagerAdapter_WorldMarkets(getSupportFragmentManager());
         adapter.addFrag(new Fragment_Markets(), getString(R.string.title_markets));
         adapter.addFrag(new Fragment_App_News(), getString(R.string.news));
         adapter.addFrag(new Fragment_Video(),getString(R.string.title_video));
+        viewPager.setAdapter(adapter);
+        //viewPager.setOffscreenPageLimit(7);
+
+    }
+
+    public void setupEquitiesViewPager(ViewPager viewPager) {
+        PagerAdapter_App_Data adapter = new PagerAdapter_App_Data(getSupportFragmentManager());
+        viewPager.setAdapter(null);
+        adapter.addFrag(new Fragment_App_News(), getString(R.string.news));
+        adapter.addFrag(new Fragment_App_News(), getString(R.string.news));
+        adapter.addFrag(new Fragment_App_News(),getString(R.string.news));
         viewPager.setAdapter(adapter);
         //viewPager.setOffscreenPageLimit(7);
 
@@ -627,73 +723,8 @@ public class Activity_Markets_Main extends AppCompatActivity {
         }
     }
 
-    public static void get_crypto_exchange_info() {
-
-        crypto_exchange_name.add("Binance");
-        crypto_exchange_name.add("Hbus");
-        crypto_exchange_name.add("Coinbase");
-        crypto_exchange_name.add("Cryptopia");;
-        crypto_exchange_name.add("CryptoBridge");
 
 
-        crypto_exchange_url.add("https://www.binance.com/?ref=35795495");
-        //Referral
-        crypto_exchange_url.add("https://www.hbus.com/invite/inviteRank?invite_code=kgd23");
-        //Referral
-        crypto_exchange_url.add("https://www.coinbase.com/join/5a2cc6b6f3b80300ef643aa4");
-        //Referral
-        crypto_exchange_url.add("https://www.cryptopia.co.nz/Register?referrer=juliansmulian");
-        //Referral
-        crypto_exchange_url.add("https://crypto-bridge.org/");
-
-
-
-        crypto_exchange_image.add("R.drawable.exchange_crypto_binance");
-        crypto_exchange_image.add("R.drawable.exchange_crypto_hbus");
-        crypto_exchange_image.add("R.drawable.exchange_crypto_coinbase");
-        crypto_exchange_image.add("R.drawable.exchange_crypto_cryptopia");
-        crypto_exchange_image.add("R.drawable.exchange_crypto_cryptobridge");
-
-
-
-
-    }
-
-    public void get_stock_exchange_info(){
-        stock_exchange_name.add("E*TRADE");
-        stock_exchange_name.add("TD Ameritrade");
-        stock_exchange_name.add("Merrill Edge");
-        stock_exchange_name.add("Charles Schwab ");
-        stock_exchange_name.add("Robinhood");
-
-        stock_exchange_url.add("https://www.etrade.com");
-        stock_exchange_url.add("https://www.tdameritrade.com/home.page");
-        stock_exchange_url.add("https://www.merrilledge.com/");
-        stock_exchange_url.add("https://www.schwab.com/");
-        stock_exchange_url.add("https://www.robinhood.com/");
-
-        stock_exchange_image.add("exchange_stock_etrade");
-        stock_exchange_image.add("exchange_stock_tdameritrade");
-        stock_exchange_image.add("exchange_stock_merrill_edge");
-        stock_exchange_image.add("exchange_stock_schwab");
-        stock_exchange_image.add("exchange_stock_robinhood");
-
-        HashSet sen = new HashSet();
-        sen.addAll(stock_exchange_name);
-        stock_exchange_name.clear();
-        stock_exchange_name.addAll(sen);
-
-        HashSet seu = new HashSet();
-        seu.addAll(stock_exchange_url);
-        stock_exchange_url.clear();
-        stock_exchange_url.addAll(seu);
-
-        HashSet sei = new HashSet();
-        sei.addAll(stock_exchange_image);
-        stock_exchange_image.clear();
-        stock_exchange_image.addAll(sei);
-
-    }
 
     public static void do_graph_change() {
         Double a=0.00;if(graph_high.size()>0) {
@@ -724,103 +755,6 @@ public class Activity_Markets_Main extends AppCompatActivity {
 
     }
 
-    private void check_if_first_download() {
-
-
-        int currentVersionCode = BuildConfig.VERSION_CODE;
-        //SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        //savedVersionCode = prefs.getInt(PREF_VERSION_CODE_KEY, DOESNT_EXIST);
-       // if (currentVersionCode == savedVersionCode) {
-            StartApplication();
-      /*
-            return;
-
-        } else if (savedVersionCode == DOESNT_EXIST) {
-
-         setContentView(R.layout.activity_equity_choice);
-         Button start =(Button)findViewById(R.id.start_app);
-         CheckBox masternodes =(CheckBox)findViewById(R.id.crypto_masternodes);
-            CheckBox proofofwork =(CheckBox)findViewById(R.id.crypto_proof_of_work);
-            CheckBox proofofstake =(CheckBox)findViewById(R.id.crypto_proof_of_stake);
-            CheckBox icos =(CheckBox)findViewById(R.id.ico);
-            CheckBox cryptowisdom=(CheckBox)findViewById(R.id.crypto_wisdom);
-            CheckBox commodities =(CheckBox)findViewById(R.id.commodities);
-            CheckBox bonds =(CheckBox)findViewById(R.id.bonds);
-            CheckBox etfs =(CheckBox)findViewById(R.id.etf);
-            CheckBox ipos =(CheckBox)findViewById(R.id.ipo);
-            CheckBox stockwisdom =(CheckBox)findViewById(R.id.stock_wisdom);
-         start.setOnClickListener(new View.OnClickListener() {
-             @Override
-             public void onClick(View view) {
-                 sharedpreferences = getSharedPreferences(Data_Preferences, Context.MODE_PRIVATE);
-                 if (masternodes.isChecked()) {
-                     SharedPreferences.Editor editor = sharedpreferences.edit();
-                     editor.putString(Masternode, "yes");
-                     editor.commit();
-                     //("THIS IS MASTERNODE VALUE "+Masternode);
-                 }
-                 if (proofofwork.isChecked()) {
-                     SharedPreferences.Editor editor = sharedpreferences.edit();
-                     editor.putString("proofofwork", "yes");
-                     editor.commit();
-                 }
-                 if (proofofstake.isChecked()) {
-                     SharedPreferences.Editor editor = sharedpreferences.edit();
-                     editor.putString("proofofstake", "yes");
-                     editor.commit();
-                 }
-                 if (icos.isChecked()) {
-                     SharedPreferences.Editor editor = sharedpreferences.edit();
-                     editor.putString("icos", "yes");
-                     editor.commit();
-                 }
-                 if (cryptowisdom.isChecked()) {
-                     SharedPreferences.Editor editor = sharedpreferences.edit();
-                     editor.putString("cryptowisdom", "yes");
-                     editor.commit();
-                 }
-                 if (commodities.isChecked()) {
-                     SharedPreferences.Editor editor = sharedpreferences.edit();
-                     editor.putString("commodities", "yes");
-                     editor.commit();
-                 }
-                 if (bonds.isChecked()) {
-                     SharedPreferences.Editor editor = sharedpreferences.edit();
-                     editor.putString("bonds", "yes");
-                     editor.commit();
-                 }
-                 if (etfs.isChecked()) {
-                     SharedPreferences.Editor editor = sharedpreferences.edit();
-                     editor.putString("etfs", "yes");
-                     editor.commit();
-                 }
-                 if (ipos.isChecked()) {
-                     SharedPreferences.Editor editor = sharedpreferences.edit();
-                     editor.putString("ipos", "yes");
-                     editor.commit();
-                 }
-                 if (stockwisdom.isChecked()) {
-                     SharedPreferences.Editor editor = sharedpreferences.edit();
-                     editor.putString("stockwisdom", "yes");
-                     editor.commit();
-                 }
-
-                 StartApplication();
-                 return;
-             }});
-
-
-
-
-        } else if (currentVersionCode > savedVersionCode) {
-            StartApplication();
-            return;
-        }
-
-        prefs.edit().putInt(PREF_VERSION_CODE_KEY, currentVersionCode).apply();
-     */
-
-    }
 
     public static void ProcessXmlx(org.w3c.dom.Document data) {
         all_feedItems.clear();

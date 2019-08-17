@@ -6,14 +6,16 @@ public class Constructor_Crypto_Equities {
    String crypto_losers_symbol;
    String crypto_losers_percent_change;
    String crypto_losers_price;
+
    String crypto_winner_name;
    String crypto_winner_symbol;
    String crytpo_winner_percent_change;
    String crytpo_winner_price;
-   String crypto_king_name;
-   String crypto_king_symbol;
-   String crytpo_king_percent_change;
-   String crytpo_king_price;
+
+   String crypto_kings_name;
+   String crypto_kings_symbol;
+   String crytpo_kings_percent_change;
+   String crytpo_kings_price;
 
    public String getCrypto_losers_name() {
       return crypto_losers_name;
@@ -79,35 +81,35 @@ public class Constructor_Crypto_Equities {
       this.crytpo_winner_price = crytpo_winner_price;
    }
 
-   public String getCrypto_king_name() {
-      return crypto_king_name;
+   public String getCrypto_kings_name() {
+      return crypto_kings_name;
    }
 
-   public void setCrypto_king_name(String crypto_king_name) {
-      this.crypto_king_name = crypto_king_name;
+   public void setCrypto_kings_name(String crypto_kings_name) {
+      this.crypto_kings_name = crypto_kings_name;
    }
 
-   public String getCrypto_king_symbol() {
-      return crypto_king_symbol;
+   public String getCrypto_kings_symbol() {
+      return crypto_kings_symbol;
    }
 
-   public void setCrypto_king_symbol(String crypto_king_symbol) {
-      this.crypto_king_symbol = crypto_king_symbol;
+   public void setCrypto_kings_symbol(String crypto_kings_symbol) {
+      this.crypto_kings_symbol = crypto_kings_symbol;
    }
 
-   public String getCrytpo_king_percent_change() {
-      return crytpo_king_percent_change;
+   public String getCrytpo_kings_percent_change() {
+      return crytpo_kings_percent_change;
    }
 
-   public void setCrytpo_king_percent_change(String crytpo_king_percent_change) {
-      this.crytpo_king_percent_change = crytpo_king_percent_change;
+   public void setCrytpo_kings_percent_change(String crytpo_kings_percent_change) {
+      this.crytpo_kings_percent_change = crytpo_kings_percent_change;
    }
 
-   public String getCrytpo_king_price() {
-      return crytpo_king_price;
+   public String getCrytpo_kings_price() {
+      return crytpo_kings_price;
    }
 
-   public void setCrytpo_king_price(String crytpo_king_price) {
-      this.crytpo_king_price = crytpo_king_price;
+   public void setCrytpo_kings_price(String crytpo_kings_price) {
+      this.crytpo_kings_price = crytpo_kings_price;
    }
 }

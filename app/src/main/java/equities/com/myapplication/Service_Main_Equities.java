@@ -111,7 +111,8 @@ public class Service_Main_Equities {
             @Override
             public String call() throws Exception {
                 if(saved_helper == 1){}else{
-                    get_masternodes();                    }
+                 //   get_masternodes();
+                }
                 return null;
             }
         });
@@ -119,7 +120,7 @@ public class Service_Main_Equities {
             @Override
             public String call() throws Exception {
                 if(saved_helper == 1){}else {
-                    get_ipos();
+                 //   get_ipos();
                         }
                 return null;
             }
@@ -139,7 +140,7 @@ public class Service_Main_Equities {
     public static void WorldMarketsMethod(){
         getWorldMarkets();
         ProcessXml(GoogleRSWorldMarketsFeed());
-        getVideoInfo("World Markets");
+        getVideoInfo("World Financial Markets");
 
     }
 
@@ -234,9 +235,7 @@ public class Service_Main_Equities {
 
 
         }
-        for(int i=0;i<masternode_feedItems.size();i++){
-            Constructor_Masternodes constructor_masternodes1 = masternode_feedItems.get(i);
-            System.out.println(constructor_masternodes1.getMasternode_name());}
+
     }
 
     public static void getMarketWinners(){
@@ -333,18 +332,20 @@ try{
         sv = Jsoup.connect("https://finance.yahoo.com/losers").userAgent("Opera").timeout(10 * 10000).get();
         Elements tbodyl = sv.select("tbody");
         Elements trl = tbodyl.select("tr");
-        for (int il = 0; il < 20; il++) {
-            String lsymbol = trl.get(il).select("td").get(0).text();
-            String lname = trl.get(il).select("td").get(1).text();
-            String lprice = trl.get(il).select("td").get(2).text().replace("+", "");
-            String lchange = trl.get(il).select("td").get(4).text().replace("+", "");
-            stock_losers_symbollist.add(lsymbol);
-            stock_losers_namelist.add(lname);
-            stock_losers_pricelist.add(lprice);
-            stock_losers_changelist.add(lchange);
-            // System.out.println("FIRST METHOD  LOSERS"+lsymbol + " " + lname + " " + lprice + " " + lchange);
-        }
+    for (int il = 0; il < 20; il++) {
+        Constructor_Stock_Equities stock_equities = new Constructor_Stock_Equities();
+        String lsymbol = trl.get(il).select("td").get(0).text();
+        String lname = trl.get(il).select("td").get(1).text();
+        String lprice = trl.get(il).select("td").get(2).text().replace("+", "");
+        String lchange = trl.get(il).select("td").get(4).text().replace("+", "");
+        stock_equities.setStock_losers_symbol(lsymbol);
+        stock_equities.setStock_losers_name(lname);
+        stock_equities.setStock_losers_price(lprice);
+        stock_equities.setStock_losers_percent_change(lchange);
+        typelist.add("Stock");
+        stock_losers_feedItems.add(stock_equities);}
 
+    System.out.println(stock_losers_feedItems.size());
     } catch (IOException e) {
 //ALTERNATIVE METHOD
     try {
@@ -642,12 +643,7 @@ try{
         array.add("$ "+string);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     public static void getCrypto_Data() {
-        Instant start = null;
-        start = Instant.now();
-
-
         //Scrape data and if any Array is 0 use API as backup
         try {
             crypto_data = Jsoup.connect("https://coinmarketcap.com/gainers-losers/").timeout(10 * 10000).get();
@@ -678,7 +674,7 @@ try{
                             }
                         }
                     }
-                    stock_loser_feedItems.add(crypto_equities);
+                    crypto_loser_feedItems.add(crypto_equities);
                 }
             }
             Element winners_table = losers_table.get(2);
@@ -883,10 +879,7 @@ try{
             }
 
         }
-        Instant end = Instant.now();
-        Duration interval = Duration.between(start, end);
-        System.out.println("Crypto Data Execution time in seconds: " +
-                interval.getSeconds());
+
     }
 
     public static void getStock_Data() {
@@ -914,19 +907,19 @@ try{
             sv1 = Jsoup.connect("https://finance.yahoo.com/losers").userAgent("Opera").timeout(10 * 10000).get();
             Elements tbodyl = sv1.select("tbody");
             Elements trl = tbodyl.select("tr");
+            Constructor_Stock_Equities stock_equities = new Constructor_Stock_Equities();
             for (int il = 0; il < 20; il++) {
                 String lsymbol = trl.get(il).select("td").get(0).text();
                 String lname = trl.get(il).select("td").get(1).text();
                 String lprice = trl.get(il).select("td").get(2).text().replace("+", "");
                 String lchange = trl.get(il).select("td").get(4).text().replace("+", "");
-                stock_losers_symbollist.add(lsymbol);
-                stock_losers_namelist.add(lname);
-                stock_losers_pricelist.add(lprice);
-                stock_losers_changelist.add(lchange);
+                stock_equities.setStock_losers_symbol(lsymbol);
+                stock_equities.setStock_losers_name(lname);
+                stock_equities.setStock_losers_price(lprice);
+                stock_equities.setStock_losers_percent_change(lchange);
                 typelist.add("Stock");
-
+                stock_losers_feedItems.add(stock_equities);
             }
-
         } catch (IOException e) {
 //ALTERNATIVE METHOD
             getStock_DataBACKUP();
@@ -1017,6 +1010,7 @@ try{
             Elements b = ff.select("span[title]");
             Elements aa = ff.select("span.posData");
             Elements bb = ff.select("span[stream]");
+
             if(stock_winners_symbollist.size()<20){
             for (Element stock_symbol : a) {
                 String symbol = stock_symbol.select("a.wsod_symbol").text();
@@ -1046,29 +1040,31 @@ try{
             Elements bl = fl.select("span[title]");
             Elements aal = fl.select("span.negData");
             Elements bb1 = fl.select("span[stream]");
-            for (Element x : al) {
-                stock_losers_symbollist.add(x.text()); }
+                Constructor_Stock_Equities stock_equities = new Constructor_Stock_Equities();
+                for (Element x : al) {
+                stock_equities.setStock_losers_symbol(x.text()); }
             for (Element x : bl) {
-                stock_losers_namelist.add(x.text()); }
+                stock_equities.setStock_losers_name(x.text()); }
             for (Element stock_price : bb1) {
                 String price = stock_price.text();
                 if (price.isEmpty()) {
                 } else {
                     if (price.contains("+")||price.contains("-")||price.contains("%")) {
                     }else{
-                        stock_losers_pricelist.add(price);} } }
+                        stock_equities.setStock_losers_price(price);} } }
             for (int i = 0; i < aal.size(); i++) {
                 if (i % 2 == 0) {
-                    // This is point amount} else {
-                    stock_losers_changelist.add(aal.get(i).text()); } }
+                    stock_equities.setStock_losers_percent_change(aal.get(i).text()); } }
+          stock_losers_feedItems.add(stock_equities);
+        }
 
-        }} catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
     }
 
-    private static void ProcessXml(org.w3c.dom.Document data) {
+    public static void ProcessXml(org.w3c.dom.Document data) {
         if (data != null) {
             String st, sd, sp, sl,si;
             org.w3c.dom.Element root = data.getDocumentElement();
@@ -1129,7 +1125,7 @@ try{
     public static org.w3c.dom.Document GoogleRSWorldMarketsFeed() {
         try {
             URL url;
-            String address = "https://news.google.com/news/rss/search/section/q/" + "World Markets" + "?ned=us&gl=US&hl=en";
+            String address = "https://news.google.com/news/rss/search/section/q/" + "World%20Financial%20Markets" + "?ned=us&gl=US&hl=en";
             url = new URL(address);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");

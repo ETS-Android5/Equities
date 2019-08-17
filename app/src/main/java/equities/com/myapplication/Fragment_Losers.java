@@ -15,6 +15,7 @@ import android.widget.TextView;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import static equities.com.myapplication.Constructor_App_Variables.stock_losers_feedItems;
 import static equities.com.myapplication.Service_Main_Equities.*;
 /**
  * Created by Julian Dinkins on 4/25/2018.
@@ -23,8 +24,8 @@ public class Fragment_Losers extends Fragment {
     TextView stock, crypto;
     private RecyclerView stockitems;
     private RecyclerView cryptoitems;
-    Adapter_Main_Equities crypto_adapter;
-    Adapter_Main_Equities stock_adapter;
+    Adapter_Stock_Equities crypto_adapter;
+    Adapter_Stock_Equities stock_adapter;
     Timer mTimer;
     int t =0;
     private TimerTask createTimerTask() {
@@ -58,11 +59,11 @@ public class Fragment_Losers extends Fragment {
         crypto = rootView.findViewById(R.id.crypto);
         stockitems= rootView.findViewById(R.id.stock_items);
         stockitems.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-        stock_adapter =new Adapter_Main_Equities(getActivity(), "Stock_Loser", stock_losers_symbollist,stock_losers_namelist,stock_losers_changelist);
+        //stock_adapter =new Adapter_Stock_Equities(getActivity(), "Stock_Loser", stock_losers_feedItems);
         stockitems.setAdapter(stock_adapter);
         cryptoitems= rootView.findViewById(R.id.crypto_items);
         cryptoitems.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-        crypto_adapter=new Adapter_Main_Equities(getActivity(), "Crypto_Loser",crypto_losers_symbollist,crypto_losers_namelist,crypto_losers_changelist);
+       // crypto_adapter=new Adapter_Stock_Equities(getActivity(), "Crypto_Loser",crypto_losers_feedItems);
         cryptoitems.setAdapter(crypto_adapter);
         Typeface custom_font = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Oregon.ttf");
         stock.setTypeface(custom_font);
@@ -110,9 +111,9 @@ public class Fragment_Losers extends Fragment {
             //cryptoitems.removeAllViewsInLayout();
             crypto_adapter.notifyDataSetChanged();
             stock_adapter.notifyDataSetChanged();
-            stockitems.setAdapter(new Adapter_Main_Equities(getActivity(), "Stock_Loser", stock_losers_symbollist,stock_losers_namelist,stock_losers_changelist));
+           // stockitems.setAdapter(new Adapter_Stock_Equities(getActivity(), "Stock_Loser", stock_losers_feedItems));
             cryptoitems.setAdapter(crypto_adapter);
-            cryptoitems.setAdapter(new Adapter_Main_Equities(getActivity(), "Crypto_Loser",crypto_losers_symbollist,crypto_losers_namelist,crypto_losers_changelist));
+          //  cryptoitems.setAdapter(new Adapter_Stock_Equities(getActivity(), "Crypto_Loser",crypto_losers_symbollist,crypto_losers_namelist,crypto_losers_changelist));
             stockitems.setAdapter(stock_adapter);
         }
     }

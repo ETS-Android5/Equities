@@ -27,8 +27,8 @@ public class Fragment_Market_Kings extends Fragment {
     TextView stock, crypto;
     private RecyclerView stockitems;
     private RecyclerView cryptoitems;
-    Adapter_Main_Equities crypto_adapter;
-    Adapter_Main_Equities stock_adapter;
+    Adapter_Stock_Equities crypto_adapter;
+    Adapter_Stock_Equities stock_adapter;
     Timer mTimer;
     int t =0;
     private TimerTask createTimerTask() {
@@ -65,11 +65,11 @@ public class Fragment_Market_Kings extends Fragment {
         crypto = rootView.findViewById(R.id.crypto);
         stockitems= rootView.findViewById(R.id.stock_items);
         stockitems.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-        stock_adapter=new Adapter_Main_Equities(getActivity(), "Stock_Kings", stock_kings_symbollist,stock_kings_namelist,stock_kings_changelist);
+        //stock_adapter=new Adapter_Stock_Equities(getActivity(), "Stock_Kings", stock_kings_symbollist,stock_kings_namelist,stock_kings_changelist);
         stockitems.setAdapter(stock_adapter);
         cryptoitems= rootView.findViewById(R.id.crypto_items);
         cryptoitems.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-        crypto_adapter=new Adapter_Main_Equities(getActivity(), "Crypto_Kings",crypto_kings_symbolist,crypto_kings_namelist,crypto_kings_marketcaplist);
+        //crypto_adapter=new Adapter_Stock_Equities(getActivity(), "Crypto_Kings",crypto_kings_symbolist,crypto_kings_namelist,crypto_kings_marketcaplist);
         cryptoitems.setAdapter(crypto_adapter);
         Typeface custom_font = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Oregon.ttf");
         stock.setTypeface(custom_font);
@@ -110,11 +110,11 @@ public class Fragment_Market_Kings extends Fragment {
         super.setUserVisibleHint(isVisibleToUser);
         if(isVisibleToUser){
 
-            crypto_adapter.notifyDataSetChanged();
-            stock_adapter.notifyDataSetChanged();
-            crypto_adapter=new Adapter_Main_Equities(getActivity(), "Crypto_Kings",crypto_kings_symbolist,crypto_kings_namelist,crypto_kings_marketcaplist);
+//            crypto_adapter.notifyDataSetChanged();
+  //          stock_adapter.notifyDataSetChanged();
+            //crypto_adapter=new Adapter_Stock_Equities(getActivity(), "Crypto_Kings",crypto_kings_symbolist,crypto_kings_namelist,crypto_kings_marketcaplist);
             cryptoitems.setAdapter(crypto_adapter);
-            stock_adapter=new Adapter_Main_Equities(getActivity(), "Stock_Kings", stock_kings_symbollist,stock_kings_namelist,stock_kings_changelist);
+            //stock_adapter=new Adapter_Stock_Equities(getActivity(), "Stock_Kings", stock_kings_symbollist,stock_kings_namelist,stock_kings_changelist);
             stockitems.setAdapter(stock_adapter);
         }}
 }

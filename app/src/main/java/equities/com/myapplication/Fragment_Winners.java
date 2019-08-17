@@ -27,8 +27,8 @@ public class Fragment_Winners extends Fragment {
     private RecyclerView stockitems;
     private RecyclerView cryptoitems;
 
-    Adapter_Main_Equities stock_adapter;
-    Adapter_Main_Equities crypto_adapter;
+    Adapter_Stock_Equities stock_adapter;
+    Adapter_Stock_Equities crypto_adapter;
     Timer mTimer;
     int t =0;
     private TimerTask createTimerTask() {
@@ -84,9 +84,9 @@ public class Fragment_Winners extends Fragment {
         stockitems.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         cryptoitems.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
 
-        stock_adapter=new Adapter_Main_Equities(getActivity(), "Stock_Winner", stock_winners_symbollist, stock_winners_namelist, stock_winners_changelist);
+       // stock_adapter=new Adapter_Stock_Equities(getActivity(), "Stock_Winner", stock_winners_symbollist, stock_winners_namelist, stock_winners_changelist);
         stockitems.setAdapter(stock_adapter);
-        crypto_adapter=new Adapter_Main_Equities(getActivity(), "Crypto_Winner", crypto_winners_symbollist, crypto_winners_namelist, crypto_winners_changelist);
+       // crypto_adapter=new Adapter_Stock_Equities(getActivity(), "Crypto_Winner", crypto_winners_symbollist, crypto_winners_namelist, crypto_winners_changelist);
         cryptoitems.setAdapter(crypto_adapter);
         Typeface custom_font = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Oregon.ttf");
 
@@ -131,9 +131,9 @@ public class Fragment_Winners extends Fragment {
         if(isVisibleToUser){
             stock_adapter.notifyDataSetChanged();
             crypto_adapter.notifyDataSetChanged();
-            stock_adapter=new Adapter_Main_Equities(getActivity(), "Stock_Winner", stock_winners_symbollist, stock_winners_namelist, stock_winners_changelist);
+            //stock_adapter=new Adapter_Stock_Equities(getActivity(), "Stock_Winner", stock_winners_symbollist, stock_winners_namelist, stock_winners_changelist);
             stockitems.setAdapter(stock_adapter);
-            crypto_adapter=new Adapter_Main_Equities(getActivity(), "Crypto_Winner", crypto_winners_symbollist, crypto_winners_namelist, crypto_winners_changelist);
+            //crypto_adapter=new Adapter_Stock_Equities(getActivity(), "Crypto_Winner", crypto_winners_symbollist, crypto_winners_namelist, crypto_winners_changelist);
             cryptoitems.setAdapter(crypto_adapter);
         }
     }

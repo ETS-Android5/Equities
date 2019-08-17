@@ -14,10 +14,10 @@ import android.widget.TextView;
 import java.lang.ref.WeakReference;
 import java.util.Random;
 
-public class AsyncDataMain extends AsyncTask<Integer, Integer, String> {
+public class AsyncWorldMarketData extends AsyncTask<Integer, Integer, String> {
 
         private WeakReference<Activity_Markets_Main> activityReference;
-        AsyncDataMain(Activity_Markets_Main context) {
+        AsyncWorldMarketData(Activity_Markets_Main context) {
             activityReference = new WeakReference<>(context);
         }
         long startTime;
@@ -88,8 +88,6 @@ public class AsyncDataMain extends AsyncTask<Integer, Integer, String> {
         @Override
         protected void onPostExecute(String result) {
             Activity_Markets_Main activity = activityReference.get();
-//          TabLayout t = activity.findViewById(R.id.tabs);
-//          t.setVisibility(View.VISIBLE);
             if (activity == null || activity.isFinishing()) return;
             activity.setMainPage();
 

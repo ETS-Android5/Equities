@@ -16,10 +16,7 @@
             android:layout_gravity="center_horizontal"
             android:background="#00000000"
             app:elevation="0dp">
-        <android.support.v4.widget.SwipeRefreshLayout
-                android:clickable="true" android:id="@+id/swipe_container"
-                android:layout_width="match_parent"
-                android:layout_height="46dp">
+
 
         <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
@@ -67,7 +64,6 @@
 
 
         </android.support.v7.widget.Toolbar>
-        </android.support.v4.widget.SwipeRefreshLayout>
 
         <android.support.design.widget.TabLayout
             android:id="@+id/tabs"
@@ -75,10 +71,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:tabIndicatorHeight="1dp"
+            app:tabIndicatorColor="@color/colorPrimary"
             app:tabMode="fixed"
             app:tabSelectedTextColor="#543533"
             app:tabTextAppearance="@style/TextAppearance.AppCompat.Small.Inverse"
-            app:tabTextColor="#ffffff" />
+            app:tabTextColor="#ffffff" >
+        </android.support.design.widget.TabLayout>
     </android.support.design.widget.AppBarLayout>
 
 
@@ -138,33 +136,20 @@
                         android:layout_weight="1"
                         android:background="#00000000"
                         android:visibility="gone"/>
-                <TableRow
-                        android:id="@+id/table_tabs"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="15"
-                        android:background="#00000000"
-                        android:orientation="horizontal">
 
-                    <View
+                    <android.support.design.widget.BottomNavigationView
+                            android:id="@+id/activity_tabs"
+                            app:labelVisibilityMode="labeled"
+                            android:background="@color/colorTrans"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:background="@drawable/background_bottom_left_grad"
-                            android:layout_weight="3"></View>
-                    <View
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:background="#ffffff"
-                            />
-                    <View
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:background="@drawable/background_bottom_right_grad"
-                            android:layout_weight="3"></View>
+                            android:layout_height="wrap_content"
+                            app:menu="@menu/bottom_nav_menu"
+                            app:itemBackground="@color/colorTrans"
+                            app:itemIconTint="@color/colorPrimary"
+                            app:itemTextColor="@color/colorPrimary"
+                            >
+                    </android.support.design.widget.BottomNavigationView>
 
-
-                </TableRow>
             </LinearLayout>
 
 

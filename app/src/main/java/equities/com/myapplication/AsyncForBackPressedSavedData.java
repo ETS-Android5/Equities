@@ -77,7 +77,7 @@ public class AsyncForBackPressedSavedData extends AsyncTask<Integer, Integer, St
             ViewPager market_pager = activity.findViewById(R.id.market_pager);
             market_pager.setVisibility(View.GONE);
             TabLayout tabs = activity.findViewById(R.id.tabs);
-            //activity.setupMainViewPager(pager);
+            //activity.setupWorldMarketsViewPager(pager);
             tabs.setupWithViewPager(pager);}
 
 
