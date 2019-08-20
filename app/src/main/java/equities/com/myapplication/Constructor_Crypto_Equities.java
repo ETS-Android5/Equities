@@ -17,6 +17,16 @@ public class Constructor_Crypto_Equities {
    String crytpo_kings_percent_change;
    String crytpo_kings_price;
 
+   public String getCrypto_kings_marketCap() {
+      return crypto_kings_marketCap;
+   }
+
+   public void setCrypto_kings_marketCap(String crypto_kings_marketCap) {
+      this.crypto_kings_marketCap = crypto_kings_marketCap;
+   }
+
+   String crypto_kings_marketCap;
+
    public String getCrypto_losers_name() {
       return crypto_losers_name;
    }

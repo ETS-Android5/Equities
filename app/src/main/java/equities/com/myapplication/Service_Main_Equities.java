@@ -30,8 +30,6 @@ import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.Duration;
-import java.time.Instant;
 import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
@@ -40,7 +38,6 @@ import java.util.concurrent.Future;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static equities.com.myapplication.Activity_Markets_Main.ap_info;
 import static equities.com.myapplication.Constructor_App_Variables.*;
 
 public class Service_Main_Equities {
@@ -238,42 +235,7 @@ public class Service_Main_Equities {
 
     }
 
-    public static void getMarketWinners(){
-        try {
-        crypto_data = Jsoup.connect("https://coinmarketcap.com/gainers-losers/").timeout(10 * 10000).get();
-        Elements losers_table = crypto_data.getElementsByClass("table-responsive");
-        Element winners_table = losers_table.get(2);
-        Elements tbody = winners_table.select("tbody");
-        Elements winners = crypto_data.select("div#gainers-24h");
-        Elements winner_change = tbody.select("td[data-usd]");//Get's percentage change
-        Elements winner_symbol = tbody.select("tr");
-        Elements winner_name = tbody.select("img[src]");
-        for (Element crypto_symbol : winner_symbol) {
-            if(crypto_winners_symbollist.size()<20){
-            String symbol = crypto_symbol.select("td.text-left").text();
-                crypto_winners_symbollist.add(symbol);
-            }
-            typelist.add("Cryptocurrency");
-         }
-        Elements link = winners.select("a.price");
-        for(Element x : link){
-            if(crypto_winners_pricelist.size()<20){
-            String url = x.attr("data-usd");
-            toDouble(crypto_winners_pricelist,url);}
-        }
-        for (Element crypto_name : winner_name) {
-            if(crypto_winners_namelist.size()<20){
-            String name = crypto_name.attr("alt");
-                crypto_winners_namelist.add(name);}
-        }
-        for (Element crypto_change : winner_change) {
-            if(crypto_winners_changelist.size()<20){
-                crypto_winners_changelist.add(crypto_change.text());}
-        }
-
-    } catch (IOException e) {
-        //Use alternative method
-    }
+    public static void getMarketWinnersStock(){
         sv = null;
         try {
 
@@ -293,13 +255,138 @@ public class Service_Main_Equities {
 
 
             }}catch (IOException e) {
-                       //Use alternative method
-            }
+            //Use alternative method
+        }
 
 
     }
+    public static void getMarketWinnersCrypto(){
+        try {
+            crypto_data = Jsoup.connect("https://coinmarketcap.com/gainers-losers/").timeout(10 * 10000).get();
+            Elements losers_table = crypto_data.getElementsByClass("table-responsive");
+            Element winners_table = losers_table.get(2);
+            Elements tbody = winners_table.select("tbody");
+            Elements winners = crypto_data.select("div#gainers-24h");
+            Elements winner_change = tbody.select("td[data-usd]");//Get's percentage change
+            Elements winner_symbol = tbody.select("tr");
+            Elements winner_name = tbody.select("img[src]");
+            for (Element crypto_symbol : winner_symbol) {
+                if(crypto_winners_symbollist.size()<20){
+                    String symbol = crypto_symbol.select("td.text-left").text();
+                    crypto_winners_symbollist.add(symbol);
+                }
+                typelist.add("Cryptocurrency");
+            }
+            Elements link = winners.select("a.price");
+            for(Element x : link){
+                if(crypto_winners_pricelist.size()<20){
+                    String url = x.attr("data-usd");
+                    toDouble(crypto_winners_pricelist,url);}
+            }
+            for (Element crypto_name : winner_name) {
+                if(crypto_winners_namelist.size()<20){
+                    String name = crypto_name.attr("alt");
+                    crypto_winners_namelist.add(name);}
+            }
+            for (Element crypto_change : winner_change) {
+                if(crypto_winners_changelist.size()<20){
+                    crypto_winners_changelist.add(crypto_change.text());}
+            }
 
-    public static void getMarketLosers(){
+        } catch (IOException e) {
+            //Use alternative method
+        }
+
+
+    }
+    public static void getMarketWinners(){
+       getMarketWinnersStock();
+       getMarketWinnersCrypto();
+    }
+
+
+
+
+
+    public static void getStockLosers(){
+        try{
+            sv = Jsoup.connect("https://finance.yahoo.com/losers").userAgent("Opera").timeout(10 * 10000).get();
+            Elements tbodyl = sv.select("tbody");
+            Elements trl = tbodyl.select("tr");
+            for (int il = 0; il < 20; il++) {
+                String lsymbol = trl.get(il).select("td").get(0).text();
+                String lname = trl.get(il).select("td").get(1).text();
+                String lprice = trl.get(il).select("td").get(2).text().replace("+", "");
+                String lchange = trl.get(il).select("td").get(4).text().replace("+", "");
+                stock_losers_symbollist.add(lsymbol);
+                stock_losers_namelist.add(lname);
+                stock_losers_pricelist.add(lprice);
+                stock_losers_changelist.add(lchange);
+                // System.out.println("FIRST METHOD  LOSERS"+lsymbol + " " + lname + " " + lprice + " " + lchange);
+            }
+
+        } catch (IOException e) {
+//ALTERNATIVE METHOD
+            try {
+                sv = Jsoup.connect("http://money.cnn.com/data/hotstocks/").userAgent("Opera").timeout(10 * 10000).get();
+                Elements ddd = sv.getElementsByClass("wsod_dataTable wsod_dataTableBigAlt");
+                Element ff = ddd.get(1);
+                Elements a = ff.select("a");
+                Elements b = ff.select("span[title]");
+                Elements aa = ff.select("span.posData");
+                Elements bb = ff.select("span[stream]");
+                if(stock_winners_symbollist.size()<20){
+                    for (Element stock_symbol : a) {
+                        String symbol = stock_symbol.select("a.wsod_symbol").text();
+                        stock_winners_symbollist.add(symbol); }
+                    for (Element stock_name : b) {
+                        String name = stock_name.text();
+                        if (name.isEmpty()) {
+                        } else {
+                            stock_winners_namelist.add(name); } }
+                    for (Element stock_price : bb) {
+                        String price = stock_price.text();
+                        if (price.isEmpty()) {
+                        } else {
+                            if (price.contains("+")||price.contains("-")||price.contains("%")) {
+                            }else{
+                                stock_winners_pricelist.add(price);} } }
+                    for (Element stock_change : aa) {
+                        String change = stock_change.text();
+                        if (change.isEmpty()) {
+                        } else {
+                            if (change.contains("%")) {
+                                stock_winners_changelist.add(change); } } }
+                    //STOCK LOSERS ARRAYS
+                    Element fl = ddd.get(2);
+                    Elements al = fl.select("a");
+                    Elements bl = fl.select("span[title]");
+                    Elements aal = fl.select("span.negData");
+                    Elements bb1 = fl.select("span[stream]");
+                    for (Element x : al) {
+                        stock_losers_symbollist.add(x.text()); }
+                    for (Element x : bl) {
+                        stock_losers_namelist.add(x.text()); }
+                    for (Element stock_price : bb1) {
+                        String price = stock_price.text();
+                        if (price.isEmpty()) {
+                        } else {
+                            if (price.contains("+")||price.contains("-")||price.contains("%")) {
+                            }else{
+                                stock_losers_pricelist.add(price);} } }
+                    for (int i = 0; i < aal.size(); i++) {
+                        if (i % 2 == 0) {
+                            // This is point amount} else {
+                            stock_losers_changelist.add(aal.get(i).text()); } }
+                }} catch (IOException z) {
+                z.printStackTrace();
+            }
+
+            e.printStackTrace();
+        }
+
+    }
+    public static void getCryptoLosers(){
         //Scrape data and if any Array is 0 use API as backup
         try {
             crypto_data = Jsoup.connect("https://coinmarketcap.com/gainers-losers/").timeout(10 * 10000).get();
@@ -328,126 +415,130 @@ public class Service_Main_Equities {
 
         } catch (IOException e) {
         }
-try{
-        sv = Jsoup.connect("https://finance.yahoo.com/losers").userAgent("Opera").timeout(10 * 10000).get();
-        Elements tbodyl = sv.select("tbody");
-        Elements trl = tbodyl.select("tr");
-    for (int il = 0; il < 20; il++) {
-        Constructor_Stock_Equities stock_equities = new Constructor_Stock_Equities();
-        String lsymbol = trl.get(il).select("td").get(0).text();
-        String lname = trl.get(il).select("td").get(1).text();
-        String lprice = trl.get(il).select("td").get(2).text().replace("+", "");
-        String lchange = trl.get(il).select("td").get(4).text().replace("+", "");
-        stock_equities.setStock_losers_symbol(lsymbol);
-        stock_equities.setStock_losers_name(lname);
-        stock_equities.setStock_losers_price(lprice);
-        stock_equities.setStock_losers_percent_change(lchange);
-        typelist.add("Stock");
-        stock_losers_feedItems.add(stock_equities);}
 
-    System.out.println(stock_losers_feedItems.size());
-    } catch (IOException e) {
-//ALTERNATIVE METHOD
-    try {
-        sv = Jsoup.connect("http://money.cnn.com/data/hotstocks/").userAgent("Opera").timeout(10 * 10000).get();
-        Elements ddd = sv.getElementsByClass("wsod_dataTable wsod_dataTableBigAlt");
-        Element ff = ddd.get(1);
-        Elements a = ff.select("a");
-        Elements b = ff.select("span[title]");
-        Elements aa = ff.select("span.posData");
-        Elements bb = ff.select("span[stream]");
-        if(stock_winners_symbollist.size()<20){
-            for (Element stock_symbol : a) {
-                String symbol = stock_symbol.select("a.wsod_symbol").text();
-                stock_winners_symbollist.add(symbol); }
-            for (Element stock_name : b) {
-                String name = stock_name.text();
-                if (name.isEmpty()) {
-                } else {
-                    stock_winners_namelist.add(name); } }
-            for (Element stock_price : bb) {
-                String price = stock_price.text();
-                if (price.isEmpty()) {
-                } else {
-                    if (price.contains("+")||price.contains("-")||price.contains("%")) {
-                    }else{
-                        stock_winners_pricelist.add(price);} } }
-            for (Element stock_change : aa) {
-                String change = stock_change.text();
-                if (change.isEmpty()) {
-                } else {
-                    if (change.contains("%")) {
-                        stock_winners_changelist.add(change); } } }
-            //STOCK LOSERS ARRAYS
-            Element fl = ddd.get(2);
-            Elements al = fl.select("a");
-            Elements bl = fl.select("span[title]");
-            Elements aal = fl.select("span.negData");
-            Elements bb1 = fl.select("span[stream]");
-            for (Element x : al) {
-                stock_losers_symbollist.add(x.text()); }
-            for (Element x : bl) {
-                stock_losers_namelist.add(x.text()); }
-            for (Element stock_price : bb1) {
-                String price = stock_price.text();
-                if (price.isEmpty()) {
-                } else {
-                    if (price.contains("+")||price.contains("-")||price.contains("%")) {
-                    }else{
-                        stock_losers_pricelist.add(price);} } }
-            for (int i = 0; i < aal.size(); i++) {
-                if (i % 2 == 0) {
-                    // This is point amount} else {
-                    stock_losers_changelist.add(aal.get(i).text()); } }
-        }} catch (IOException z) {
-        z.printStackTrace();
+    }
+    public static void getMarketLosers(){
+       getCryptoLosers();
+       getStockLosers();
     }
 
-    e.printStackTrace();
-    }
-    }
 
-    public static void getMarketKings(){
+    public static void getMarketKingsStock(){
+        try {
+//GET STOCK KINGS
+            sv = Jsoup.connect("https://www.tradingview.com/markets/stocks-usa/market-movers-large-cap/").userAgent("Opera").timeout(10 * 10000).get();
+            Elements tbody =sv.select("tbody");
+
+            Elements tr =tbody.select("tr");
+            for (Element z : tr) {
+                if (stock_kings_symbollist.size() < 20) {
+
+
+                    String td0 = z.select("td").get(0).text();
+                    String[] split = td0.split(" ");
+                    String symbol = split[0];
+                    String name = td0.replace(split[0],"");
+                    String td1 = z.select("td").get(1).text();
+                    String price = td1;
+                    String td2 = z.select("td").get(2).text();
+                    String change = td2;
+                    stock_kings_symbollist.add(symbol);
+                    stock_kings_namelist.add(name);
+                    stock_kings_ipdown.add(change);
+                    stock_kings_changelist.add(price);
+                    //System.out.println("MAIN KINGS METHOD "+name+" "+symbol+" "+price+" "+change);
+                }}
+        } catch (IOException z) {
+            //USE ALTERNATIVE SITE FOR STOCK KINGS
+            try {
+                sv = Jsoup.connect("http://www.dogsofthedow.com/largest-companies-by-market-cap.htm").userAgent("Opera").timeout(10 * 10000).get();
+                Elements tbody =sv.select("tbody");
+                Elements tbody2 =tbody.select("tbody");
+                Elements tr =tbody2.select("tr");
+                for (int i = 15; i <= 24; i++) {
+                    if (stock_kings_namelist.size() < 20) {
+                        Element td0 = tr.get(i).select("td").get(0);
+                        Element td1 = tr.get(i).select("td").get(1);
+                        Element td2 = tr.get(i).select("td").get(3);
+                        Element td3 = tr.get(i).select("td").get(4);
+                        String remove = td2.text().replace(",", "");
+                        double add = Double.parseDouble(remove);
+                        int value = (int) Math.round(add);
+                        String added = String.valueOf(value);
+                        if (add > 1000) {
+                            added = added + " T";
+                        } else {
+                            added = added + " B";
+                        }
+                        try {
+                            sv = Jsoup.connect("https://money.cnn.com/quote/quote.html?symb=" + td0.text()).timeout(10 * 10000).get();
+                            Elements t = sv.select("tbody");
+                            Elements tx = t.select("tr");
+                            String td = tx.select("td").get(0).text();
+                            String[] split = td.split(" ");
+                            stock_kings_ipdown.add(split[0]);
+                            //System.out.println("SPECIFIC QUOTE "+split[0]);
+
+                        } catch (IOException d) {
+                        }
+                        stock_kings_namelist.add(td1.text());
+                        stock_kings_symbollist.add(td0.text());
+                        stock_kings_changelist.add(added);
+                        //stock_kings_ipdown.add(td3.text());
+
+//                    System.out.println(i-14+" "+td0.text()+" "+td1.text()+" "+added);
+                    }
+                }
+
+            } catch (IOException e) {
+                //Neither method works for Stock Kings..send an email to the developer
+                e.printStackTrace();
+            }    z.printStackTrace();
+        }
+
+
+    }
+    public static void getMarketKingsCrypto(){
         try {
             crypto_data = Jsoup.connect("https://coinmarketcap.com/").timeout(10 * 10000).get();
             Elements table = crypto_data.select("tbody");
             Elements tr = table.select("tr");
             for (Element t :tr){
-                    String symbol_name = t.select("td").get(1).text();
-                    String[] split = symbol_name.split(" ", 2);
-                    String symbol = split[0].replace(" ", "");
-                    String name = split[1].replace(" ", "");
-                    String price = t.select("td").get(3).text();
-                    String change = t.select("td").get(6).text();
-                    String cap = t.select("td").get(2).text();
-                    DecimalFormat df = new DecimalFormat("0.00");
-                    df.setMaximumFractionDigits(2);
-                    crypto_kings_symbolist.add(symbol);
-                    double p = Double.parseDouble(price.replace("$", " ").replace(",", ""));
-                    price = df.format(p);
-                    crypto_kings_namelist.add(name);
-                    crypto_kings_pricelist.add(price);
-                    crypto_kings_changelist.add(change);
-                    double d = Double.parseDouble(cap.replace("$", " ").replace(",", ""));
-                    cap = df.format(d);
-                    int l = cap.length();
-                    long ti = 1000000000000L;
-                    if (l <= 12) {
-                        cap = String.valueOf(d / 1000000);
-                        crypto_kings_marketcaplist.add(cap.substring(0, 3) + " M");
-                    }
-                    if (l > 12) {
-                        cap = String.valueOf(d / 1000000000);
-                        crypto_kings_marketcaplist.add(cap.substring(0, 3) + " B");
-                    }
-                    if (l > 15) {
-                        cap = String.valueOf(d / ti);
-                        crypto_kings_marketcaplist.add(cap.substring(0, 3) + " T");
-                    }
-                    btc_market_cap_change = crypto_kings_changelist.get(0) + "";
-                    btc_market_cap_amount = (String) crypto_kings_pricelist.get(0);
+                String symbol_name = t.select("td").get(1).text();
+                String[] split = symbol_name.split(" ", 2);
+                String symbol = split[0].replace(" ", "");
+                String name = split[1].replace(" ", "");
+                String price = t.select("td").get(3).text();
+                String change = t.select("td").get(6).text();
+                String cap = t.select("td").get(2).text();
+                DecimalFormat df = new DecimalFormat("0.00");
+                df.setMaximumFractionDigits(2);
+                crypto_kings_symbolist.add(symbol);
+                double p = Double.parseDouble(price.replace("$", " ").replace(",", ""));
+                price = df.format(p);
+                crypto_kings_namelist.add(name);
+                crypto_kings_pricelist.add(price);
+                crypto_kings_changelist.add(change);
+                double d = Double.parseDouble(cap.replace("$", " ").replace(",", ""));
+                cap = df.format(d);
+                int l = cap.length();
+                long ti = 1000000000000L;
+                if (l <= 12) {
+                    cap = String.valueOf(d / 1000000);
+                    crypto_kings_marketcaplist.add(cap.substring(0, 3) + " M");
                 }
-                // System.out.println("X "+symbol+" "+name+" "+price+" "+change);
+                if (l > 12) {
+                    cap = String.valueOf(d / 1000000000);
+                    crypto_kings_marketcaplist.add(cap.substring(0, 3) + " B");
+                }
+                if (l > 15) {
+                    cap = String.valueOf(d / ti);
+                    crypto_kings_marketcaplist.add(cap.substring(0, 3) + " T");
+                }
+                btc_market_cap_change = crypto_kings_changelist.get(0) + "";
+                btc_market_cap_amount = (String) crypto_kings_pricelist.get(0);
+            }
+            // System.out.println("X "+symbol+" "+name+" "+price+" "+change);
 
         }catch (IOException n){
             //USING ALTERNATIVE SITE
@@ -547,80 +638,15 @@ try{
             }
 
         }
-        try {
-//GET STOCK KINGS
-            sv = Jsoup.connect("https://www.tradingview.com/markets/stocks-usa/market-movers-large-cap/").userAgent("Opera").timeout(10 * 10000).get();
-            Elements tbody =sv.select("tbody");
-
-            Elements tr =tbody.select("tr");
-            for (Element z : tr) {
-                if (stock_kings_symbollist.size() < 20) {
-
-
-                    String td0 = z.select("td").get(0).text();
-                    String[] split = td0.split(" ");
-                    String symbol = split[0];
-                    String name = td0.replace(split[0],"");
-                    String td1 = z.select("td").get(1).text();
-                    String price = td1;
-                    String td2 = z.select("td").get(2).text();
-                    String change = td2;
-                    stock_kings_symbollist.add(symbol);
-                    stock_kings_namelist.add(name);
-                    stock_kings_ipdown.add(change);
-                    stock_kings_changelist.add(price);
-                    //System.out.println("MAIN KINGS METHOD "+name+" "+symbol+" "+price+" "+change);
-                }}
-        } catch (IOException z) {
-            //USE ALTERNATIVE SITE FOR STOCK KINGS
-            try {
-                sv = Jsoup.connect("http://www.dogsofthedow.com/largest-companies-by-market-cap.htm").userAgent("Opera").timeout(10 * 10000).get();
-                Elements tbody =sv.select("tbody");
-                Elements tbody2 =tbody.select("tbody");
-                Elements tr =tbody2.select("tr");
-                for (int i = 15; i <= 24; i++) {
-                    if (stock_kings_namelist.size() < 20) {
-                        Element td0 = tr.get(i).select("td").get(0);
-                        Element td1 = tr.get(i).select("td").get(1);
-                        Element td2 = tr.get(i).select("td").get(3);
-                        Element td3 = tr.get(i).select("td").get(4);
-                        String remove = td2.text().replace(",", "");
-                        double add = Double.parseDouble(remove);
-                        int value = (int) Math.round(add);
-                        String added = String.valueOf(value);
-                        if (add > 1000) {
-                            added = added + " T";
-                        } else {
-                            added = added + " B";
-                        }
-                        try {
-                            sv = Jsoup.connect("https://money.cnn.com/quote/quote.html?symb=" + td0.text()).timeout(10 * 10000).get();
-                            Elements t = sv.select("tbody");
-                            Elements tx = t.select("tr");
-                            String td = tx.select("td").get(0).text();
-                            String[] split = td.split(" ");
-                            stock_kings_ipdown.add(split[0]);
-                            //System.out.println("SPECIFIC QUOTE "+split[0]);
-
-                        } catch (IOException d) {
-                        }
-                        stock_kings_namelist.add(td1.text());
-                        stock_kings_symbollist.add(td0.text());
-                        stock_kings_changelist.add(added);
-                        //stock_kings_ipdown.add(td3.text());
-
-//                    System.out.println(i-14+" "+td0.text()+" "+td1.text()+" "+added);
-                    }
-                }
-
-            } catch (IOException e) {
-                //Neither method works for Stock Kings..send an email to the developer
-                e.printStackTrace();
-            }    z.printStackTrace();
-        }
-
-
     }
+    public static void getMarketKings(){
+        getMarketKingsCrypto();
+        getMarketKingsStock();
+    }
+
+
+
+
 
     public static void toDouble(ArrayList array, String string){
         Double doub = Double.parseDouble(string);
@@ -643,7 +669,7 @@ try{
         array.add("$ "+string);
     }
 
-    public static void getCrypto_Data() {
+    public static void getCrypto_Data(){
         //Scrape data and if any Array is 0 use API as backup
         try {
             crypto_data = Jsoup.connect("https://coinmarketcap.com/gainers-losers/").timeout(10 * 10000).get();
@@ -652,30 +678,30 @@ try{
             Elements loser_symbol = losers.select("td.text-left");
             Elements loser_volume = losers.select("td.text-right");
             Elements loser_name_change = losers.select("td[data-sort]");
-            for (Element x : loser_volume) {
-                Constructor_Crypto_Equities crypto_equities = new Constructor_Crypto_Equities();
-                String v = x.getElementsByClass("volume").text().replace("$", "").replace(",", "");
-                if (v.isEmpty()) {
-                } else {
-                    if (Double.parseDouble(v) > 250000) {
+            for (Element x: loser_volume) {
+                String v =x.getElementsByClass("volume").text().replace("$","").replace(",","");
+                if (v.isEmpty()){}else{
+                    if(Double.parseDouble(v)>250000){
+
                         for (Element s : loser_symbol) {
-                            crypto_equities.setCrypto_losers_symbol(s.text());
+                            crypto_losers_symbollist.add(s.text());
                         }
                         Elements price = losers.select("a.price");
-                        for (Element xx : price) {
-                            String url = xx.attr("data-usd");
-                            crypto_equities.setCrypto_losers_price(url);
+                        for(Element xx : price){
+                            if(crypto_losers_pricelist.size()<20){
+                                String url = xx.attr("data-usd");
+                                toDouble(crypto_losers_pricelist,url);}
                         }
                         for (int i = 0; i < loser_name_change.size(); i++) {
                             if (i % 2 == 0) {
-                                crypto_equities.setCrypto_losers_name(loser_name_change.get(i).text());
+                                if(crypto_losers_namelist.size()<20){
+                                    crypto_losers_namelist.add(loser_name_change.get(i).text());}
                             } else {
-                                crypto_equities.setCrypto_losers_percent_change(loser_name_change.get(i).text());
+                                if(crypto_losers_changelist.size()<20){
+                                    crypto_losers_changelist.add(loser_name_change.get(i).text());}
                             }
                         }
-                    }
-                    crypto_loser_feedItems.add(crypto_equities);
-                }
+                    }}
             }
             Element winners_table = losers_table.get(2);
             Elements tbody = winners_table.select("tbody");
@@ -684,119 +710,116 @@ try{
             Elements winner_symbol = tbody.select("tr");
             Elements winner_name = tbody.select("img[src]");
             for (Element crypto_symbol : winner_symbol) {
-
-                String symbol = crypto_symbol.select("td.text-left").text();
-                crypto_winners_symbollist.add(symbol);
-                typelist.add("Cryptocurrency");
-
+                if(crypto_winners_symbollist.size()<20){
+                    String symbol = crypto_symbol.select("td.text-left").text();
+                    crypto_winners_symbollist.add(symbol);
+                    typelist.add("Cryptocurrency");}
             }
             Elements link = winners.select("a.price");
-            for (Element x : link) {
-
-                String url = x.attr("data-usd");
-                toDouble(crypto_winners_pricelist, url);
-
+            for(Element x : link){
+                if(crypto_winners_pricelist.size()<20){
+                    String url = x.attr("data-usd");
+                    toDouble(crypto_winners_pricelist,url);}
             }
             for (Element crypto_name : winner_name) {
-
-                String name = crypto_name.attr("alt");
-                crypto_winners_namelist.add(name);
-
+                if(crypto_winners_namelist.size()<20){
+                    String name = crypto_name.attr("alt");
+                    crypto_winners_namelist.add(name);}
             }
             for (Element crypto_change : winner_change) {
-
-                crypto_winners_changelist.add(crypto_change.text());
-
+                if(crypto_winners_changelist.size()<20){
+                    crypto_winners_changelist.add(crypto_change.text());}
             }
         } catch (IOException e) {
             //Use alternative method
-            try {
+            try{
                 crypto_data = Jsoup.connect("https://www.coingecko.com/en/coins/trending").timeout(10 * 10000).get();
                 Elements tbody = crypto_data.select("tbody");
                 Elements winner_change = tbody.select("tr");
-                for (Element x : winner_change) {
+                for(Element x :winner_change){
                     String symbol = x.select("span").get(0).text();
                     String name = x.select("span").get(1).text();
-                    String price = x.select("span").get(4).text().replace("$", "");
+                    String price = x.select("span").get(4).text().replace("$","");
                     String change = x.select("span").get(5).text();
-
-                    crypto_winners_symbollist.add(symbol);
-                    crypto_winners_namelist.add(name);
-                    crypto_winners_changelist.add(change);
-                    typelist.add("Cryptocurrency");
-                    toDouble(crypto_winners_pricelist, price);
-                    //System.out.println("WINNERS "+name+" "+symbol+" "+price+" "+change);
-
+                    if(crypto_winners_namelist.size()<20){
+                        crypto_winners_symbollist.add(symbol);
+                        crypto_winners_namelist.add(name);
+                        crypto_winners_changelist.add(change);
+                        typelist.add("Cryptocurrency");
+                        toDouble(crypto_winners_pricelist,price);
+                        //System.out.println("WINNERS "+name+" "+symbol+" "+price+" "+change);
+                    }
 
                 }
-            } catch (IOException i) {
+            }
+            catch (IOException i){
                 //i.printStackTrace();
                 //USE 3rd OPTION api IF NECCESSARY as winners and losers methods have failed
                 //Send a message to me stating how all 3 methods have failed.
 
-            }
-        }
+            }}
         //GETTING CRYPTO MARKET CAP LEADERS
         try {
             crypto_data = Jsoup.connect("https://coinmarketcap.com/").timeout(10 * 10000).get();
             Elements table = crypto_data.select("tbody");
             Elements tr = table.select("tr");
-            for (Element t : tr) {
-                String symbol_name = t.select("td").get(1).text();
-                String[] split = symbol_name.split(" ", 2);
-                String symbol = split[0].replace(" ", "");
-                String name = split[1].replace(" ", "");
-                String price = t.select("td").get(3).text();
-                String change = t.select("td").get(6).text();
-                String cap = t.select("td").get(2).text();
-                DecimalFormat df = new DecimalFormat("0.00");
-                df.setMaximumFractionDigits(2);
-                crypto_kings_symbolist.add(symbol);
-                double p = Double.parseDouble(price.replace("$", " ").replace(",", ""));
-                price = df.format(p);
-                crypto_kings_namelist.add(name);
-                crypto_kings_pricelist.add(price);
-                crypto_kings_changelist.add(change);
-                double d = Double.parseDouble(cap.replace("$", " ").replace(",", ""));
-                cap = df.format(d);
-                int l = cap.length();
-                long ti = 1000000000000L;
-                if (l <= 12) {
-                    cap = String.valueOf(d / 1000000);
-                    crypto_kings_marketcaplist.add(cap.substring(0, 3) + " M");
+            for (Element t :tr){
+                if(crypto_kings_marketcaplist.size()<20) {
+                    String symbol_name = t.select("td").get(1).text();
+                    String[] split = symbol_name.split(" ", 2);
+                    String symbol = split[0].replace(" ", "");
+                    String name = split[1].replace(" ", "");
+                    String price = t.select("td").get(3).text();
+                    String change = t.select("td").get(6).text();
+                    String cap = t.select("td").get(2).text();
+                    DecimalFormat df = new DecimalFormat("0.00");
+                    df.setMaximumFractionDigits(2);
+                    crypto_kings_symbolist.add(symbol);
+                    double p = Double.parseDouble(price.replace("$", " ").replace(",", ""));
+                    price = df.format(p);
+                    crypto_kings_namelist.add(name);
+                    crypto_kings_pricelist.add(price);
+                    crypto_kings_changelist.add(change);
+                    double d = Double.parseDouble(cap.replace("$", " ").replace(",", ""));
+                    cap = df.format(d);
+                    int l = cap.length();
+                    long ti = 1000000000000L;
+                    if (l <= 12) {
+                        cap = String.valueOf(d / 1000000);
+                        crypto_kings_marketcaplist.add(cap.substring(0, 3) + " M");
+                    }
+                    if (l > 12) {
+                        cap = String.valueOf(d / 1000000000);
+                        crypto_kings_marketcaplist.add(cap.substring(0, 3) + " B");
+                    }
+                    if (l > 15) {
+                        cap = String.valueOf(d / ti);
+                        crypto_kings_marketcaplist.add(cap.substring(0, 3) + " T");
+                    }
+                    btc_market_cap_change = crypto_kings_changelist.get(0) + "";
+                    btc_market_cap_amount = (String) crypto_kings_pricelist.get(0);
                 }
-                if (l > 12) {
-                    cap = String.valueOf(d / 1000000000);
-                    crypto_kings_marketcaplist.add(cap.substring(0, 3) + " B");
-                }
-                if (l > 15) {
-                    cap = String.valueOf(d / ti);
-                    crypto_kings_marketcaplist.add(cap.substring(0, 3) + " T");
-                }
-                btc_market_cap_change = crypto_kings_changelist.get(0) + "";
-                btc_market_cap_amount = (String) crypto_kings_pricelist.get(0);
-
             }
-        } catch (IOException n) {
+        }catch (IOException n){
             //USING ALTERNATIVE SITE
             try {
                 crypto_data = Jsoup.connect("https://finance.yahoo.com/cryptocurrencies").timeout(10 * 10000).get();
-                Elements tbody = crypto_data.select("tbody");
-                Elements tr = tbody.select("tr");
-                for (int i = 0; i < 20; i++) {
+                Elements tbody =crypto_data.select("tbody");
+                Elements tr =tbody.select("tr");
+                for(int i=0;i<20;i++){
                     String symbol = tr.get(i).select("td").get(0).text();
                     String name = tr.get(i).select("td").get(1).text();
-                    String price = tr.get(i).select("td").get(3).text().replace("+", "");
-                    String change = tr.get(i).select("td").get(4).text().replace("+", "");
+                    String price = tr.get(i).select("td").get(3).text().replace("+","");
+                    String change = tr.get(i).select("td").get(4).text().replace("+","");
                     crypto_kings_symbolist.add(symbol);
                     crypto_kings_namelist.add(name);
                     crypto_kings_pricelist.add(price);
                     crypto_kings_changelist.add(change);
                 }
-                btc_market_cap_change = crypto_kings_changelist.get(0) + "%";
-                btc_market_cap_amount = (String) crypto_kings_pricelist.get(0);
+                btc_market_cap_change =crypto_kings_changelist.get(0)+"%";
+                btc_market_cap_amount =(String) crypto_kings_pricelist.get(0);
 
-            } catch (IOException o) {
+            }catch (IOException o){
                 //USING API AS LAST RESORT IF SITES ARE DOWN
                 RequestQueue requestQueue = Volley.newRequestQueue(ApplicationContextProvider.getContext());
                 final String url = "https://api.coinmarketcap.com/v2/ticker/?sort=rank";
@@ -805,61 +828,57 @@ try{
                     public void onResponse(JSONObject response) {
                         try {
                             JSONObject obj = response.getJSONObject("data");
-                            JSONArray keys = obj.names();
+                            JSONArray keys = obj.names ();
                             String market_cap = null;
-                            String price = null;
+                            String price =null;
                             for (int i = 0; i < 20; ++i) {
-                                String key = keys.getString(i); // Here's your key
-                                String value = obj.getString(key);// Here's your value
+                                String key = keys.getString (i); // Here's your key
+                                String value = obj.getString (key);// Here's your value
                                 JSONObject jsonObject = new JSONObject(value);
                                 String name = jsonObject.getString("name");
-                                if (name.equalsIgnoreCase("XRP")) {
-                                    crypto_kings_namelist.add("Ripple");
-                                } else {
+                                if (name.equalsIgnoreCase("XRP")){
+                                    crypto_kings_namelist.add("Ripple");}else{
                                     crypto_kings_namelist.add(name);
                                 }
                                 String symbol = jsonObject.getString("symbol");
                                 crypto_kings_symbolist.add(symbol);
-                                JSONObject quotes = jsonObject.getJSONObject("quotes");
-                                JSONArray ke = quotes.names();
-                                for (int a = 0; a < ke.length(); ++a) {
-                                    String keyz = ke.getString(a); // Here's your key
-                                    String valuez = quotes.getString(keyz);
+                                JSONObject quotes =jsonObject.getJSONObject("quotes");
+                                JSONArray ke = quotes.names ();
+                                for(int a =0; a < ke.length(); ++a){
+                                    String keyz = ke.getString (a); // Here's your key
+                                    String valuez = quotes.getString (keyz);
                                     JSONObject jzO = new JSONObject(valuez);
-                                    market_cap = jzO.getString("market_cap");
-                                    price = jzO.getString("price");
+                                    market_cap= jzO.getString("market_cap");
+                                    price =jzO.getString("price");
                                     DecimalFormat df = new DecimalFormat("0.00");
                                     df.setMaximumFractionDigits(2);
-                                    String p = market_cap;
-                                    String pr = price;
+                                    String p =market_cap;
+                                    String pr =price;
                                     double d = Double.parseDouble(p);
                                     double dr = Double.parseDouble(pr);
-                                    p = df.format(d);
-                                    pr = df.format(dr);
-                                    int l = p.length();
+                                    p =df.format(d);
+                                    pr =df.format(dr);
+                                    int l =p.length();
                                     long t = 1000000000000L;
                                     crypto_kings_pricelist.add(pr);
-                                    if (l <= 12) {
-                                        p = String.valueOf(d / 1000000);
-                                        crypto_kings_marketcaplist.add(p.substring(0, 3) + " M");
-                                    }
-                                    if (l > 12) {
-                                        p = String.valueOf(d / 1000000000);
-                                        crypto_kings_marketcaplist.add(p.substring(0, 3) + " B");
-                                    }
-                                    if (l > 15) {
-                                        p = String.valueOf(d / t);
-                                        crypto_kings_marketcaplist.add(p.substring(0, 3) + " T");
-                                    }
-                                    String mc = jzO.getString("percent_change_24h");
+                                    if (l<=12){
+                                        p= String.valueOf(d/1000000);
+                                        crypto_kings_marketcaplist.add(p.substring(0,3)+" M");}
+                                    if (l>12){p= String.valueOf(d/1000000000);
+                                        crypto_kings_marketcaplist.add(p.substring(0,3)+" B");}
+                                    if (l>15){p= String.valueOf(d/t);
+                                        crypto_kings_marketcaplist.add(p.substring(0,3)+" T");}
+                                    String mc =jzO.getString("percent_change_24h");
                                     crypto_kings_changelist.add(mc);
                                 }
 
 
+
+
                             }
-                            btc_market_cap_amount = (String) crypto_kings_pricelist.get(0);
-                            btc_market_cap_amount = btc_market_cap_amount.replace(" ", "");
-                            btc_market_cap_change = crypto_kings_changelist.get(0) + "";
+                            btc_market_cap_amount =(String) crypto_kings_pricelist.get(0);
+                            btc_market_cap_amount =btc_market_cap_amount.replace(" ","");
+                            btc_market_cap_change =crypto_kings_changelist.get(0)+"";
                         } catch (JSONException e) {
                             //SEND A MESSAGE TO THE DEVELOPER AS ALL 3 METHODS HAVE FAILED
                             e.printStackTrace();
@@ -879,7 +898,6 @@ try{
             }
 
         }
-
     }
 
     public static void getStock_Data() {
@@ -907,19 +925,19 @@ try{
             sv1 = Jsoup.connect("https://finance.yahoo.com/losers").userAgent("Opera").timeout(10 * 10000).get();
             Elements tbodyl = sv1.select("tbody");
             Elements trl = tbodyl.select("tr");
-            Constructor_Stock_Equities stock_equities = new Constructor_Stock_Equities();
             for (int il = 0; il < 20; il++) {
                 String lsymbol = trl.get(il).select("td").get(0).text();
                 String lname = trl.get(il).select("td").get(1).text();
                 String lprice = trl.get(il).select("td").get(2).text().replace("+", "");
                 String lchange = trl.get(il).select("td").get(4).text().replace("+", "");
-                stock_equities.setStock_losers_symbol(lsymbol);
-                stock_equities.setStock_losers_name(lname);
-                stock_equities.setStock_losers_price(lprice);
-                stock_equities.setStock_losers_percent_change(lchange);
+                stock_losers_symbollist.add(lsymbol);
+                stock_losers_namelist.add(lname);
+                stock_losers_pricelist.add(lprice);
+                stock_losers_changelist.add(lchange);
                 typelist.add("Stock");
-                stock_losers_feedItems.add(stock_equities);
+
             }
+
         } catch (IOException e) {
 //ALTERNATIVE METHOD
             getStock_DataBACKUP();
@@ -936,20 +954,20 @@ try{
                 if (stock_kings_symbollist.size() < 20) {
 
 
-                String td0 = z.select("td").get(0).text();
-                String[] split = td0.split(" ");
-                String symbol = split[0];
-                String name = td0.replace(split[0],"");
-                String td1 = z.select("td").get(1).text();
-                String price = td1;
-                String td2 = z.select("td").get(2).text();
-                String change = td2;
-                stock_kings_symbollist.add(symbol);
-                stock_kings_namelist.add(name);
-                stock_kings_ipdown.add(change);
-                stock_kings_changelist.add(price);
-                //System.out.println("MAIN KINGS METHOD "+name+" "+symbol+" "+price+" "+change);
-            }}
+                    String td0 = z.select("td").get(0).text();
+                    String[] split = td0.split(" ");
+                    String symbol = split[0];
+                    String name = td0.replace(split[0],"");
+                    String td1 = z.select("td").get(1).text();
+                    String price = td1;
+                    String td2 = z.select("td").get(2).text();
+                    String change = td2;
+                    stock_kings_symbollist.add(symbol);
+                    stock_kings_namelist.add(name);
+                    stock_kings_ipdown.add(change);
+                    stock_kings_changelist.add(price);
+                    //System.out.println("MAIN KINGS METHOD "+name+" "+symbol+" "+price+" "+change);
+                }}
         } catch (IOException z) {
             //USE ALTERNATIVE SITE FOR STOCK KINGS
             try {
@@ -1311,26 +1329,26 @@ try{
 
     public static void clearWinnersData(){
         if(stock_winners_symbollist.size()>19){
-        stock_winners_symbollist.subList(0, 20).clear();
-        stock_winners_namelist.subList(0, 20).clear();
-        stock_winners_changelist.subList(0, 20).clear();
-        stock_winners_pricelist.subList(0, 20).clear();
-        crypto_winners_changelist.subList(0, 20).clear();
-        crypto_winners_pricelist.subList(0, 20).clear();
-        crypto_winners_namelist.subList(0, 20).clear();
-        crypto_winners_symbollist.subList(0, 20).clear();
+        stock_winners_symbollist.clear();
+        stock_winners_namelist.clear();
+        stock_winners_changelist.clear();
+        stock_winners_pricelist.clear();
+        crypto_winners_changelist.clear();
+        crypto_winners_pricelist.clear();
+        crypto_winners_namelist.clear();
+        crypto_winners_symbollist.clear();
         }}
 
     public static void clearLosersData(){
         if(stock_losers_symbollist.size()>20){
-        stock_losers_symbollist.subList(0, 20).clear();
-        stock_losers_namelist.subList(0, 20).clear();
-        stock_losers_changelist.subList(0, 20).clear();
-        stock_losers_pricelist.subList(0, 20).clear();
-        crypto_losers_pricelist.subList(0, 20).clear();
-        crypto_losers_changelist.subList(0, 20).clear();
-        crypto_losers_namelist.subList(0, 20).clear();
-        crypto_losers_symbollist.subList(0, 20).clear();}}
+        stock_losers_symbollist.clear();
+        stock_losers_namelist.clear();
+        stock_losers_changelist.clear();
+        stock_losers_pricelist.clear();
+        crypto_losers_pricelist.clear();
+        crypto_losers_changelist.clear();
+        crypto_losers_namelist.clear();
+        crypto_losers_symbollist.clear();}}
 
     public static void clearKingsData(){
         if(crypto_kings_symbolist.size()>20){

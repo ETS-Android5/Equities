@@ -2,6 +2,7 @@ package equities.com.myapplication;
 
 import android.os.AsyncTask;
 import android.os.Build;
+import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -36,7 +37,7 @@ public class AsyncChosenData extends AsyncTask<Void, Void, String> {
         protected void onPreExecute() {
             super.onPreExecute();
             Activity_Markets_Main activity = activityReference.get();
-            TableRow t = activity.findViewById(R.id.table_tabs);
+            BottomNavigationView t = activity.findViewById(R.id.activity_tabs);
             t.setVisibility(View.GONE);
             graph_change.clear();
             exchange_list.clear();
@@ -176,9 +177,6 @@ public class AsyncChosenData extends AsyncTask<Void, Void, String> {
             Activity_Markets_Main activity = activityReference.get();
             activity.fullScreen="go";
             // get a reference to the activity if it is still there
-
-            TableRow t = activity.findViewById(R.id.table_tabs);
-            t.setVisibility(View.VISIBLE);
             String a=activity.ap_info.getCurrent_Aequity_Price();
             if (activity == null || activity.isFinishing()&&graph_high.size()>0&&activity.requestQueue !=null&& activity.forward) return;
             ProgressBar mainbar = activity.findViewById(R.id.mainbar);

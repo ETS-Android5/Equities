@@ -40,16 +40,6 @@
 
             </TableRow>
 
-            <TextView
-                android:id="@+id/ipos_data_provider"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:autoLink="web"
-                android:gravity="center"
-                android:text="@string/ipos_data_provider"
-                android:textColor="@color/colorPrimary"
-                android:textColorLink="@color/darkTextColor"
-                android:textSize="12sp" />
             <android.support.v7.widget.RecyclerView
                     android:id="@+id/crypto_items"
                     android:layout_width="match_parent"

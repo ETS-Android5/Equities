@@ -73,10 +73,12 @@ public class Adapter_Crypto_Equities extends RecyclerView.Adapter<Adapter_Crypto
 
         @Override
         public void onBindViewHolder(MyViewHolder holder, int i) {
-            Constructor_Crypto_Equities loser_crypto_equities = crypto_loser_equities.get(i);
-            Constructor_Crypto_Equities winner_crypto_equities = crypto_winner_equities.get(i);
-            Constructor_Crypto_Equities king_crypto_equities =crypto_king_equities.get(i);
+//            Constructor_Crypto_Equities loser_crypto_equities = crypto_loser_equities.get(i);
+//            Constructor_Crypto_Equities winner_crypto_equities = crypto_winner_equities.get(i);
+//            Constructor_Crypto_Equities king_crypto_equities =crypto_king_equities.get(i);
+
             try {
+/*
                 if ("Crypto_Winner".equals(type_and_case)) {
                     holder.number.setText((1 + i) + ".");
                     holder.symbol.setText(winner_crypto_equities.getCrypto_winner_symbol());
@@ -87,6 +89,7 @@ public class Adapter_Crypto_Equities extends RecyclerView.Adapter<Adapter_Crypto
                     holder.value.setTextColor(Color.parseColor("#00cc00"));
                     holder.types.setText("+" + "Cryptocurrency");
                 }
+
                 if ("Crypto_Loser".equals(type_and_case)) {
                     holder.number.setText((1 + i) + ".");
                     holder.symbol.setText(loser_crypto_equities.getCrypto_losers_symbol());
@@ -97,6 +100,7 @@ public class Adapter_Crypto_Equities extends RecyclerView.Adapter<Adapter_Crypto
                     holder.types.setText("Cryptocurrency");
                     holder.cPrice.setText(loser_crypto_equities.getCrypto_losers_price());
                 }
+
                 if (("Crypto_Kings".equals(type_and_case))) {
                     holder.number.setText((1 + i) + ".");
                     holder.symbol.setText(king_crypto_equities.getCrypto_kings_symbol());
@@ -112,7 +116,7 @@ public class Adapter_Crypto_Equities extends RecyclerView.Adapter<Adapter_Crypto
                     holder.value.setText("" + king_crypto_equities.getCrytpo_kings_price());
                     holder.types.setText("Cryptocurrency");
                 }
-
+*/
             } catch (Exception e) {
                 holder.name.setText("" + "Updating");
                 holder.value.setText("" + "Updating");

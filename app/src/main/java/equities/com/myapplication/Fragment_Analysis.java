@@ -32,6 +32,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import static com.google.android.gms.internal.zzagz.runOnUiThread;
 import static equities.com.myapplication.Constructor_App_Variables.*;
 import static equities.com.myapplication.Constructor_App_Variables.market_type;
 import static equities.com.myapplication.Service_Main_Equities.*;
@@ -74,7 +75,7 @@ public class Fragment_Analysis extends Fragment {
         return new TimerTask() {
             @Override
             public void run() {
-                getActivity().runOnUiThread(new Runnable() {
+                runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         Handler handler = new Handler();

@@ -66,7 +66,10 @@ public class Activity_Markets_Main extends AppCompatActivity {
     Database_Local_Aequities check_saved = new Database_Local_Aequities(Activity_Markets_Main.this);
     RequestQueue requestQueue;
     TextView txt;
-    //final int[] ICONS = new int[]{R.drawable.direction_markets, R.drawable.direction_up, R.drawable.direction_down, R.drawable.direction_kings, R.drawable.direction_news, R.drawable.direction_masternode, R.drawable.direction_icos, R.drawable.direction_ipos};
+    private TabLayout pagetabs;
+    int[] worldMarketICONS = new int[]{R.drawable.direction_markets, R.drawable.direction_news, R.drawable.direction_youtube_video};
+    int[] stockMarketICONS = new int[]{R.drawable.direction_down, R.drawable.direction_up, R.drawable.direction_kings};
+
     static Element price = null;
     protected ArrayAdapter<String> ad;
     private static Toolbar toolbar;
@@ -292,7 +295,7 @@ public class Activity_Markets_Main extends AppCompatActivity {
         market_pager.setVisibility(View.GONE);
         table_tabs = findViewById(R.id.table_tabs);
         activity_tabs =findViewById(R.id.activity_tabs);
-        TabLayout pagetabs = findViewById(R.id.tabs);
+        pagetabs = findViewById(R.id.tabs);
         setupWorldMarketsViewPager(pager);
         pagetabs.setupWithViewPager(pager);
         if(pager.getVisibility()==View.VISIBLE){
@@ -308,16 +311,13 @@ public class Activity_Markets_Main extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.markets:
-                        Toast.makeText(Activity_Markets_Main.this, "Markets", Toast.LENGTH_SHORT).show();
+                        setupWorldMarketsViewPager(pager);
                         break;
-                    case R.id.equities:
-                        setupEquitiesViewPager(pager);
+                    case R.id.stock:
+                        setupStockPager(pager);
                         break;
-                    case R.id.masternodes:
-                        setupMasternnodeViewPager(pager);
-                        break;
-                    case R.id.ipos:
-                        //Toast.makeText(Activity_Markets_Main.this, "IPOS", Toast.LENGTH_SHORT).show();
+                    case R.id.crypto:
+                        setupCryptoPager(pager);
                         break;
                 }
                 return true;
@@ -325,8 +325,14 @@ public class Activity_Markets_Main extends AppCompatActivity {
         });
 
     }
+
+
               
     public void setupWorldMarketsViewPager(ViewPager viewPager) {
+        viewPager.removeAllViews();
+        viewPager.setAdapter(null);
+        adapter.removeAllFrag();
+        adapter.notifyDataSetChanged();
         adapter.addFrag(new Fragment_Markets(), getString(R.string.markets));
         adapter.addFrag(new Fragment_App_News(), getString(R.string.news));
         adapter.addFrag(new Fragment_Video(),getString(R.string.title_video));
@@ -335,23 +341,30 @@ public class Activity_Markets_Main extends AppCompatActivity {
 
     }
 
-    public void setupEquitiesViewPager(ViewPager viewPager) {
+    public void setupStockPager(ViewPager viewPager) {
         viewPager.removeAllViews();
         viewPager.setAdapter(null);
         adapter.removeAllFrag();
         adapter.notifyDataSetChanged();
-        adapter.addFrag(new Fragment_Winners(), getString(R.string.leaders));
-        adapter.addFrag(new Fragment_Losers(), getString(R.string.losers));
-        adapter.addFrag(new Fragment_Market_Kings(),getString(R.string.market_kings));
+        adapter.addFrag(new Fragment_Losers_Stock(), getString(R.string.losers));
+        adapter.addFrag(new Fragment_Winners_Stock(), getString(R.string.leaders));
+        adapter.addFrag(new Fragment_Market_Kings_Stock(),getString(R.string.market_kings));
+        adapter.addFrag(new Fragment_Ipos(), getString(R.string.ipo));
+        adapter.addFrag(new Fragment_App_News(), getString(R.string.news));
+        adapter.addFrag(new Fragment_Video(),getString(R.string.title_video));
         viewPager.setAdapter(adapter);
 
     }
-    public void setupMasternnodeViewPager(ViewPager viewPager) {
+    public void setupCryptoPager(ViewPager viewPager) {
         viewPager.removeAllViews();
         viewPager.setAdapter(null);
         adapter.removeAllFrag();
         adapter.notifyDataSetChanged();
-        adapter.addFrag(new Fragment_Masternodes(), getString(R.string.leaders));
+        adapter.addFrag(new Fragment_Losers_Crypto(), getString(R.string.losers));
+        adapter.addFrag(new Fragment_Winners_Crypto(), getString(R.string.leaders));
+        adapter.addFrag(new Fragment_Market_Kings_Crypto(), getString(R.string.market_kings));
+        adapter.addFrag(new Fragment_Masternodes(), "Mnodes");
+        adapter.addFrag(new Fragment_Icos(), getString(R.string.ico));
         adapter.addFrag(new Fragment_App_News(), getString(R.string.news));
         adapter.addFrag(new Fragment_Video(),getString(R.string.title_video));
         viewPager.setAdapter(adapter);

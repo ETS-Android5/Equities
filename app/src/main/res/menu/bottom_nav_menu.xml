@@ -4,26 +4,22 @@
     <item
             android:id="@+id/markets"
             android:enabled="true"
-            android:title="Markets"
+            android:title="Global Exchanges"
            android:icon="@drawable/direction_markets"
         app:showAsAction="always" />
     <item
-            android:id="@+id/equities"
+            android:id="@+id/stock"
             android:enabled="true"
-            android:title="Equities"
+            android:title="Stock Market"
         android:icon="@drawable/banner_ae"
         app:showAsAction="always" />
     <item
-        android:id="@+id/masternodes"
-        android:enabled="true"
-        android:title="Masternodes"
-        android:icon="@drawable/direction_masternode"
-        app:showAsAction="always" />
-    <item
-            android:id="@+id/ipos"
+            android:id="@+id/crypto"
             android:enabled="true"
-            android:title="Public Offerings"
-        android:icon="@drawable/direction_ipos"
-        app:showAsAction="always" />
+            android:title="Cryptocurrencies"
+            android:icon="@drawable/banner_ae"
+            app:showAsAction="always" />
+
+
 
 </menu>
