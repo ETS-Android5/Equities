@@ -39,10 +39,6 @@ public class Fragment_Exchanges extends Fragment {
         TextView t = rootView.findViewById(R.id.greeting);
         yes =rootView.findViewById(R.id.yes);
         yesnotable =rootView.findViewById(R.id.yesnotable);
-        Typeface custom_font = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Oregon.ttf");
-        exchanges =rootView.findViewById(R.id.exchanges);
-        exchanges.setTypeface(custom_font);
-        exchanges.setPaintFlags(exchanges.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
 
         if(ap_info.getMarketType().equalsIgnoreCase("OTC")){
             stock_exchange_name.remove(4);

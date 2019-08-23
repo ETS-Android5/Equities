@@ -26,8 +26,6 @@ import static equities.com.myapplication.Service_Main_Equities.*;
  */
 
 public class Fragment_Winners_Stock extends Fragment  {
-    TextView stock;
-
     private RecyclerView stockitems;
     LinearLayout cryptoView;
     Adapter_Main_Equities winner_stock_adapter;
@@ -58,24 +56,21 @@ public class Fragment_Winners_Stock extends Fragment  {
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        winner_stock_adapter =new Adapter_Main_Equities(getActivity(), "Stock_Winner", stock_winners_symbollist, stock_winners_namelist, stock_winners_changelist);
-        stockitems= view.findViewById(R.id.stock_items);
-        stock = view.findViewById(R.id.stock);
-        cryptoView = view.findViewById(R.id.cryptoView);
-        cryptoView.setVisibility(View.GONE);
-        stockitems= view.findViewById(R.id.stock_items);
-        stockitems.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-        winner_stock_adapter =new Adapter_Main_Equities(getActivity(), "Stock_Winner", stock_winners_symbollist, stock_winners_namelist, stock_winners_changelist);
-        stockitems.setAdapter(winner_stock_adapter);
-        Typeface custom_font = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Oregon.ttf");
-        stock.setTypeface(custom_font);
-        stock.setPaintFlags(stock.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
-        mTimer = new Timer();
-        mTimer.scheduleAtFixedRate(createTimerTask(),0,15000);
+
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_leaders, container, false);
+        winner_stock_adapter =new Adapter_Main_Equities(getActivity(), "Stock_Winner", stock_winners_symbollist, stock_winners_namelist, stock_winners_changelist);
+        stockitems= rootView.findViewById(R.id.stock_items);
+        cryptoView = rootView.findViewById(R.id.cryptoView);
+        cryptoView.setVisibility(View.GONE);
+        stockitems= rootView.findViewById(R.id.stock_items);
+        stockitems.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+        winner_stock_adapter =new Adapter_Main_Equities(getActivity(), "Stock_Winner", stock_winners_symbollist, stock_winners_namelist, stock_winners_changelist);
+        stockitems.setAdapter(winner_stock_adapter);
+        mTimer = new Timer();
+        mTimer.scheduleAtFixedRate(createTimerTask(),0,15000);
         return rootView;
 
     }
@@ -93,13 +88,13 @@ public class Fragment_Winners_Stock extends Fragment  {
         @Override
         protected String doInBackground(Integer... integers) {
             Service_Main_Equities sme =new Service_Main_Equities();
-            sme.clearWinnersData();
+            sme.clearCryptoWinnersData();
             sme.getMarketWinnersStock();
             return null;
         }
         @Override
         protected void onPostExecute(String result) {
-            if(stock_winners_namelist.size()>0||crypto_winners_namelist.size()>0){
+            if(stock_winners_namelist.size()>0){
                 setUserVisibleHint(true);}else{
                 mTimer = new Timer();
                 mTimer.scheduleAtFixedRate(createTimerTask(),0,2000);
@@ -111,9 +106,10 @@ public class Fragment_Winners_Stock extends Fragment  {
     public void setUserVisibleHint(boolean isVisibleToUser){
         super.setUserVisibleHint(isVisibleToUser);
         if(isVisibleToUser){
-//            winner_stock_adapter.notifyDataSetChanged();
-//            stockitems= rootView.findViewById(R.id.stock_items);
-//            stockitems.setAdapter(winner_stock_adapter);
+            stockitems.removeAllViewsInLayout();
+            winner_stock_adapter.notifyDataSetChanged();
+            winner_stock_adapter =new Adapter_Main_Equities(getActivity(), "Stock_Winner", stock_winners_symbollist, stock_winners_namelist, stock_winners_changelist);
+            stockitems.setAdapter(winner_stock_adapter);
 
 
         }

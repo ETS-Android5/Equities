@@ -3,6 +3,7 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
+        android:background="@color/colorPrimary"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
@@ -19,27 +20,6 @@
                 android:id="@+id/stockView"
                 android:orientation="vertical">
 
-            <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="3dp"
-                    android:paddingRight="3dp">
-
-                <android.support.v7.widget.AppCompatTextView
-
-                        android:id="@+id/stock"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:background="#00000000"
-                        android:gravity="center"
-                        android:layout_weight="1"
-
-                        android:text="@string/stock_market_gainers"
-                        android:textColor="@color/colorPrimary"
-                        android:textSize="18sp" />
-
-            </TableRow>
 
             <android.support.v7.widget.RecyclerView
                     android:id="@+id/stock_items"
@@ -56,27 +36,6 @@
                 android:layout_weight="1"
                 android:orientation="vertical">
 
-            <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="3dp"
-                    android:paddingRight="3dp">
-
-                <android.support.v7.widget.AppCompatTextView
-
-                        android:id="@+id/crypto"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:background="#00000000"
-                        android:gravity="center"
-                        android:layout_weight="1"
-
-                        android:text="@string/crypto_gainers"
-                        android:textColor="@color/colorPrimary"
-                        android:textSize="18sp" />
-
-            </TableRow>
 
 
             <android.support.v7.widget.RecyclerView

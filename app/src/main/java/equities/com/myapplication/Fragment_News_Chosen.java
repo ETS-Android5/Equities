@@ -35,12 +35,7 @@ public class Fragment_News_Chosen extends Fragment {
         news_feed=rootView.findViewById(R.id.news_feed);
         news_feed.setAdapter(new Adapter_Chosen_News_Feed(getActivity(), feedItems));
         news_feed.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-        news= rootView.findViewById(R.id.news);
-        Typeface custom_font = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Oregon.ttf");
 
-        news.setTypeface(custom_font);
-
-        news.setPaintFlags(news.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
 
 
         return rootView;

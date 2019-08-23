@@ -83,7 +83,7 @@ public class Fragment_Winners_Crypto extends Fragment {
         @Override
         protected String doInBackground(Integer... integers) {
             Service_Main_Equities sme =new Service_Main_Equities();
-            sme.clearWinnersData();
+            sme.clearCryptoWinnersData();
             sme.getMarketWinnersCrypto();
             return null;
         }
@@ -101,6 +101,7 @@ public class Fragment_Winners_Crypto extends Fragment {
     public void setUserVisibleHint(boolean isVisibleToUser){
         super.setUserVisibleHint(isVisibleToUser);
         if(isVisibleToUser){
+            cryptoitems.removeAllViewsInLayout();
             crypto_adapter=new Adapter_Main_Equities(getActivity(), "Crypto_Winner", crypto_winners_symbollist, crypto_winners_namelist, crypto_winners_changelist);
             cryptoitems.setAdapter(crypto_adapter);
             crypto_adapter.notifyDataSetChanged();

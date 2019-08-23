@@ -18,24 +18,17 @@ import static equities.com.myapplication.Constructor_App_Variables.ico_feedItems
  */
 
 public class Fragment_Icos extends Fragment {
-    TextView ico;
     private RecyclerView ico_items;
+    Adapter_Icos_Feed icos_adapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-
         View rootView = inflater.inflate(R.layout.fragment_icos, container, false);
-        ico = rootView.findViewById(R.id.ico);
         ico_items= rootView.findViewById(R.id.ico_items);
         ico_items.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-        ico_items.setAdapter(new Adapter_Icos_Feed(getActivity(),ico_feedItems));
-        Typeface custom_font = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Oregon.ttf");
-
-        ico.setTypeface(custom_font);
-
-        ico.setPaintFlags(ico.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
-
+        icos_adapter=new Adapter_Icos_Feed(getActivity(),ico_feedItems);
+        ico_items.setAdapter(icos_adapter
+        );
         return rootView;
 
     }

@@ -3,6 +3,7 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
+        android:background="@color/colorPrimary"
         android:layout_height="match_parent"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:orientation="vertical">
@@ -19,27 +20,6 @@
 
                 android:orientation="vertical">
 
-            <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="3dp"
-                    android:paddingRight="3dp">
-
-                <android.support.v7.widget.AppCompatTextView
-
-                    android:id="@+id/crypto"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight=".5"
-                    android:background="#00000000"
-                    android:gravity="center"
-
-                    android:text="@string/masternodes"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="26sp" />
-
-            </TableRow>
 
             <TableRow
                     android:layout_width="match_parent"
@@ -62,7 +42,7 @@
                         android:gravity="left|center"
                         android:singleLine="true"
                         android:text="Sym"
-                        android:textColor="@color/colorPrimary"
+                        android:textColor="@color/colorBlack"
                         android:textSize="12sp"/>
 
                 <TextView
@@ -78,7 +58,7 @@
                         android:shadowRadius="1"
                         android:singleLine="true"
                         android:text=" %"
-                        android:textColor="@color/colorPrimary"
+                        android:textColor="@color/colorBlack"
                         android:textSize="12sp"/>
 
                 <TextView
@@ -89,7 +69,7 @@
                         android:gravity="left|center"
                         android:singleLine="true"
                         android:text="Name"
-                        android:textColor="@color/colorPrimary"
+                        android:textColor="@color/colorBlack"
                         android:textSize="12sp"/>
 
                 <TextView
@@ -100,7 +80,7 @@
                         android:gravity="left|center"
                         android:singleLine="true"
                         android:text="23160"
-                        android:textColor="@color/colorPrimary"
+                        android:textColor="@color/colorBlack"
                         android:textSize="14sp"
                         android:visibility="gone"/>
 
@@ -112,7 +92,7 @@
                         android:gravity="left|center"
                         android:singleLine="true"
                         android:text="Cost"
-                        android:textColor="@color/colorPrimary"
+                        android:textColor="@color/colorBlack"
                         android:textSize="12sp"/>
 
 
@@ -129,7 +109,7 @@
                         android:shadowRadius="1"
                         android:singleLine="true"
                         android:text="Cap"
-                        android:textColor="@color/colorPrimary"
+                        android:textColor="@color/colorBlack"
                         android:textSize="12sp"/>
             </TableRow>
 

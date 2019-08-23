@@ -65,7 +65,8 @@ public class Adapter_Masternodes_Feed extends RecyclerView.Adapter<Adapter_Maste
 
    @Override
    public void onBindViewHolder(Adapter_Masternodes_Feed.MyViewHolder holder, int position) {
-       Constructor_Masternodes constructor_masternodes = masternode_feedItems.get(position);
+       try{
+     Constructor_Masternodes constructor_masternodes = masternode_feedItems.get(position);
      holder.symbol.setText(constructor_masternodes.getMasternode_symbol());
      if (constructor_masternodes.getMasternode_percent_change().contains("-")){
          holder.changes.setTextColor(Color.parseColor("#ff0000"));
@@ -77,7 +78,16 @@ public class Adapter_Masternodes_Feed extends RecyclerView.Adapter<Adapter_Maste
      holder.cost_to_own.setText(constructor_masternodes.getMasternode_purchase_value());
      holder.cap.setText(""+constructor_masternodes.getMasternode_marketcap());
      holder.name.setText(""+constructor_masternodes.getMasternode_name());
-   }
+   }catch (Exception e) {
+           holder.symbol.setText("" + "Updating");
+           holder.changes.setText("" + "Updating");
+           holder.count.setText("" + "Updating");
+           holder.cost_to_own.setText("" + "Updating");
+           holder.cap.setText("" + "Updating");
+           holder.name.setText("" + "Updating");
+
+
+       }}
    
    @Override  
    public int getItemCount() {  

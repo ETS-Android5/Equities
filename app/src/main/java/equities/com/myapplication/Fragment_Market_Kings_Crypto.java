@@ -26,7 +26,6 @@ import static equities.com.myapplication.Service_Main_Equities.*;
  */
 
 public class Fragment_Market_Kings_Crypto extends Fragment {
-    TextView stock, crypto;
     LinearLayout stockView;
     private RecyclerView cryptoitems;
     Adapter_Main_Equities crypto_adapter;
@@ -62,19 +61,13 @@ public class Fragment_Market_Kings_Crypto extends Fragment {
 
 
         View rootView = inflater.inflate(R.layout.fragment_kings, container, false);
-        stock = rootView.findViewById(R.id.stock);
-        crypto = rootView.findViewById(R.id.crypto);
-       stockView  =rootView.findViewById(R.id.stockView);
+        stockView  =rootView.findViewById(R.id.stockView);
        stockView.setVisibility(View.GONE);
        cryptoitems= rootView.findViewById(R.id.crypto_items);
         cryptoitems.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         crypto_adapter=new Adapter_Main_Equities(getActivity(), "Crypto_Kings",crypto_kings_symbolist,crypto_kings_namelist,crypto_kings_marketcaplist);
         cryptoitems.setAdapter(crypto_adapter);
         Typeface custom_font = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Oregon.ttf");
-        stock.setTypeface(custom_font);
-        crypto.setTypeface(custom_font);
-        stock.setPaintFlags(stock.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
-        crypto.setPaintFlags(stock.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
         mTimer = new Timer();
         mTimer.scheduleAtFixedRate(createTimerTask(),0,15000);
 
@@ -93,8 +86,8 @@ public class Fragment_Market_Kings_Crypto extends Fragment {
         @Override
         protected String doInBackground(Integer... integers) {
             Service_Main_Equities sme =new Service_Main_Equities();
-            sme.clearKingsData();
-            sme.getMarketKings();
+            sme.clearCryptoKingsData();
+            sme.getMarketKingsCrypto();
             return null;
         }
         @Override
@@ -108,6 +101,7 @@ public class Fragment_Market_Kings_Crypto extends Fragment {
     public void setKingsUserVisibleHint(boolean isVisibleToUser){
         super.setUserVisibleHint(isVisibleToUser);
         if(isVisibleToUser){
+            cryptoitems.removeAllViewsInLayout();
             crypto_adapter.notifyDataSetChanged();
             crypto_adapter=new Adapter_Main_Equities(getActivity(), "Crypto_Kings",crypto_kings_symbolist,crypto_kings_namelist,crypto_kings_marketcaplist);
             cryptoitems.setAdapter(crypto_adapter);

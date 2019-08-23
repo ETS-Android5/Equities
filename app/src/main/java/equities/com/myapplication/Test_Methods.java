@@ -31,131 +31,69 @@ import static equities.com.myapplication.Service_Main_Equities.crypto_losers_cha
 public class Test_Methods {
     @RequiresApi(api = Build.VERSION_CODES.O)
     public static void main(String[] args) {
-        getStock_Data();
+        get_masternodes();
     }
-    public static void getStock_Data() {
-        //Getting winners and losers
-        sv = null;
+    public static void get_masternodes() {
+        Document m = null;
         try {
-//WINNERS
-            sv = Jsoup.connect("https://finance.yahoo.com/gainers").userAgent("Opera").timeout(10 * 10000).get();
-            Elements tbody =sv.select("tbody");
-            Elements tr =tbody.select("tr");
-            for(int i=0;i<20;i++){
-                String symbol = tr.get(i).select("td").get(0).text();
-                String name = tr.get(i).select("td").get(1).text();
-                String price = tr.get(i).select("td").get(2).text().replace("+","");
-                String change = tr.get(i).select("td").get(4).text().replace("+","");
-                stock_winners_symbollist.add(symbol);
-                stock_winners_namelist.add(name);
-                stock_winners_pricelist.add(price);
-                stock_winners_changelist.add(change);
-                typelist.add("Stock");
-                //System.out.println("FIRST METHOD WINNERS"+symbol+" "+name+" "+price+" "+change);
-
-            }
-            Document sv1=null;
-            sv1 = Jsoup.connect("https://finance.yahoo.com/losers").userAgent("Opera").timeout(10 * 10000).get();
-            Elements tbodyl = sv1.select("tbody");
-            Elements trl = tbodyl.select("tr");
-            for (int il = 0; il < 20; il++) {
-                Constructor_Stock_Equities stock_equities = new Constructor_Stock_Equities();
-                String lsymbol = trl.get(il).select("td").get(0).text();
-                String lname = trl.get(il).select("td").get(1).text();
-                String lprice = trl.get(il).select("td").get(2).text().replace("+", "");
-                String lchange = trl.get(il).select("td").get(4).text().replace("+", "");
-                stock_equities.setStock_losers_symbol(lsymbol);
-                stock_equities.setStock_losers_name(lname);
-                stock_equities.setStock_losers_price(lprice);
-                stock_equities.setStock_losers_percent_change(lchange);
-                typelist.add("Stock");
-            stock_losers_feedItems.add(stock_equities);
-            }
-
-            System.out.println(stock_losers_feedItems.size());
-            for(int i=0;i<20;i++){
-                Constructor_Stock_Equities stock_equities = new Constructor_Stock_Equities();
-                System.out.println(stock_equities.getStock_losers_name());}
-
+            m = Jsoup.connect("https://masternodes.online").userAgent("Mozilla").timeout(10 * 100000).get();
         } catch (IOException e) {
-//ALTERNATIVE METHOD
-            getStock_DataBACKUP();
             e.printStackTrace();
         }
+        Element c = m.getElementById("coins");
+        Elements tb = c.select("tbody");
+        Elements n = tb.get(1).select("tr");
+        for (int x = 0; x < n.size(); x++) {
+            Constructor_Masternodes constructor_masternodes = new Constructor_Masternodes();
+            Elements k = n.get(x).select("td");
+            String [] splits = k.get(2).text().split(" ");
+            constructor_masternodes.setMasternode_name(splits[0]);
+            constructor_masternodes.setMasternode_symbol(splits[1].replace("(","").replace(")",""));
+            constructor_masternodes.setMasternode_percent_change(k.get(4).text());
+            Float add;
+            String mc = k.get(6).text().replace("%", "").replace("$", "").replace(",", "");
+            if (mc.contains("?")) {
+                constructor_masternodes.setMasternode_marketcap("Unknown");
+            } else {
+                add = Float.parseFloat(mc);
+                if (add > 999) {
+                    String a = String.format("%.0f", add);
+                    String added = null;
 
-        try {
-//GET STOCK KINGS
-            sv = Jsoup.connect("https://www.tradingview.com/markets/stocks-usa/market-movers-large-cap/").userAgent("Opera").timeout(10 * 10000).get();
-            Elements tbody =sv.select("tbody");
-
-            Elements tr =tbody.select("tr");
-            for (Element z : tr) {
-                if (stock_kings_symbollist.size() < 20) {
-
-
-                    String td0 = z.select("td").get(0).text();
-                    String[] split = td0.split(" ");
-                    String symbol = split[0];
-                    String name = td0.replace(split[0],"");
-                    String td1 = z.select("td").get(1).text();
-                    String price = td1;
-                    String td2 = z.select("td").get(2).text();
-                    String change = td2;
-                    stock_kings_symbollist.add(symbol);
-                    stock_kings_namelist.add(name);
-                    stock_kings_ipdown.add(change);
-                    stock_kings_changelist.add(price);
-                    //System.out.println("MAIN KINGS METHOD "+name+" "+symbol+" "+price+" "+change);
-                }}
-        } catch (IOException z) {
-            //USE ALTERNATIVE SITE FOR STOCK KINGS
-            try {
-                sv = Jsoup.connect("http://www.dogsofthedow.com/largest-companies-by-market-cap.htm").userAgent("Opera").timeout(10 * 10000).get();
-                Elements tbody =sv.select("tbody");
-                Elements tbody2 =tbody.select("tbody");
-                Elements tr =tbody2.select("tr");
-                for (int i = 15; i <= 24; i++) {
-                    if (stock_kings_namelist.size() < 20) {
-                        Element td0 = tr.get(i).select("td").get(0);
-                        Element td1 = tr.get(i).select("td").get(1);
-                        Element td2 = tr.get(i).select("td").get(3);
-                        Element td3 = tr.get(i).select("td").get(4);
-                        String remove = td2.text().replace(",", "");
-                        double add = Double.parseDouble(remove);
-                        int value = (int) Math.round(add);
-                        String added = String.valueOf(value);
-                        if (add > 1000) {
-                            added = added + " T";
-                        } else {
-                            added = added + " B";
-                        }
-                        try {
-                            sv = Jsoup.connect("https://money.cnn.com/quote/quote.html?symb=" + td0.text()).timeout(10 * 10000).get();
-                            Elements t = sv.select("tbody");
-                            Elements tx = t.select("tr");
-                            String td = tx.select("td").get(0).text();
-                            String[] split = td.split(" ");
-                            stock_kings_ipdown.add(split[0]);
-                            //System.out.println("SPECIFIC QUOTE "+split[0]);
-
-                        } catch (IOException d) {
-                        }
-                        stock_kings_namelist.add(td1.text());
-                        stock_kings_symbollist.add(td0.text());
-                        stock_kings_changelist.add(added);
-                        //stock_kings_ipdown.add(td3.text());
-
-//                    System.out.println(i-14+" "+td0.text()+" "+td1.text()+" "+added);
+                    if (mc.length() > 9) {
+                        added = a.substring(0, 3) + " B";
+                    }
+                    if (mc.length() <= 9) {
+                        added = a.substring(0, 3) + " M";
+                    }
+                    if (mc.length() == 11) {
+                        constructor_masternodes.setMasternode_marketcap(added.substring(0, 2) + "." + added.substring(2, added.length()));
+                    }
+                    if (mc.length() == 10) {
+                        constructor_masternodes.setMasternode_marketcap(added.substring(0, 1) + "." + added.substring(1, added.length()));
+                    }
+                    ;
+                    if (mc.length() == 9) {
+                        constructor_masternodes.setMasternode_marketcap(added.substring(0, 3) + "." + added.substring(3, added.length()));
+                    }
+                    if (mc.length() == 8) {
+                        constructor_masternodes.setMasternode_marketcap(added.substring(0, 2) + "." + added.substring(2, added.length()));
+                    }
+                    if (mc.length() == 7) {
+                        constructor_masternodes.setMasternode_marketcap(added.substring(0, 1) + "." + added.substring(1, added.length()));
+                    }
+                    if (mc.length() == 6) {
+                        constructor_masternodes.setMasternode_marketcap(added.substring(0, 3) + "." + added.substring(2, added.length()));
                     }
                 }
+                constructor_masternodes.setMasternode_node_count(k.get(8).text());
+                constructor_masternodes.setMasternode_purchase_value(k.get(10).text());}
 
-            } catch (IOException e) {
-                //Neither method works for Stock Kings..send an email to the developer
-                e.printStackTrace();
-            }    z.printStackTrace();
+            masternode_feedItems.add(constructor_masternodes);
+
+
         }
-
-
+             System.out.println(masternode_feedItems.size());
     }
 
 

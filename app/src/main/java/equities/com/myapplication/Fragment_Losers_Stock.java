@@ -22,7 +22,6 @@ import static equities.com.myapplication.Service_Main_Equities.*;
  * Created by Julian Dinkins on 4/25/2018.
  */
 public class Fragment_Losers_Stock extends Fragment {
-    TextView stock;
     LinearLayout cryptoView;
     private RecyclerView stockitems;
     Adapter_Main_Equities loser_stock_adapter;
@@ -64,16 +63,12 @@ public class Fragment_Losers_Stock extends Fragment {
     {
 
         View rootView = inflater.inflate(R.layout.fragment_losers, container, false);
-        stock = rootView.findViewById(R.id.stock);
         cryptoView= rootView.findViewById(R.id.cryptoView);
         cryptoView.setVisibility(View.GONE);
         stockitems= rootView.findViewById(R.id.stock_items);
         stockitems.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         loser_stock_adapter =new Adapter_Main_Equities(getActivity(), "Stock_Loser", stock_losers_symbollist,stock_losers_namelist,stock_losers_changelist);
         stockitems.setAdapter(loser_stock_adapter);
-        Typeface custom_font = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Oregon.ttf");
-        stock.setTypeface(custom_font);
-        stock.setPaintFlags(stock.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
         mTimer = new Timer();
         mTimer.scheduleAtFixedRate(createTimerTask(),0,15000);
         return rootView;
@@ -93,14 +88,14 @@ public class Fragment_Losers_Stock extends Fragment {
         @Override
         protected String doInBackground(Integer... integers) {
             Service_Main_Equities sme = new Service_Main_Equities();
-            sme.clearLosersData();
+            sme.clearStockLosersData();
             sme.getStockLosers();
             return null;
         }
 
         @Override
         protected void onPostExecute(String result) {
-            if(stock_losers_namelist.size()>0||crypto_losers_namelist.size()>0){
+            if(stock_losers_namelist.size()>0){
                 setLosersUserVisibleHint(true);}else{
                 mTimer = new Timer();
                 mTimer.scheduleAtFixedRate(createTimerTask(),0,2000);
@@ -111,6 +106,7 @@ public class Fragment_Losers_Stock extends Fragment {
     public void setLosersUserVisibleHint(boolean isVisibleToUser){
         super.setUserVisibleHint(isVisibleToUser);
         if(isVisibleToUser){
+            stockitems.removeAllViewsInLayout();
             loser_stock_adapter.notifyDataSetChanged();
             stockitems.setAdapter(new Adapter_Main_Equities(getActivity(), "Stock_Loser", stock_losers_symbollist,stock_losers_namelist,stock_losers_changelist));
             stockitems.setAdapter(loser_stock_adapter);

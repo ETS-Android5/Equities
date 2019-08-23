@@ -6,14 +6,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:orientation="vertical">
-    <TextView
-            android:id="@+id/analysis"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="@string/action_analysis"
-            android:textColor="@color/colorPrimary"
-            android:textSize="26sp" />
+
     <TableRow
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -26,7 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:textColor="@color/darkTextColor2"
+            android:textColor="@color/colorBlack"
             android:textSize="22sp"
             android:textStyle="bold" />
 
@@ -35,7 +28,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="6"
-            android:textColor="@color/darkTextColor2"
+            android:textColor="@color/colorBlack"
             android:visibility="gone" />
 
         <ImageView
@@ -67,7 +60,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:textColor="@color/darkTextColor2"
+                android:textColor="@color/colorBlack"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
@@ -76,7 +69,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:textColor="@color/darkTextColor2"
+                android:textColor="@color/colorBlack"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
@@ -91,7 +84,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:textColor="@color/darkTextColor2"
+                    android:textColor="@color/colorBlack"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
@@ -102,7 +95,7 @@
                     android:layout_marginLeft="10dp"
                     android:gravity="left|center"
                     android:text="Supply"
-                    android:textColor="@color/darkTextColor2"
+                    android:textColor="@color/colorBlack"
                     android:textSize="16sp"
                     android:textStyle="bold" />
             </TableRow>
@@ -117,7 +110,7 @@
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:text="@string/market_cap"
-                    android:textColor="@color/darkTextColor2"
+                    android:textColor="@color/colorBlack"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
@@ -127,7 +120,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginLeft="10dp"
                     android:gravity="left|center"
-                    android:textColor="@color/darkTextColor2"
+                    android:textColor="@color/colorBlack"
                     android:textSize="16sp"
                     android:textStyle="bold" />
             </TableRow>
@@ -146,7 +139,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="5dp"
                 android:gravity="top|right"
-                android:textColor="@color/darkTextColor2"
+                android:textColor="@color/colorBlack"
                 android:textSize="24sp" />
 
             <TextView
@@ -155,7 +148,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="5dp"
                 android:gravity="top|right"
-                android:textColor="@color/darkTextColor2"
+                android:textColor="@color/colorBlack"
                 android:textSize="22sp" />
 
 
@@ -170,7 +163,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:textColor="@color/darkTextColor2"
+        android:textColor="@color/colorBlack"
         android:visibility="invisible" />
 
     <android.support.design.widget.TabLayout
@@ -182,13 +175,13 @@
         app:tabMode="fixed"
         android:visibility="gone"
         app:tabSelectedTextColor="@color/green_color_text"
-        app:tabTextColor="#ffffff " />
+        app:tabTextColor="@color/colorBlack" />
     <com.jjoe64.graphview.GraphView
             android:id="@+id/graph_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="#00000000"
+            android:background="@drawable/background_gradient"
     ></com.jjoe64.graphview.GraphView>
     <android.support.design.widget.TabLayout
             android:id="@+id/chosen_tabs"
@@ -198,14 +191,14 @@
             app:tabIndicatorColor="@color/green_color_text"
             app:tabMode="fixed"
             app:tabSelectedTextColor="@color/green_color_text"
-            app:tabTextColor="#ffffff " />
+            app:tabTextColor="@color/colorBlack" />
 <TextView
         android:id="@+id/chosenpricechange"
         android:gravity="center"
         android:textSize="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/colorPrimary"
+        android:textColor="@color/colorBlack"
         />
     <TableRow
         android:layout_width="match_parent"
@@ -219,7 +212,7 @@
             android:layout_weight="1"
             android:gravity="left|center"
             android:text="@string/price"
-            android:textColor="@color/darkTextColor2"
+            android:textColor="@color/colorBlack"
             android:textStyle="bold" />
         <TextView
             android:layout_width="match_parent"
@@ -236,7 +229,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="@string/volume"
-            android:textColor="@color/darkTextColor2"
+            android:textColor="@color/colorBlack"
             android:textStyle="bold" />
 
         <TextView
@@ -245,7 +238,7 @@
             android:layout_weight="1"
             android:gravity="right|center"
             android:text="@string/date"
-            android:textColor="@color/darkTextColor2"
+            android:textColor="@color/colorBlack"
             android:textStyle="bold" />
     </TableRow>
 

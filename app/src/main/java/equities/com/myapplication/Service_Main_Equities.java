@@ -168,9 +168,6 @@ public class Service_Main_Equities {
 
 
     }
-
-
-
     //Completed Method but need a backup for masternodes
     public static void get_masternodes() {
         Document m = null;
@@ -1132,13 +1129,130 @@ public class Service_Main_Equities {
                         }
                     }
 
-                    all_feedItems.add(it);
+                    world_markets_news_feedItems.add(it);
 
 
                 }
             }
         }
     }
+
+    public static void ProcessStockXml(org.w3c.dom.Document data) {
+        if (data != null) {
+            String st, sd, sp, sl,si;
+            org.w3c.dom.Element root = data.getDocumentElement();
+            Node channel = root.getChildNodes().item(0);
+            NodeList items = channel.getChildNodes();
+
+            for (int i = 0; i < items.getLength(); i++) {
+                Constructor_Stock_News_Feed it = new Constructor_Stock_News_Feed();
+                Node curentchild = items.item(i);
+                if (curentchild.getNodeName().equalsIgnoreCase("item")) {
+                    NodeList itemchilds = curentchild.getChildNodes();
+                    for (int j = 0; j < itemchilds.getLength(); j++) {
+                        Node curent = itemchilds.item(j);
+                        if (curent.getNodeName().equalsIgnoreCase("title")) {
+                            st = curent.getTextContent().toString();
+                            st= st.substring(0,st.indexOf(" - ")+" - ".length());
+                            st= st.replace("-","");
+                            it.setTitle(st);
+                            //(st);
+                        } else if (curent.getNodeName().equalsIgnoreCase("media:content")) {
+                            sd = curent.getTextContent().toString();
+                            //(sd);
+
+                            String d = curent.getTextContent().toString();
+                            String pattern1 = "<img src=\"";
+                            String pattern2 = "\"";
+                            Pattern p = Pattern.compile(Pattern.quote(pattern1) + "(.*?)" + Pattern.quote(pattern2));
+                            Matcher m = p.matcher(d);
+                            while (m.find()) {
+                                it.setThumbnailUrl(m.group(1));
+                                ////("HERE IS YOUR IMAGE DUDE! "+m.group(1));
+                            }
+                            it.setDescription(sd);
+                        } else if (curent.getNodeName().equalsIgnoreCase("pubDate")) {
+                            sp = curent.getTextContent().toString();
+                            sp = sp.replaceAll("@20", " ");
+                            it.setPubDate(sp);
+                            //(sp);
+                        } else if (curent.getNodeName().equalsIgnoreCase("link")) {
+                            sl = curent.getTextContent().toString();
+                            sl = sl.replaceAll("@20", " ");
+                            it.setLink(sl);
+                            //(sl);
+                        } else if (curent.getNodeName().equalsIgnoreCase("source")) {
+                            si = curent.getTextContent().toString();
+                            it.setSource(si);
+                        }
+                    }
+
+                    stock_market_news_feedItems.add(it);
+
+
+                }
+            }
+        }
+    }
+
+    public static void ProcessCryptoXml(org.w3c.dom.Document data) {
+        if (data != null) {
+            String st, sd, sp, sl,si;
+            org.w3c.dom.Element root = data.getDocumentElement();
+            Node channel = root.getChildNodes().item(0);
+            NodeList items = channel.getChildNodes();
+
+            for (int i = 0; i < items.getLength(); i++) {
+                Constructor_News_Feed it = new Constructor_News_Feed();
+                Node curentchild = items.item(i);
+                if (curentchild.getNodeName().equalsIgnoreCase("item")) {
+                    NodeList itemchilds = curentchild.getChildNodes();
+                    for (int j = 0; j < itemchilds.getLength(); j++) {
+                        Node curent = itemchilds.item(j);
+                        if (curent.getNodeName().equalsIgnoreCase("title")) {
+                            st = curent.getTextContent().toString();
+                            st= st.substring(0,st.indexOf(" - ")+" - ".length());
+                            st= st.replace("-","");
+                            it.setTitle(st);
+                            //(st);
+                        } else if (curent.getNodeName().equalsIgnoreCase("media:content")) {
+                            sd = curent.getTextContent().toString();
+                            //(sd);
+
+                            String d = curent.getTextContent().toString();
+                            String pattern1 = "<img src=\"";
+                            String pattern2 = "\"";
+                            Pattern p = Pattern.compile(Pattern.quote(pattern1) + "(.*?)" + Pattern.quote(pattern2));
+                            Matcher m = p.matcher(d);
+                            while (m.find()) {
+                                it.setThumbnailUrl(m.group(1));
+                                ////("HERE IS YOUR IMAGE DUDE! "+m.group(1));
+                            }
+                            it.setDescription(sd);
+                        } else if (curent.getNodeName().equalsIgnoreCase("pubDate")) {
+                            sp = curent.getTextContent().toString();
+                            sp = sp.replaceAll("@20", " ");
+                            it.setPubDate(sp);
+                            //(sp);
+                        } else if (curent.getNodeName().equalsIgnoreCase("link")) {
+                            sl = curent.getTextContent().toString();
+                            sl = sl.replaceAll("@20", " ");
+                            it.setLink(sl);
+                            //(sl);
+                        } else if (curent.getNodeName().equalsIgnoreCase("source")) {
+                            si = curent.getTextContent().toString();
+                            it.setSource(si);
+                        }
+                    }
+
+                    crypto_market_news_feedItems.add(it);
+
+
+                }
+            }
+        }
+    }
+
 
     public static org.w3c.dom.Document GoogleRSWorldMarketsFeed() {
         try {
@@ -1160,7 +1274,46 @@ public class Service_Main_Equities {
 
 
     }
+    public static org.w3c.dom.Document GoogleRSStockMarketsFeed() {
+        try {
+            URL url;
+            String address = "https://news.google.com/news/rss/search/section/q/" + "World%20Stock%20Markets" + "?ned=us&gl=US&hl=en";
+            url = new URL(address);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+            InputStream inputStream = connection.getInputStream();
+            DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = builderFactory.newDocumentBuilder();
+            org.w3c.dom.Document xmlDoc = builder.parse(inputStream);
 
+            return xmlDoc;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+
+    }
+    public static org.w3c.dom.Document GoogleRSCryptoMarketsFeed() {
+        try {
+            URL url;
+            String address = "https://news.google.com/news/rss/search/section/q/" + "Cryptocurrency" + "?ned=us&gl=US&hl=en";
+            url = new URL(address);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+            InputStream inputStream = connection.getInputStream();
+            DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = builderFactory.newDocumentBuilder();
+            org.w3c.dom.Document xmlDoc = builder.parse(inputStream);
+
+            return xmlDoc;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+
+    }
 
 
 
@@ -1327,41 +1480,50 @@ public class Service_Main_Equities {
           crypto_kings_changelist.clear();
     }
 
-    public static void clearWinnersData(){
+    public static void clearStockWinnersData(){
         if(stock_winners_symbollist.size()>19){
-        stock_winners_symbollist.clear();
-        stock_winners_namelist.clear();
-        stock_winners_changelist.clear();
-        stock_winners_pricelist.clear();
-        crypto_winners_changelist.clear();
-        crypto_winners_pricelist.clear();
-        crypto_winners_namelist.clear();
-        crypto_winners_symbollist.clear();
+            stock_winners_symbollist.clear();
+            stock_winners_namelist.clear();
+            stock_winners_changelist.clear();
+            stock_winners_pricelist.clear();
+        }}
+    public static void clearCryptoWinnersData(){
+        if(crypto_winners_symbollist.size()>19){
+            crypto_winners_changelist.clear();
+            crypto_winners_pricelist.clear();
+            crypto_winners_namelist.clear();
+            crypto_winners_symbollist.clear();
         }}
 
-    public static void clearLosersData(){
+    public static void clearStockLosersData(){
         if(stock_losers_symbollist.size()>20){
         stock_losers_symbollist.clear();
         stock_losers_namelist.clear();
         stock_losers_changelist.clear();
-        stock_losers_pricelist.clear();
-        crypto_losers_pricelist.clear();
-        crypto_losers_changelist.clear();
-        crypto_losers_namelist.clear();
-        crypto_losers_symbollist.clear();}}
+        stock_losers_pricelist.clear();}}
+    public static void clearCryptoLosersData(){
+        if(crypto_losers_symbollist.size()>20){
+            crypto_losers_pricelist.clear();
+            crypto_losers_changelist.clear();
+            crypto_losers_namelist.clear();
+            crypto_losers_symbollist.clear();}}
 
-    public static void clearKingsData(){
-        if(crypto_kings_symbolist.size()>20){
+    public static void clearStockKingsData(){
+        if(stock_kings_symbollist.size()>20){
         stock_kings_symbollist.clear();
         stock_kings_namelist.clear();
         stock_kings_ipdown.clear();
-        stock_kings_changelist.clear();
-        crypto_kings_symbolist.clear();
-        crypto_kings_namelist.clear();
-        crypto_kings_pricelist.clear();
-        crypto_kings_changelist.clear();}}
+        stock_kings_changelist.clear();}}
+    public static void clearCryptoKingsData(){
+        if(crypto_kings_symbolist.size()>20){
+            crypto_kings_symbolist.clear();
+            crypto_kings_namelist.clear();
+            crypto_kings_pricelist.clear();
+            crypto_kings_changelist.clear();}}
 
-     public static void clearMasterNodesData(){
+
+
+    public static void clearMasterNodesData(){
         masternode_feedItems.clear();
         masternode_marketcap.clear();
         masternode_name.clear();

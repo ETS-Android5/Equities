@@ -347,7 +347,7 @@ public class Service_Chosen_Equity
     }
 
     private static void ProcessXml(org.w3c.dom.Document data) {
-        //all_feedItems.clear();
+        //world_markets_news_feedItems.clear();
         if (data != null) {
             String st, sd, sp, sl,si;
             org.w3c.dom.Element root = data.getDocumentElement();

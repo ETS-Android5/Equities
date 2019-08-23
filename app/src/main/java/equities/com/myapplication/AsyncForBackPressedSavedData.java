@@ -1,8 +1,11 @@
 package equities.com.myapplication;
 
 import android.os.AsyncTask;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.view.MenuItem;
 import android.view.View;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
@@ -78,7 +81,27 @@ public class AsyncForBackPressedSavedData extends AsyncTask<Integer, Integer, St
             market_pager.setVisibility(View.GONE);
             TabLayout tabs = activity.findViewById(R.id.tabs);
             //activity.setupWorldMarketsViewPager(pager);
-            tabs.setupWithViewPager(pager);}
+            tabs.setupWithViewPager(pager);
+            BottomNavigationView activity_tabs =activity.findViewById(R.id.activity_tabs);
+
+            activity_tabs.setItemIconTintList(null);
+            activity_tabs.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+                @Override
+                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                    switch (item.getItemId()) {
+                        case R.id.markets:
+                            activity.setupWorldMarketsViewPager(pager);
+                            break;
+                        case R.id.stock:
+                            activity.setupStockPager(pager);
+                            break;
+                        case R.id.crypto:
+                            activity.setupCryptoPager(pager);
+                            break;
+                    }
+                    return true;
+                }
+            });}
 
 
 

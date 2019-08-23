@@ -36,7 +36,12 @@ public class AsyncOtherAppData extends AsyncTask<Integer, Integer, String> {
             cst.getCrypto_Data();
             cst.getStock_Data();
             cst.get_masternodes();
+            cst.get_icos();
             cst.get_ipos();
+            cst.ProcessStockXml(GoogleRSStockMarketsFeed());
+            cst.ProcessCryptoXml(GoogleRSCryptoMarketsFeed());
+
+
             return "task finished";
         }
         @Override

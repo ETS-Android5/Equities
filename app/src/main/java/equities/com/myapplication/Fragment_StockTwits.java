@@ -27,11 +27,6 @@ public class Fragment_StockTwits extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_stocktwits, container, false);
-        Typeface custom_font = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Oregon.ttf");
-        social =rootView.findViewById(R.id.social);
-        social.setTypeface(custom_font);
-        social.setPaintFlags(social.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
-
         stocktwits_feed=rootView.findViewById(R.id.stocktwits_feed);
         stocktwits_feed.setAdapter(new Adapter_StockTwits_Feed(getActivity(), stocktwits_feedItems));
         stocktwits_feed.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));

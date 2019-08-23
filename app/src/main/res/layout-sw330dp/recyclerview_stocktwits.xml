@@ -10,7 +10,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/scpro"
-            android:textColor="@color/colorPrimary"
+            android:textColor="@color/colorBlack"
             android:textStyle="bold" />
     <TableRow
         android:layout_width="match_parent"
@@ -45,7 +45,7 @@
                 android:layout_height="wrap_content"
                 android:textColorLink="@color/green_color_text"
                 android:autoLink="all"
-                android:textColor="@color/colorPrimary" />
+                android:textColor="@color/colorBlack" />
 
 
             <TextView
@@ -53,7 +53,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/scpro"
-                    android:textColor="@color/colorPrimary" />
+                    android:textColor="@color/colorBlack" />
 
         </LinearLayout>
     </TableRow>

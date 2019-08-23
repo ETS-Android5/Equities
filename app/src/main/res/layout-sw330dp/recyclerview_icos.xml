@@ -31,7 +31,7 @@
                     android:gravity="left"
                     android:singleLine="true"
                     android:text="name"
-                    android:textColor="@color/colorPrimary"
+                    android:textColor="@color/colorBlack"
                     android:textSize="18sp"
                     android:textStyle="bold"/>
 
@@ -48,7 +48,7 @@
                 android:maxLines="5"
                 android:singleLine="true"
                 android:text="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
-                android:textColor="@color/colorPrimary"
+                android:textColor="@color/colorBlack"
                 android:textSize="14sp"/>
         <View
                 android:layout_width="match_parent"
@@ -73,7 +73,7 @@
                 android:gravity="bottom|center"
                 android:singleLine="true"
                 android:text="start"
-                android:textColor="@color/colorPrimary"
+                android:textColor="@color/colorBlack"
                 android:textSize="14sp"/>
 
         <TextView
@@ -82,7 +82,7 @@
                 android:gravity="center"
                 android:singleLine="true"
                 android:text="thru"
-                android:textColor="@color/colorPrimary"
+                android:textColor="@color/colorBlack"
                 android:textSize="14sp"/>
 
         <TextView
@@ -98,7 +98,7 @@
                 android:shadowRadius="1"
                 android:singleLine="true"
                 android:text="end"
-                android:textColor="@color/colorPrimary"
+                android:textColor="@color/colorBlack"
                 android:textSize="14sp"/>
     </LinearLayout>
 </TableRow>

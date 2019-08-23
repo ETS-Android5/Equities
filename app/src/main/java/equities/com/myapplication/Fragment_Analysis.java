@@ -96,6 +96,7 @@ public class Fragment_Analysis extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
     }
 
     @Override
@@ -115,10 +116,7 @@ public class Fragment_Analysis extends Fragment {
         a_price=rootView.findViewById(R.id.aequity_price);
         saved =rootView.findViewById(R.id.saved);
         a_cap =rootView.findViewById(R.id.aequity_cap);
-        Typeface custom_font = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Oregon.ttf");
-        analysis =rootView.findViewById(R.id.analysis);
-        analysis.setTypeface(custom_font);
-        analysis.setPaintFlags(analysis.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
+
         a_cap.setText(ap_info.getMarketCap());
         if(!a_price.getText().toString().isEmpty()){
             a_price.setText("Updating");
@@ -488,11 +486,12 @@ public void getGraphData(List<Double> array, int xDates, int xPoints, int calend
         if(isVisibleToUser){
             System.out.println("updating price!!!");
         //a_price.setText(""+current_updated_price.get(0));
+            if(current_percentage_change.size()==0){ a_price_change.setText("Updating");}else{
             if (current_percentage_change.get(0).toString().contains("-")){
                 a_price_change.setTextColor(Color.parseColor("#ff0000"));
             }else{a_price_change.setTextColor(Color.parseColor("#00ff00"));}
         a_price_change.setText(""+current_percentage_change.get(0));
-        }
+        }}
     }
 
 

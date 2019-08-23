@@ -179,6 +179,7 @@ public class Activity_Markets_Main extends AppCompatActivity {
 
     }
 
+
     private boolean checkInternetConnection() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         if (cm.getActiveNetworkInfo() != null
@@ -325,9 +326,6 @@ public class Activity_Markets_Main extends AppCompatActivity {
         });
 
     }
-
-
-              
     public void setupWorldMarketsViewPager(ViewPager viewPager) {
         viewPager.removeAllViews();
         viewPager.setAdapter(null);
@@ -340,18 +338,17 @@ public class Activity_Markets_Main extends AppCompatActivity {
         //viewPager.setOffscreenPageLimit(7);
 
     }
-
     public void setupStockPager(ViewPager viewPager) {
         viewPager.removeAllViews();
         viewPager.setAdapter(null);
         adapter.removeAllFrag();
         adapter.notifyDataSetChanged();
-        adapter.addFrag(new Fragment_Losers_Stock(), getString(R.string.losers));
-        adapter.addFrag(new Fragment_Winners_Stock(), getString(R.string.leaders));
         adapter.addFrag(new Fragment_Market_Kings_Stock(),getString(R.string.market_kings));
+        adapter.addFrag(new Fragment_Winners_Stock(), getString(R.string.leaders));
+        adapter.addFrag(new Fragment_Losers_Stock(), getString(R.string.losers));
         adapter.addFrag(new Fragment_Ipos(), getString(R.string.ipo));
-        adapter.addFrag(new Fragment_App_News(), getString(R.string.news));
-        adapter.addFrag(new Fragment_Video(),getString(R.string.title_video));
+        adapter.addFrag(new Fragment_Stock_App_News(), getString(R.string.news));
+        //  Delete News and add  adapter.addFrag(new Fragment_Stock_Media(),getString(R.string.media));
         viewPager.setAdapter(adapter);
 
     }
@@ -360,17 +357,16 @@ public class Activity_Markets_Main extends AppCompatActivity {
         viewPager.setAdapter(null);
         adapter.removeAllFrag();
         adapter.notifyDataSetChanged();
-        adapter.addFrag(new Fragment_Losers_Crypto(), getString(R.string.losers));
-        adapter.addFrag(new Fragment_Winners_Crypto(), getString(R.string.leaders));
         adapter.addFrag(new Fragment_Market_Kings_Crypto(), getString(R.string.market_kings));
+        adapter.addFrag(new Fragment_Winners_Crypto(), getString(R.string.leaders));
+        adapter.addFrag(new Fragment_Losers_Crypto(), getString(R.string.losers));
         adapter.addFrag(new Fragment_Masternodes(), "Mnodes");
         adapter.addFrag(new Fragment_Icos(), getString(R.string.ico));
-        adapter.addFrag(new Fragment_App_News(), getString(R.string.news));
-        adapter.addFrag(new Fragment_Video(),getString(R.string.title_video));
+        adapter.addFrag(new Fragment_Crypto_App_News(), getString(R.string.news));
+    //  Delete News and add  adapter.addFrag(new Fragment_Crypto_Media(),getString(R.string.media));
         viewPager.setAdapter(adapter);
 
     }
-
     public void setupChosenViewPager(ViewPager viewPager) {
         PagerAdapter_WorldMarkets adapter = new PagerAdapter_WorldMarkets(getSupportFragmentManager());
         if (ap_info.getMarketType().equals("Index")||ap_info.getMarketType().equals("Stock")) {
@@ -417,7 +413,7 @@ public class Activity_Markets_Main extends AppCompatActivity {
         PagerAdapter_WorldMarkets adapter = new PagerAdapter_WorldMarkets(getSupportFragmentManager());
         Fragment_Analysis fragment_analysis = new Fragment_Analysis();
         adapter.removeFrag(fragment_analysis, "Fragment_Analysis");
-        mTimer.cancel();
+//        mTimer.cancel();
         graph_date.clear();
         graph_high.clear();
         graph_volume.clear();
@@ -785,7 +781,7 @@ public class Activity_Markets_Main extends AppCompatActivity {
 
 
     public static void ProcessXmlx(org.w3c.dom.Document data) {
-        all_feedItems.clear();
+        world_markets_news_feedItems.clear();
         if (data != null) {
             String st, sd, sp, sl,si;
             org.w3c.dom.Element root = data.getDocumentElement();
@@ -835,7 +831,7 @@ public class Activity_Markets_Main extends AppCompatActivity {
                         }
                     }
 
-                    all_feedItems.add(it);
+                    world_markets_news_feedItems.add(it);
 
 
                 }

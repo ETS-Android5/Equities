@@ -53,11 +53,11 @@ public class Adapter_Icos_Feed extends RecyclerView.Adapter<Adapter_Icos_Feed.My
    
    @Override  
    public void onBindViewHolder(MyViewHolder holder, int position) {  
-//     holder.name.setText(""+ico_name.get(position));
- //    holder.message.setText(""+ico_message.get(position));
-//     holder.start.setText(""+ico_startdate.get(position));
- //    holder.end.setText(""+ico_enddate.get(position));
- //      holder.textlink = String.valueOf(ico_name.get(position));
+     holder.name.setText(""+ico_name.get(position));
+     holder.message.setText(""+ico_message.get(position));
+     holder.start.setText(""+ico_startdate.get(position));
+     holder.end.setText(""+ico_enddate.get(position));
+     holder.textlink = String.valueOf(ico_name.get(position));
    }  
    
    @Override  

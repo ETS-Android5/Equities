@@ -47,6 +47,6 @@
         android:layout_weight="1"
         android:gravity="right|center"
         android:text="05/30/2018"
-        android:textColor="@color/darkTextColor2" />
+        android:textColor="@color/colorBlack" />
 </TableRow>
 

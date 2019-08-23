@@ -26,7 +26,6 @@ import static equities.com.myapplication.Service_Main_Equities.*;
  */
 
 public class Fragment_Market_Kings_Stock extends Fragment {
-    TextView stock;
     private RecyclerView stockitems;
     LinearLayout cryptoView;
     Adapter_Main_Equities stock_adapter;
@@ -62,16 +61,12 @@ public class Fragment_Market_Kings_Stock extends Fragment {
 
 
         View rootView = inflater.inflate(R.layout.fragment_kings, container, false);
-        stock = rootView.findViewById(R.id.stock);
         stockitems= rootView.findViewById(R.id.stock_items);
         cryptoView = rootView.findViewById(R.id.cryptoView);
         cryptoView.setVisibility(View.GONE);
         stockitems.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         stock_adapter=new Adapter_Main_Equities(getActivity(), "Stock_Kings", stock_kings_symbollist,stock_kings_namelist,stock_kings_changelist);
         stockitems.setAdapter(stock_adapter);
-        Typeface custom_font = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Oregon.ttf");
-        stock.setTypeface(custom_font);
-        stock.setPaintFlags(stock.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
         mTimer = new Timer();
         mTimer.scheduleAtFixedRate(createTimerTask(),0,15000);
 
@@ -90,7 +85,7 @@ public class Fragment_Market_Kings_Stock extends Fragment {
         @Override
         protected String doInBackground(Integer... integers) {
             Service_Main_Equities sme =new Service_Main_Equities();
-            sme.clearKingsData();
+            sme.clearStockKingsData();
             sme.getMarketKingsStock();
             return null;
         }
@@ -105,6 +100,7 @@ public class Fragment_Market_Kings_Stock extends Fragment {
     public void setKingsUserVisibleHint(boolean isVisibleToUser){
         super.setUserVisibleHint(isVisibleToUser);
         if(isVisibleToUser){
+            stockitems.removeAllViewsInLayout();
             stock_adapter.notifyDataSetChanged();
             stock_adapter=new Adapter_Main_Equities(getActivity(), "Stock_Kings", stock_kings_symbollist,stock_kings_namelist,stock_kings_changelist);
             stockitems.setAdapter(stock_adapter);

@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/scpro"
         android:gravity="left"
-        android:textColor="@color/colorPrimary"
+        android:textColor="@color/colorBlack"
         android:textSize="20sp" />
 
 
@@ -34,7 +34,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/scpro"
         android:gravity="left"
-        android:textColor="@color/colorPrimary"
+        android:textColor="@color/colorBlack"
         android:textSize="12sp" />
 
     <TextView
@@ -43,7 +43,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/scpro"
         android:gravity="left"
-        android:textColor="@color/colorPrimary"
+        android:textColor="@color/colorBlack"
         android:textSize="26sp"
         android:textStyle="bold" />
 
@@ -67,7 +67,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/scpro"
         android:gravity="left"
-        android:textColor="@color/colorPrimary"
+        android:textColor="@color/colorBlack"
         android:textSize="12sp" />
 
 
@@ -75,7 +75,7 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:alpha=".1"
-            android:background="@color/colorPrimary" android:visibility="gone">
+            android:background="@color/colorBlack" android:visibility="gone">
 
     </View>
 </LinearLayout>

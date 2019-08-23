@@ -34,7 +34,7 @@
                 android:gravity="left"
                 android:singleLine="true"
                 android:text="name"
-                android:textColor="@color/colorPrimary"
+                android:textColor="@color/colorBlack"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
@@ -57,7 +57,7 @@
                 android:maxLines="5"
                 android:singleLine="true"
                 android:text="$1.00 - $2.00"
-                android:textColor="@color/colorPrimary"
+                android:textColor="@color/colorBlack"
                 android:textSize="14sp" />
 
             <TextView
@@ -68,7 +68,7 @@
                 android:gravity="top|left"
                 android:singleLine="true"
                 android:text="start"
-                android:textColor="@color/colorPrimary"
+                android:textColor="@color/colorBlack"
                 android:textSize="14sp" />
 
         </TableRow>
@@ -76,7 +76,7 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:alpha=".1"
-            android:background="@color/colorPrimary"
+            android:background="@color/colorBlack"
         android:visibility="gone">
 
         </View>
@@ -101,13 +101,14 @@
             android:shadowRadius="1"
             android:singleLine="true"
             android:text="end"
-            android:textColor="@color/colorPrimary"
+            android:textColor="@color/colorBlack"
             android:textSize="14sp" />
         <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:alpha=".1"
-                android:background="@color/colorPrimary" android:visibility="gone">
+                android:background="@color/colorBlack"
+                android:visibility="gone">
 
         </View>
     </LinearLayout>
