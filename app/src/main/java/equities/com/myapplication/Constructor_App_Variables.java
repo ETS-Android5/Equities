@@ -101,6 +101,15 @@ public class Constructor_App_Variables {
     public static String dax_change;
 
 
+    public static String getCurrent_volume() {
+        return current_volume;
+    }
+
+    public static void setCurrent_volume(String current_volume) {
+        Constructor_App_Variables.current_volume = current_volume;
+    }
+
+    public static String current_volume;
 
 
     public static String btc_market_cap_amount;

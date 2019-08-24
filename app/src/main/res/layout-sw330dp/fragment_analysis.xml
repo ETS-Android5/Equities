@@ -124,6 +124,31 @@
                     android:textSize="16sp"
                     android:textStyle="bold" />
             </TableRow>
+
+            <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="@string/volume"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+                <TextView
+                        android:id="@+id/aequity_current_volume"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="10dp"
+                        android:gravity="top|right"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="16sp" />
+            </TableRow>
+
+
         </LinearLayout>
 
         <LinearLayout
@@ -150,6 +175,8 @@
                 android:gravity="top|right"
                 android:textColor="@color/colorBlack"
                 android:textSize="22sp" />
+
+
 
 
 

@@ -42,7 +42,7 @@ import static equities.com.myapplication.Service_Main_Equities.*;
  */
 
 public class Fragment_Analysis extends Fragment {
-    TextView a_price,a_price_change,a_name,a_symbol,a_type,a_supply,a_cap,sup,saved,savedd,analysis,chosen_price_change;
+    TextView a_price,a_price_change,a_name,a_symbol,a_type,a_supply,a_cap,sup,saved,savedd,analysis,chosen_price_change,a_volume;
     ImageView save;
     LineGraphSeries<DataPoint> series = new LineGraphSeries<>();
     int xx= 0;
@@ -114,6 +114,7 @@ public class Fragment_Analysis extends Fragment {
         a_supply=rootView.findViewById(R.id.aequity_supply);
         a_price_change =rootView.findViewById(R.id.aequity_price_change);
         a_price=rootView.findViewById(R.id.aequity_price);
+        a_volume=rootView.findViewById(R.id.aequity_current_volume);
         saved =rootView.findViewById(R.id.saved);
         a_cap =rootView.findViewById(R.id.aequity_cap);
 
@@ -130,6 +131,7 @@ public class Fragment_Analysis extends Fragment {
         }
 
         a_price_change.setText(graph_change.get(0)+" %");
+        a_volume.setText(ap_info.getCurrent_volume());
 
 
 
@@ -485,8 +487,9 @@ public void getGraphData(List<Double> array, int xDates, int xPoints, int calend
         super.setUserVisibleHint(isVisibleToUser);
         if(isVisibleToUser){
             System.out.println("updating price!!!");
-        //a_price.setText(""+current_updated_price.get(0));
+        //
             if(current_percentage_change.size()==0){ a_price_change.setText("Updating");}else{
+                a_price.setText(""+current_updated_price.get(0));
             if (current_percentage_change.get(0).toString().contains("-")){
                 a_price_change.setTextColor(Color.parseColor("#ff0000"));
             }else{a_price_change.setTextColor(Color.parseColor("#00ff00"));}

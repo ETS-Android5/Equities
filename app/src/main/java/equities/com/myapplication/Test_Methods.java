@@ -24,6 +24,7 @@ import java.text.DecimalFormat;
 import java.time.Duration;
 import java.time.Instant;
 
+import static equities.com.myapplication.Activity_Markets_Main.ap_info;
 import static equities.com.myapplication.Constructor_App_Variables.*;
 import static equities.com.myapplication.Service_Main_Equities.*;
 import static equities.com.myapplication.Service_Main_Equities.crypto_losers_changelist;
@@ -31,69 +32,39 @@ import static equities.com.myapplication.Service_Main_Equities.crypto_losers_cha
 public class Test_Methods {
     @RequiresApi(api = Build.VERSION_CODES.O)
     public static void main(String[] args) {
-        get_masternodes();
+        updatePrice();
     }
-    public static void get_masternodes() {
-        Document m = null;
-        try {
-            m = Jsoup.connect("https://masternodes.online").userAgent("Mozilla").timeout(10 * 100000).get();
-        } catch (IOException e) {
-            e.printStackTrace();
+    public static void updatePrice(){
+        Constructor_App_Variables app_info =new Constructor_App_Variables();
+        if(app_info.getMarketType()=="Crypto"||app_info.getMarketType()=="Cryptocurrency"){
+            Document caps = null;
+            String name=null;
+            if(ap_info.getMarketName().equalsIgnoreCase("XRP")){
+                name = "Ripple";
+            }else{
+                name = app_info.getMarketName();}
+            try {
+                caps = Jsoup.connect("https://coinmarketcap.com/currencies/" + "bitcoin").timeout(10 * 10000).get();
+                Element as = caps.getElementsByClass("details-panel-item--header flex-container").first();
+                Elements e = as.select("span:eq(1)");
+                Elements p = as.select("span:eq(0)");
+                Element av = caps.getElementsByClass("details-panel-item--marketcap-stats flex-container").first();
+                Elements v = av.select("span.eq(1)");
+
+                String change = e.get(2).text();
+                String price = p.get(1).text();
+                change = change.replaceAll("\\(", "").replaceAll("\\)", "");
+                current_percentage_change.clear();
+                current_updated_price.clear();
+                current_percentage_change.add(change);
+                current_updated_price.add(price);
+                System.out.println("hello "+as);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }else{
+            //getstockupdate
         }
-        Element c = m.getElementById("coins");
-        Elements tb = c.select("tbody");
-        Elements n = tb.get(1).select("tr");
-        for (int x = 0; x < n.size(); x++) {
-            Constructor_Masternodes constructor_masternodes = new Constructor_Masternodes();
-            Elements k = n.get(x).select("td");
-            String [] splits = k.get(2).text().split(" ");
-            constructor_masternodes.setMasternode_name(splits[0]);
-            constructor_masternodes.setMasternode_symbol(splits[1].replace("(","").replace(")",""));
-            constructor_masternodes.setMasternode_percent_change(k.get(4).text());
-            Float add;
-            String mc = k.get(6).text().replace("%", "").replace("$", "").replace(",", "");
-            if (mc.contains("?")) {
-                constructor_masternodes.setMasternode_marketcap("Unknown");
-            } else {
-                add = Float.parseFloat(mc);
-                if (add > 999) {
-                    String a = String.format("%.0f", add);
-                    String added = null;
-
-                    if (mc.length() > 9) {
-                        added = a.substring(0, 3) + " B";
-                    }
-                    if (mc.length() <= 9) {
-                        added = a.substring(0, 3) + " M";
-                    }
-                    if (mc.length() == 11) {
-                        constructor_masternodes.setMasternode_marketcap(added.substring(0, 2) + "." + added.substring(2, added.length()));
-                    }
-                    if (mc.length() == 10) {
-                        constructor_masternodes.setMasternode_marketcap(added.substring(0, 1) + "." + added.substring(1, added.length()));
-                    }
-                    ;
-                    if (mc.length() == 9) {
-                        constructor_masternodes.setMasternode_marketcap(added.substring(0, 3) + "." + added.substring(3, added.length()));
-                    }
-                    if (mc.length() == 8) {
-                        constructor_masternodes.setMasternode_marketcap(added.substring(0, 2) + "." + added.substring(2, added.length()));
-                    }
-                    if (mc.length() == 7) {
-                        constructor_masternodes.setMasternode_marketcap(added.substring(0, 1) + "." + added.substring(1, added.length()));
-                    }
-                    if (mc.length() == 6) {
-                        constructor_masternodes.setMasternode_marketcap(added.substring(0, 3) + "." + added.substring(2, added.length()));
-                    }
-                }
-                constructor_masternodes.setMasternode_node_count(k.get(8).text());
-                constructor_masternodes.setMasternode_purchase_value(k.get(10).text());}
-
-            masternode_feedItems.add(constructor_masternodes);
-
-
-        }
-             System.out.println(masternode_feedItems.size());
     }
 
 

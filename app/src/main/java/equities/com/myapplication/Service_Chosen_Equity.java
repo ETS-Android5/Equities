@@ -311,6 +311,7 @@ public class Service_Chosen_Equity
         }
         Elements ez =cap.select("td[data-test]");
         ap_info.setMarketCap(ez.get(8).text());
+        ap_info.setCurrent_volume(ez.get(6).text());
 
     }
 
