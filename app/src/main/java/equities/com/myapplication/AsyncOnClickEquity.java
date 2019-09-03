@@ -26,10 +26,10 @@ import static equities.com.myapplication.Constructor_App_Variables.graph_volume;
 import static equities.com.myapplication.Constructor_App_Variables.feedItems;
 import static equities.com.myapplication.Constructor_App_Variables.stocktwits_feedItems;
 
-public class AsyncChosenData extends AsyncTask<Void, Void, String> {
+public class AsyncOnClickEquity extends AsyncTask<Void, Void, String> {
 
         private WeakReference<Activity_Markets_Main> activityReference;
-        AsyncChosenData(Activity_Markets_Main context) {
+        AsyncOnClickEquity(Activity_Markets_Main context) {
             activityReference = new WeakReference<>(context);
         }
         long startTime;
@@ -93,79 +93,24 @@ public class AsyncChosenData extends AsyncTask<Void, Void, String> {
             Activity_Markets_Main activity = activityReference.get();
             if(isCancelled())
             {
-
                 //("Async Cancelled");
                 return null;}
 
-//System.out.print("THIS IS WHAT MARKET TYPE EQUALS "+activity.ap_info.getMarketType());
-
-//            getSupportActionBar().setDisplayShowTitleEnabled(true);
-            if (activity.async_analysis_page) {
-                activity.reloadAllData();
-                if (activity.ap_info.getMarketType().equals("Crypto")||(activity.ap_info.getMarketType().equals("Cryptocurrency"))) {
-
-                    activity.getChosenCryptoInfo();
-                    activity.getStockTwitsData();
-                    activity.get_coinmarketcap_exchange_listing();
-                    Service_Chosen_Equity shoe = new Service_Chosen_Equity(activity);
-                    shoe.main();
-                    activity.do_graph_change();
-                }
-                if (activity.ap_info.getMarketType().equals("Index")) {
-
-                    activity.get_exchange_info();
-                    activity.get_current_stock_info();
-                    activity.getStockTwitsData();
-                    Service_Chosen_Equity shoe = new Service_Chosen_Equity(activity);
-                    shoe.main();
-                    activity.do_graph_change();
-                }
-                else {
-
-                    activity.get_exchange_info();
-                    activity.get_current_stock_info();
-                    activity.getStockTwitsData();
-                    Service_Chosen_Equity shoe = new Service_Chosen_Equity(activity);
-                    shoe.main();
-                    activity.do_graph_change();
-                }
-
-
-
-            } else {
-                if (activity.ap_info.getMarketType().equals("Crypto")||(activity.ap_info.getMarketType().equals("Cryptocurrency"))) {
-
-                    activity.getChosenCryptoInfo();
-                    activity.getStockTwitsData();
-                    activity.get_coinmarketcap_exchange_listing();
-                    Service_Chosen_Equity shoe = new Service_Chosen_Equity(activity);
-                    shoe.main();
-                    activity.do_graph_change();
-                }
-               if (activity.ap_info.getMarketType().equals("Index")) {
-
-                    activity.get_exchange_info();
-                    activity.get_current_stock_info();
-                    activity.getStockTwitsData();
-                    Service_Chosen_Equity shoe = new Service_Chosen_Equity(activity);
-                    shoe.main();
-                    activity.do_graph_change();
-                }
-
-                else
-                {
-                    activity.getChosenCryptoInfo();
-                    activity.getStockTwitsData();
-                    activity.get_coinmarketcap_exchange_listing();
-                    Service_Chosen_Equity shoe = new Service_Chosen_Equity(activity);
-                    shoe.main();
-                    activity.do_graph_change();
-                }
-                activity.ProcessXmlx(activity.GoogleRSFeedx());
-
-                activity.async_analysis_page = true;
-
-
+            if (activity.ap_info.getMarketType().equals("Crypto")||(activity.ap_info.getMarketType().equals("Cryptocurrency"))) {
+                activity.getChosenCryptoInfo();
+                activity.getStockTwitsData();
+                activity.get_coinmarketcap_exchange_listing();
+                Service_Chosen_Equity shoe = new Service_Chosen_Equity(activity);
+                shoe.main();
+                activity.do_graph_change();
+            }else{
+                activity.get_exchange_info();
+                activity.get_current_stock_info();
+                activity.getStockTwitsData();
+                Service_Chosen_Equity shoe = new Service_Chosen_Equity(activity);
+                shoe.main();
+                activity.do_graph_change();
+                //activity.async_analysis_page = true;
             }
             return "task finished";
         }
@@ -176,7 +121,6 @@ public class AsyncChosenData extends AsyncTask<Void, Void, String> {
         protected void onPostExecute(String result) {
             Activity_Markets_Main activity = activityReference.get();
             activity.fullScreen="go";
-            // get a reference to the activity if it is still there
             String a=activity.ap_info.getCurrent_Aequity_Price();
             if (activity == null || activity.isFinishing()&&graph_high.size()>0&&activity.requestQueue !=null&& activity.forward) return;
             ProgressBar mainbar = activity.findViewById(R.id.mainbar);
@@ -185,25 +129,9 @@ public class AsyncChosenData extends AsyncTask<Void, Void, String> {
             pager.setVisibility(View.GONE);
             ViewPager market_pager = activity.findViewById(R.id.market_pager);
             market_pager.setVisibility(View.VISIBLE);
-
             TabLayout tabs = activity.findViewById(R.id.tabs);
             tabs.setupWithViewPager(market_pager);
             activity.setupChosenViewPager(market_pager);
-
-            if (activity.ap_info.getMarketType().equals("Index")) {
-                //tabs.getTabAt(0).setIcon(R.drawable.direction_info);
-                //tabs.getTabAt(1).setIcon(R.drawable.direction_news);
-                //tabs.getTabAt(2).setIcon(R.drawable.direction_youtube_video);
-                //tabs.getTabAt(3).setIcon(R.drawable.direction_socialmedia);
-            }else{
-                //tabs.getTabAt(0).setIcon(R.drawable.direction_info);
-                //tabs.getTabAt(1).setIcon(R.drawable.direction_news);
-                //tabs.getTabAt(2).setIcon(R.drawable.direction_youtube_video);
-                //tabs.getTabAt(3).setIcon(R.drawable.direction_exchange);
-                //tabs.getTabAt(4).setIcon(R.drawable.direction_socialmedia);
-            }
-
-
             RelativeLayout progLayout =activity.findViewById(R.id.progLayout);
             progLayout.setVisibility(View.GONE);
 

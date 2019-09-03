@@ -60,7 +60,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import static equities.com.myapplication.Constructor_App_Variables.*;
-import static equities.com.myapplication.Fragment_Analysis.mTimer;
 
 public class Activity_Markets_Main extends AppCompatActivity {
     Database_Local_Aequities check_saved = new Database_Local_Aequities(Activity_Markets_Main.this);
@@ -136,10 +135,8 @@ public class Activity_Markets_Main extends AppCompatActivity {
         if (pager.getVisibility()==View.VISIBLE){
             finish();}else {
             reloadAllData();
-            new AsyncChosenData(this).cancel(true);
+            new AsyncOnClickEquity(this).cancel(true);
             new AsyncForBackPressedSavedData(Activity_Markets_Main.this).execute();
-
-
         }
 
     }
@@ -157,12 +154,6 @@ public class Activity_Markets_Main extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        STARTAPPLICATION();
-        //MobileAds.initialize(this, "ca-app-pub-6566728316210720/4471280326");
-
-    }
-
-    public void STARTAPPLICATION(){
         MobileAds.initialize(this, "ca-app-pub-6566728316210720/4471280326");
         mInterstitialAd = new InterstitialAd(this);
         mInterstitialAd.setAdUnitId("ca-app-pub-6566728316210720/4471280326");
@@ -175,9 +166,9 @@ public class Activity_Markets_Main extends AppCompatActivity {
         imageView =findViewById(R.id.imageView);
         progress= findViewById(R.id.progressBar);
         txt = findViewById(R.id.output);
-        new AsyncWorldMarketData(Activity_Markets_Main.this).execute();
+        new AsyncWorldMarketData(Activity_Markets_Main.this).execute();    }
 
-    }
+
 
 
     private boolean checkInternetConnection() {
@@ -445,7 +436,7 @@ public class Activity_Markets_Main extends AppCompatActivity {
                 ap_info.setMarketName(split_marketinfo[1]);
                 ap_info.setMarketType(split_marketinfo[2]);
                 chosen_searchView_item.onEditorAction(EditorInfo.IME_ACTION_DONE);
-                new AsyncChosenData(Activity_Markets_Main.this).execute();
+                new AsyncOnClickEquity(Activity_Markets_Main.this).execute();
                 chosen_searchView_item.setText("");
                 reloadAllData();
 

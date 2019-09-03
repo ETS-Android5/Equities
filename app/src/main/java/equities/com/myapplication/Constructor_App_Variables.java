@@ -147,6 +147,7 @@ public class Constructor_App_Variables {
     public static String cobe="https://www.coinbase.com/join/5a2cc6b6f3b80300ef643aa4";
     public static String rbh="http://share.robinhood.com/juliand141";
     public static ArrayList cpr;
+    public static String chosen_website;
 
 
     public Constructor_App_Variables(){}
@@ -157,6 +158,14 @@ public class Constructor_App_Variables {
     public String getMarketName(){
         return this.market_name;
     }
+
+    public static String getChosen_website() {
+        return chosen_website;
+    }
+    public static void setChosen_website(String chosen_website) {
+        Constructor_App_Variables.chosen_website = chosen_website;
+    }
+
     public void setMarketName(String market_name){
         this.market_name = market_name;
     }

@@ -11,13 +11,13 @@
             android:id="@+id/stock"
             android:enabled="true"
             android:title="Stock Market"
-        android:icon="@drawable/banner_ae"
+        android:icon="@drawable/wallst"
         app:showAsAction="always" />
     <item
             android:id="@+id/crypto"
             android:enabled="true"
             android:title="Cryptocurrencies"
-            android:icon="@drawable/banner_ae"
+            android:icon="@drawable/bitcoin"
             app:showAsAction="always" />
 
 

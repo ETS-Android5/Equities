@@ -1,9 +1,9 @@
 package equities.com.myapplication;
 
+import android.app.SearchManager;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -33,16 +33,16 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 import static com.google.android.gms.internal.zzagz.runOnUiThread;
+import static equities.com.myapplication.Activity_Markets_Main.ap_info;
 import static equities.com.myapplication.Constructor_App_Variables.*;
 import static equities.com.myapplication.Constructor_App_Variables.market_type;
-import static equities.com.myapplication.Service_Main_Equities.*;
 
 /**
  * Created by Julian Dinkins on 4/25/2018.
  */
 
 public class Fragment_Analysis extends Fragment {
-    TextView a_price,a_price_change,a_name,a_symbol,a_type,a_supply,a_cap,sup,saved,savedd,analysis,chosen_price_change,a_volume;
+    TextView a_price,a_price_change,a_name,a_symbol,a_type,a_supply,a_cap,sup,saved,savedd,analysis,chosen_price_change,a_volume,a_website;
     ImageView save;
     LineGraphSeries<DataPoint> series = new LineGraphSeries<>();
     int xx= 0;
@@ -115,8 +115,25 @@ public class Fragment_Analysis extends Fragment {
         a_price_change =rootView.findViewById(R.id.aequity_price_change);
         a_price=rootView.findViewById(R.id.aequity_price);
         a_volume=rootView.findViewById(R.id.aequity_current_volume);
+        a_website=rootView.findViewById(R.id.aequity_website);
         saved =rootView.findViewById(R.id.saved);
         a_cap =rootView.findViewById(R.id.aequity_cap);
+
+        a_website.setText(ap_info.getChosen_website());
+        a_website.setTextColor(getActivity().getResources().getColor(R.color.colorGold));
+        a_website.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    Intent intent = new Intent(Intent.ACTION_WEB_SEARCH);
+                    String search = a_website.getText().toString();
+                    intent.putExtra(SearchManager.QUERY, search);
+                    startActivity(intent);
+                } catch (Exception e) {
+                    // TODO: handle exception
+                }
+            }
+        });
 
         a_cap.setText(ap_info.getMarketCap());
         if(!a_price.getText().toString().isEmpty()){
@@ -138,17 +155,17 @@ public class Fragment_Analysis extends Fragment {
         mTimer = new Timer();
         mTimer.scheduleAtFixedRate(createTimerTask(),0,15000);
         if (ap_pc !=null && ap_pc.contains("-")){
-            a_price_change.setTextColor(Color.parseColor("#ff0000"));
-        }else{a_price_change.setTextColor(Color.parseColor("#00ff00"));}
+            a_price_change.setTextColor(getResources().getColor(R.color.colorRed));
+        }else{a_price_change.setTextColor(getResources().getColor(R.color.colorGreen));}
         sup=rootView.findViewById(R.id.supply);
         if(ap_info.getMarketType().equals("Cryptocurrency")){
             sup.setText(getString(R.string.supply));
         }else{
             sup.setText(getString(R.string.shares));}
 
-            a_supply.setText(ap_info.getMarketSupply());
+        a_supply.setText(ap_info.getMarketSupply());
         Constructor_App_Variables app_info =new Constructor_App_Variables();
-        a_name.setText(app_info.getMarketName());
+        a_name.setText(app_info.getMarketName().replace(" ",""));
         String correct =app_info.getMarketSymbol();
         boolean  b = correct.startsWith("%5E");
         if(b)
@@ -167,9 +184,6 @@ public class Fragment_Analysis extends Fragment {
         if(db.getSymbol().contains(a_symbol.getText().toString())){
             save.setImageResource(android.R.drawable.btn_star_big_on);
         }
-
-
-
 
         //dont forget shared preferences or check database if aequity is in database show big star on
 
@@ -201,7 +215,10 @@ public class Fragment_Analysis extends Fragment {
             }
         });
         historical_listview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-        ab =new Adapter_Graph_Points(getContext(), 1,graph_high,graph_change,graph_volume,graph_date);
+        //PointsAll.addAll(graph_high);
+        //Collections.reverse(PointsAll);
+        //getGraphData(PointsAll,0,PointsAll.size(),Calendar.DAY_OF_WEEK,dayDate,maxDayDate);
+        ab =new Adapter_Graph_Points(getContext(), graph_high.size(),graph_high,graph_change,graph_volume,graph_date);
         historical_listview.setAdapter(ab);
         historical_listview.findViewHolderForAdapterPosition(0);
         graph_view.setVisibility(View.GONE);
@@ -262,8 +279,6 @@ public class Fragment_Analysis extends Fragment {
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                System.out.println("THIS IS GRAPH ARRAY DATE "+graph_date.size()
-                );
                 int position = tab.getPosition();
                 switch (position) {
                     case 0:
@@ -429,10 +444,10 @@ public void getGraphData(List<Double> array, int xDates, int xPoints, int calend
     Double result = ((graph_end-graph_start)/graph_start)*100;
     if(graph_end>graph_start){
     series.setColor(Color.GREEN);
-        chosen_price_change.setTextColor(Color.GREEN);
+        chosen_price_change.setTextColor(getResources().getColor(R.color.colorGreen));
     }
     else{series.setColor(Color.RED);
-        chosen_price_change.setTextColor(Color.RED);}
+        chosen_price_change.setTextColor(getResources().getColor(R.color.colorRed));}
     chosen_price_change.setText(((df.format(result))+" %"));
     staticLabelsFormatter.setHorizontalLabels(allDates.toArray(new String[0]));
     Collections.sort(labels);
@@ -456,11 +471,11 @@ public void getGraphData(List<Double> array, int xDates, int xPoints, int calend
 }
 
     public void getNewData(){
-        new ASYNCUpdatePrice().execute();
+        new ASYNCUpdateFinancialData().execute();
 
     }
 
-    public class ASYNCUpdatePrice extends AsyncTask<Integer, Integer, String> {
+    public class ASYNCUpdateFinancialData extends AsyncTask<Integer, Integer, String> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -469,7 +484,7 @@ public void getGraphData(List<Double> array, int xDates, int xPoints, int calend
         @Override
         protected String doInBackground(Integer... integers) {
             Service_Chosen_Equity service_chosen_equity = new Service_Chosen_Equity(getActivity());
-            service_chosen_equity.updatePrice();
+            service_chosen_equity.updateFinancialData();
             return null;
         }
 
@@ -491,8 +506,8 @@ public void getGraphData(List<Double> array, int xDates, int xPoints, int calend
             if(current_percentage_change.size()==0){ a_price_change.setText("Updating");}else{
                 a_price.setText(""+current_updated_price.get(0));
             if (current_percentage_change.get(0).toString().contains("-")){
-                a_price_change.setTextColor(Color.parseColor("#ff0000"));
-            }else{a_price_change.setTextColor(Color.parseColor("#00ff00"));}
+                a_price_change.setTextColor(getActivity().getResources().getColor(R.color.colorRed));
+            }else{a_price_change.setTextColor(getActivity().getResources().getColor(R.color.colorGreen));}
         a_price_change.setText(""+current_percentage_change.get(0));
         }}
     }

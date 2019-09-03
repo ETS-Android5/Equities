@@ -29,11 +29,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import static equities.com.myapplication.Activity_Markets_Main.ap_info;
 import static equities.com.myapplication.Constructor_App_Variables.*;
 
-//The original version of this code was found on StackOverflow.com from user flup
-//https://stackoverflow.com/users/1973271/flup
-//https://stackoverflow.com/questions/21670451/how-to-send-multiple-asynchronous-requests-to-different-web-services
-
-
 public class Service_Chosen_Equity
 {
     private static Context context;
@@ -51,39 +46,34 @@ public class Service_Chosen_Equity
             @Override
             public String call() throws Exception
             {
-                long startTime = System.nanoTime();
                 Constructor_App_Variables ax = new Constructor_App_Variables();
                 String a = ax.getMarketType();
                 if (a.equals("Cryptocurrency") || a.equals("Crypto"))
                 {
-
                 }
                 else {
                     get_stock_shares();
                     get_stock_cap();
-
-                    long endTime = System.nanoTime();
-                    long duration = (endTime - startTime);
-                    //29 seconds Boost Mobile
-                    //("GET get_stock_points TIME IS "+duration/1000000000+" seconds");
                     }
 
 
                 return null;
             }
         });
-
+        callables.add(new Callable<String>() {
+            @Override
+            public String call() throws Exception {
+               getWebsite();
+                return null;
+            }
+        });
 
         callables.add(new Callable<String>()
         {
             @Override
             public String call() throws Exception
-            {long startTime = System.nanoTime();
+            {
                 getVideoInfo();
-                long endTime = System.nanoTime();
-                long duration = (endTime - startTime);
-                //1 second Boost Mobile
-                //("GET VIDEOS TIME IS "+duration/1000000000+" seconds");
                 return null;
             }
         });
@@ -92,12 +82,8 @@ public class Service_Chosen_Equity
         {
             @Override
             public String call() throws Exception
-            {long startTime = System.nanoTime();
+            {
                 ProcessXml(GoogleRSFeed());
-                long endTime = System.nanoTime();
-                long duration = (endTime - startTime);
-                //4 seconds Boost Mobile
-                ////("GET NEWS TIME IS "+duration/1000000000+" seconds");
                 return null;
             }
         });
@@ -106,19 +92,16 @@ public class Service_Chosen_Equity
         {
             @Override
             public String call() throws Exception
-            {long startTime = System.nanoTime();
+            {
                 Constructor_App_Variables ax = new Constructor_App_Variables();
                 String a = ax.getMarketType();
                 saved_helper=1;
                 if (a.equals("Cryptocurrency") || a.equals("Crypto")){
-                get_crypto_points();}
+                get_crypto_info();}
                 else{
-                    get_stock_points();
+                get_stock_points();
                 }
-                long endTime = System.nanoTime();
-                long duration = (endTime - startTime);
-                //4 seconds Boost Mobile
-                //("GET points IS "+duration/1000000000+" seconds");
+
                 return null;
             }
         });
@@ -140,24 +123,23 @@ public class Service_Chosen_Equity
 
     }
 
-
-
-    public static void updatePrice(){
+    public static void updateFinancialData(){
         Constructor_App_Variables app_info =new Constructor_App_Variables();
+        Document caps = null;
+        String name=null;
         if(app_info.getMarketType()=="Crypto"||app_info.getMarketType()=="Cryptocurrency"){
-            //get crypto update
-            Document caps = null;
-            String name=null;
+
             if(ap_info.getMarketName().equalsIgnoreCase("XRP")){
                 name = "Ripple";
             }else{
-            name = app_info.getMarketName();}
+                name = app_info.getMarketName();}
+
             try {
                 caps = Jsoup.connect("https://coinmarketcap.com/currencies/" + name).timeout(10 * 10000).get();
                 Element as = caps.getElementsByClass("details-panel-item--header flex-container").first();
+                Element az = caps.getElementsByClass( "details-panel-item--marketcap-stats flex-container").first();
                 Elements e = as.select("span:eq(1)");
                 Elements p = as.select("span:eq(0)");
-
                 String change = e.get(2).text();
                 String price = p.get(1).text();
                 change = change.replaceAll("\\(", "").replaceAll("\\)", "");
@@ -165,11 +147,30 @@ public class Service_Chosen_Equity
                 current_updated_price.clear();
                 current_percentage_change.add(change);
                 current_updated_price.add(price);
+                Elements ee = az.select("span:eq(0)");
+                String changed_volume= ee.get(4).text();
+                app_info.setCurrent_volume(changed_volume);
             } catch (IOException e) {
+                //  !!!!!!! !!!!!! NEED A BACKUP WEBSITE TO RETRIEVE DATA IF COINMARKETCAP IS UNAVALIABLE
                 e.printStackTrace();
             }
         }else{
-            //getstockupdate
+            try {
+                caps = Jsoup.connect("https://money.cnn.com/quote/quote.html?symb="+name).userAgent("Opera").timeout(10 * 10000).get();
+                Element tb= caps.select("tbody").get(1);
+                String td = tb.select("td").get(7).text();
+                Element tb1= caps.select("tbody").get(0);
+                String td0 = String.valueOf(tb1.select("td").get(0).select("span").text());
+                String td1 = String.valueOf(tb1.select("td").get(1).select("span").get(4).text());
+                current_percentage_change.clear();
+                current_updated_price.clear();
+                current_percentage_change.add(td1);
+                current_updated_price.add(td0);
+                app_info.setCurrent_volume(td);
+            }catch (IOException e){
+                //NEED A BACKUP for stockupdate
+            }
+
         }
     }
 
@@ -205,7 +206,7 @@ public class Service_Chosen_Equity
         //(graph_high.size());
     }
 
-    public static void get_crypto_points() {
+    public static void get_crypto_info() {
         long startTime = System.nanoTime();
         DateFormat sdf = new SimpleDateFormat("yyyyMMdd");
         Date begindate = new Date();
@@ -306,14 +307,61 @@ public class Service_Chosen_Equity
         Document cap =null;
         try{
             cap =Jsoup.connect("https://finance.yahoo.com/quote/"+marname+"?p="+marname).timeout(10 *10000).get();
+            Elements ez =cap.select("td[data-test]");
+            ap_info.setMarketCap(ez.get(8).text());
+            ap_info.setCurrent_volume(ez.get(6).text());
         } catch (IOException e){
+            //Backup method
             e.printStackTrace();
         }
-        Elements ez =cap.select("td[data-test]");
-        ap_info.setMarketCap(ez.get(8).text());
-        ap_info.setCurrent_volume(ez.get(6).text());
+
 
     }
+
+    public static void getWebsite(){
+        Constructor_App_Variables app_info =new Constructor_App_Variables();
+        Document caps = null;
+        String name=app_info.getMarketName();
+        if(app_info.getMarketType()=="Crypto"||app_info.getMarketType()=="Cryptocurrency"){
+            try{
+                caps = Jsoup.connect("https://coinmarketcap.com/currencies/" + name).timeout(10 * 10000).get();
+                Elements links = caps.getElementsByClass("list-unstyled details-panel-item--links");
+                Element link =links.select("li>a").get(0);
+                String url = link.attr("href");
+                app_info.setChosen_website(url);
+            } catch (IOException e) {
+                try{
+                    //Alternative crypto site
+                    caps = Jsoup.connect("https://www.coingecko.com/en/coins/" + name).timeout(10 * 10000).get();
+                    Elements links = caps.getElementsByClass("col-md-9 col-lg-7 p-0");
+                    Elements link =links.select("div>a");
+                    String url = link.attr("href");
+                    app_info.setChosen_website(url);
+                }catch (IOException x){
+                    app_info.setChosen_website("Unknown");
+                }
+
+            }
+        }else {
+            try {
+                //Get stock website
+                caps = Jsoup.connect("https://finance.yahoo.com/quote/" + name + "/profile?p=" + name).timeout(10 * 10000).get();
+                Element main = caps.getElementById("Main");
+                String d = main.select("a[href]").get(1).text();
+                app_info.setChosen_website(d);
+            } catch (IOException e) {
+                //Use a different website
+                try {
+                    caps = Jsoup.connect("https://money.cnn.com/quote/profile/profile.html?symb=" + name).timeout(10 * 10000).get();
+                    Element tb = caps.select("tbody").get(3);
+                    String d = tb.select("a[href]").text();
+                    app_info.setChosen_website(d);
+
+                } catch (IOException e1) {
+                    app_info.setChosen_website("Unknown");
+                }
+            }
+        }}
 
     public static void getVideoInfo() {
 

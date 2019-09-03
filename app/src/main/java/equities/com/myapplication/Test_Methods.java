@@ -4,68 +4,40 @@ import android.os.Build;
 import android.support.annotation.RequiresApi;
 
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
-import java.text.DecimalFormat;
-import java.time.Duration;
-import java.time.Instant;
 
-import static equities.com.myapplication.Activity_Markets_Main.ap_info;
-import static equities.com.myapplication.Constructor_App_Variables.*;
-import static equities.com.myapplication.Service_Main_Equities.*;
-import static equities.com.myapplication.Service_Main_Equities.crypto_losers_changelist;
+import static equities.com.myapplication.Constructor_App_Variables.current_percentage_change;
+import static equities.com.myapplication.Constructor_App_Variables.current_updated_price;
 
 public class Test_Methods {
     @RequiresApi(api = Build.VERSION_CODES.O)
     public static void main(String[] args) {
-        updatePrice();
+        updaqte();
     }
-    public static void updatePrice(){
+    public static void updaqte(){
         Constructor_App_Variables app_info =new Constructor_App_Variables();
-        if(app_info.getMarketType()=="Crypto"||app_info.getMarketType()=="Cryptocurrency"){
-            Document caps = null;
-            String name=null;
-            if(ap_info.getMarketName().equalsIgnoreCase("XRP")){
-                name = "Ripple";
-            }else{
-                name = app_info.getMarketName();}
-            try {
-                caps = Jsoup.connect("https://coinmarketcap.com/currencies/" + "bitcoin").timeout(10 * 10000).get();
-                Element as = caps.getElementsByClass("details-panel-item--header flex-container").first();
-                Elements e = as.select("span:eq(1)");
-                Elements p = as.select("span:eq(0)");
-                Element av = caps.getElementsByClass("details-panel-item--marketcap-stats flex-container").first();
-                Elements v = av.select("span.eq(1)");
-
-                String change = e.get(2).text();
-                String price = p.get(1).text();
-                change = change.replaceAll("\\(", "").replaceAll("\\)", "");
-                current_percentage_change.clear();
-                current_updated_price.clear();
-                current_percentage_change.add(change);
-                current_updated_price.add(price);
-                System.out.println("hello "+as);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }else{
-            //getstockupdate
-        }
-    }
-
+        String name="gsat";
+         Document caps= null;
+        try {
+            caps = Jsoup.connect("https://money.cnn.com/quote/quote.html?symb="+name).userAgent("Opera").timeout(10 * 10000).get();
+            Element tb= caps.select("tbody").get(1);
+            String td = tb.select("td").get(7).text();
+            Element tb1= caps.select("tbody").get(0);
+            String td0 = String.valueOf(tb1.select("td").get(0).select("span").text());
+            String td1 = String.valueOf(tb1.select("td").get(1).select("span").get(4).text());
+            current_percentage_change.clear();
+            current_updated_price.clear();
+            current_percentage_change.add(td1);
+            current_updated_price.add(td0);
+            app_info.setCurrent_volume(td);
+            System.out.println(td);
+        }catch (IOException e){
+            //NEED A BACKUP for stockupdate
+        }}
 
 }

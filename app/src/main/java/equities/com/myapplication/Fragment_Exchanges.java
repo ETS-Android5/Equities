@@ -25,7 +25,7 @@ import static equities.com.myapplication.Constructor_App_Variables.stock_exchang
 
 public class Fragment_Exchanges extends Fragment {
     private RecyclerView exchange_feed;
-    TextView yes,exchanges;
+    TextView yes;
     TableRow yesnotable;
 
     @Override

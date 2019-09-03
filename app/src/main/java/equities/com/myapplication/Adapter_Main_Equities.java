@@ -2,7 +2,6 @@ package equities.com.myapplication;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.hardware.camera2.CaptureRequest;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,7 +10,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static equities.com.myapplication.Activity_Markets_Main.ap_info;
 import static equities.com.myapplication.Service_Main_Equities.*;
@@ -58,7 +56,7 @@ public class Adapter_Main_Equities extends RecyclerView.Adapter<Adapter_Main_Equ
                     ap_info.setMarketType(types.getText().toString());
                     ap_info.setMarketChange(value.getText().toString());
                     Activity_Markets_Main activity_main = new Activity_Markets_Main();
-                    new AsyncChosenData((Activity_Markets_Main) context)
+                    new AsyncOnClickEquity((Activity_Markets_Main) context)
                             .execute();}
             });
         }

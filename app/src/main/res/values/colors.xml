@@ -5,10 +5,11 @@
     <color name="darkTextColor">#F57F17</color>
     <color name="darkTextColor2">#FFFFFF</color>
     <color name="green_color_text">#888980</color>
-    <color name="red_color_text">#B71C1C</color>
+    <color name="colorRed">#E91E63</color>
     <color name="colorBlack">#1A237E</color>
     <color name="colorBlue">#01579B</color>
     <color name="colorGold">#F8CD76</color>
     <color name="colorTrans">#00000000</color>
+    <color name="colorGreen">#4CAF50</color>
 
 </resources>

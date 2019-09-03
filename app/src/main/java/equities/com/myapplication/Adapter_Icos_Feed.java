@@ -127,7 +127,6 @@ public class Adapter_Icos_Feed extends RecyclerView.Adapter<Adapter_Icos_Feed.My
     public static class getURLS extends AsyncTask<Integer, Integer, String> {
         private View rootView;
         public getURLS(View rootView) {
-
             this.rootView = rootView;
         }
 

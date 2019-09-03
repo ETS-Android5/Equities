@@ -252,7 +252,7 @@ public class Service_Main_Equities {
 
 
             }}catch (IOException e) {
-            //Use alternative method
+            //Need alternative method
         }
 
 
