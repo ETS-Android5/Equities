@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">Equities</string>
+    <string name="main">Main</string>
+    <string name = "globalmarkets">Global Markets</string>
+    <string name="stockmarket">Stock Market</string>
     <string name="app_comp">AHV Mobile Solutions</string>
     <string name="title_item_detail">Item Detail</string>
     <string name="title_main">Main</string>

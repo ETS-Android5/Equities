@@ -99,9 +99,9 @@ public class Fragment_Losers_Crypto extends Fragment {
         super.setUserVisibleHint(isVisibleToUser);
         if(isVisibleToUser){
             cryptoitems.removeAllViewsInLayout();
-            crypto_adapter.notifyDataSetChanged();
-            cryptoitems.setAdapter(crypto_adapter);
             cryptoitems.setAdapter(new Adapter_Main_Equities(getActivity(), "Crypto_Loser",crypto_losers_symbollist,crypto_losers_namelist,crypto_losers_changelist));
+            cryptoitems.setAdapter(crypto_adapter);
+            crypto_adapter.notifyDataSetChanged();
         }
     }
 

@@ -168,9 +168,6 @@ public class Activity_Markets_Main extends AppCompatActivity {
         txt = findViewById(R.id.output);
         new AsyncWorldMarketData(Activity_Markets_Main.this).execute();    }
 
-
-
-
     private boolean checkInternetConnection() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         if (cm.getActiveNetworkInfo() != null
@@ -302,7 +299,7 @@ public class Activity_Markets_Main extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
-                    case R.id.markets:
+                    case R.id.home:
                         setupWorldMarketsViewPager(pager);
                         break;
                     case R.id.stock:
@@ -741,7 +738,7 @@ public class Activity_Markets_Main extends AppCompatActivity {
 
 
 
-    public static void do_graph_change() {
+   public static void do_graph_change() {
         Double a=0.00;if(graph_high.size()>0) {
             for (int i = 0; i < graph_high.size(); i++) {
                 if (graph_high.get(i) != null) {

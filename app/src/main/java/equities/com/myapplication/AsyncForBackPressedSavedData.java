@@ -89,9 +89,10 @@ public class AsyncForBackPressedSavedData extends AsyncTask<Integer, Integer, St
             activity_tabs.setItemIconTintList(null);
             activity_tabs.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
                 @Override
+
                 public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                     switch (item.getItemId()) {
-                        case R.id.markets:
+                        case R.id.home:
                             activity.setupWorldMarketsViewPager(pager);
                             break;
                         case R.id.stock:

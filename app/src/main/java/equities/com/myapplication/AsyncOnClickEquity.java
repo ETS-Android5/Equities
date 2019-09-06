@@ -1,7 +1,9 @@
 package equities.com.myapplication;
 
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
@@ -9,10 +11,8 @@ import android.support.v4.view.ViewPager;
 import android.view.Gravity;
 import android.view.View;
 import android.view.animation.AnimationUtils;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
-import android.widget.TableRow;
-import android.widget.TextView;
+import android.view.animation.LinearInterpolator;
+import android.widget.*;
 
 import java.lang.ref.WeakReference;
 import java.util.Random;
@@ -64,6 +64,10 @@ public class AsyncOnClickEquity extends AsyncTask<Void, Void, String> {
             }
             TextView txt2 =activity.findViewById(R.id.output2);
             txt2.setText(q);
+            LinearLayout mainlayout= activity.findViewById(R.id.main_layout);
+            mainlayout.setBackgroundResource(R.drawable.background_gradient);
+            AppBarLayout abl = activity.findViewById(R.id.app_bar);
+            abl.setVisibility(View.GONE);
             startTime = System.nanoTime();
             RelativeLayout progLayout =activity.findViewById(R.id.progLayout);
             progLayout.setVisibility(View.VISIBLE);
@@ -121,6 +125,10 @@ public class AsyncOnClickEquity extends AsyncTask<Void, Void, String> {
         protected void onPostExecute(String result) {
             Activity_Markets_Main activity = activityReference.get();
             activity.fullScreen="go";
+            LinearLayout mainlayout= activity.findViewById(R.id.main_layout);
+            mainlayout.setBackgroundColor(Color.parseColor("#ffffff"));
+            AppBarLayout abl = activity.findViewById(R.id.app_bar);
+            abl.setVisibility(View.VISIBLE);
             String a=activity.ap_info.getCurrent_Aequity_Price();
             if (activity == null || activity.isFinishing()&&graph_high.size()>0&&activity.requestQueue !=null&& activity.forward) return;
             ProgressBar mainbar = activity.findViewById(R.id.mainbar);

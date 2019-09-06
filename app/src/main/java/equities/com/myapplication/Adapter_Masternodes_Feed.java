@@ -69,9 +69,9 @@ public class Adapter_Masternodes_Feed extends RecyclerView.Adapter<Adapter_Maste
      Constructor_Masternodes constructor_masternodes = masternode_feedItems.get(position);
      holder.symbol.setText(constructor_masternodes.getMasternode_symbol());
      if (constructor_masternodes.getMasternode_percent_change().contains("-")){
-         holder.changes.setTextColor(Color.parseColor("#ff0000"));
+         holder.changes.setTextColor(context.getResources().getColor(R.color.colorRed));
      }else{
-         holder.changes.setTextColor(Color.parseColor("#00cc00"));
+         holder.changes.setTextColor(context.getResources().getColor(R.color.colorGreen));
      }
      holder.changes.setText(constructor_masternodes.getMasternode_percent_change());
      holder.count.setText(constructor_masternodes.getMasternode_node_count());

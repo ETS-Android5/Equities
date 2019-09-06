@@ -146,9 +146,6 @@ public class Adapter_Main_Markets extends RecyclerView.Adapter<Adapter_Main_Mark
     @Override
     public Adapter_Main_Markets.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_world_view, parent, false);
-
-
-
         return new Adapter_Main_Markets.MyViewHolder(view);
     }
 
@@ -156,14 +153,15 @@ public class Adapter_Main_Markets extends RecyclerView.Adapter<Adapter_Main_Mark
     public void onBindViewHolder(Adapter_Main_Markets.MyViewHolder holder, int position) {
 
         holder.mIdView.setText("" + market_list[position]);
-        holder.mPriceView.setText("$ " + int_list[position]);
+        if (int_list[position] ==null){holder.mPriceView.setText("Updating");}else{
+        holder.mPriceView.setText("$ " + int_list[position]);}
         holder.mChangeView.setText(change_list[position]);
         if (change_list[position] !=null && change_list[position].contains("-")){
             holder.circle.setImageResource(R.drawable.holder_red_circle);
-            holder.mChangeView.setTextColor(Color.parseColor("#FF0000"));
+            holder.mChangeView.setTextColor(context.getResources().getColor(R.color.colorRed));
         } else {
             holder.circle.setImageResource(R.drawable.holder_green_circle);
-            holder.mChangeView.setTextColor(Color.parseColor("#00cc00"));
+            holder.mChangeView.setTextColor(context.getResources().getColor(R.color.colorGreen));
 
         }
 

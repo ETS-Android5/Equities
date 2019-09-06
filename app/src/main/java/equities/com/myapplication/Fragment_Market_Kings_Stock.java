@@ -101,8 +101,9 @@ public class Fragment_Market_Kings_Stock extends Fragment {
         super.setUserVisibleHint(isVisibleToUser);
         if(isVisibleToUser){
             stockitems.removeAllViewsInLayout();
-            stock_adapter.notifyDataSetChanged();
             stock_adapter=new Adapter_Main_Equities(getActivity(), "Stock_Kings", stock_kings_symbollist,stock_kings_namelist,stock_kings_changelist);
             stockitems.setAdapter(stock_adapter);
+            stock_adapter.notifyDataSetChanged();
+
         }}
 }

@@ -100,7 +100,7 @@ public class Fragment_Markets extends Fragment {
 
 
         mTimer = new Timer();
-        mTimer.scheduleAtFixedRate(createTimerTask(),0,15000);
+        mTimer.scheduleAtFixedRate(createTimerTask(),0,2000);
         return rootView;
 
     }
@@ -132,10 +132,11 @@ public class Fragment_Markets extends Fragment {
         super.setUserVisibleHint(isVisibleToUser);
         if(isVisibleToUser){
             stockitems.removeAllViewsInLayout();
-            stockitems.setAdapter(null);
-            adapter.notifyDataSetChanged();
+            //stockitems.setAdapter(null);
             adapter =new Adapter_Main_Markets(getActivity(),  market_list,int_list,change_list);
             stockitems.setAdapter(adapter);
+            adapter.notifyDataSetChanged();
+
         }
 }
     public void clearMarkets(){

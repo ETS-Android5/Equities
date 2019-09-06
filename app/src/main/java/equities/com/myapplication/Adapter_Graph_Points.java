@@ -75,14 +75,14 @@ public class Adapter_Graph_Points extends RecyclerView.Adapter<Adapter_Graph_Poi
 
             if(as>as1)
             {
-                holder.aequity_amount.setTextColor(Color.parseColor("#00ff00"));
-                holder.aequity_change.setTextColor(Color.parseColor("#00ff00"));
+                holder.aequity_amount.setTextColor(context.getResources().getColor(R.color.colorGreen));
+                holder.aequity_change.setTextColor(context.getResources().getColor(R.color.colorGreen));
 
             }
             else
             {
-                holder.aequity_amount.setTextColor(Color.parseColor("#ff0000"));
-                holder.aequity_change.setTextColor(Color.parseColor("#ff0000"));
+                holder.aequity_amount.setTextColor(context.getResources().getColor(R.color.colorRed));
+                holder.aequity_change.setTextColor(context.getResources().getColor(R.color.colorRed));
 
             }
 
@@ -107,9 +107,9 @@ public class Adapter_Graph_Points extends RecyclerView.Adapter<Adapter_Graph_Poi
                 al = Double.parseDouble(sl);}
                 holder.aequity_volume.setText("" + graph_volume.get(position));
                 if (a > al) {
-                    holder.aequity_volume.setTextColor(Color.parseColor("#00ff00"));
+                    holder.aequity_volume.setTextColor(context.getResources().getColor(R.color.colorGreen));
                 } else {
-                    holder.aequity_volume.setTextColor(Color.parseColor("#ff0000"));
+                    holder.aequity_volume.setTextColor(context.getResources().getColor(R.color.colorRed));
                 }
             }
             //DO NOT DELETE THIS SYSTEM MESSAGE>ANDROID GLITCH

@@ -95,16 +95,17 @@ public class Fragment_Market_Kings_Crypto extends Fragment {
             if(crypto_kings_namelist.size()>0||stock_kings_namelist.size()>0){
                 setKingsUserVisibleHint(true);}else{
                 mTimer = new Timer();
-                mTimer.scheduleAtFixedRate(createTimerTask(),0,4000);
+                mTimer.scheduleAtFixedRate(createTimerTask(),0,2000);
             }
         }}
     public void setKingsUserVisibleHint(boolean isVisibleToUser){
         super.setUserVisibleHint(isVisibleToUser);
         if(isVisibleToUser){
             cryptoitems.removeAllViewsInLayout();
-            crypto_adapter.notifyDataSetChanged();
             crypto_adapter=new Adapter_Main_Equities(getActivity(), "Crypto_Kings",crypto_kings_symbolist,crypto_kings_namelist,crypto_kings_marketcaplist);
             cryptoitems.setAdapter(crypto_adapter);
+
+            crypto_adapter.notifyDataSetChanged();
 
         }}
 }

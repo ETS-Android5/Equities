@@ -135,7 +135,7 @@ public class Service_Chosen_Equity
                 name = app_info.getMarketName();}
 
             try {
-                caps = Jsoup.connect("https://coinmarketcap.com/currencies/" + name).timeout(10 * 10000).get();
+                caps = Jsoup.connect("https://coinmarketcap.com/currencies/" + name).userAgent("Opera").timeout(10 * 10000).get();
                 Element as = caps.getElementsByClass("details-panel-item--header flex-container").first();
                 Element az = caps.getElementsByClass( "details-panel-item--marketcap-stats flex-container").first();
                 Elements e = as.select("span:eq(1)");
@@ -179,7 +179,7 @@ public class Service_Chosen_Equity
         String marname = ap_info.getMarketSymbol();
         Document d = null;
         try {
-            d = Jsoup.connect("https://finance.yahoo.com/quote/"+marname+"/history?p="+marname).timeout(10 * 10000).get();
+            d = Jsoup.connect("https://finance.yahoo.com/quote/"+marname+"/history?p="+marname).userAgent("Opera").timeout(10 * 10000).get();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -231,7 +231,7 @@ public class Service_Chosen_Equity
             Document d= null;
         String url = "https://coinmarketcap.com/currencies/" + f + "/historical-data/?start=20000101&end=" + sdf.format(begindate);
         try {
-            d = Jsoup.connect(url).timeout(10 * 10000).get();
+            d = Jsoup.connect(url).userAgent("Opera").timeout(10 * 10000).get();
         } catch (IOException e) {
             try{
                 String[] s = f.split("(?=\\p{Lu})");
@@ -290,7 +290,7 @@ public class Service_Chosen_Equity
         Document doc =null;
         String marname = ap_info.getMarketSymbol();
         try {
-            doc = Jsoup.connect("https://finance.yahoo.com/quote/"+marname+"/key-statistics?p="+marname).timeout(10 * 1000).get();
+            doc = Jsoup.connect("https://finance.yahoo.com/quote/"+marname+"/key-statistics?p="+marname).userAgent("Opera").timeout(10 * 1000).get();
             //
         } catch (IOException e) {
             e.printStackTrace();
@@ -306,7 +306,7 @@ public class Service_Chosen_Equity
         String marname = ap_info.getMarketSymbol();
         Document cap =null;
         try{
-            cap =Jsoup.connect("https://finance.yahoo.com/quote/"+marname+"?p="+marname).timeout(10 *10000).get();
+            cap =Jsoup.connect("https://finance.yahoo.com/quote/"+marname+"?p="+marname).userAgent("Opera").timeout(10 *10000).get();
             Elements ez =cap.select("td[data-test]");
             ap_info.setMarketCap(ez.get(8).text());
             ap_info.setCurrent_volume(ez.get(6).text());
@@ -324,7 +324,7 @@ public class Service_Chosen_Equity
         String name=app_info.getMarketName();
         if(app_info.getMarketType()=="Crypto"||app_info.getMarketType()=="Cryptocurrency"){
             try{
-                caps = Jsoup.connect("https://coinmarketcap.com/currencies/" + name).timeout(10 * 10000).get();
+                caps = Jsoup.connect("https://coinmarketcap.com/currencies/" + name).userAgent("Opera").timeout(10 * 10000).get();
                 Elements links = caps.getElementsByClass("list-unstyled details-panel-item--links");
                 Element link =links.select("li>a").get(0);
                 String url = link.attr("href");
@@ -332,7 +332,7 @@ public class Service_Chosen_Equity
             } catch (IOException e) {
                 try{
                     //Alternative crypto site
-                    caps = Jsoup.connect("https://www.coingecko.com/en/coins/" + name).timeout(10 * 10000).get();
+                    caps = Jsoup.connect("https://www.coingecko.com/en/coins/" + name).userAgent("Opera").timeout(10 * 10000).get();
                     Elements links = caps.getElementsByClass("col-md-9 col-lg-7 p-0");
                     Elements link =links.select("div>a");
                     String url = link.attr("href");
@@ -347,7 +347,7 @@ public class Service_Chosen_Equity
                 //Get stock website
                 caps = Jsoup.connect("https://finance.yahoo.com/quote/" + name + "/profile?p=" + name).timeout(10 * 10000).get();
                 Element main = caps.getElementById("Main");
-                String d = main.select("a[href]").get(1).text();
+                String d = main.select("a[href]").get(0).text();
                 app_info.setChosen_website(d);
             } catch (IOException e) {
                 //Use a different website

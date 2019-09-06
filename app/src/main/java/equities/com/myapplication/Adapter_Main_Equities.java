@@ -78,7 +78,7 @@ public class Adapter_Main_Equities extends RecyclerView.Adapter<Adapter_Main_Equ
                 holder.circle.setImageResource(R.drawable.holder_red_circle);
                 holder.cPrice.setText("$ " + stock_losers_pricelist.get(i));
                 holder.value.setText("" + stock_losers_changelist.get(i));
-                holder.value.setTextColor(Color.parseColor("#ff0000"));
+                holder.value.setTextColor(context.getResources().getColor(R.color.colorRed));
                 holder.types.setText("Stock");
             }
             if ("Stock_Kings".equals(type_and_case)) {
@@ -89,9 +89,9 @@ public class Adapter_Main_Equities extends RecyclerView.Adapter<Adapter_Main_Equ
                 String poo = String.valueOf(stock_kings_ipdown.get(i));
                 if (poo.contains("-")) {
                     holder.circle.setImageResource(R.drawable.holder_red_circle);
-                    holder.value.setTextColor(Color.parseColor("#ff0000"));
+                    holder.value.setTextColor(context.getResources().getColor(R.color.colorRed));
                 } else {
-                    holder.value.setTextColor(Color.parseColor("#00cc00"));
+                    holder.value.setTextColor(context.getResources().getColor(R.color.colorGreen));
                     holder.circle.setImageResource(R.drawable.holder_green_circle);
                 }
                 holder.types.setText("Stock");
@@ -107,7 +107,7 @@ public class Adapter_Main_Equities extends RecyclerView.Adapter<Adapter_Main_Equ
                 holder.cPrice.setText("" + crypto_winners_pricelist.get(i));
                 holder.circle.setImageResource(R.drawable.holder_green_circle);
                 holder.value.setText("+" + crypto_winners_changelist.get(i));
-                holder.value.setTextColor(Color.parseColor("#00cc00"));
+                holder.value.setTextColor(context.getResources().getColor(R.color.colorGreen));
                 holder.types.setText("+" + "Cryptocurrency");
             }
             if ("Stock_Winner".equals(type_and_case)) {
@@ -118,7 +118,7 @@ public class Adapter_Main_Equities extends RecyclerView.Adapter<Adapter_Main_Equ
                 holder.cPrice.setText("" + stock_winners_pricelist.get(i));
                 holder.circle.setImageResource(R.drawable.holder_green_circle);
                 holder.value.setText("+" + stock_winners_changelist.get(i));
-                holder.value.setTextColor(Color.parseColor("#00cc00"));
+                holder.value.setTextColor(context.getResources().getColor(R.color.colorGreen));
                 holder.types.setText("+" + "Stock");
             }
             if ("Crypto_Loser".equals(type_and_case)) {
@@ -127,7 +127,7 @@ public class Adapter_Main_Equities extends RecyclerView.Adapter<Adapter_Main_Equ
                 holder.name.setText("" + crypto_losers_namelist.get(i));
                 holder.circle.setImageResource(R.drawable.holder_red_circle);
                 holder.value.setText("" + crypto_losers_changelist.get(i));
-                holder.value.setTextColor(Color.parseColor("#ff0000"));
+                holder.value.setTextColor(context.getResources().getColor(R.color.colorRed));
                 holder.types.setText("Cryptocurrency");
                 holder.cPrice.setText("" + crypto_losers_pricelist.get(i));
             }
@@ -139,9 +139,9 @@ public class Adapter_Main_Equities extends RecyclerView.Adapter<Adapter_Main_Equ
                 String poo = String.valueOf(crypto_kings_changelist.get(i));
                 if (poo.contains("-")) {
                     holder.circle.setImageResource(R.drawable.holder_red_circle);
-                    holder.value.setTextColor(Color.parseColor("#ff0000"));
+                    holder.value.setTextColor(context.getResources().getColor(R.color.colorRed));
                 } else {
-                    holder.value.setTextColor(Color.parseColor("#00cc00"));
+                    holder.value.setTextColor(context.getResources().getColor(R.color.colorGreen));
                     holder.circle.setImageResource(R.drawable.holder_green_circle);
                 }
                 holder.value.setText("" + crypto_kings_changelist.get(i));

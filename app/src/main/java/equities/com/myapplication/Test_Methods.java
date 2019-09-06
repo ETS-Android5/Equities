@@ -37,6 +37,8 @@ public class Test_Methods {
             app_info.setCurrent_volume(td);
             System.out.println(td);
         }catch (IOException e){
+            System.out.println(e);
+
             //NEED A BACKUP for stockupdate
         }}
 

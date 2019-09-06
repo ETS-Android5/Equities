@@ -107,9 +107,10 @@ public class Fragment_Winners_Stock extends Fragment  {
         super.setUserVisibleHint(isVisibleToUser);
         if(isVisibleToUser){
             stockitems.removeAllViewsInLayout();
-            winner_stock_adapter.notifyDataSetChanged();
             winner_stock_adapter =new Adapter_Main_Equities(getActivity(), "Stock_Winner", stock_winners_symbollist, stock_winners_namelist, stock_winners_changelist);
             stockitems.setAdapter(winner_stock_adapter);
+            winner_stock_adapter.notifyDataSetChanged();
+
 
 
         }

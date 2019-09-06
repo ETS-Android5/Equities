@@ -2,21 +2,21 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-            android:id="@+id/markets"
+            android:id="@+id/home"
             android:enabled="true"
-            android:title="Global Exchanges"
+            android:title="@string/globalmarkets"
            android:icon="@drawable/direction_markets"
         app:showAsAction="always" />
     <item
             android:id="@+id/stock"
             android:enabled="true"
-            android:title="Stock Market"
+            android:title="@string/stockmarket"
         android:icon="@drawable/wallst"
         app:showAsAction="always" />
     <item
             android:id="@+id/crypto"
             android:enabled="true"
-            android:title="Cryptocurrencies"
+            android:title="@string/crypto"
             android:icon="@drawable/bitcoin"
             app:showAsAction="always" />
 

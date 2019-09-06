@@ -60,7 +60,7 @@ public class Fragment_Masternodes extends Fragment {
         masternodes_adapter=new Adapter_Masternodes_Feed(getActivity(),masternode_feedItems);
         masternode_items.setAdapter(masternodes_adapter);
         mTimer = new Timer();
-        mTimer.scheduleAtFixedRate(createTimerTask(),0,15000);
+        mTimer.scheduleAtFixedRate(createTimerTask(),0,2000);
         return rootView;
 
     }
@@ -83,9 +83,9 @@ public class Fragment_Masternodes extends Fragment {
         @Override
         protected void onPostExecute(String result) {
             masternode_items.removeAllViewsInLayout();
-            masternodes_adapter.notifyDataSetChanged();
             masternodes_adapter=new Adapter_Masternodes_Feed(getActivity(),masternode_feedItems);
             masternode_items.setAdapter(masternodes_adapter);
+            masternodes_adapter.notifyDataSetChanged();
 
         }
     }
