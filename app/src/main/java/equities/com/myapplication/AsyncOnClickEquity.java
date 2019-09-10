@@ -11,7 +11,6 @@ import android.support.v4.view.ViewPager;
 import android.view.Gravity;
 import android.view.View;
 import android.view.animation.AnimationUtils;
-import android.view.animation.LinearInterpolator;
 import android.widget.*;
 
 import java.lang.ref.WeakReference;
@@ -101,19 +100,19 @@ public class AsyncOnClickEquity extends AsyncTask<Void, Void, String> {
                 return null;}
 
             if (activity.ap_info.getMarketType().equals("Crypto")||(activity.ap_info.getMarketType().equals("Cryptocurrency"))) {
-                activity.getChosenCryptoInfo();
-                activity.getStockTwitsData();
-                activity.get_coinmarketcap_exchange_listing();
+                activity.primaryGetCrypto_Method();
+                activity.primaryGetSocialMedia_Method();
+                activity.primaryGetCryptoExchange_Method();
                 Service_Chosen_Equity shoe = new Service_Chosen_Equity(activity);
                 shoe.main();
-                activity.do_graph_change();
+                activity.historic_daily_percentage_change();
             }else{
                 activity.get_exchange_info();
-                activity.get_current_stock_info();
-                activity.getStockTwitsData();
+                activity.primaryGetStock_Method();
+                activity.primaryGetSocialMedia_Method();
                 Service_Chosen_Equity shoe = new Service_Chosen_Equity(activity);
                 shoe.main();
-                activity.do_graph_change();
+                activity.historic_daily_percentage_change();
                 //activity.async_analysis_page = true;
             }
             return "task finished";

@@ -126,16 +126,12 @@ public class Service_Chosen_Equity
     public static void updateFinancialData(){
         Constructor_App_Variables app_info =new Constructor_App_Variables();
         Document caps = null;
-        String name=null;
         if(app_info.getMarketType()=="Crypto"||app_info.getMarketType()=="Cryptocurrency"){
-
             if(ap_info.getMarketName().equalsIgnoreCase("XRP")){
-                name = "Ripple";
-            }else{
-                name = app_info.getMarketName();}
-
+                ap_info.setMarketName("Ripple");
+            }
             try {
-                caps = Jsoup.connect("https://coinmarketcap.com/currencies/" + name).userAgent("Opera").timeout(10 * 10000).get();
+                caps = Jsoup.connect("https://coinmarketcap.com/currencies/" + ap_info.getMarketName()).userAgent("Opera").timeout(10 * 10000).get();
                 Element as = caps.getElementsByClass("details-panel-item--header flex-container").first();
                 Element az = caps.getElementsByClass( "details-panel-item--marketcap-stats flex-container").first();
                 Elements e = as.select("span:eq(1)");
@@ -150,13 +146,25 @@ public class Service_Chosen_Equity
                 Elements ee = az.select("span:eq(0)");
                 String changed_volume= ee.get(4).text();
                 app_info.setCurrent_volume(changed_volume);
+
             } catch (IOException e) {
-                //  !!!!!!! !!!!!! NEED A BACKUP WEBSITE TO RETRIEVE DATA IF COINMARKETCAP IS UNAVALIABLE
-                e.printStackTrace();
+                try{
+                    caps = Jsoup.connect("https://www.coingecko.com/en/coins/" + ap_info.getMarketName().toLowerCase()).userAgent("Opera").timeout(10 * 10000).get();
+                    Elements qu =caps.getElementsByClass("mt-3");
+                    Element z = qu.select("span").get(0);
+                    Element z1 = qu.select("span").get(1);
+                    Element z2 = qu.select("span").get(152);
+                    current_percentage_change.clear();
+                    current_updated_price.clear();
+                    current_percentage_change.add(z1.text());
+                    current_updated_price.add(z.text());
+                    app_info.setCurrent_volume(z2.text());
+                } catch (IOException i) {
+                    i.printStackTrace();}
             }
         }else{
             try {
-                caps = Jsoup.connect("https://money.cnn.com/quote/quote.html?symb="+name).userAgent("Opera").timeout(10 * 10000).get();
+                caps = Jsoup.connect("https://money.cnn.com/quote/quote.html?symb="+app_info.getMarketSymbol()).userAgent("Opera").timeout(10 * 10000).get();
                 Element tb= caps.select("tbody").get(1);
                 String td = tb.select("td").get(7).text();
                 Element tb1= caps.select("tbody").get(0);
@@ -165,10 +173,29 @@ public class Service_Chosen_Equity
                 current_percentage_change.clear();
                 current_updated_price.clear();
                 current_percentage_change.add(td1);
-                current_updated_price.add(td0);
+                String [] split = td0.split(" ");
+                current_updated_price.add(split[0]);
                 app_info.setCurrent_volume(td);
+
             }catch (IOException e){
-                //NEED A BACKUP for stockupdate
+                try{
+                    caps = Jsoup.connect("https://finance.yahoo.com/quote/" + ap_info.getMarketSymbol()).userAgent("Opera").timeout(10 * 10000).get();
+                    current_percentage_change.clear();
+                    current_updated_price.clear();
+                    Elements ez =caps.select("td[data-test]");
+                    String qu =caps.select("div[data-reactid]").get(50).text();
+                    String [] split = qu.split(" ");
+                    current_updated_price.add(split[0]);
+                    current_percentage_change.add(split[2].replace("(","").replace(")",""));
+                    ap_info.setMarketCap(ez.get(8).text());
+                    ap_info.setCurrent_volume(ez.get(6).text());
+                } catch (IOException i) {
+                    current_percentage_change.clear();
+                    current_updated_price.clear();
+                    current_percentage_change.add("Updating");
+                    current_updated_price.add("Updating");
+                    app_info.setCurrent_volume("Updating");}
+
             }
 
         }
@@ -232,9 +259,49 @@ public class Service_Chosen_Equity
         String url = "https://coinmarketcap.com/currencies/" + f + "/historical-data/?start=20000101&end=" + sdf.format(begindate);
         try {
             d = Jsoup.connect(url).userAgent("Opera").timeout(10 * 10000).get();
+            Element price = d.getElementById("quote_price");
+            String v = price.text();
+            Elements divs = d.select("table");
+            for (Element tz : divs) {
+                Elements tds = tz.select("td");
+                Elements s = tz.getElementsByClass("text-right");
+                for (Element ss : s) {
+                    Elements p = ss.select("td[data-format-fiat]");
+                    String g = p.text();
+                    String[] splited = g.split("\\s+");
+                    if (v != null && !g.isEmpty()) {
+                        graph_high.add(splited[0].replaceAll("[^\\d.]",""));
+                        graph_low.add(splited[2]);
+                    }
+                    Elements pn = ss.select("td[data-format-market-cap]");
+                    String vp = pn.text();
+                    String[] split = vp.split("\\s+");
+                    if (vp != null && !vp.isEmpty()) {
+                        graph_volume.add(split[0]);
+                        graph_market_cap.add(split[1]);
+                    }
+                }
+                for (Element bb : tds) {
+                    Elements gdate = bb.getElementsByClass("text-left");
+                    String result0 = gdate.text();
+                    if (result0 != null && !result0.isEmpty()) {
+                        graph_date.add(String.valueOf(result0));
+                    }
+                }
+            }
+            ////("THIs Is graph high "+ Arrays.asList(graph_high));
+            _AllDays = graph_high;
+            if (graph_high.size()==0){graph_high.add(0);}
+
+
+
+            long endTime = System.nanoTime();
+            long duration = (endTime - startTime);
+            //("CRYPTO POINTS TIME IS " + duration / 1000000000 + " seconds");
         } catch (IOException e) {
             try{
-                String[] s = f.split("(?=\\p{Lu})");
+                get_crypto_info();
+
 
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -242,45 +309,7 @@ public class Service_Chosen_Equity
             e.printStackTrace();
         }
 
-                            Element price = d.getElementById("quote_price");
-                            String v = price.text();
-                            Elements divs = d.select("table");
-                            for (Element tz : divs) {
-                                Elements tds = tz.select("td");
-                                Elements s = tz.getElementsByClass("text-right");
-                                for (Element ss : s) {
-                                    Elements p = ss.select("td[data-format-fiat]");
-                                    String g = p.text();
-                                    String[] splited = g.split("\\s+");
-                                    if (v != null && !g.isEmpty()) {
-                                        graph_high.add(splited[0].replaceAll("[^\\d.]",""));
-                                        graph_low.add(splited[2]);
-                                    }
-                                    Elements pn = ss.select("td[data-format-market-cap]");
-                                    String vp = pn.text();
-                                    String[] split = vp.split("\\s+");
-                                    if (vp != null && !vp.isEmpty()) {
-                                        graph_volume.add(split[0]);
-                                        graph_market_cap.add(split[1]);
-                                    }
-                                }
-                                for (Element bb : tds) {
-                                    Elements gdate = bb.getElementsByClass("text-left");
-                                    String result0 = gdate.text();
-                                    if (result0 != null && !result0.isEmpty()) {
-                                        graph_date.add(String.valueOf(result0));
-                                    }
-                                }
-                            }
-                            ////("THIs Is graph high "+ Arrays.asList(graph_high));
-                            _AllDays = graph_high;
-        if (graph_high.size()==0){graph_high.add(0);}
 
-
-
-        long endTime = System.nanoTime();
-        long duration = (endTime - startTime);
-        //("CRYPTO POINTS TIME IS " + duration / 1000000000 + " seconds");
 
 
 
@@ -322,6 +351,7 @@ public class Service_Chosen_Equity
         Constructor_App_Variables app_info =new Constructor_App_Variables();
         Document caps = null;
         String name=app_info.getMarketName();
+        String symbol = app_info.getMarketSymbol();
         if(app_info.getMarketType()=="Crypto"||app_info.getMarketType()=="Cryptocurrency"){
             try{
                 caps = Jsoup.connect("https://coinmarketcap.com/currencies/" + name).userAgent("Opera").timeout(10 * 10000).get();
@@ -345,14 +375,15 @@ public class Service_Chosen_Equity
         }else {
             try {
                 //Get stock website
-                caps = Jsoup.connect("https://finance.yahoo.com/quote/" + name + "/profile?p=" + name).timeout(10 * 10000).get();
+                caps = Jsoup.connect("https://finance.yahoo.com/quote/" + symbol + "/profile?p=" + symbol).timeout(10 * 10000).get();
                 Element main = caps.getElementById("Main");
-                String d = main.select("a[href]").get(0).text();
+                String d = main.select("a[href]").get(1).text();
                 app_info.setChosen_website(d);
+
             } catch (IOException e) {
                 //Use a different website
                 try {
-                    caps = Jsoup.connect("https://money.cnn.com/quote/profile/profile.html?symb=" + name).timeout(10 * 10000).get();
+                    caps = Jsoup.connect("https://money.cnn.com/quote/profile/profile.html?symb=" + symbol).timeout(10 * 10000).get();
                     Element tb = caps.select("tbody").get(3);
                     String d = tb.select("a[href]").text();
                     app_info.setChosen_website(d);
