@@ -36,6 +36,76 @@ public class Service_Chosen_Equity
     public Service_Chosen_Equity(Context context){
         this.context=context;
     }
+    public static void backUp(){
+main();
+ExecutorService service = Executors.newCachedThreadPool();
+        Set <Callable<String>> callables = new HashSet <Callable<String>> ();
+
+        callables.add(new Callable<String>() {
+            @Override
+            public String call() throws Exception {
+                getWebsite();
+                return null;
+            }
+        });
+
+        callables.add(new Callable<String>()
+        {
+            @Override
+            public String call() throws Exception
+            {
+                getVideoInfo();
+                return null;
+            }
+        });
+
+        callables.add(new Callable<String>()
+        {
+            @Override
+            public String call() throws Exception
+            {
+                ProcessXml(GoogleRSFeed());
+                return null;
+            }
+        });
+
+        callables.add(new Callable<String>()
+        {
+            @Override
+            public String call() throws Exception
+            {
+                Constructor_App_Variables ax = new Constructor_App_Variables();
+                String a = ax.getMarketType();
+                saved_helper=1;
+                if (a.equals("Cryptocurrency") || a.equals("Crypto")){
+                    System.out.println("Calling crypto Method");
+
+                    get_crypto_info();}
+                else{
+                    System.out.println("Calling stock method");
+
+                    get_stock_points();
+                }
+
+                return null;
+            }
+        });
+
+
+        try
+        {
+            List<Future<String>> futures = service.invokeAll(callables);
+            for (Future<String> future : futures)
+            {
+                //// (future.get());
+                //Where to check all variables
+            }
+        }
+        catch (InterruptedException e)
+        {
+            e.printStackTrace();
+        }
+    }
     public static void main()
     {
 
@@ -48,7 +118,7 @@ public class Service_Chosen_Equity
             {
                 Constructor_App_Variables ax = new Constructor_App_Variables();
                 String a = ax.getMarketType();
-                if (a.equals("Cryptocurrency") || a.equals("Crypto"))
+                if (a.equalsIgnoreCase("Cryptocurrency") || a.equalsIgnoreCase("Crypto"))
                 {
                 }
                 else {
@@ -97,9 +167,13 @@ public class Service_Chosen_Equity
                 String a = ax.getMarketType();
                 saved_helper=1;
                 if (a.equals("Cryptocurrency") || a.equals("Crypto")){
-                get_crypto_info();}
+                    System.out.println("Calling crypto Method");
+
+                    get_crypto_info();}
                 else{
-                get_stock_points();
+                    System.out.println("Calling stock method");
+
+                    get_stock_points();
                 }
 
                 return null;
@@ -126,7 +200,7 @@ public class Service_Chosen_Equity
     public static void updateFinancialData(){
         Constructor_App_Variables app_info =new Constructor_App_Variables();
         Document caps = null;
-        if(app_info.getMarketType()=="Crypto"||app_info.getMarketType()=="Cryptocurrency"){
+        if(app_info.getMarketType().equalsIgnoreCase("Crypto")||app_info.getMarketType().equalsIgnoreCase("Cryptocurrency")){
             if(ap_info.getMarketName().equalsIgnoreCase("XRP")){
                 ap_info.setMarketName("Ripple");
             }
@@ -149,6 +223,7 @@ public class Service_Chosen_Equity
 
             } catch (IOException e) {
                 try{
+                    System.out.println("Trying coingecko instead");
                     caps = Jsoup.connect("https://www.coingecko.com/en/coins/" + ap_info.getMarketName().toLowerCase()).userAgent("Opera").timeout(10 * 10000).get();
                     Elements qu =caps.getElementsByClass("mt-3");
                     Element z = qu.select("span").get(0);
@@ -160,10 +235,12 @@ public class Service_Chosen_Equity
                     current_updated_price.add(z.text());
                     app_info.setCurrent_volume(z2.text());
                 } catch (IOException i) {
+                    System.out.println("Coinmarket and Coingecko are not working");
                     i.printStackTrace();}
             }
         }else{
             try {
+                System.out.println("Trying cnn");
                 caps = Jsoup.connect("https://money.cnn.com/quote/quote.html?symb="+app_info.getMarketSymbol()).userAgent("Opera").timeout(10 * 10000).get();
                 Element tb= caps.select("tbody").get(1);
                 String td = tb.select("td").get(7).text();
@@ -179,6 +256,7 @@ public class Service_Chosen_Equity
 
             }catch (IOException e){
                 try{
+                    System.out.println("Trying yahoo instead");
                     caps = Jsoup.connect("https://finance.yahoo.com/quote/" + ap_info.getMarketSymbol()).userAgent("Opera").timeout(10 * 10000).get();
                     current_percentage_change.clear();
                     current_updated_price.clear();
@@ -190,6 +268,7 @@ public class Service_Chosen_Equity
                     ap_info.setMarketCap(ez.get(8).text());
                     ap_info.setCurrent_volume(ez.get(6).text());
                 } catch (IOException i) {
+                    System.out.println("Nothing works");
                     current_percentage_change.clear();
                     current_updated_price.clear();
                     current_percentage_change.add("Updating");
@@ -352,7 +431,7 @@ public class Service_Chosen_Equity
         Document caps = null;
         String name=app_info.getMarketName();
         String symbol = app_info.getMarketSymbol();
-        if(app_info.getMarketType()=="Crypto"||app_info.getMarketType()=="Cryptocurrency"){
+        if(app_info.getMarketType().equalsIgnoreCase("Crypto")||app_info.getMarketType().equalsIgnoreCase("Cryptocurrency")){
             try{
                 caps = Jsoup.connect("https://coinmarketcap.com/currencies/" + name).userAgent("Opera").timeout(10 * 10000).get();
                 Elements links = caps.getElementsByClass("list-unstyled details-panel-item--links");
@@ -487,6 +566,9 @@ public class Service_Chosen_Equity
 
     public static org.w3c.dom.Document GoogleRSFeed() {
         try {
+            video_url.clear();
+            image_video_url.clear();
+            video_title.clear();
             URL url;
             Context context;
             String f = ap_info.getMarketName();

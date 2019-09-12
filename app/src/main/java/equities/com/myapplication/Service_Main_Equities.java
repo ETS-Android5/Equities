@@ -91,47 +91,11 @@ public class Service_Main_Equities {
 
     public static void main() {
         clearMainData();
-        ExecutorService service = Executors.newCachedThreadPool();
-        Set<Callable<String>> callables = new HashSet<Callable<String>>();
-        callables.add(new Callable<String>() {
-            @RequiresApi(api = Build.VERSION_CODES.O)
-            @Override
-            public String call() throws Exception {
-                if(saved_helper == 1){}else{
-                    WorldMarketsMethod();
-                }
-                return null;
-            }
-        });
-
-        callables.add(new Callable<String>() {
-            @Override
-            public String call() throws Exception {
-                if(saved_helper == 1){}else{
-                 //   get_masternodes();
-                }
-                return null;
-            }
-        });
-        callables.add(new Callable<String>() {
-            @Override
-            public String call() throws Exception {
-                if(saved_helper == 1){}else {
-                 //   get_ipos();
-                        }
-                return null;
-            }
-        });
-
-        try {
-            List<Future<String>> futures = service.invokeAll(callables);
-            for (Future<String> future : futures) {
-//                //(future.get());
-                //Where to check all variables
-            }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        long startTime = System.nanoTime();
+        WorldMarketsMethod();
+        long endTime =System.nanoTime();
+        long duration =(endTime-startTime);
+        System.out.println("OPENING METHOD TAKES "+(duration/1000000000)+" seconds to load");
     }
 
     public static void WorldMarketsMethod(){
@@ -252,9 +216,51 @@ public class Service_Main_Equities {
 
 
             }}catch (IOException e) {
-            //Need alternative method
-        }
+            try {
+                sv = Jsoup.connect("http://money.cnn.com/data/hotstocks/").userAgent("Opera").timeout(10 * 10000).get();
+                Elements ddd = sv.getElementsByClass("wsod_dataTable wsod_dataTableBigAlt");
+                Element ff = ddd.get(1);
+                Elements a = ff.select("a");
+                Elements b = ff.select("span[title]");
+                Elements aa = ff.select("span.posData");
+                Elements bb = ff.select("span[stream]");
+                if (stock_winners_symbollist.size() < 20) {
+                    for (Element stock_symbol : a) {
+                        String symbol = stock_symbol.select("a.wsod_symbol").text();
+                        stock_winners_symbollist.add(symbol);
+                    }
+                    for (Element stock_name : b) {
+                        String name = stock_name.text();
+                        if (name.isEmpty()) {
+                        } else {
+                            stock_winners_namelist.add(name);
+                        }
+                    }
+                    for (Element stock_price : bb) {
+                        String price = stock_price.text();
+                        if (price.isEmpty()) {
+                        } else {
+                            if (price.contains("+") || price.contains("-") || price.contains("%")) {
+                            } else {
+                                stock_winners_pricelist.add(price);
+                            }
+                        }
+                    }
+                    for (Element stock_change : aa) {
+                        String change = stock_change.text();
+                        if (change.isEmpty()) {
+                        } else {
+                            if (change.contains("%")) {
+                                stock_winners_changelist.add(change);
+                            }
+                        }
+                    }
 
+                }
+            } catch (IOException z) {
+            //Print out anything!
+                }
+        }
 
     }
     public static void getMarketWinnersCrypto(){
@@ -301,10 +307,6 @@ public class Service_Main_Equities {
        getMarketWinnersCrypto();
     }
 
-
-
-
-
     public static void getStockLosers(){
         try{
             sv = Jsoup.connect("https://finance.yahoo.com/losers").userAgent("Opera").timeout(10 * 10000).get();
@@ -324,60 +326,7 @@ public class Service_Main_Equities {
 
         } catch (IOException e) {
 //ALTERNATIVE METHOD
-            try {
-                sv = Jsoup.connect("http://money.cnn.com/data/hotstocks/").userAgent("Opera").timeout(10 * 10000).get();
-                Elements ddd = sv.getElementsByClass("wsod_dataTable wsod_dataTableBigAlt");
-                Element ff = ddd.get(1);
-                Elements a = ff.select("a");
-                Elements b = ff.select("span[title]");
-                Elements aa = ff.select("span.posData");
-                Elements bb = ff.select("span[stream]");
-                if(stock_winners_symbollist.size()<20){
-                    for (Element stock_symbol : a) {
-                        String symbol = stock_symbol.select("a.wsod_symbol").text();
-                        stock_winners_symbollist.add(symbol); }
-                    for (Element stock_name : b) {
-                        String name = stock_name.text();
-                        if (name.isEmpty()) {
-                        } else {
-                            stock_winners_namelist.add(name); } }
-                    for (Element stock_price : bb) {
-                        String price = stock_price.text();
-                        if (price.isEmpty()) {
-                        } else {
-                            if (price.contains("+")||price.contains("-")||price.contains("%")) {
-                            }else{
-                                stock_winners_pricelist.add(price);} } }
-                    for (Element stock_change : aa) {
-                        String change = stock_change.text();
-                        if (change.isEmpty()) {
-                        } else {
-                            if (change.contains("%")) {
-                                stock_winners_changelist.add(change); } } }
-                    //STOCK LOSERS ARRAYS
-                    Element fl = ddd.get(2);
-                    Elements al = fl.select("a");
-                    Elements bl = fl.select("span[title]");
-                    Elements aal = fl.select("span.negData");
-                    Elements bb1 = fl.select("span[stream]");
-                    for (Element x : al) {
-                        stock_losers_symbollist.add(x.text()); }
-                    for (Element x : bl) {
-                        stock_losers_namelist.add(x.text()); }
-                    for (Element stock_price : bb1) {
-                        String price = stock_price.text();
-                        if (price.isEmpty()) {
-                        } else {
-                            if (price.contains("+")||price.contains("-")||price.contains("%")) {
-                            }else{
-                                stock_losers_pricelist.add(price);} } }
-                    for (int i = 0; i < aal.size(); i++) {
-                        if (i % 2 == 0) {
-                            // This is point amount} else {
-                            stock_losers_changelist.add(aal.get(i).text()); } }
-                }} catch (IOException z) {
-                z.printStackTrace();
-            }
+
 
             e.printStackTrace();
         }
@@ -418,7 +367,6 @@ public class Service_Main_Equities {
        getCryptoLosers();
        getStockLosers();
     }
-
 
     public static void getMarketKingsStock(){
         try {
@@ -641,10 +589,6 @@ public class Service_Main_Equities {
         getMarketKingsStock();
     }
 
-
-
-
-
     public static void toDouble(ArrayList array, String string){
         Double doub = Double.parseDouble(string);
         DecimalFormat DollarPlus = new DecimalFormat("#.##");
@@ -665,7 +609,6 @@ public class Service_Main_Equities {
         }
         array.add("$ "+string);
     }
-
     public static void getCrypto_Data(){
         //Scrape data and if any Array is 0 use API as backup
         try {
@@ -896,7 +839,6 @@ public class Service_Main_Equities {
 
         }
     }
-
     public static void getStock_Data() {
         //Getting winners and losers
         sv = null;
@@ -1136,7 +1078,6 @@ public class Service_Main_Equities {
             }
         }
     }
-
     public static void ProcessStockXml(org.w3c.dom.Document data) {
         if (data != null) {
             String st, sd, sp, sl,si;
@@ -1194,7 +1135,6 @@ public class Service_Main_Equities {
             }
         }
     }
-
     public static void ProcessCryptoXml(org.w3c.dom.Document data) {
         if (data != null) {
             String st, sd, sp, sl,si;
@@ -1252,7 +1192,6 @@ public class Service_Main_Equities {
             }
         }
     }
-
 
     public static org.w3c.dom.Document GoogleRSWorldMarketsFeed() {
         try {
@@ -1316,7 +1255,6 @@ public class Service_Main_Equities {
     }
 
 
-
     public static void get_icos(){
         Document e =null;
         Constructor_Icos it =new Constructor_Icos();
@@ -1365,7 +1303,6 @@ public class Service_Main_Equities {
             //("SIZE "+ico_name.get(i)+" "+ico_message.get(i)+" "+ico_startdate.get(i)+" "+ico_enddate.get(i));
         }
     }
-
     public static void get_ipos(){
         Document d =null;
         try {
@@ -1385,7 +1322,6 @@ public class Service_Main_Equities {
         }
 
     }
-
     public static void getWorldMarkets(){
         dow_change = null;
         dow_amount = null;
@@ -1496,26 +1432,26 @@ public class Service_Main_Equities {
         }}
 
     public static void clearStockLosersData(){
-        if(stock_losers_symbollist.size()>20){
+        if(stock_losers_symbollist.size()>19){
         stock_losers_symbollist.clear();
         stock_losers_namelist.clear();
         stock_losers_changelist.clear();
         stock_losers_pricelist.clear();}}
     public static void clearCryptoLosersData(){
-        if(crypto_losers_symbollist.size()>20){
+        if(crypto_losers_symbollist.size()>19){
             crypto_losers_pricelist.clear();
             crypto_losers_changelist.clear();
             crypto_losers_namelist.clear();
             crypto_losers_symbollist.clear();}}
 
     public static void clearStockKingsData(){
-        if(stock_kings_symbollist.size()>20){
+        if(stock_kings_symbollist.size()>19){
         stock_kings_symbollist.clear();
         stock_kings_namelist.clear();
         stock_kings_ipdown.clear();
         stock_kings_changelist.clear();}}
     public static void clearCryptoKingsData(){
-        if(crypto_kings_symbolist.size()>20){
+        if(crypto_kings_symbolist.size()>19){
             crypto_kings_symbolist.clear();
             crypto_kings_namelist.clear();
             crypto_kings_pricelist.clear();

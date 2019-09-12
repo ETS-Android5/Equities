@@ -91,7 +91,7 @@ public class Adapter_Masternodes_Feed extends RecyclerView.Adapter<Adapter_Maste
    
    @Override  
    public int getItemCount() {  
-     return masternode_feedItems.size();
+     return 30;
    }  
    
 

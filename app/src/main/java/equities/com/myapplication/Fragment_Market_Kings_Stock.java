@@ -94,7 +94,7 @@ public class Fragment_Market_Kings_Stock extends Fragment {
             if(crypto_kings_namelist.size()>0||stock_kings_namelist.size()>0){
                 setKingsUserVisibleHint(true);}else{
                 mTimer = new Timer();
-                mTimer.scheduleAtFixedRate(createTimerTask(),0,4000);
+                mTimer.scheduleAtFixedRate(createTimerTask(),0,2000);
             }
         }}
     public void setKingsUserVisibleHint(boolean isVisibleToUser){

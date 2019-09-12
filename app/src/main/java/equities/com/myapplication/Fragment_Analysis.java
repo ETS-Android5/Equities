@@ -44,7 +44,7 @@ import static equities.com.myapplication.Constructor_App_Variables.market_type;
  */
 
 public class Fragment_Analysis extends Fragment {
-    TextView a_price,a_price_change,a_name,a_symbol,a_type,a_supply,a_cap,sup,saved,savedd,analysis,chosen_price_change,a_volume,a_website;
+    TextView a_price,a_price_change,chosen_price_change;
     ImageView save;
     LineGraphSeries<DataPoint> series = new LineGraphSeries<>();
     int xx= 0;
@@ -71,29 +71,7 @@ public class Fragment_Analysis extends Fragment {
     String maxYearDate = new SimpleDateFormat("yyyy").format(cal.getTime());
     SimpleDateFormat yearDate = new SimpleDateFormat("yyyy");
     List<Integer> years= new ArrayList<Integer>();
-    static Timer mTimer;
-    int t =0;
-    private TimerTask createTimerTask() {
-        return new TimerTask() {
-            @Override
-            public void run() {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Handler handler = new Handler();
-                        handler.postDelayed(new Runnable() {
-                            public void run() {
-                                if(t>0) {
-                                    getNewData();}
-                                t=t+1;
-                            }
-                        }, 0);
-                    }
 
-                });
-            }
-        };
-    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -106,116 +84,20 @@ public class Fragment_Analysis extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_analysis, container, false);
         historical_listview =rootView.findViewById(R.id.historical_listview);
-        chosen_price_change =rootView.findViewById(R.id.chosenpricechange);
+        chosen_price_change = rootView.findViewById(R.id.chosenpricechange);
         graph_view=rootView.findViewById(R.id.graph_view);
-        String ap_pc = ap_info.getCurrent_Aequity_Price_Change();
-        savedd =rootView.findViewById(R.id.savedd);
-        a_name =rootView.findViewById(R.id.aequity_name);
-        a_type =rootView.findViewById(R.id.aequity_type);
-        a_symbol=rootView.findViewById(R.id.aequity_symbol);
-        a_supply=rootView.findViewById(R.id.aequity_supply);
         a_price_change =rootView.findViewById(R.id.aequity_price_change);
         a_price=rootView.findViewById(R.id.aequity_price);
-        a_volume=rootView.findViewById(R.id.aequity_current_volume);
-        a_website=rootView.findViewById(R.id.aequity_website);
-        saved =rootView.findViewById(R.id.saved);
-        a_cap =rootView.findViewById(R.id.aequity_cap);
-
-        a_website.setText(ap_info.getChosen_website());
-        a_website.setTextColor(getActivity().getResources().getColor(R.color.colorGold));
-        a_website.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    Intent intent = new Intent(Intent.ACTION_WEB_SEARCH);
-                    String search = a_website.getText().toString();
-                    intent.putExtra(SearchManager.QUERY, search);
-                    startActivity(intent);
-                } catch (Exception e) {
-                    // TODO: handle exception
-                }
-            }
-        });
-
-        a_cap.setText(ap_info.getMarketCap());
-        if(!a_price.getText().toString().isEmpty()){
-            a_price.setText("Updating");
+        graph_view.setVisibility(View.GONE);
+        graph_view.getGridLabelRenderer().setGridStyle(GridLabelRenderer.GridStyle.HORIZONTAL);
+        graph_view.getGridLabelRenderer().setGridColor(getResources().getColor(R.color.colorPrimary));
+        if (graph_high.size()>6){
+            graph_view.setVisibility(View.VISIBLE);
+            Points7.clear();
+            Points7.addAll(graph_high.subList(0,7));
+            Collections.reverse(Points7);
+            getGraphData(Points7,7,7,Calendar.DAY_OF_WEEK,dayDate,maxDayDate);
         }
-        try {
-                a_price.setText("$ " +graph_high.get(0));
-
-        }catch(IndexOutOfBoundsException e){
-
-            ////("Had to start over ");
-        }
-
-        a_price_change.setText(graph_change.get(0)+" %");
-        a_volume.setText(ap_info.getCurrent_volume());
-
-
-
-        mTimer = new Timer();
-        mTimer.scheduleAtFixedRate(createTimerTask(),0,15000);
-        if (ap_pc !=null && ap_pc.contains("-")){
-            a_price_change.setTextColor(getResources().getColor(R.color.colorRed));
-        }else{a_price_change.setTextColor(getResources().getColor(R.color.colorGreen));}
-        sup=rootView.findViewById(R.id.supply);
-        if(ap_info.getMarketType().equals("Cryptocurrency")){
-            sup.setText(getString(R.string.supply));
-        }else{
-            sup.setText(getString(R.string.shares));}
-
-        a_supply.setText(ap_info.getMarketSupply());
-        Constructor_App_Variables app_info =new Constructor_App_Variables();
-        a_name.setText(app_info.getMarketName().replace(" ",""));
-        String correct =app_info.getMarketSymbol();
-        boolean  b = correct.startsWith("%5E");
-        if(b)
-        {
-            String scorrect=correct.substring(0,3);
-            correct =correct.replaceAll(scorrect,"");
-            a_symbol.setText(correct);
-        }
-        else
-            {
-        a_symbol.setText(correct);
-            }
-        save =rootView.findViewById(R.id.save);
-        a_type.setText(app_info.getMarketType());
-        db = new Database_Local_Aequities(getActivity().getApplicationContext());
-        if(db.getSymbol().contains(a_symbol.getText().toString())){
-            save.setImageResource(android.R.drawable.btn_star_big_on);
-        }
-
-        //dont forget shared preferences or check database if aequity is in database show big star on
-
-
-        save.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                save.setImageResource(android.R.drawable.btn_star_big_on);
-                AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
-                dialog.setTitle(app_info.getMarketName()+" is saved")
-                        .setIcon(R.drawable.banner_ae)
-                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialoginterface, int i) {
-                                Handler handler = new Handler();
-                                handler.postDelayed(new Runnable() {
-                                    public void run() {
-
-                                        String mS=a_symbol.getText().toString();
-                                        String mN=a_name.getText().toString();
-                                        String mT=a_type.getText().toString();
-                                        db.add_equity_info(mS,mN,mT);
-                                          db.close();
-                                    }
-                                }, 2000);
-                            }
-                        }).show();
-
-
-            }
-        });
         historical_listview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         //PointsAll.addAll(graph_high);
         //Collections.reverse(PointsAll);
@@ -223,7 +105,6 @@ public class Fragment_Analysis extends Fragment {
         ab =new Adapter_Graph_Points(getContext(), graph_high.size(),graph_high,graph_change,graph_volume,graph_date);
         historical_listview.setAdapter(ab);
         historical_listview.findViewHolderForAdapterPosition(0);
-        graph_view.setVisibility(View.GONE);
         TabLayout tabLayoutchoice = (TabLayout)rootView.findViewById(R.id.tabchoice);
         tabLayoutchoice.addTab(tabLayoutchoice.newTab().setText("LIST"));
         tabLayoutchoice.addTab(tabLayoutchoice.newTab().setText("GRAPH"));
@@ -440,7 +321,7 @@ public void getGraphData(List<Double> array, int xDates, int xPoints, int calend
     graph_view.getGridLabelRenderer().setHorizontalLabelsColor(Color.TRANSPARENT);
     graph_view.getGridLabelRenderer().setHorizontalLabelsVisible(false);
     graph_view.getGridLabelRenderer().setVerticalLabelsColor(Color.WHITE);
-    graph_view.getGridLabelRenderer().setGridStyle(GridLabelRenderer.GridStyle.NONE);
+    //graph_view.getGridLabelRenderer().setGridStyle(GridLabelRenderer.GridStyle.NONE);
     Double graph_end = Double.parseDouble(String.valueOf(array.get(array.size() - 1)));
     Double graph_start = Double.parseDouble(String.valueOf(array.get(0)));
     Double result = ((graph_end-graph_start)/graph_start)*100;
@@ -472,47 +353,8 @@ public void getGraphData(List<Double> array, int xDates, int xPoints, int calend
 
 }
 
-    public void getNewData(){
-        new ASYNCUpdateFinancialData().execute();
 
-    }
 
-    public class ASYNCUpdateFinancialData extends AsyncTask<Integer, Integer, String> {
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected String doInBackground(Integer... integers) {
-            Service_Chosen_Equity service_chosen_equity = new Service_Chosen_Equity(getActivity());
-            service_chosen_equity.updateFinancialData();
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            if(Double.parseDouble(String.valueOf(graph_high.size()))>0){
-                setLosersUserVisibleHint(true);}else{
-                mTimer = new Timer();
-                mTimer.scheduleAtFixedRate(createTimerTask(),0,2000);
-            }
-        }
-
-    }
-    public void setLosersUserVisibleHint(boolean isVisibleToUser){
-        super.setUserVisibleHint(isVisibleToUser);
-        if(isVisibleToUser){
-            System.out.println("updating price!!!");
-        //
-            if(current_percentage_change.size()==0){ a_price_change.setText("Updating");}else{
-                a_price.setText(""+current_updated_price.get(0));
-            if (current_percentage_change.get(0).toString().contains("-")){
-                a_price_change.setTextColor(getActivity().getResources().getColor(R.color.colorRed));
-            }else{a_price_change.setTextColor(getActivity().getResources().getColor(R.color.colorGreen));}
-        a_price_change.setText(""+current_percentage_change.get(0));
-        }}
-    }
 
 
 

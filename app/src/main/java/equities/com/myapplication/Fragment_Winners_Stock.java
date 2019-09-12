@@ -88,7 +88,7 @@ public class Fragment_Winners_Stock extends Fragment  {
         @Override
         protected String doInBackground(Integer... integers) {
             Service_Main_Equities sme =new Service_Main_Equities();
-            sme.clearCryptoWinnersData();
+            sme.clearStockWinnersData();
             sme.getMarketWinnersStock();
             return null;
         }
@@ -110,9 +110,6 @@ public class Fragment_Winners_Stock extends Fragment  {
             winner_stock_adapter =new Adapter_Main_Equities(getActivity(), "Stock_Winner", stock_winners_symbollist, stock_winners_namelist, stock_winners_changelist);
             stockitems.setAdapter(winner_stock_adapter);
             winner_stock_adapter.notifyDataSetChanged();
-
-
-
         }
              }
 

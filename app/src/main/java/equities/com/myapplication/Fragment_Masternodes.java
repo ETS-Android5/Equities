@@ -60,7 +60,7 @@ public class Fragment_Masternodes extends Fragment {
         masternodes_adapter=new Adapter_Masternodes_Feed(getActivity(),masternode_feedItems);
         masternode_items.setAdapter(masternodes_adapter);
         mTimer = new Timer();
-        mTimer.scheduleAtFixedRate(createTimerTask(),0,2000);
+        mTimer.scheduleAtFixedRate(createTimerTask(),0,10000);
         return rootView;
 
     }

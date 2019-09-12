@@ -54,7 +54,7 @@ public class Fragment_Losers_Stock extends Fragment {
         super.onCreate(savedInstanceState);
         //getActivity().setContentView(R.layout.activity_main);
 
-        stockitems= getActivity().findViewById(R.id.stock_items);
+        //stockitems= getActivity().findViewById(R.id.stock_items);
 
     }
 
@@ -106,6 +106,7 @@ public class Fragment_Losers_Stock extends Fragment {
     public void setLosersUserVisibleHint(boolean isVisibleToUser){
         super.setUserVisibleHint(isVisibleToUser);
         if(isVisibleToUser){
+
             stockitems.removeAllViewsInLayout();
             loser_stock_adapter=new Adapter_Main_Equities(getActivity(), "Stock_Loser", stock_losers_symbollist,stock_losers_namelist,stock_losers_changelist);
             stockitems.setAdapter(loser_stock_adapter);

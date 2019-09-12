@@ -5,6 +5,7 @@ import android.content.res.AssetManager;
 import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.TabLayout;
@@ -59,6 +60,7 @@ import java.util.regex.Pattern;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import static com.google.android.gms.internal.zzagz.runOnUiThread;
 import static equities.com.myapplication.Constructor_App_Variables.*;
 
 public class Activity_Markets_Main extends AppCompatActivity {
@@ -68,7 +70,61 @@ public class Activity_Markets_Main extends AppCompatActivity {
     private TabLayout pagetabs;
     int[] worldMarketICONS = new int[]{R.drawable.direction_markets, R.drawable.direction_news, R.drawable.direction_youtube_video};
     int[] stockMarketICONS = new int[]{R.drawable.direction_down, R.drawable.direction_up, R.drawable.direction_kings};
+    static Timer mTimer;
+    int t =0;
+    public TimerTask createTimerTask() {
+        return new TimerTask() {
+            @Override
+            public void run() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Handler handler = new Handler();
+                        handler.postDelayed(new Runnable() {
+                            public void run() {
+                                if(t>0) {
+                                    new ASYNCUpdateFinancialData().execute();}
+                                t=t+1;
+                            }
+                        }, 0);
+                    }
 
+                });
+            }
+        };
+    }
+    public class ASYNCUpdateFinancialData extends AsyncTask<Integer, Integer, String> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected String doInBackground(Integer... integers) {
+            Service_Chosen_Equity service_chosen_equity = new Service_Chosen_Equity(Activity_Markets_Main.this);
+            service_chosen_equity.updateFinancialData();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            if(Double.parseDouble(String.valueOf(graph_high.size()))>0){
+                TextView a_price_change =findViewById(R.id.aequity_price_change);
+                TextView a_price=findViewById(R.id.aequity_price);
+                if(current_percentage_change.size()==0){ a_price_change.setText("Updating");}else{
+                    a_price.setText(""+current_updated_price.get(0));
+                    if (current_percentage_change.get(0).toString().contains("-")){
+                        a_price_change.setTextColor(getResources().getColor(R.color.colorRed));
+                    }else{a_price_change.setTextColor(getResources().getColor(R.color.colorGreen));}
+                    a_price_change.setText(""+current_percentage_change.get(0));
+                }}else{
+                //mTimer = new Timer();
+                //mTimer.scheduleAtFixedRate(createTimerTask(),0,2000);
+            }
+        }
+
+    }
+    LinearLayout equityView;
     static Element price = null;
     protected ArrayAdapter<String> ad;
     private static Toolbar toolbar;
@@ -134,6 +190,9 @@ public class Activity_Markets_Main extends AppCompatActivity {
         ViewPager pager = findViewById(R.id.viewpager);
         if (pager.getVisibility()==View.VISIBLE){
             finish();}else {
+            createTimerTask().cancel();
+            equityView = findViewById(R.id.equityView);
+            equityView.setVisibility(View.GONE);
             reloadAllData();
             new AsyncOnClickEquity(this).cancel(true);
             new AsyncForBackPressedSavedData(Activity_Markets_Main.this).execute();
@@ -273,6 +332,8 @@ public class Activity_Markets_Main extends AppCompatActivity {
     protected void setMainPage() {
         setContentView(R.layout.activity_main);
         setJSON_INFO();
+        equityView = findViewById(R.id.equityView);
+        equityView.setVisibility(View.GONE);
         toolbar = findViewById(R.id.toolbar);
         progLayout=findViewById(R.id.progLayout);
         openSearchView();
@@ -435,13 +496,14 @@ public class Activity_Markets_Main extends AppCompatActivity {
                 chosen_searchView_item.onEditorAction(EditorInfo.IME_ACTION_DONE);
                 new AsyncOnClickEquity(Activity_Markets_Main.this).execute();
                 chosen_searchView_item.setText("");
+                createTimerTask().cancel();
                 reloadAllData();
 
             }
         });
     }
 
-    public void getChosenCryptoInfo(){
+    public void primaryGetCrypto_Method(){
         long startTime = System.nanoTime();
         String newString= null;
         RequestQueue requestQueue = Volley.newRequestQueue(this);
@@ -538,7 +600,7 @@ public class Activity_Markets_Main extends AppCompatActivity {
 
     }
 
-    public void get_current_stock_info(){
+    public void primaryGetStock_Method(){
         String symbol =ap_info.getMarketSymbol();
         String apikey ="XBA42BUC2B6U6G5C";
         String url ="https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol="+symbol+"&apikey="+apikey;
@@ -568,6 +630,10 @@ public class Activity_Markets_Main extends AppCompatActivity {
 
 
                 } catch (JSONException e) {
+                    //aLTERNATIVE METHOD
+                    Service_Chosen_Equity service_chosen_equity = new Service_Chosen_Equity(Activity_Markets_Main.this);
+                    service_chosen_equity.backUp();
+                   // service_chosen_equity.updateFinancialData();
                     e.printStackTrace();
                 }
 
@@ -585,7 +651,7 @@ public class Activity_Markets_Main extends AppCompatActivity {
 
     }
 
-    public void getStockTwitsData(){
+    public void primaryGetSocialMedia_Method(){
         String market_symbol=ap_info.getMarketSymbol();
         if (market_symbol.contains("%5E")){
         market_symbol =market_symbol.replace("%5E","");}
@@ -664,7 +730,7 @@ public class Activity_Markets_Main extends AppCompatActivity {
 
     }
 
-    public static void get_coinmarketcap_exchange_listing() {
+    public static void primaryGetCryptoExchange_Method() {
         Document doc = null;
         String name = ap_info.getMarketName();
         //("THIS IS THE MARKET NAME "+name);
@@ -738,7 +804,7 @@ public class Activity_Markets_Main extends AppCompatActivity {
 
 
 
-   public static void do_graph_change() {
+   public static void historic_daily_percentage_change() {
         Double a=0.00;if(graph_high.size()>0) {
             for (int i = 0; i < graph_high.size(); i++) {
                 if (graph_high.get(i) != null) {
