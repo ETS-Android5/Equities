@@ -1,6 +1,7 @@
 package equities.com.myapplication;
 
 import android.content.Context;
+import android.util.Log;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -36,6 +37,7 @@ public class Service_Chosen_Equity
     public Service_Chosen_Equity(Context context){
         this.context=context;
     }
+    public Service_Chosen_Equity(){}
     public static void backUp(){
 main();
 ExecutorService service = Executors.newCachedThreadPool();
@@ -198,6 +200,7 @@ ExecutorService service = Executors.newCachedThreadPool();
     }
 
     public static void updateFinancialData(){
+        Log.d("TAG", "Updating Financial Data");
         Constructor_App_Variables app_info =new Constructor_App_Variables();
         Document caps = null;
         if(app_info.getMarketType().equalsIgnoreCase("Crypto")||app_info.getMarketType().equalsIgnoreCase("Cryptocurrency")){
@@ -221,7 +224,7 @@ ExecutorService service = Executors.newCachedThreadPool();
                 String changed_volume= ee.get(4).text();
                 app_info.setCurrent_volume(changed_volume);
 
-            } catch (IOException e) {
+            } catch (Exception e) {
                 try{
                     System.out.println("Trying coingecko instead");
                     caps = Jsoup.connect("https://www.coingecko.com/en/coins/" + ap_info.getMarketName().toLowerCase()).userAgent("Opera").timeout(10 * 10000).get();
@@ -234,13 +237,13 @@ ExecutorService service = Executors.newCachedThreadPool();
                     current_percentage_change.add(z1.text());
                     current_updated_price.add(z.text());
                     app_info.setCurrent_volume(z2.text());
-                } catch (IOException i) {
+                } catch (Exception i) {
                     System.out.println("Coinmarket and Coingecko are not working");
                     i.printStackTrace();}
             }
         }else{
             try {
-                System.out.println("Trying cnn");
+                System.out.println("Trying cnn for "+ app_info.getMarketSymbol());
                 caps = Jsoup.connect("https://money.cnn.com/quote/quote.html?symb="+app_info.getMarketSymbol()).userAgent("Opera").timeout(10 * 10000).get();
                 Element tb= caps.select("tbody").get(1);
                 String td = tb.select("td").get(7).text();
@@ -254,7 +257,7 @@ ExecutorService service = Executors.newCachedThreadPool();
                 current_updated_price.add(split[0]);
                 app_info.setCurrent_volume(td);
 
-            }catch (IOException e){
+            }catch (Exception e){
                 try{
                     System.out.println("Trying yahoo instead");
                     caps = Jsoup.connect("https://finance.yahoo.com/quote/" + ap_info.getMarketSymbol()).userAgent("Opera").timeout(10 * 10000).get();

@@ -9,6 +9,9 @@ import java.util.Set;
  */
 
 public class Constructor_App_Variables {
+    static String top_story_url;
+    static String top_story_title;
+    static String top_story_image_url;
     static ArrayList masternode_name=new ArrayList<>();
     static ArrayList masternode_symbol=new ArrayList<>();
     static ArrayList masternode_percent_change=new ArrayList<>();
@@ -48,6 +51,7 @@ public class Constructor_App_Variables {
     static ArrayList Suser_name=new ArrayList<>();
     static ArrayList Smessage=new ArrayList<>();
     static ArrayList Simg_url=new ArrayList<>();
+    public static ArrayList current_saved_price = new ArrayList<>();
     public static ArrayList current_percentage_change = new ArrayList<>();
     public static ArrayList current_updated_price = new ArrayList<>();
     public static ArrayList graph_date_today = new ArrayList<>();
@@ -105,8 +109,8 @@ public class Constructor_App_Variables {
         return current_volume;
     }
 
-    public static void setCurrent_volume(String current_volume) {
-        Constructor_App_Variables.current_volume = current_volume;
+    public void setCurrent_volume(String currentvolume) {
+        this.current_volume = currentvolume;
     }
 
     public static String current_volume;

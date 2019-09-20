@@ -213,7 +213,7 @@ public class AsyncOnClickEquity extends AsyncTask<Void, Void, String> {
 
             a_supply.setText(ap_info.getMarketSupply());
             Constructor_App_Variables app_info =new Constructor_App_Variables();
-            a_name.setText(app_info.getMarketName().replace(" ",""));
+            a_name.setText(app_info.getMarketName().replaceFirst(" ",""));
             String correct =app_info.getMarketSymbol();
             boolean  b = correct.startsWith("%5E");
             if(b)

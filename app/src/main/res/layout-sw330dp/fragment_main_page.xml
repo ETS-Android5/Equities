@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_width="match_parent">
+    android:layout_margin="20dp"
+    android:orientation="vertical"
+    android:visibility="visible">
 
     <TableRow
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone">
+        android:layout_height="wrap_content">
 
         <ImageView
             android:id="@+id/imageView2"
@@ -40,7 +41,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="230dp"
         android:background="#000000"
         android:orientation="vertical">
 
@@ -51,6 +52,7 @@
             android:background="@drawable/background_gradient"
             android:fontFamily="@font/scpro"
             android:gravity="center"
+            android:text="Bitcoin increases 4000% in 24 hours"
             android:textColor="@color/colorPrimary"
             android:textSize="22sp"
             android:textStyle="bold" />
@@ -58,8 +60,7 @@
         <ImageView
             android:id="@+id/news_image"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+            android:layout_height="match_parent"
             android:layout_weight=".2"
             android:scaleType="fitXY"
             android:src="@drawable/direction_news" />
@@ -83,10 +84,6 @@
         android:visibility="gone">
 
     </View>
-    <android.support.v7.widget.RecyclerView
-            android:id="@+id/saved_items"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
 
 
 </LinearLayout>

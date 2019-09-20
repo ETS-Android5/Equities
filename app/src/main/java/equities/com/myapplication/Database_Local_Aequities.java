@@ -66,27 +66,19 @@ public class Database_Local_Aequities extends SQLiteOpenHelper {
 
     public ArrayList getSymbol() {
         ArrayList<String> symbol = new ArrayList<>();
-        try {
-            String query = "SELECT DISTINCT * FROM " + TABLE_AEQUITY_INFO;
+        try { String query = "SELECT DISTINCT * FROM " + TABLE_AEQUITY_INFO;
             SQLiteDatabase db = this.getWritableDatabase();
             Cursor cursor = db.rawQuery(query, null);
             if (cursor.moveToFirst()) {
                 while (!cursor.isAfterLast()) {
                     symbol.add(cursor.getString(cursor.getColumnIndex(KEY_AEQUITY_SYMBOL)));
-                    cursor.moveToNext();
-                }
-            }
+                    cursor.moveToNext(); } }
             db.close();
-
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         return symbol;
     }
-
-
-
     public ArrayList getstockSymbol() {
         ArrayList<String> symbol = new ArrayList<>();
         String sto ="stock";
@@ -108,7 +100,6 @@ public class Database_Local_Aequities extends SQLiteOpenHelper {
 
         return symbol;
     }
-
     public ArrayList getcryptoSymbol() {
         ArrayList<String> symbol = new ArrayList<>();
         String sto ="stock";
@@ -130,8 +121,6 @@ public class Database_Local_Aequities extends SQLiteOpenHelper {
 
         return symbol;
     }
-
-
     public ArrayList getcryptoName() {
         ArrayList<String> symbol = new ArrayList<>();
         try {
@@ -155,8 +144,7 @@ public class Database_Local_Aequities extends SQLiteOpenHelper {
 
     public ArrayList getName() {
         ArrayList<String> name = new ArrayList<>();
-        try {
-            String query = "SELECT DISTINCT * FROM " + TABLE_AEQUITY_INFO;
+        try { String query = "SELECT DISTINCT * FROM " + TABLE_AEQUITY_INFO;
             SQLiteDatabase db = this.getWritableDatabase();
             Cursor cursor = db.rawQuery(query, null);
             if (cursor.moveToFirst()) {

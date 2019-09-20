@@ -29,7 +29,6 @@ public class AsyncForBackPressedSavedData extends AsyncTask<Integer, Integer, St
             super.onPreExecute();
             Activity_Markets_Main activity = activityReference.get();
             ViewPager pager = activity.findViewById(R.id.viewpager);
-            ViewPager market_pager = activity.findViewById(R.id.viewpager);
 
             if (pager.getVisibility()== View.VISIBLE){
                 activity.finishAffinity();}else{

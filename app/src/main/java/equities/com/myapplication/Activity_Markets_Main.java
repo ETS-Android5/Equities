@@ -10,9 +10,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.Patterns;
@@ -43,24 +41,15 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.*;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
-import static com.google.android.gms.internal.zzagz.runOnUiThread;
 import static equities.com.myapplication.Constructor_App_Variables.*;
 
 public class Activity_Markets_Main extends AppCompatActivity {
@@ -68,6 +57,8 @@ public class Activity_Markets_Main extends AppCompatActivity {
     RequestQueue requestQueue;
     TextView txt;
     private TabLayout pagetabs;
+    String[] main_page_stock_news_urls = new String[]{"https://www.msn.com/en-us/money","https://money.cnn.com/data/markets/","https://finance.yahoo.com/","https://www.google.com/finance","https://www.bloomberg.com/"};
+    String[] main_page_crypto_news_urls = new String[]{"https://www.coindesk.com","https://cryptonews.com"};
     int[] worldMarketICONS = new int[]{R.drawable.direction_markets, R.drawable.direction_news, R.drawable.direction_youtube_video};
     int[] stockMarketICONS = new int[]{R.drawable.direction_down, R.drawable.direction_up, R.drawable.direction_kings};
     static Timer mTimer;
@@ -83,7 +74,14 @@ public class Activity_Markets_Main extends AppCompatActivity {
                         handler.postDelayed(new Runnable() {
                             public void run() {
                                 if(t>0) {
-                                    new ASYNCUpdateFinancialData().execute();}
+                                    Constructor_App_Variables app_info =new Constructor_App_Variables();
+                                    if(app_info.getMarketName().equalsIgnoreCase("empty")){
+                                        Log.d("TAG", "Doing nothing");
+                                    }else {
+                                        new ASYNCUpdateFinancialData().execute();
+                                        Log.d("TAG", "METHOD asyncUpdateFinancialData executed");
+                                    }
+                                    }
                                 t=t+1;
                             }
                         }, 0);
@@ -95,17 +93,11 @@ public class Activity_Markets_Main extends AppCompatActivity {
     }
     public class ASYNCUpdateFinancialData extends AsyncTask<Integer, Integer, String> {
         @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
         protected String doInBackground(Integer... integers) {
-            Service_Chosen_Equity service_chosen_equity = new Service_Chosen_Equity(Activity_Markets_Main.this);
+            Service_Chosen_Equity service_chosen_equity = new Service_Chosen_Equity();
             service_chosen_equity.updateFinancialData();
             return null;
         }
-
         @Override
         protected void onPostExecute(String result) {
             if(Double.parseDouble(String.valueOf(graph_high.size()))>0){
@@ -118,14 +110,12 @@ public class Activity_Markets_Main extends AppCompatActivity {
                     }else{a_price_change.setTextColor(getResources().getColor(R.color.colorGreen));}
                     a_price_change.setText(""+current_percentage_change.get(0));
                 }}else{
-                //mTimer = new Timer();
-                //mTimer.scheduleAtFixedRate(createTimerTask(),0,2000);
+                //DONT CHANGE ANYTHING
             }
         }
 
     }
     LinearLayout equityView;
-    static Element price = null;
     protected ArrayAdapter<String> ad;
     private static Toolbar toolbar;
     TableRow table_tabs;
@@ -145,14 +135,12 @@ public class Activity_Markets_Main extends AppCompatActivity {
     Animation centerLinear;
     boolean forward;
     static String repo;
-    static Boolean async_analysis_page = false;
     public static boolean db_exist =false;
     Context context =this;
-    static RecyclerView.LayoutManager l;
     static InterstitialAd mInterstitialAd;
-    private SwipeRefreshLayout swipe_container;
     static ViewPager pager;
     PagerAdapter_WorldMarkets adapter = new PagerAdapter_WorldMarkets(getSupportFragmentManager());
+    String googleAdsauthentication = "ca-app-pub-6566728316210720/4471280326";
 
     @Override
     protected void onStart() {
@@ -163,13 +151,17 @@ public class Activity_Markets_Main extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
         //Put car in gear
+
 
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+
+
         //Put car in neutral
 
     }
@@ -181,19 +173,21 @@ public class Activity_Markets_Main extends AppCompatActivity {
 
     }
 
+
     protected void onRestart(){
         super.onRestart();
-        System.out.println("RESTARTING APPLICATION");
+        //System.out.println("RESTARTING APPLICATION");
     }
 
     public void onBackPressed() {
         ViewPager pager = findViewById(R.id.viewpager);
         if (pager.getVisibility()==View.VISIBLE){
             finish();}else {
-            createTimerTask().cancel();
             equityView = findViewById(R.id.equityView);
             equityView.setVisibility(View.GONE);
             reloadAllData();
+            Constructor_App_Variables app_info =new Constructor_App_Variables();
+            app_info.setMarketName("empty");
             new AsyncOnClickEquity(this).cancel(true);
             new AsyncForBackPressedSavedData(Activity_Markets_Main.this).execute();
         }
@@ -213,9 +207,9 @@ public class Activity_Markets_Main extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        MobileAds.initialize(this, "ca-app-pub-6566728316210720/4471280326");
+        MobileAds.initialize(this, googleAdsauthentication);
         mInterstitialAd = new InterstitialAd(this);
-        mInterstitialAd.setAdUnitId("ca-app-pub-6566728316210720/4471280326");
+        mInterstitialAd.setAdUnitId(googleAdsauthentication);
         mInterstitialAd.loadAd(new AdRequest.Builder().build());
         checkInternetConnection();
         get_exchange_info();
@@ -225,7 +219,7 @@ public class Activity_Markets_Main extends AppCompatActivity {
         imageView =findViewById(R.id.imageView);
         progress= findViewById(R.id.progressBar);
         txt = findViewById(R.id.output);
-        new AsyncWorldMarketData(Activity_Markets_Main.this).execute();    }
+        new MainPageAsyncMethod(Activity_Markets_Main.this).execute();    }
 
     private boolean checkInternetConnection() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -302,17 +296,17 @@ public class Activity_Markets_Main extends AppCompatActivity {
 
 
     }
-    public class setAsyncCreateSavedData extends AsyncTask<Integer, Integer, String> {
+    public class MainPageAsyncMethod extends AsyncTask<Integer, Integer, String> {
 
         private WeakReference<Activity_Markets_Main> activityReference;
-        setAsyncCreateSavedData(Activity_Markets_Main context) {
+        MainPageAsyncMethod(Activity_Markets_Main context) {
             activityReference = new WeakReference<>(context);
         }
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            Constructor_News_Feed constructor_news_feed = new Constructor_News_Feed();
-            constructor_news_feed.setNews_search_term("World Markets");
+            //Constructor_News_Feed constructor_news_feed = new Constructor_News_Feed();
+            //constructor_news_feed.setNews_search_term("World Markets");
         }
         @Override
         protected String doInBackground(Integer... params) {
@@ -380,6 +374,7 @@ public class Activity_Markets_Main extends AppCompatActivity {
         viewPager.setAdapter(null);
         adapter.removeAllFrag();
         adapter.notifyDataSetChanged();
+        adapter.addFrag(new Fragment_Saved(),"Main");
         adapter.addFrag(new Fragment_Markets(), getString(R.string.markets));
         adapter.addFrag(new Fragment_App_News(), getString(R.string.news));
         adapter.addFrag(new Fragment_Video(),getString(R.string.title_video));
@@ -450,6 +445,7 @@ public class Activity_Markets_Main extends AppCompatActivity {
                 String typ = childJsonArray.getString(2);
                 aequity_type_arraylist.add(typ);
                 searchview_arraylist.add(sym + "  " + nam + "  " + typ);
+                //Log.println(Log.INFO,"TAG",aequity_symbol_arraylist.get(i));
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -484,6 +480,8 @@ public class Activity_Markets_Main extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 searchview_arraylist.clear();
+                new AsyncOnClickEquity(Activity_Markets_Main.this).cancel(true);
+                new ASYNCUpdateFinancialData().cancel(true);
                 setJSON_INFO();
                 InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
@@ -496,7 +494,6 @@ public class Activity_Markets_Main extends AppCompatActivity {
                 chosen_searchView_item.onEditorAction(EditorInfo.IME_ACTION_DONE);
                 new AsyncOnClickEquity(Activity_Markets_Main.this).execute();
                 chosen_searchView_item.setText("");
-                createTimerTask().cancel();
                 reloadAllData();
 
             }
@@ -560,6 +557,7 @@ public class Activity_Markets_Main extends AppCompatActivity {
                             }
 
                             ap_info.setCurrent_Aequity_Price_Change(heroObject.getString("percent_change_24h") + "%");
+                            ap_info.setCurrent_volume(heroObject.getString("24h_volume_usd"));
                             String p =heroObject.getString("market_cap_usd");
                             double d = Double.parseDouble(p);
                             p =df.format(d);
@@ -576,9 +574,11 @@ public class Activity_Markets_Main extends AppCompatActivity {
                         else{ap_info.setMarketSupply("Unknown");
                             ap_info.setMarketCap("Unknown");
                             ap_info.setCurrent_Aequity_Price_Change("Unknown");}
+
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
+                    catch(Exception z){}
 
 
                 }
@@ -801,9 +801,6 @@ public class Activity_Markets_Main extends AppCompatActivity {
         }
     }
 
-
-
-
    public static void historic_daily_percentage_change() {
         Double a=0.00;if(graph_high.size()>0) {
             for (int i = 0; i < graph_high.size(); i++) {
@@ -834,90 +831,6 @@ public class Activity_Markets_Main extends AppCompatActivity {
     }
 
 
-    public static void ProcessXmlx(org.w3c.dom.Document data) {
-        world_markets_news_feedItems.clear();
-        if (data != null) {
-            String st, sd, sp, sl,si;
-            org.w3c.dom.Element root = data.getDocumentElement();
-            Node channel = root.getChildNodes().item(0);
-            NodeList items = channel.getChildNodes();
-
-            for (int i = 0; i < items.getLength(); i++) {
-                Constructor_News_Feed it = new Constructor_News_Feed();
-                Node curentchild = items.item(i);
-                if (curentchild.getNodeName().equalsIgnoreCase("item")) {
-                    NodeList itemchilds = curentchild.getChildNodes();
-                    for (int j = 0; j < itemchilds.getLength(); j++) {
-                        Node curent = itemchilds.item(j);
-                        if (curent.getNodeName().equalsIgnoreCase("title")) {
-                            st = curent.getTextContent().toString();
-                            st= st.substring(0,st.indexOf(" - ")+" - ".length());
-                            st= st.replace("-","");
-                            it.setTitle(st);
-                            //(st);
-                        } else if (curent.getNodeName().equalsIgnoreCase("media:content")) {
-                            sd = curent.getTextContent().toString();
-                            //(sd);
-
-                            String d = curent.getTextContent().toString();
-                            String pattern1 = "<img src=\"";
-                            String pattern2 = "\"";
-                            Pattern p = Pattern.compile(Pattern.quote(pattern1) + "(.*?)" + Pattern.quote(pattern2));
-                            Matcher m = p.matcher(d);
-                            while (m.find()) {
-                                it.setThumbnailUrl(m.group(1));
-                                ////("HERE IS YOUR IMAGE DUDE! "+m.group(1));
-                            }
-                            it.setDescription(sd);
-                        } else if (curent.getNodeName().equalsIgnoreCase("pubDate")) {
-                            sp = curent.getTextContent().toString();
-                            sp = sp.replaceAll("@20", " ");
-                            it.setPubDate(sp);
-                            //(sp);
-                        } else if (curent.getNodeName().equalsIgnoreCase("link")) {
-                            sl = curent.getTextContent().toString();
-                            sl = sl.replaceAll("@20", " ");
-                            it.setLink(sl);
-                            //(sl);
-                        } else if (curent.getNodeName().equalsIgnoreCase("source")) {
-                            si = curent.getTextContent().toString();
-                            it.setSource(si);
-                        }
-                    }
-
-                    world_markets_news_feedItems.add(it);
-
-
-                }
-            }
-        }
-    }
-
-    public static org.w3c.dom.Document GoogleRSFeedx() {
-        try {
-            URL url;
-            Context context;
-            repo = "Stock%20Cryptocurrency";
-            String address = "https://news.google.com/news/rss/search/section/q/" + repo + "?ned=us&gl=US&hl=en";
-
-
-            url = new URL(address);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("GET");
-            InputStream inputStream = connection.getInputStream();
-            DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder builder = builderFactory.newDocumentBuilder();
-            org.w3c.dom.Document xmlDoc = builder.parse(inputStream);
-
-            return xmlDoc;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-
-
-    }
-
     public void get_saved_stock_price_change(String taco){
         //String symbol =ap_info.getMarketSymbol();
         String apikey ="XBA42BUC2B6U6G5C";
@@ -938,7 +851,10 @@ public class Activity_Markets_Main extends AppCompatActivity {
                     String fclose=numberFormat.format(d);
                     fclose=fclose+"%";
                     current_percentage_change.add(fclose);
-
+                    String price= time.getString("05. price");
+                    double e =Double.parseDouble(price);
+                    String p=numberFormat.format(e);
+                    current_saved_price.add(p);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -957,36 +873,152 @@ public class Activity_Markets_Main extends AppCompatActivity {
 
     }
 
+    public void get_saved_crypto_price_change(String taco){
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        if(taco.equalsIgnoreCase("XRP")){
+            taco = "Ripple";
+        }else {
+
+        }if(taco.contains(" ")){
+            taco =taco.replace(" ","-");
+        }
+
+        final String url = "https://api.coinmarketcap.com/v1/ticker/"+taco;
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                for (int i = 0; i < response.length(); i++) {
+                    JSONObject heroObject = null;
+                    try {
+                        heroObject = response.getJSONObject(i);
+                        current_percentage_change.add(heroObject.getString("percent_change_24h") + "%");
+                        DecimalFormat numberFormat = new DecimalFormat("#.00");
+                        double d =Double.parseDouble(heroObject.getString("price_usd"));
+                        String fclose=numberFormat.format(d);
+                        current_saved_price.add(fclose);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    catch(Exception z){}
+
+
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                //("Something ahppened An Error occured while making the request "+error);
+            }
+        });
+        requestQueue.add(jsonArrayRequest);
+    }
+
     public void getSavedEquities(){
+        getTopNewsStories();
+        ArrayList a = check_saved.getName();
         ArrayList b = check_saved.getSymbol();
         ArrayList c = check_saved.getType();
-        for( int x=0;x<b.size();x++) {
-            Document cap = null;
+        for( int x=0;x<a.size();x++) {
             if (c.get(x).equals("Stock")||c.get(x).equals("Index")) {
                 get_saved_stock_price_change(""+check_saved.getSymbol().get(x));
             } else {
                 ArrayList d = check_saved.getName();
-                Document caps = null;
                 if (d.size()>0) {
-                    String g = String.valueOf(d.get(x));
-                    if (g.contains(" ")) {
-                        g = g.replace(" ", "-");
-                    }
-                    try {
-                        caps = Jsoup.connect("https://coinmarketcap.com/currencies/" + g).timeout(10 * 10000).get();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    Element as = caps.getElementsByClass("details-panel-item--header flex-container").first();
-                    Elements e = as.select("span:eq(1)");
-                    String f = e.get(2).text();;
-                    f = f.replaceAll("\\(", "").replaceAll("\\)", "");
-                    current_percentage_change.add(f);
+                   get_saved_crypto_price_change(""+d.get(x));
 
 
                 }
             }
 
         }check_saved.close();
+    }
+
+
+    public void getTopNewsStories(){
+
+        Double a =1.00;
+        //Double.parseDouble(ap_info.getBitcoinPrice());
+        Double b =2.00;
+        //Double.parseDouble(ap_info.getNasdaqPrice());
+        Random random = new Random();
+        int stock = random.nextInt( 5);
+        int crypto = random.nextInt(2);
+        System.out.println("RANDOM CRYPTO STORY IS "+crypto);
+        if (a>b){
+            Document doc = null;
+            try {
+                doc = Jsoup.connect(main_page_stock_news_urls[stock]).timeout(10 * 1000).get();
+                if(stock==0){}
+                if(stock==1){}
+                if(stock==2){}
+                if(stock==3){}
+                if(stock==4){}
+
+
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            //System.out.println(doc);
+            //Log.println(Log.INFO,"TAG", String.valueOf(doc));
+
+        }else{
+            Document doc = null;
+            try {
+                doc = Jsoup.connect(main_page_crypto_news_urls[crypto]).timeout(10 * 1000).get();
+                crypto=1;
+                if(crypto==0){
+                    Element f =doc.getElementById("featured-articles");
+                    Element link = f.select("a").first();
+                    Element image = link.select("img").first();
+                    String url = image.absUrl("src");
+                    top_story_image_url = url;
+                    top_story_title =link.attr("title");
+                    top_story_url = link.attr("href");
+                    //System.out.println("LINK TITLE " + link.attr("title"));
+                    //System.out.println("LINK URL " + link.attr("href"));
+                    //System.out.println("LINK IMAGE URL " + url);
+                }
+                if(crypto==1){
+                    int rand = random.nextInt( 3);
+                    System.out.println("THIS IS RAND " + rand);
+                    Element z = doc.getElementsByClass("cn-tile row article").get(rand);
+                    Element link = z.select("a").first();
+                    Element image = z.select("img").first();
+                    String url = image.absUrl("src");
+                    Element i = doc.getElementsByClass("props").get(rand+1);
+                    String alink = i.select("a").get(1).text();
+                    top_story_image_url = url;
+                    top_story_title =alink;
+                    top_story_url = main_page_crypto_news_urls[crypto]+link.attr("href");
+                    //System.out.println("LINK IMAGE URL " + url);
+                    //System.out.println("LINK URL " + main_page_crypto_news_urls[crypto]+link.attr("href"));
+                    //System.out.println("LINK TITLE " + alink);
+                }
+/**
+                if(crypto==2){
+                    Elements e =doc.select("div.fsp");
+                    Element link = e.select("a").first();
+                    Element image = link.select("amp-img").first();
+                    String url = image.absUrl("src");
+                    top_story_image_url = url;
+                    top_story_title =link.attr("title");
+                    top_story_url = link.attr("href");
+                    //System.out.println("LINK TITLE " + link.attr("title"));
+                    //System.out.println("LINK URL " + link.attr("href"));
+                    //System.out.println("LINK IMAGE URL " + url);
+
+                    //System.out.println("hello "+link);
+                }
+   */
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            //Log.println(Log.INFO,"TAG", String.valueOf(doc));
+        }
+
+
     }
 }

@@ -9,11 +9,19 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 
+import com.squareup.picasso.MemoryPolicy;
+import com.squareup.picasso.Picasso;
+
 import static equities.com.myapplication.Constructor_App_Variables.current_percentage_change;
+import static equities.com.myapplication.Constructor_App_Variables.current_saved_price;
+import static equities.com.myapplication.Constructor_App_Variables.top_story_image_url;
+import static equities.com.myapplication.Constructor_App_Variables.top_story_title;
+import static equities.com.myapplication.Constructor_App_Variables.top_story_url;
 
 
 /**
@@ -21,11 +29,11 @@ import static equities.com.myapplication.Constructor_App_Variables.current_perce
  */
 
 public class Fragment_Saved extends Fragment {
-    public static RecyclerView saved_feed;
+    public static RecyclerView saved_items;
     public ProgressBar progressBar2;
     public Adapter_Saved_Feed adapter_saved_feed;
-    TextView fav;
-
+    TextView news_title, newslink;
+    ImageView newsimage;
     public Fragment_Saved() {
     }
     @Override
@@ -35,30 +43,30 @@ public class Fragment_Saved extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_saved, container, false);
-        fav= rootView.findViewById(R.id.fav);
-        Typeface custom_font = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Oregon.ttf");
-
-        fav.setTypeface(custom_font);
-
-        fav.setPaintFlags(fav.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
-        saved_feed=rootView.findViewById(R.id.saved_feed);
-        saved_feed.setVisibility(View.VISIBLE);
+        saved_items=rootView.findViewById(R.id.saved_items);
+        saved_items.setVisibility(View.VISIBLE);
+        news_title=rootView.findViewById(R.id.news_title);
+        newsimage=rootView.findViewById(R.id.news_image);
+        newslink=rootView.findViewById(R.id.news_link);
+        news_title.setText(top_story_title);
+        Picasso.with(getActivity()).load(top_story_image_url).memoryPolicy(MemoryPolicy.NO_CACHE).noFade().into(newsimage);
+        newslink.setText(top_story_url);
         Constructor_App_Variables cav =new Constructor_App_Variables();
         Database_Local_Aequities ld =new Database_Local_Aequities(getActivity());
         //(Arrays.asList(ld.getName()));
         //The only way to fix this is to create a constructor with arraylist so you can clear arraylist when backpress is entered
-        if (saved_feed!=null){
+        if (saved_items!=null){
             //("SAVED FEED IS NOT NULL!!!");
             //saved_feed.setAdapter(null);
            // saved_feed.setLayoutManager(null);
-            saved_feed.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-            saved_feed.setAdapter(new Adapter_Saved_Feed(getActivity(),Database_Local_Aequities.KEY_AEQUITY_SYMBOL,Database_Local_Aequities.KEY_AEQUITY_NAME,current_percentage_change,Database_Local_Aequities.KEY_AEQUITY_TYPE));
+            saved_items.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+            saved_items.setAdapter(new Adapter_Saved_Feed(getActivity(),Database_Local_Aequities.KEY_AEQUITY_SYMBOL,Database_Local_Aequities.KEY_AEQUITY_NAME,current_percentage_change,current_saved_price,Database_Local_Aequities.KEY_AEQUITY_TYPE));
             //(Arrays.asList("X "+ld.getName()+" "+ld.getType()));
 
         }else {
-            adapter_saved_feed=new Adapter_Saved_Feed(getActivity(),Database_Local_Aequities.KEY_AEQUITY_SYMBOL,Database_Local_Aequities.KEY_AEQUITY_NAME,current_percentage_change,Database_Local_Aequities.KEY_AEQUITY_TYPE);
+            adapter_saved_feed=new Adapter_Saved_Feed(getActivity(),Database_Local_Aequities.KEY_AEQUITY_SYMBOL,Database_Local_Aequities.KEY_AEQUITY_NAME,current_percentage_change,current_saved_price,Database_Local_Aequities.KEY_AEQUITY_TYPE);
             //("SAVED FEED IS NULL!!!");
-            saved_feed.setAdapter(adapter_saved_feed);
+            saved_items.setAdapter(adapter_saved_feed);
 
         }
         return rootView;

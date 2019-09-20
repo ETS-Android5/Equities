@@ -83,6 +83,7 @@ public class Fragment_Analysis extends Fragment {
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_analysis, container, false);
+        //Set text null or delete stock from list if not found online(LIKE IPCI)
         historical_listview =rootView.findViewById(R.id.historical_listview);
         chosen_price_change = rootView.findViewById(R.id.chosenpricechange);
         graph_view=rootView.findViewById(R.id.graph_view);

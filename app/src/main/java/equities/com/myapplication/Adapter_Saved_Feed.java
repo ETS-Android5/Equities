@@ -14,32 +14,36 @@ import java.util.ArrayList;
 import static equities.com.myapplication.Activity_Markets_Main.ap_info;
 import static equities.com.myapplication.Activity_Markets_Main.db_exist;
 import static equities.com.myapplication.Constructor_App_Variables.current_percentage_change;
+import static equities.com.myapplication.Constructor_App_Variables.current_saved_price;
 
 public class Adapter_Saved_Feed extends RecyclerView.Adapter<Adapter_Saved_Feed.MyViewHolder> {
 
     String name;
     String symbol;
     String type;
+    ArrayList price;
     ArrayList currentchange;
     Context context;
 
 
-    public Adapter_Saved_Feed(Context context, String symbol, String name, ArrayList currentchange, String type) {
+    public Adapter_Saved_Feed(Context context, String symbol, String name, ArrayList currentchange,ArrayList price, String type) {
         this.symbol = symbol;
         this.name = name;
         this.currentchange =currentchange;
         this.type = type;
+        this.price = price;
         this.context=context;
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView symbol, name, currentchange, type;
+        public TextView symbol, name, currentchange, type, price;
         public ImageView circle;
         public MyViewHolder(View itemView) {
         super(itemView);
         circle =itemView.findViewById(R.id.circle);
         symbol = itemView.findViewById(R.id.symbol);
         name = itemView.findViewById(R.id.name);
+        price = itemView.findViewById(R.id.price);
         currentchange = itemView.findViewById(R.id.current_change);
 
         type = itemView.findViewById(R.id.type);
@@ -71,16 +75,15 @@ public class Adapter_Saved_Feed extends RecyclerView.Adapter<Adapter_Saved_Feed.
         if(cc.contains("-")){
             cc.replace("-","");
             holder.currentchange.setTextColor(Color.parseColor("#ff0000"));
-
+            holder.circle.setImageResource(R.drawable.holder_green_circle);
         }
         else{
             cc.replace("+","").replace("(","").replace(")","");
             holder.currentchange.setTextColor(Color.parseColor("#00CC00"));
-
+            holder.circle.setScaleType(ImageView.ScaleType.FIT_CENTER);
+            holder.circle.setImageResource(R.drawable.holder_red_circle);
         }
-        holder.circle.setScaleType(ImageView.ScaleType.FIT_CENTER);
-        holder.circle.setImageResource(android.R.drawable.btn_star_big_on);
-
+        holder.price.setText(""+ current_saved_price.get(position));
         String l =ld.getType(holder.name.getText().toString());
 if (l.equalsIgnoreCase("Cryptocurrency")){
     holder.type.setText("Crypto");
